@@ -5,8 +5,8 @@
 
   // Your web app's Firebase configuration
   const firebaseConfig = {
-    apiKey: "AIzaSyBkEIQdyds3kdAL3Zzn9rgbyLuRcpRsqDw",
-    authDomain: "wavelength-adde0.firebaseapp.com",
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
     projectId: "wavelength-adde0",
     storageBucket: "wavelength-adde0.firebasestorage.app",
     messagingSenderId: "912354011753",
