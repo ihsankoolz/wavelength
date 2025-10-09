@@ -1,5 +1,8 @@
     // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { initializeApp } from "firebase/app";
+  import { getFirestore } from 'firebase/firestore'
+  import { getAuth } from 'firebase/auth'
+  import { getStorage } from 'firebase/storage'
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -7,11 +10,22 @@
   const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId: "wavelength-adde0",
-    storageBucket: "wavelength-adde0.firebasestorage.app",
-    messagingSenderId: "912354011753",
-    appId: "1:912354011753:web:7af3427a59eec781c810f8"
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID
   };
+
+  console.log('Firebase Config:', {
+  projectId: firebaseConfig.projectId,
+  authDomain: firebaseConfig.authDomain
+})
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
+
+  export const db = getFirestore(app)
+  export const auth = getAuth(app)
+  export const storage = getStorage(app, '(default)')
+
+  console.log('Firebase initialized successfully')
