@@ -6,6 +6,8 @@ import Landing from '@/views/Landing.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import Home from '@/views/Home.vue'
+import UserProfile from '@/views/UserProfile.vue'
+import EditProfile from '@/views/EditProfile.vue'
 
 const routes = [
   // Public routes
@@ -33,7 +35,19 @@ const routes = [
     name: 'Home',
     component: Home,
     meta: { requiresAuth: true }
-  }
+  },
+  {
+    path: '/profile/:id',
+    name: 'UserProfile',
+    component: UserProfile,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/edit-profile/:id',
+    name: 'EditProfile',
+    component: EditProfile,
+    meta: { requiresAuth: true }
+  },
   
   // TODO: Add more routes here
   // {

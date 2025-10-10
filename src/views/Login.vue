@@ -6,7 +6,9 @@
             
             <!-- Logo Section -->
             <div class="text-center text-white mb-4">
-                <img src="/assets/logo1.png" alt="Wavelength" class="auth-logo mb-3">
+                <router-link to="/">
+                    <img src="/assets/logo1.png" alt="Wavelength" class="auth-logo">
+                </router-link>
                 <p class="tagline">Discover Singapore's Local Music</p>
             </div>
 
