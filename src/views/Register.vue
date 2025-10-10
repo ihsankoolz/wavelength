@@ -190,7 +190,7 @@ export default {
             }
 
             if (this.userType === 'fan') {
-            this.$router.push('/home')
+            this.$router.push('/onboarding')
             } else {
             this.$router.push('/artist/setup')
             }

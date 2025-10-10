@@ -8,6 +8,7 @@ import Register from '@/views/Register.vue'
 import Home from '@/views/Home.vue'
 import UserProfile from '@/views/UserProfile.vue'
 import EditProfile from '@/views/EditProfile.vue'
+import Onboarding from '@/views/Onboarding.vue'
 
 const routes = [
   // Public routes
@@ -30,6 +31,12 @@ const routes = [
   },
   
   // Protected routes (need login)
+  {
+    path: '/onboarding',
+    name: 'Onboarding',
+    component: Onboarding,
+    meta: { requiresAuth: true }
+  },
   {
     path: '/home',
     name: 'Home',
