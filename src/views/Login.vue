@@ -1,3 +1,4 @@
+<!-- login.vue -->
 <template>
     <div class="auth-wrapper">
         <div class="container">

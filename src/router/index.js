@@ -1,5 +1,7 @@
+// index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import { auth } from '@/services/firebase'
+import { onAuthStateChanged } from 'firebase/auth'
 
 // Import views
 import Landing from '@/views/Landing.vue'
@@ -8,7 +10,7 @@ import Register from '@/views/Register.vue'
 import Home from '@/views/Home.vue'
 import UserProfile from '@/views/UserProfile.vue'
 import EditProfile from '@/views/EditProfile.vue'
-// import artistDashboard from '@/views/ArtistDashboard.vue'
+import Onboarding from '@/views/Onboarding.vue'
 
 const routes = [
   // Public routes
@@ -31,6 +33,12 @@ const routes = [
   },
   
   // Protected routes (need login)
+  {
+    path: '/onboarding',
+    name: 'Onboarding',
+    component: Onboarding,
+    meta: { requiresAuth: true }
+  },
   {
     path: '/home',
     name: 'Home',
@@ -76,7 +84,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  // Smooth scroll for anchor links
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
       return {
@@ -91,9 +98,24 @@ const router = createRouter({
   }
 })
 
-// Route guards
+// Function to get current auth state
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe() // Stop listening after we get the result
+        resolve(user)
+      },
+      reject
+    )
+  })
+}
+
+// Route guards - now waits for Firebase
 router.beforeEach(async (to, from, next) => {
-  const user = auth.currentUser
+  // Wait for Firebase to finish checking auth state
+  const user = await getCurrentUser()
 
   // If page needs auth and user NOT logged in
   if (to.meta.requiresAuth && !user) {
@@ -122,8 +144,8 @@ router.beforeEach(async (to, from, next) => {
         next('/artist/setup')
       }
       // If trying to access setup but already completed
-      // ✅ ONLY redirect to setup if dashboard is accessed but setup not completed
-      // ✅ ALLOW access to setup page even if already completed (for editing)
+      // ONLY redirect to setup if dashboard is accessed but setup not completed
+      // ALLOW access to setup page even if already completed (for editing)
       else if (to.name === 'ArtistDashboard' && !artistData?.profileSetupCompleted) {
         next('/artist/setup')
       } else {

@@ -1,3 +1,4 @@
+<!-- register.vue -->
 <template>
     <div class="auth-wrapper">
         <div class="container">
@@ -190,7 +191,7 @@ export default {
             }
 
             if (this.userType === 'fan') {
-            this.$router.push('/home')
+            this.$router.push('/onboarding')
             } else {
             this.$router.push('/artist/setup')
             }

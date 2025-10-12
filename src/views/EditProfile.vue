@@ -1,40 +1,103 @@
+<!-- editprofile.vue - IMPROVED VERSION -->
 <template>
-  <div class="edit-profile">
-    <h2>Edit Profile</h2>
+  <div class="edit-profile-wrapper">
+    <!-- Navigation Bar (MISSING!) -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+      <div class="container">
+        <router-link to="/home" class="navbar-brand">
+          <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo">
+        </router-link>
+      </div>
+    </nav>
 
-    <form @submit.prevent="updateProfile">
-        <!-- Profile Image Button -->
-        <div class="profile-image-container">
-            <img
-            :src="previewImage || form.profileImage || defaultPfp"
-            alt="Profile Picture"
-            class="profile-img"
-            @click="selectImage"
-            />
-            <input
-            type="file"
-            ref="fileInput"
-            accept="image/*"
-            @change="onFileSelected"
-            style="display: none;"
-            />
-        </div>
+    <!-- Main Content -->
+    <div class="content-wrapper">
+      <div class="container py-4">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 col-lg-6">
+            
+            <div class="card shadow">
+              <div class="card-body p-4">
+                <h2 class="text-center mb-4">Edit Profile</h2>
 
-        <div>
-            <label>Display Name</label>
-            <input v-model="form.displayName" type="text" />
-        </div>
+                <form @submit.prevent="updateProfile">
+                  <!-- Profile Image -->
+                  <div class="profile-image-container text-center mb-4">
+                    <div class="position-relative d-inline-block">
+                      <img
+                        :src="previewImage || form.profileImage || defaultPfp"
+                        alt="Profile Picture"
+                        class="profile-img"
+                        @click="selectImage"
+                      />
+                      <button 
+                        type="button" 
+                        class="btn btn-primary btn-sm camera-btn"
+                        @click="selectImage"
+                      >
+                        <i class="bi bi-camera"></i>
+                      </button>
+                    </div>
+                    <input
+                      type="file"
+                      ref="fileInput"
+                      accept="image/*"
+                      @change="onFileSelected"
+                      style="display: none;"
+                    />
+                    <p class="text-muted small mt-2">Click to change photo</p>
+                  </div>
 
-        <div>
-            <label>Email</label>
-            <input v-model="form.email" type="email" />
-        </div>
-        <div>
-            <p>Last Active: {{ formatLastActive(form.lastActive) }}</p>
-        </div>
+                  <!-- Display Name -->
+                  <div class="mb-3">
+                    <label class="form-label fw-bold">Display Name</label>
+                    <input 
+                      v-model="form.displayName" 
+                      type="text" 
+                      class="form-control"
+                      required
+                    />
+                  </div>
 
-        <button type="submit">Save Changes</button>
-    </form>
+                  <!-- Email (read-only) -->
+                  <div class="mb-3">
+                    <label class="form-label fw-bold">Email</label>
+                    <input 
+                      v-model="form.email" 
+                      type="email" 
+                      class="form-control"
+                      disabled
+                    />
+                    <small class="text-muted">Email cannot be changed</small>
+                  </div>
+
+                  <!-- Last Active (read-only) -->
+                  <div class="mb-4">
+                    <label class="form-label fw-bold">Last Active</label>
+                    <p class="text-muted">{{ formatLastActive(form.lastActive) }}</p>
+                  </div>
+
+                  <!-- Action Buttons -->
+                  <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary py-2">
+                      Save Changes
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-secondary"
+                      @click="$router.push(`/profile/${userId}`)"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -68,10 +131,8 @@ export default {
       return;
     }
 
-    // Use the route param if available, otherwise the logged-in user
     this.userId = this.$route.params.id || user.uid;
 
-    // Load the current user data from Firestore
     const docRef = doc(db, "users", this.userId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -82,34 +143,24 @@ export default {
   },
   methods: {
     selectImage() {
-        this.$refs.fileInput.click();
+      this.$refs.fileInput.click();
     },
     onFileSelected(event) {
-        const file = event.target.files[0]
-        if (!file) return
-
-        // show local preview
-        this.previewImage = URL.createObjectURL(file)
-
-        // upload to db (TBC)
-        // this.selectedFile = file
+      const file = event.target.files[0];
+      if (!file) return;
+      this.previewImage = URL.createObjectURL(file);
+      // TODO: Upload to Firebase Storage
     },
     async updateProfile() {
       try {
-        let profileImageUrl = this.form.profileImage
-
-        // upload to db (TBC)
-        // if (this.selectedFile) { ... }
-
         const docRef = doc(db, "users", this.userId);
         await updateDoc(docRef, {
           displayName: this.form.displayName,
-          profileImage: profileImageUrl,
+          profileImage: this.previewImage || this.form.profileImage,
         });
 
         alert("Profile updated successfully!");
         this.$router.push(`/profile/${this.userId}`);
-
       } catch (error) {
         console.error("Error updating profile:", error);
         alert("Failed to update profile.");
@@ -123,35 +174,69 @@ export default {
 };
 </script>
 
-<style>
-.edit-profile {
-  max-width: 400px;
-  margin: 50px auto;
-  text-align: left;
+<style scoped>
+.edit-profile-wrapper {
+  min-height: 100vh;
+  background: #f8f9fa;
 }
 
-.edit-profile form div {
-  margin-bottom: 15px;
+.navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
+.navbar-logo {
+  height: 80px;
+  width: auto;
 }
 
-input {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.content-wrapper {
+  margin-top: 120px;
+  padding-bottom: 40px;
 }
 
-button {
-  padding: 10px 20px;
-  border-radius: 6px;
+.card {
   border: none;
-  background-color: #667eea;
-  color: white;
+  border-radius: 12px;
+}
+
+.profile-image-container {
   cursor: pointer;
+}
+
+.profile-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #667eea;
+  transition: opacity 0.3s;
+}
+
+.profile-img:hover {
+  opacity: 0.8;
+}
+
+.camera-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background-color: #667eea;
+  border-color: #667eea;
+}
+
+.btn-primary:hover {
+  background-color: #5568d3;
+  border-color: #5568d3;
 }
 </style>
