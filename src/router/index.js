@@ -1,3 +1,4 @@
+// index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import { auth } from '@/services/firebase'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -10,7 +11,6 @@ import Home from '@/views/Home.vue'
 import UserProfile from '@/views/UserProfile.vue'
 import EditProfile from '@/views/EditProfile.vue'
 import Onboarding from '@/views/Onboarding.vue'
-// import artistDashboard from '@/views/ArtistDashboard.vue'
 
 const routes = [
   // Public routes
@@ -144,8 +144,8 @@ router.beforeEach(async (to, from, next) => {
         next('/artist/setup')
       }
       // If trying to access setup but already completed
-      // ✅ ONLY redirect to setup if dashboard is accessed but setup not completed
-      // ✅ ALLOW access to setup page even if already completed (for editing)
+      // ONLY redirect to setup if dashboard is accessed but setup not completed
+      // ALLOW access to setup page even if already completed (for editing)
       else if (to.name === 'ArtistDashboard' && !artistData?.profileSetupCompleted) {
         next('/artist/setup')
       } else {
