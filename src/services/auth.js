@@ -31,30 +31,31 @@ export const authService = {
 
       // 3. If artist, create artist profile
     if (userType === 'artist') {
-        await setDoc(doc(db, 'artists', user.uid), {
-            userId: user.uid,
-            artistName: displayName,
-            bio: '',
-            genres: [],
-            location: 'Singapore',
-            socialLinks: {
-                spotify: '',
-                youtube: '',
-                instagram: ''
+      await setDoc(doc(db, 'artists', user.uid), {
+        userId: user.uid,
+        artistName: displayName,
+        bio: '',
+        genres: [],
+        location: 'Singapore',
+        socialLinks: {
+          spotify: '',
+          youtube: '',
+          instagram: ''
         },
         musicLinks: [],
         followerCount: 0,
         verified: false,
+        profileSetupCompleted: false, // Add this flag
         createdAt: new Date()
-        })
+      })
     }
 
-    return { success: true, user }
-    } catch (error) {
-        console.error('Registration error:', error)
-        return { success: false, error: error.message }
-    }
-    },
+    return { success: true, user, userType } // Return userType for redirect logic
+  } catch (error) {
+    console.error('Registration error:', error)
+    return { success: false, error: error.message }
+  }
+},
 
   // Login user
     async login(email, password) {
