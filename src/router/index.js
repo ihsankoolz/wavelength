@@ -9,6 +9,7 @@ import Home from '@/views/Home.vue'
 import UserProfile from '@/views/UserProfile.vue'
 import EditProfile from '@/views/EditProfile.vue'
 import Onboarding from '@/views/Onboarding.vue'
+// import artistDashboard from '@/views/ArtistDashboard.vue'
 
 const routes = [
   // Public routes
@@ -55,6 +56,20 @@ const routes = [
     component: EditProfile,
     meta: { requiresAuth: true }
   },
+   {
+    path: '/artist/dashboard',
+    name: 'ArtistDashboard',
+    component: () => import('@/views/ArtistDashboard.vue'),
+    meta: { requiresAuth: true, requiresArtist: true } // Extra protection for artists only
+  },
+  // Add this to your routes array in index.js
+{
+  path: '/artist/setup',
+  name: 'ArtistSetup',
+  component: () => import('@/views/ArtistSetup.vue'),
+  meta: { requiresAuth: true, requiresArtist: true }
+},
+
   
   // TODO: Add more routes here
   // {
@@ -84,7 +99,7 @@ const router = createRouter({
 })
 
 // Route guards
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const user = auth.currentUser
 
   // If page needs auth and user NOT logged in
@@ -95,7 +110,34 @@ router.beforeEach((to, from, next) => {
   else if (to.meta.requiresGuest && user) {
     next('/home')
   }
-  // Everything else
+   else if (to.meta.requiresArtist && user) {
+    const { doc, getDoc } = await import('firebase/firestore')
+    const { db } = await import('@/services/firebase')
+    
+    const userDoc = await getDoc(doc(db, 'users', user.uid))
+    const userData = userDoc.data()
+
+    if (userData?.userType !== 'artist') {
+      next('/home')
+    } else {
+      // Check if artist setup is completed
+      const artistDoc = await getDoc(doc(db, 'artists', user.uid))
+      const artistData = artistDoc.data()
+      
+      // If trying to access dashboard but setup not completed
+      if (to.name === 'ArtistDashboard' && !artistData?.profileSetupCompleted) {
+        next('/artist/setup')
+      }
+      // If trying to access setup but already completed
+      // ✅ ONLY redirect to setup if dashboard is accessed but setup not completed
+      // ✅ ALLOW access to setup page even if already completed (for editing)
+      else if (to.name === 'ArtistDashboard' && !artistData?.profileSetupCompleted) {
+        next('/artist/setup')
+      } else {
+        next() // Allow access to both setup and dashboard
+      }
+    }
+  }
   else {
     next()
   }
