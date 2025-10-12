@@ -1,3 +1,4 @@
+<!-- artistDashbord.vue -->
 <template>
   <div class="dashboard-content">
     <!-- Loading State -->

@@ -144,8 +144,8 @@ router.beforeEach(async (to, from, next) => {
         next('/artist/setup')
       }
       // If trying to access setup but already completed
-      // ✅ ONLY redirect to setup if dashboard is accessed but setup not completed
-      // ✅ ALLOW access to setup page even if already completed (for editing)
+      // ONLY redirect to setup if dashboard is accessed but setup not completed
+      // ALLOW access to setup page even if already completed (for editing)
       else if (to.name === 'ArtistDashboard' && !artistData?.profileSetupCompleted) {
         next('/artist/setup')
       } else {

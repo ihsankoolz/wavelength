@@ -1,3 +1,4 @@
+<!-- userprofile.vue -->
 <template>
   <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">

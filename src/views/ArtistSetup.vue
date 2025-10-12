@@ -1,3 +1,4 @@
+<!-- artistsetup.vue -->
 <template>
   <div class="artist-setup">
     <div class="container">
