@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { auth } from '@/services/firebase'
+import { onAuthStateChanged } from 'firebase/auth'
 
 // Import views
 import Landing from '@/views/Landing.vue'
@@ -54,21 +55,12 @@ const routes = [
     name: 'EditProfile',
     component: EditProfile,
     meta: { requiresAuth: true }
-  },
-  
-  // TODO: Add more routes here
-  // {
-  //   path: '/onboarding',
-  //   name: 'Onboarding',
-  //   component: () => import('@/views/Onboarding.vue'),
-  //   meta: { requiresAuth: true }
-  // },
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  // Smooth scroll for anchor links
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
       return {
@@ -83,9 +75,24 @@ const router = createRouter({
   }
 })
 
-// Route guards
-router.beforeEach((to, from, next) => {
-  const user = auth.currentUser
+// Function to get current auth state
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe() // Stop listening after we get the result
+        resolve(user)
+      },
+      reject
+    )
+  })
+}
+
+// Route guards - now waits for Firebase
+router.beforeEach(async (to, from, next) => {
+  // Wait for Firebase to finish checking auth state
+  const user = await getCurrentUser()
 
   // If page needs auth and user NOT logged in
   if (to.meta.requiresAuth && !user) {
