@@ -11,6 +11,10 @@ import Home from '@/views/Home.vue'
 import UserProfile from '@/views/UserProfile.vue'
 import EditProfile from '@/views/EditProfile.vue'
 import Onboarding from '@/views/Onboarding.vue'
+import BrowseEvents from '@/views/BrowseEvents.vue'
+import CreateEvent from '@/views/CreateEvent.vue'
+import EventDetails from '@/views/EventDetails.vue'
+import PublicArtistProfile from '@/views/PublicArtistProfile.vue'
 
 const routes = [
   // Public routes
@@ -64,12 +68,36 @@ const routes = [
     meta: { requiresAuth: true, requiresArtist: true } // Extra protection for artists only
   },
   // Add this to your routes array in index.js
-{
-  path: '/artist/setup',
-  name: 'ArtistSetup',
-  component: () => import('@/views/ArtistSetup.vue'),
-  meta: { requiresAuth: true, requiresArtist: true }
-},
+  {
+    path: '/artist/setup',
+    name: 'ArtistSetup',
+    component: () => import('@/views/ArtistSetup.vue'),
+    meta: { requiresAuth: true, requiresArtist: true }
+  },
+  {
+    path: '/artist/:id',
+    name: 'PublicArtistProfile',
+    component: PublicArtistProfile,
+    meta: { requiresAuth: true }
+  },
+  {
+  path: '/events',
+  name: 'BrowseEvents',
+  component: () => import('@/views/BrowseEvents.vue'),
+  meta: { requiresAuth: true }
+  },
+  {
+    path: '/events/create',
+    name: 'CreateEvent',
+    component: () => import('@/views/CreateEvent.vue'),
+    meta: { requiresAuth: true, requiresArtist: true } // Only artists
+  },
+  {
+    path: '/events/:id',
+    name: 'EventDetails',
+    component: () => import('@/views/EventDetails.vue'),
+    meta: { requiresAuth: true }
+  }
 
   
   // TODO: Add more routes here
