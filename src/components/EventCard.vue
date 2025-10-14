@@ -24,6 +24,15 @@
           {{ event.venue }}
         </p>
 
+        <!-- Small Map preview -->
+        <div class="mt-3 event-card-map">
+          <EventMap 
+            :location="event.location" 
+            :title="event.venue"
+            size="small"
+          />
+        </div>
+
         <!-- Genre Tags -->
         <div class="genres mb-3">
           <span 
@@ -54,8 +63,13 @@
 </template>
 
 <script>
+import EventMap from '@/components/EventMap.vue'
+
 export default {
   name: 'EventCard',
+  components: {
+    EventMap
+  },
   props: {
     event: {
       type: Object,
@@ -79,10 +93,17 @@ export default {
       
       return eventDate.toLocaleDateString('en-SG', options)
     },
+    viewDetails() {
+      this.$router.push(`/events/${this.event.id}`)
+    },
     markInterested() {
       // TODO: Implement interested functionality
       console.log('Interested in event:', this.event.title)
       alert(`Marked interested in "${this.event.title}"! (Feature coming soon)`)
+    },
+    getDirections() {
+      const address = encodeURIComponent(this.event.location)
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=${address}`, '_blank')
     }
   }
 }
@@ -107,6 +128,11 @@ export default {
   font-weight: 600;
   color: #2c3e50;
   font-size: 1.2rem;
+}
+
+.event-card-map {
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .event-detail {
