@@ -312,7 +312,7 @@ const getYouTubeEmbedUrl = (url) => {
     }
 
     const addEvent = () => {
-      alert('Event management feature coming soon!')
+      router.push('/events/create')
     }
 
     const viewAnalytics = () => {
