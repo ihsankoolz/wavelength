@@ -1,4 +1,6 @@
 <!-- artistDashbord.vue -->
+
+<!-- edit -->
 <template>
   <div class="dashboard-content">
     <!-- Loading State -->
@@ -12,7 +14,7 @@
         </div>
       </div>
     </div>
-
+    
     <!-- Error State -->
     <div v-else-if="error" class="container-fluid bg-danger text-white p-4">
       <div class="row justify-content-center">
@@ -27,74 +29,97 @@
     </div>
 
     <!-- Artist Profile Display -->
+     
     <div v-else class="container-fluid p-4">
-      <div class="row justify-content-center">
-        <!-- Artist Header -->
-        <div class="col-12 text-center mb-4">
-            <h1 class="display-4 fw-bold mb-2">{{ artistData.artistName || 'Artist Name' }}</h1>
-            <p class="lead mb-3">{{ artistData.bio || 'No bio available' }}</p>
-        </div>
-
-        <!-- Genres Display -->
-        <div class="col-12 text-center mb-4">
-            <h6 class="mb-3">Music Genres</h6>
-            <div v-if="artistData.genres && artistData.genres.length > 0">
-                <span 
-                v-for="genre in artistData.genres" 
-                :key="genre"
-                class="badge bg-dark me-2 mb-2 px-3 py-2"
-                style="font-size: 0.9rem;">
-                {{ genre }}</span>
+        <!-- nav bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <router-link to="/home" class="navbar-brand">
+            <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo">
+            </router-link>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="ms-auto d-flex gap-2 align-items-center">
+                <router-link to="/home" class="btn btn-outline-light">
+                <i class="bi bi-arrow-left"></i> Back
+                </router-link>
             </div>
-            <div v-else>
-                <span class="badge bg-secondary">No genres selected</span>
             </div>
         </div>
+        </nav> 
+        <div class="content-wrapper">
+            <div class="container-fluid p-4">
+        <div class="row justify-content-center">
+            <!-- Artist Header -->
+            <div class="col-12 text-center mb-4">
+                <h1 class="display-4 fw-bold mb-2">{{ artistData.artistName || 'Artist Name' }}</h1>
+                <p class="lead mb-3">{{ artistData.bio || 'No bio available' }}</p>
+            </div>
 
-        <!-- Navigation Tabs -->
-        <div class="col-12">
-            <ul class="nav nav-tabs nav-justified mb-4" role="tablist">
-                <li class="nav-item" role="presentation">
-                <button 
-                    class="nav-link"
-                    :class="{ active: activeTab === 'music' }"
-                    @click="activeTab = 'music'"
-                    type="button">Music</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                <button 
-                    class="nav-link"
-                    :class="{ active: activeTab === 'events' }"
-                    @click="activeTab = 'events'"
-                    type="button">Events</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                <button 
-                    class="nav-link"
-                    :class="{ active: activeTab === 'about' }"
-                    @click="activeTab = 'about'"
-                    type="button">About</button>
-                </li>
-          </ul>
+            <!-- Genres Display -->
+            <div class="col-12 text-center mb-4">
+                <h6 class="mb-3">Music Genres</h6>
+                <div v-if="artistData.genres && artistData.genres.length > 0">
+                    <span 
+                    v-for="genre in artistData.genres" 
+                    :key="genre"
+                    class="badge bg-dark me-2 mb-2 px-3 py-2"
+                    style="font-size: 0.9rem;">
+                    {{ genre }}</span>
+                </div>
+                <div v-else>
+                    <span class="badge bg-secondary">No genres selected</span>
+                </div>
+            </div>
 
-<!-- Tab Content -->
-<div class="tab-content">
-  <!-- Music Tab -->
-  <div 
-    v-if="activeTab === 'music'" 
-    class="tab-pane show active"
-    style="display: block !important; opacity: 1 !important;"
-  >
-    <div class="visible-content" style="background: white; padding: 20px; margin: 20px 0; border: 2px solid #007bff; border-radius: 10px;">
+            <!-- Navigation Tabs -->
+            <div class="col-12">
+                <ul class="nav nav-tabs nav-justified mb-4" role="tablist">
+                    <li class="nav-item" role="presentation">
+                    <button 
+                        class="nav-link"
+                        :class="{ active: activeTab === 'music' }"
+                        @click="activeTab = 'music'"
+                        type="button">Music</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                    <button 
+                        class="nav-link"
+                        :class="{ active: activeTab === 'events' }"
+                        @click="activeTab = 'events'"
+                        type="button">Events</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                    <button 
+                        class="nav-link"
+                        :class="{ active: activeTab === 'about' }"
+                        @click="activeTab = 'about'"
+                        type="button">About</button>
+                    </li>
+            </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+        <!-- Music Tab -->
+        <div 
+            v-if="activeTab === 'music'" 
+            class="tab-pane show active"
+            style="display: block !important; opacity: 1 !important;"
+        >
+            <div class="visible-content" style="background: white; padding: 20px; margin: 20px 0; border: 2px solid #007bff; border-radius: 10px;">
+            
       
-      
-      <!-- Latest Single -->
-      <div style="background: #f8f9fa; padding: 20px; margin: 15px 0; border-left: 4px solid #28a745; border-radius: 5px;">
-        <h5 style="color: #28a745; margin-bottom: 15px;">🎵 Latest Single: {{ artistData.latestSingle || 'No title yet' }}</h5>
-        <div style="background: #e9ecef; padding: 20px; border-radius: 8px; text-align: center;">
-          <p class="text-muted">Watch my latest video here:</p>
-          
-          <div v-if="artistData.youtubeVideoUrl" class="embed-container">
+        <!-- Latest Single -->
+        <div style="background: #f8f9fa; padding: 20px; margin: 15px 0; border-left: 4px solid #28a745; border-radius: 5px;">
+            <h5 style="color: #28a745; margin-bottom: 15px;">🎵 Latest Single: {{ artistData.latestSingle || 'No title yet' }}</h5>
+            <div style="background: #e9ecef; padding: 20px; border-radius: 8px; text-align: center;">
+            <p class="text-muted">Watch my latest video here:</p>
+            
+            <div v-if="artistData.youtubeVideoUrl" class="embed-container">
         
         <div class="video-wrapper">
           <iframe 
@@ -105,18 +130,18 @@
             allowfullscreen
             class="youtube-iframe"
           ></iframe>
+            </div>
         </div>
-      </div>
+            </div>
         </div>
-      </div>
 
       <!-- Latest Album -->
-      <div style="background: #f8f9fa; padding: 20px; margin: 15px 0; border-left: 4px solid #1db954; border-radius: 5px;">
-        <h5 style="color: #1db954; margin-bottom: 15px;">💿 Album: {{ artistData.latestAlbum || 'No album yet' }}</h5>
-        <div style="background: #e9ecef; padding: 20px; border-radius: 8px; text-align: center;">
-          <p class="text-muted">Listen to my music here:</p>
-        
-          <div v-if="artistData.spotifyTrackUrl" class="embed-container">
+        <div style="background: #f8f9fa; padding: 20px; margin: 15px 0; border-left: 4px solid #1db954; border-radius: 5px;">
+            <h5 style="color: #1db954; margin-bottom: 15px;">💿 Album: {{ artistData.latestAlbum || 'No album yet' }}</h5>
+            <div style="background: #e9ecef; padding: 20px; border-radius: 8px; text-align: center;">
+            <p class="text-muted">Listen to my music here:</p>
+            
+            <div v-if="artistData.spotifyTrackUrl" class="embed-container">
      
         <div class="spotify-wrapper">
           <iframe 
@@ -128,71 +153,68 @@
             allow="encrypted-media"
             class="spotify-iframe"
           ></iframe>
+                </div>
+            </div>
+                </div>
+            </div>
+            </div>
         </div>
-      </div>
+
+        <!-- Events Tab -->
+        <div 
+            v-if="activeTab === 'events'" 
+            class="tab-pane show active"
+            style="display: block !important; opacity: 1 !important;"
+        >
+            <div style="background: #007bff; color: white; padding: 40px; text-align: center; border-radius: 10px;">
+            <h4>🎪 EVENTS TAB IS WORKING!</h4>
+            <p>No events scheduled at the moment</p>
+            <button @click="addEvent" class="btn btn-light">📅 Add Event</button>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Events Tab -->
-  <div 
-    v-if="activeTab === 'events'" 
-    class="tab-pane show active"
-    style="display: block !important; opacity: 1 !important;"
-  >
-    <div style="background: #007bff; color: white; padding: 40px; text-align: center; border-radius: 10px;">
-      <h4>🎪 EVENTS TAB IS WORKING!</h4>
-      <p>No events scheduled at the moment</p>
-      <button @click="addEvent" class="btn btn-light">📅 Add Event</button>
-    </div>
-  </div>
+        <!-- About Tab -->
+        <div 
+            v-if="activeTab === 'about'" 
+            class="tab-pane show active"
+            style="display: block !important; opacity: 1 !important;"
+        >
+            <div style="background: #28a745; color: white; padding: 40px; text-align: center; border-radius: 10px;">
+            <h4>About {{ artistData.artistName || 'Artist Name' }}!</h4>
+            <p>{{ artistData.aboutSection || 'No about section available.' }}</p>
+            <div v-if="hasSocialLinks" class="social-links mt-4">
+                <h5>Connect With Me!</h5>
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                <a 
+                                v-if="artistData.socialLinks?.spotify" 
+                                :href="artistData.socialLinks.spotify" 
+                                target="_blank"
+                                class="btn btn-success btn-sm"
+                                >
+                                Spotify
+                                </a>
+                                <a 
+                                v-if="artistData.socialLinks?.youtube" 
+                                :href="artistData.socialLinks.youtube" 
+                                target="_blank"
+                                class="btn btn-danger btn-sm"
+                                >
+                                YouTube
+                                </a>
+                                <a 
+                                v-if="artistData.socialLinks?.instagram" 
+                                :href="artistData.socialLinks.instagram" 
+                                target="_blank"
+                                class="btn btn-primary btn-sm"
+                                >
+                                Instagram
+                                </a>
+                            </div>
+                            </div>
 
-  <!-- About Tab -->
-  <div 
-    v-if="activeTab === 'about'" 
-    class="tab-pane show active"
-    style="display: block !important; opacity: 1 !important;"
-  >
-    <div style="background: #28a745; color: white; padding: 40px; text-align: center; border-radius: 10px;">
-      <h4>About {{ artistData.artistName || 'Artist Name' }}!</h4>
-      <p>{{ artistData.aboutSection || 'No about section available.' }}</p>
-      <div v-if="hasSocialLinks" class="social-links mt-4">
-        <h5>Connect With Me!</h5>
-            <div class="d-flex flex-wrap gap-2 justify-content-center">
-                        <a 
-                          v-if="artistData.socialLinks?.spotify" 
-                          :href="artistData.socialLinks.spotify" 
-                          target="_blank"
-                          class="btn btn-success btn-sm"
-                        >
-                          Spotify
-                        </a>
-                        <a 
-                          v-if="artistData.socialLinks?.youtube" 
-                          :href="artistData.socialLinks.youtube" 
-                          target="_blank"
-                          class="btn btn-danger btn-sm"
-                        >
-                          YouTube
-                        </a>
-                        <a 
-                          v-if="artistData.socialLinks?.instagram" 
-                          :href="artistData.socialLinks.instagram" 
-                          target="_blank"
-                          class="btn btn-primary btn-sm"
-                        >
-                          Instagram
-                        </a>
-                      </div>
-                    </div>
-
-    </div>
-  </div>
-</div>
-
-
-          
+            </div>
+        </div>
+        </div>  
         </div>
 
         <!-- Quick Actions - Only show for profile owner -->
@@ -206,10 +228,10 @@
     </button>
   </div>
 </div>
-
-
       </div> <!-- End of main row -->
     </div> <!-- End of Artist Profile Display -->
+    </div>
+    </div>
   </div>
 </template>
 
@@ -457,6 +479,11 @@ const getYouTubeEmbedUrl = (url) => {
   padding: 40px 20px;
   border-radius: 8px;
   text-align: center;
+}
+
+.content-wrapper {
+  margin-top: 110px; /* Adjust this value based on your navbar height */
+  padding-bottom: 40px;
 }
 
 .embed-placeholder {
