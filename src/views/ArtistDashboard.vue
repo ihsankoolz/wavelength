@@ -1,6 +1,4 @@
 <!-- artistDashbord.vue -->
-
-<!-- edit -->
 <template>
   <div class="dashboard-content">
     <!-- Loading State -->
@@ -29,7 +27,6 @@
     </div>
 
     <!-- Artist Profile Display -->
-     
     <div v-else class="container-fluid p-4">
         <!-- nav bar -->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
@@ -100,7 +97,7 @@
                         @click="activeTab = 'about'"
                         type="button">About</button>
                     </li>
-            </ul>
+                </ul>
 
         <!-- Tab Content -->
         <div class="tab-content">
@@ -112,7 +109,6 @@
         >
             <div class="visible-content" style="background: white; padding: 20px; margin: 20px 0; border: 2px solid #007bff; border-radius: 10px;">
             
-      
         <!-- Latest Single -->
         <div style="background: #f8f9fa; padding: 20px; margin: 15px 0; border-left: 4px solid #28a745; border-radius: 5px;">
             <h5 style="color: #28a745; margin-bottom: 15px;">🎵 Latest Single: {{ artistData.latestSingle || 'No title yet' }}</h5>
@@ -161,16 +157,102 @@
         </div>
 
         <!-- Events Tab -->
-        <div 
-            v-if="activeTab === 'events'" 
+        <div v-if="activeTab === 'events'" 
             class="tab-pane show active"
-            style="display: block !important; opacity: 1 !important;"
-        >
-            <div style="background: #007bff; color: white; padding: 40px; text-align: center; border-radius: 10px;">
+            style="display: block !important; opacity: 1 !important;">
+            
+            <div v-if="eventsLoading" class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading events...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Loading your events...</p>
+                    </div>
+            <div v-else>
+                    <!-- Header with Add Event Button -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                      <div>
+                        <h4 class="mb-1">🎪 My Events</h4>
+                        <p class="text-muted mb-0">Manage your upcoming performances</p>
+                      </div>
+                      <button @click="addEvent" class="btn btn-primary">
+                        📅 Add New Event
+                      </button>
+                    </div>
+            </div>
+
+            <div v-if="artistEvents.length === 0" class="text-center py-5">
+                      <div style="background: #f8f9fa; padding: 40px; border-radius: 10px; border: 2px dashed #dee2e6;">
+                        <i class="bi bi-calendar-event display-4 text-muted mb-3"></i>
+                        <h5 class="text-muted mb-3">No events scheduled yet</h5>
+                        <p class="text-muted mb-4">Create your first event to start building your audience!</p>
+                        <button @click="addEvent" class="btn btn-primary btn-lg">
+                          📅 Create Your First Event
+                        </button>
+                      </div>
+                    </div>
+                    
+            <div v-else class="row g-4">
+                      <div 
+                        v-for="event in artistEvents" 
+                        :key="event.id"
+                        class="col-12 col-md-6 col-lg-4">
+                        <div class="card h-100 event-card">
+                          
+
+                          <div class="card-body d-flex flex-column">
+                            <!-- Event Title -->
+                            <h5 class="card-title text-primary fw-bold mb-2">{{ event.title || 'Untitled Event' }}</h5>
+                            
+                            <!-- Event Date & Time -->
+                            <div class="mb-2">
+                              <small class="text-muted">
+                                <i class="bi bi-calendar me-1"></i>
+                                {{ formatEventDate(event.date) }}
+                                <span v-if="formatEventTime(event.date)" class="ms-2">
+                                  <i class="bi bi-clock me-1"></i>
+                                  {{ formatEventTime(event.date) }}
+                                </span>
+                              </small>
+                            </div>
+
+                            <!-- Event Location -->
+                            <div v-if="event.location" class="mb-2">
+                              <small class="text-muted">
+                                <i class="bi bi-geo-alt me-1"></i>
+                                {{ event.location }}
+                              </small>
+                            </div>
+
+                            <!-- Event Description -->
+                            <p v-if="event.description" class="card-text text-muted small mb-3">
+                              {{ event.description.length > 100 ? event.description.substring(0, 100) + '...' : event.description }}
+                            </p>
+
+                          </div>
+
+                          <!-- Card Actions -->
+                          <div class="card-footer bg-light">
+                            <div class="btn-group w-100" role="group">
+                              <button class="btn btn-outline-primary btn-sm" @click="editEvent(event.id)">
+                                <i class="bi bi-pencil"></i> Edit
+                              </button>
+                              <button class="btn btn-outline-info btn-sm" @click="viewEvent(event.id)">
+                                <i class="bi bi-eye"></i> View
+                              </button>
+                              <button class="btn btn-outline-danger btn-sm" @click="deleteEvent(event.id)">
+                                <i class="bi bi-trash"></i> Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  
+            <!-- <div style="background: #007bff; color: white; padding: 40px; text-align: center; border-radius: 10px;">
             <h4>🎪 EVENTS TAB IS WORKING!</h4>
             <p>No events scheduled at the moment</p>
             <button @click="addEvent" class="btn btn-light">📅 Add Event</button>
-            </div>
+            </div> -->
         </div>
 
         <!-- About Tab -->
@@ -238,7 +320,7 @@
 <script>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '@/services/firebase'
 
@@ -250,6 +332,9 @@ export default {
     const error = ref(null)
     const currentUser = ref(null)
     const activeTab = ref('music')
+    //event tab
+    const artistEvents = ref([])
+    const eventsLoading = ref(false)
     
     // Initialize artistData with uid field
     const artistData = reactive({
@@ -284,6 +369,109 @@ export default {
     const isOwner = computed(() => {
       return currentUser.value && currentUser.value.uid === artistData.uid
     })
+
+    
+const loadArtistEvents = async (artistId) => {
+  try {
+    eventsLoading.value = true
+    
+    console.log('Looking for events with artistId:', artistId)
+    
+    // Query events where artistId matches the current artist
+    const eventsQuery = query(
+      collection(db, 'events'),
+      where('artistId', '==', artistId)
+    )
+    
+    const eventsSnapshot = await getDocs(eventsQuery)
+    
+    console.log('Found events:', eventsSnapshot.docs.length)
+    
+    artistEvents.value = eventsSnapshot.docs.map(doc => {
+      const data = doc.data()
+      console.log('Event data:', data)
+      return {
+        id: doc.id,
+        ...data
+      }
+    })
+    
+    // Sort events by date in JavaScript instead of Firestore
+    artistEvents.value.sort((a, b) => {
+      const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date)
+      const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date)
+      return dateA - dateB
+    })
+    
+    console.log('Loaded and sorted artist events:', artistEvents.value)
+  } catch (err) {
+    console.error('Error loading artist events:', err)
+  } finally {
+    eventsLoading.value = false
+  }
+}
+
+// Format date for events
+const formatEventDate = (timestamp) => {
+  if (!timestamp) return 'Date TBD'
+  
+  let date
+  if (timestamp.toDate) {
+    date = timestamp.toDate()
+  } else if (timestamp instanceof Date) {
+    date = timestamp
+  } else {
+    date = new Date(timestamp)
+  }
+  
+  return date.toLocaleDateString('en-US', { 
+    weekday: 'short',
+    year: 'numeric', 
+    month: 'short',
+    day: 'numeric'
+  })
+}
+
+// Format time for events
+const formatEventTime = (timestamp) => {
+  if (!timestamp) return ''
+  
+  let date
+  if (timestamp.toDate) {
+    date = timestamp.toDate()
+  } else if (timestamp instanceof Date) {
+    date = timestamp
+  } else {
+    date = new Date(timestamp)
+  }
+  
+  return date.toLocaleTimeString('en-US', { 
+    hour: 'numeric',
+    minute: '2-digit'
+  })
+}
+
+// Event management -- placeholders for now
+const editEvent = (eventId) => {
+  router.push(`/events/edit/${eventId}`)
+}
+
+const viewEvent = (eventId) => {
+  router.push(`/events/${eventId}`)
+}
+
+const deleteEvent = async (eventId) => {
+  if (confirm('Are you sure you want to delete this event?')) {
+    try {
+      console.log('Deleting event:', eventId)
+    } catch (error) {
+      console.error('Error deleting event:', error)
+    }
+  }
+}
+
+
+
 
     const getSpotifyEmbedUrl = (url) => {
   if (!url) return null
@@ -368,8 +556,8 @@ const getYouTubeEmbedUrl = (url) => {
             aboutSection: data.aboutSection || '',
             latestSingle: data.latestSingle || '',
             latestAlbum: data.latestAlbum || '',
-            spotifyTrackUrl: data.spotifyTrackUrl || '',      // ✅ ADD THIS
-  youtubeVideoUrl: data.youtubeVideoUrl || '', 
+            spotifyTrackUrl: data.spotifyTrackUrl || '',      
+            youtubeVideoUrl: data.youtubeVideoUrl || '', 
             genres: data.genres || [],
             socialLinks: data.socialLinks || {
               spotify: '',
@@ -382,6 +570,8 @@ const getYouTubeEmbedUrl = (url) => {
             createdAt: data.createdAt,
             profileSetupCompleted: data.profileSetupCompleted || false
           })
+          await loadArtistEvents(userId)
+
         } else {
           error.value = 'Artist profile not found. Please complete your registration.'
         }
@@ -409,21 +599,27 @@ const getYouTubeEmbedUrl = (url) => {
       return () => unsubscribe()
     })
 
-    // ✅ FIXED: Return isOwner in the return statement
     return {
       artistData,
       loading,
       error,
       activeTab,
       hasSocialLinks,
-      isOwner, // ✅ NOW RETURNED - template can access it
+      isOwner, 
+      artistEvents,
+      eventsLoading,
       formatDate,
+      formatEventDate, // ✅ ADD THIS
+  formatEventTime, // ✅ ADD THIS
+  editEvent, // ✅ ADD THIS
+  viewEvent, // ✅ ADD THIS
+  deleteEvent, // ✅ ADD THIS
       goToSetup,
       editProfile,
       addEvent,
       viewAnalytics,
-      getSpotifyEmbedUrl,    // ✅ ADD THIS
-  getYouTubeEmbedUrl   
+      getSpotifyEmbedUrl,    
+      getYouTubeEmbedUrl   
     }
   }
 }
@@ -482,7 +678,7 @@ const getYouTubeEmbedUrl = (url) => {
 }
 
 .content-wrapper {
-  margin-top: 110px; /* Adjust this value based on your navbar height */
+  margin-top: 110px; 
   padding-bottom: 40px;
 }
 
