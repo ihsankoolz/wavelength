@@ -411,6 +411,7 @@ const loadArtistEvents = async (artistId) => {
   }
 }
 
+
 // Format date for events
 const formatEventDate = (timestamp) => {
   if (!timestamp) return 'Date TBD'
