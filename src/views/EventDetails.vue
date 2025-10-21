@@ -2,19 +2,7 @@
  <template>
   <div class="event-details-page">
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container">
-        <router-link to="/home" class="navbar-brand">
-          <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo">
-        </router-link>
-        
-        <div class="ms-auto d-flex gap-2">
-          <router-link to="/events" class="btn btn-outline-light">
-            <i class="bi bi-arrow-left"></i> Back to Events
-          </router-link>
-        </div>
-      </div>
-    </nav>
+    <NavigationBar />
 
     <!-- Loading State -->
     <div v-if="loading" class="content-wrapper">
@@ -180,11 +168,13 @@
 import { auth, db } from '@/services/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import EventMap from '@/components/EventMap.vue'
+import NavigationBar from '@/components/NavigationBar.vue'
 
 export default {
   name: 'EventDetails',
   components: {
-    EventMap
+    EventMap,
+    NavigationBar
   },
   data() {
     return {

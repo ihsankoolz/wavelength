@@ -1,6 +1,9 @@
 <!-- artistDashbord.vue -->
 <template>
   <div class="dashboard-content">
+
+    <NavigationBar />
+
     <!-- Loading State -->
     <div v-if="loading" class="container-fluid bg-light p-4">
       <div class="row justify-content-center">
@@ -219,9 +222,15 @@ import { useRouter } from 'vue-router'
 import { doc, getDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '@/services/firebase'
+import NavigationBar from '@/components/NavigationBar.vue'
+import EventCard from '@/components/EventCard.vue'
 
 export default {
   name: 'ArtistDashboard',
+  components:{
+    NavigationBar,
+    EventCard
+  },
   setup() {
     const router = useRouter()
     const loading = ref(true)
@@ -411,6 +420,8 @@ const getYouTubeEmbedUrl = (url) => {
 <style scoped>
 .dashboard-content {
   min-height: 100vh;
+  padding-top: 100px; /* ⭐ Space for fixed navbar */
+  background: #f8f9fa; /* Optional: add background color */
 }
 
 .display-4 {
@@ -450,6 +461,8 @@ const getYouTubeEmbedUrl = (url) => {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  min-height: 150px;
 }
 
 .music-placeholder {
@@ -457,6 +470,7 @@ const getYouTubeEmbedUrl = (url) => {
   padding: 40px 20px;
   border-radius: 8px;
   text-align: center;
+  min-height: 100px;
 }
 
 .embed-placeholder {
@@ -465,11 +479,12 @@ const getYouTubeEmbedUrl = (url) => {
   margin: 20px 0;
   border-radius: 5px;
   border: 2px dashed #adb5bd;
+  min-height: 80px;
 }
 
 .spotify-embed {
-  background: #1db954;
-  color: white;
+  background: #1db954 !important;
+  color: white !important;
 }
 
 /* About Section */
@@ -523,75 +538,23 @@ const getYouTubeEmbedUrl = (url) => {
   height: 3rem;
 }
 
-@media (max-width: 768px) {
-  .display-4 {
-    font-size: 2rem;
-  }
-  
-  .btn-group {
-    flex-direction: column;
-  }
-  
-  .btn-group .btn {
-    border-radius: 0.375rem !important;
-    margin-bottom: 0.5rem;
-  }
-
-  .nav-tabs .nav-link {
-    padding: 10px 15px;
-    font-size: 14px;
-  }
-}
 .tab-content {
-  min-height: 300px; /* Ensure container has minimum height */
+  min-height: 300px;
 }
 
 .tab-pane {
-  display: block !important; /* Override Bootstrap's display: none */
-  min-height: 200px; /* Ensure each tab pane has height */
+  display: block !important;
+  min-height: 200px;
 }
 
 .tab-pane:not(.show) {
-  display: none !important; /* Hide non-active tabs */
+  display: none !important;
 }
-
-/* Ensure music sections are visible */
-.music-section {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
-  min-height: 150px; /* Ensure minimum height */
-}
-
-.music-placeholder {
-  background: #f8f9fa;
-  padding: 40px 20px;
-  border-radius: 8px;
-  text-align: center;
-  min-height: 100px; /* Ensure placeholder is visible */
-}
-
-.embed-placeholder {
-  background: #e9ecef;
-  padding: 30px;
-  margin: 20px 0;
-  border-radius: 5px;
-  border: 2px dashed #adb5bd;
-  min-height: 80px; /* Ensure embed area is visible */
-}
-
-.spotify-embed {
-  background: #1db954 !important;
-  color: white !important;
-}
-
 
 /* Embed Wrappers */
 .video-wrapper {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
   border-radius: 12px;
@@ -618,7 +581,6 @@ const getYouTubeEmbedUrl = (url) => {
   min-height: 152px;
 }
 
-/* Enhanced embed containers */
 .embed-container {
   background: #f8f9fa;
   padding: 20px;
@@ -633,8 +595,30 @@ const getYouTubeEmbedUrl = (url) => {
   text-align: center;
 }
 
-/* Responsive embeds */
+/* ⭐ MOBILE RESPONSIVE */
 @media (max-width: 768px) {
+  .dashboard-content {
+    padding-top: 80px; /* ⭐ Less padding for mobile navbar */
+  }
+  
+  .display-4 {
+    font-size: 2rem;
+  }
+  
+  .btn-group {
+    flex-direction: column;
+  }
+  
+  .btn-group .btn {
+    border-radius: 0.375rem !important;
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-tabs .nav-link {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
   .spotify-iframe {
     height: 152px;
   }

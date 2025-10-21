@@ -15,6 +15,7 @@ import BrowseEvents from '@/views/BrowseEvents.vue'
 import CreateEvent from '@/views/CreateEvent.vue'
 import EventDetails from '@/views/EventDetails.vue'
 import PublicArtistProfile from '@/views/PublicArtistProfile.vue'
+import MyInterests from '@/views/MyInterests.vue'
 
 const routes = [
   // Public routes
@@ -96,6 +97,12 @@ const routes = [
     path: '/events/:id',
     name: 'EventDetails',
     component: () => import('@/views/EventDetails.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/my-interests',
+    name: 'MyInterests',
+    component: MyInterests,
     meta: { requiresAuth: true }
   }
 

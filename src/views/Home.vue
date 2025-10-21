@@ -3,25 +3,7 @@
   <div class="fan-homepage">
     
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container">
-        <router-link to="/home" class="navbar-brand">
-          <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo">
-        </router-link>
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <div class="ms-auto d-flex gap-2 align-items-center">
-            <span class="text-white me-2">{{ userName }}</span>
-            <button @click="goToProfile" class="btn btn-outline-light">Profile</button>
-            <button @click="logout" class="btn btn-light">Logout</button>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <NavigationBar />
 
     <!-- Main Content -->
     <div class="content-wrapper">
@@ -154,6 +136,7 @@
 import { signOut } from 'firebase/auth'
 import { auth, db } from '@/services/firebase'
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore'
+import NavigationBar from '@/components/NavigationBar.vue'
 import ArtistCard from '@/components/ArtistCard.vue'
 import EventCard from '@/components/EventCard.vue'
 
@@ -161,7 +144,8 @@ export default {
   name: 'FanHomepage',
   components: {
     ArtistCard,
-    EventCard
+    EventCard,
+    NavigationBar
   },
   data() {
     return {

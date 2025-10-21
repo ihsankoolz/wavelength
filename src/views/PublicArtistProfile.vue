@@ -2,25 +2,7 @@
  <template>
   <div class="public-artist-profile">
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container">
-        <router-link to="/home" class="navbar-brand">
-          <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo">
-        </router-link>
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <div class="ms-auto d-flex gap-2 align-items-center">
-            <router-link to="/home" class="btn btn-outline-light">
-              <i class="bi bi-arrow-left"></i> Back
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <NavigationBar />
 
     <!-- Loading State -->
     <div v-if="loading" class="content-wrapper">
@@ -85,7 +67,9 @@
             <button 
               class="btn btn-primary btn-lg"
               @click="toggleFollow"
+              :disabled="followLoading"
             >
+              <span v-if="followLoading" class="spinner-border spinner-border-sm me-2"></span>
               <i class="bi" :class="isFollowing ? 'bi-check-circle-fill' : 'bi-plus-circle'"></i>
               {{ isFollowing ? 'Following' : 'Follow' }}
             </button>
@@ -298,11 +282,14 @@
 import { auth, db } from '@/services/firebase'
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore' // ⭐ Removed orderBy import
 import EventCard from '@/components/EventCard.vue'
+import NavigationBar from '@/components/NavigationBar.vue'
+import { followArtist, unfollowArtist, isUserFollowingArtist } from '@/utils/userInteractions'
 
 export default {
   name: 'PublicArtistProfile',
   components: {
-    EventCard
+    EventCard,
+    NavigationBar
   },
   data() {
     return {
@@ -312,6 +299,7 @@ export default {
       loadingEvents: false,
       activeTab: 'music',
       isFollowing: false,
+      followLoading: false,
       defaultImage: 'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff' // ⭐ FIXED
     }
   },
@@ -324,6 +312,7 @@ export default {
   async mounted() {
     await this.loadArtistProfile()
     await this.loadArtistEvents()
+    await this.checkFollowStatus()
   },
   methods: {
     async loadArtistProfile() {
@@ -392,6 +381,17 @@ export default {
       }
     },
 
+    async checkFollowStatus() {
+      try {
+        const user = auth.currentUser
+        if (user && this.artist) {
+          this.isFollowing = await isUserFollowingArtist(user.uid, this.artist.id)
+        }
+      } catch (error) {
+        console.error('Error checking follow status:', error)
+      }
+    },
+
     getSpotifyEmbedUrl(url) {
       if (!url) return null
       return url.replace('open.spotify.com/', 'open.spotify.com/embed/')
@@ -421,14 +421,40 @@ export default {
       })
     },
 
-    toggleFollow() {
-      // TODO: Implement actual follow/unfollow with Firestore
-      this.isFollowing = !this.isFollowing
-      
-      if (this.isFollowing) {
-        alert(`You're now following ${this.artist.artistName}! (Feature will be fully implemented soon)`)
-      } else {
-        alert(`Unfollowed ${this.artist.artistName}`)
+    async toggleFollow() {
+      const user = auth.currentUser
+      if (!user) {
+        alert('Please log in to follow artists')
+        return
+      }
+
+      this.followLoading = true
+
+      try {
+        if (this.isFollowing) {
+          // Unfollow
+          const result = await unfollowArtist(user.uid, this.artist.id)
+          if (result.success) {
+            this.isFollowing = false
+            // Update local count
+            if (this.artist.followerCount > 0) {
+              this.artist.followerCount--
+            }
+          }
+        } else {
+          // Follow
+          const result = await followArtist(user.uid, this.artist.id)
+          if (result.success) {
+            this.isFollowing = true
+            // Update local count
+            this.artist.followerCount = (this.artist.followerCount || 0) + 1
+          }
+        }
+      } catch (error) {
+        console.error('Error toggling follow:', error)
+        alert('Failed to update follow status. Please try again.')
+      } finally {
+        this.followLoading = false
       }
     }
   }

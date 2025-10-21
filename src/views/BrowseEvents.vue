@@ -2,25 +2,7 @@
 <template>
   <div class="browse-events-page">
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container">
-        <router-link to="/home" class="navbar-brand">
-          <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo">
-        </router-link>
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <div class="ms-auto d-flex gap-2 align-items-center">
-            <span class="text-white me-2">{{ userName }}</span>
-            <router-link to="/home" class="btn btn-outline-light">Home</router-link>
-            <button @click="logout" class="btn btn-light">Logout</button>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <NavigationBar />
 
     <!-- Main Content -->
     <div class="content-wrapper">
@@ -156,6 +138,7 @@
 import { signOut } from 'firebase/auth'
 import { auth, db } from '@/services/firebase'
 import { collection, getDocs, query, orderBy, where } from 'firebase/firestore'
+import NavigationBar from '@/components/NavigationBar.vue'
 import EventCard from '@/components/EventCard.vue'
 import DiscoveryMap from '@/components/DiscoveryMap.vue'
 
@@ -163,7 +146,8 @@ export default {
   name: 'BrowseEvents',
   components: {
     EventCard,
-    DiscoveryMap
+    DiscoveryMap,
+    NavigationBar
   },
   data() {
     return {
@@ -190,24 +174,24 @@ export default {
     await this.loadEvents()
   },
   methods: {
-    async loadUserData() {
-      try {
-        const user = auth.currentUser
-        if (!user) {
-          this.$router.push('/login')
-          return
-        }
+    // async loadUserData() {
+    //   try {
+    //     const user = auth.currentUser
+    //     if (!user) {
+    //       this.$router.push('/login')
+    //       return
+    //     }
 
-        // Get user data
-        const { doc, getDoc } = await import('firebase/firestore')
-        const userDoc = await getDoc(doc(db, 'users', user.uid))
-        if (userDoc.exists()) {
-          this.userName = userDoc.data().displayName
-        }
-      } catch (error) {
-        console.error('Error loading user data:', error)
-      }
-    },
+    //     // Get user data
+    //     const { doc, getDoc } = await import('firebase/firestore')
+    //     const userDoc = await getDoc(doc(db, 'users', user.uid))
+    //     if (userDoc.exists()) {
+    //       this.userName = userDoc.data().displayName
+    //     }
+    //   } catch (error) {
+    //     console.error('Error loading user data:', error)
+    //   }
+    // },
 
     async loadEvents() {
       try {
@@ -293,14 +277,14 @@ export default {
       this.displayedEvents = [...this.allEvents]
     },
 
-    async logout() {
-      try {
-        await signOut(auth)
-        this.$router.push('/login')
-      } catch (error) {
-        console.error('Logout error:', error)
-      }
-    }
+    // async logout() {
+    //   try {
+    //     await signOut(auth)
+    //     this.$router.push('/login')
+    //   } catch (error) {
+    //     console.error('Logout error:', error)
+    //   }
+    // }
   }
 }
 </script>
