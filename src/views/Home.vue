@@ -286,12 +286,45 @@ export default {
       this.displayedArtists = this.recommendedArtists
     },
 
-    goToProfile() {
-      const user = auth.currentUser
-      if (user) {
+    // asyncgoToProfile() {
+    //   const user = auth.currentUser
+    //   if (user) {
+    //     this.$router.push(`/profile/${user.uid}`)
+    //   }
+    // },
+    // ✅ CORRECTED: Updated goToProfile method to match your router logic
+async goToProfile() {
+  const user = auth.currentUser
+  if (!user) {
+    this.$router.push('/login')
+    return
+  }
+
+  try {
+    // Check the user's type from the users collection (matching your router logic)
+    const userDoc = await getDoc(doc(db, 'users', user.uid))
+    
+    if (userDoc.exists()) {
+      const userData = userDoc.data()
+      
+      if (userData?.userType === 'artist') {
+        // User is an artist - redirect to artist dashboard
+        this.$router.push('/artist/dashboard')
+      } else {
+        // User is a fan - redirect to fan profile page
         this.$router.push(`/profile/${user.uid}`)
       }
-    },
+    } else {
+      // No user document found - fallback to regular profile
+      this.$router.push(`/profile/${user.uid}`)
+    }
+  } catch (error) {
+    console.error('Error checking user type:', error)
+    // Fallback to regular profile if there's an error
+    this.$router.push(`/profile/${user.uid}`)
+  }
+},
+
 
     async logout() {
       try {
