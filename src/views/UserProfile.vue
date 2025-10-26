@@ -202,32 +202,87 @@ export default {
 
         const userId = user.uid
 
-        // Delete user document from Firestore
-        await deleteDoc(doc(db, 'users', userId))
+        // Step 1: Delete all related data from Firestore first
+        console.log('🗑️ Deleting user data from Firestore...')
 
-        // If artist, also delete artist profile
+        // Delete user document
+        await deleteDoc(doc(db, 'users', userId))
+        console.log('✅ User document deleted')
+
+        // If artist, delete artist profile and related data
         try {
           const artistDoc = await getDoc(doc(db, 'artists', userId))
           if (artistDoc.exists()) {
             await deleteDoc(doc(db, 'artists', userId))
+            console.log('✅ Artist profile deleted')
+
+            // TODO: Delete artist's events (if needed)
+            // TODO: Delete artist's music comments (if needed)
           }
         } catch (e) {
-          // No artist profile, that's okay
+          console.log('ℹ️ No artist profile found')
         }
 
-        // Delete Firebase Auth user
-        await deleteUser(user)
+        // Delete user's notifications
+        try {
+          const { collection, query, where, getDocs } = await import('firebase/firestore')
+          const notificationsQuery = query(
+            collection(db, 'notifications'),
+            where('recipientId', '==', userId),
+          )
+          const notificationsSnapshot = await getDocs(notificationsQuery)
+          const deletePromises = notificationsSnapshot.docs.map((doc) => deleteDoc(doc.ref))
+          await Promise.all(deletePromises)
+          console.log(`✅ Deleted ${notificationsSnapshot.size} notifications`)
+        } catch (e) {
+          console.log('ℹ️ No notifications to delete')
+        }
 
-        alert('Account deleted successfully')
-        this.$router.push('/')
+        // Step 2: Delete Firebase Auth account
+        console.log('🗑️ Deleting Firebase Auth account...')
+        try {
+          await deleteUser(user)
+          console.log('✅ Firebase Auth account deleted')
+
+          alert(
+            '✅ Account deleted successfully. You can now register with this email again if you wish.',
+          )
+          this.$router.push('/')
+        } catch (authError) {
+          console.error('❌ Error deleting Auth account:', authError)
+
+          if (authError.code === 'auth/requires-recent-login') {
+            // Firestore data is already deleted, but Auth needs re-authentication
+            alert(
+              '⚠️ Your account data has been deleted from our database.\n\n' +
+                'However, for security reasons, you need to log out and log back in, ' +
+                'then delete your account again to fully remove it from the authentication system.\n\n' +
+                'This will allow you to reuse your email address.',
+            )
+            await auth.signOut()
+            this.$router.push('/login')
+          } else {
+            // Unexpected error - alert user
+            alert(
+              '⚠️ Partial deletion occurred.\n\n' +
+                'Your data was removed from our database, but there was an issue with the authentication system.\n\n' +
+                'Please contact support with this error code: ' +
+                authError.code,
+            )
+            await auth.signOut()
+            this.$router.push('/')
+          }
+        }
       } catch (error) {
         console.error('Error deleting account:', error)
 
-        if (error.code === 'auth/requires-recent-login') {
-          alert('For security, please log out and log in again before deleting your account.')
-        } else {
-          alert('Failed to delete account. Please try again.')
-        }
+        // If Firestore deletion failed, show error
+        alert(
+          '❌ Failed to delete account.\n\n' +
+            'Please try again or contact support if the issue persists.\n\n' +
+            'Error: ' +
+            (error.message || 'Unknown error'),
+        )
       }
     },
   },
