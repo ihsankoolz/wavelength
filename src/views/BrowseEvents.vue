@@ -7,7 +7,6 @@
     <!-- Main Content -->
     <div class="content-wrapper">
       <div class="container py-4">
-
         <!-- Header -->
         <div class="welcome-section mb-5">
           <h1 class="display-5 fw-bold mb-2">🎪 Upcoming Events</h1>
@@ -17,20 +16,28 @@
         <!-- Filter Section -->
         <div class="card shadow-sm mb-4">
           <div class="card-body">
-            <h5 class="card-title mb-3">
-              <i class="bi bi-funnel"></i> Filter Events
-            </h5>
+            <h5 class="card-title mb-3"><i class="bi bi-funnel"></i> Filter Events</h5>
             <div class="row g-3">
-              <div class="col-md-4">
-                <label class="form-label">Date:</label>
-                <input 
-                  type="date" 
-                  class="form-control" 
-                  v-model="filters.date"
-                />
+              <!-- Date Range Filter -->
+              <div class="col-md-3">
+                <label class="form-label">Time Period:</label>
+                <select class="form-select" v-model="filters.dateRange">
+                  <option value="all">All Upcoming</option>
+                  <option value="today">Today</option>
+                  <option value="thisWeek">This Week</option>
+                  <option value="thisMonth">This Month</option>
+                  <option value="custom">Custom Date</option>
+                </select>
               </div>
 
-              <div class="col-md-4">
+              <!-- Custom Date (shows only if custom selected) -->
+              <div class="col-md-3" v-if="filters.dateRange === 'custom'">
+                <label class="form-label">Custom Date:</label>
+                <input type="date" class="form-control" v-model="filters.customDate" />
+              </div>
+
+              <!-- Genre Filter -->
+              <div class="col-md-3">
                 <label class="form-label">Genre:</label>
                 <select class="form-select" v-model="filters.genre">
                   <option value="">All Genres</option>
@@ -40,14 +47,26 @@
                 </select>
               </div>
 
-              <div class="col-md-4">
+              <!-- Location Filter -->
+              <div class="col-md-3">
                 <label class="form-label">Location:</label>
-                <input 
-                  type="text" 
-                  class="form-control" 
+                <input
+                  type="text"
+                  class="form-control"
                   v-model="filters.location"
                   placeholder="Search by venue or area"
                 />
+              </div>
+
+              <!-- Sort By -->
+              <div class="col-md-3">
+                <label class="form-label">Sort By:</label>
+                <select class="form-select" v-model="filters.sortBy">
+                  <option value="date">Date (Earliest First)</option>
+                  <option value="dateDesc">Date (Latest First)</option>
+                  <option value="popularity">Popularity (Most Interest)</option>
+                  <option value="newest">Newest Added</option>
+                </select>
               </div>
             </div>
 
@@ -80,23 +99,21 @@
         <div v-if="!isLoading && displayedEvents.length === 0" class="text-center py-5">
           <i class="bi bi-calendar-x fs-1 text-muted mb-3"></i>
           <p class="text-muted">No events found matching your criteria.</p>
-          <button class="btn btn-outline-primary" @click="clearFilters">
-            Clear Filters
-          </button>
+          <button class="btn btn-outline-primary" @click="clearFilters">Clear Filters</button>
         </div>
 
         <!-- ADD THIS: View Toggle Buttons -->
         <div class="btn-group mb-4" role="group">
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="btn btn-outline-primary"
             :class="{ active: viewMode === 'grid' }"
             @click="viewMode = 'grid'"
           >
             <i class="bi bi-grid-3x3-gap"></i> Grid View
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="btn btn-outline-primary"
             :class="{ active: viewMode === 'map' }"
             @click="viewMode = 'map'"
@@ -109,35 +126,28 @@
         <div v-if="viewMode === 'map'" class="mb-4">
           <div class="card shadow-sm">
             <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-map"></i> Event Discovery Map
-              </h5>
+              <h5 class="card-title"><i class="bi bi-map"></i> Event Discovery Map</h5>
               <p class="text-muted">Click on markers to see event details</p>
-              <DiscoveryMap :events="displayedEvents" />
+              <!-- FIX: Add :key to force re-render when switching views -->
+              <DiscoveryMap :key="mapKey" :events="displayedEvents" />
             </div>
           </div>
         </div>
 
         <!-- Events Grid -->
         <div v-else class="row g-4">
-          <div 
-            v-for="event in displayedEvents" 
-            :key="event.id"
-            class="col-12 col-md-6 col-lg-4"
-          >
+          <div v-for="event in displayedEvents" :key="event.id" class="col-12 col-md-6 col-lg-4">
             <EventCard :event="event" />
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { signOut } from 'firebase/auth'
 import { auth, db } from '@/services/firebase'
-import { collection, getDocs, query, orderBy, where } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy } from 'firebase/firestore'
 import NavigationBar from '@/components/NavigationBar.vue'
 import EventCard from '@/components/EventCard.vue'
 import DiscoveryMap from '@/components/DiscoveryMap.vue'
@@ -147,7 +157,7 @@ export default {
   components: {
     EventCard,
     DiscoveryMap,
-    NavigationBar
+    NavigationBar,
   },
   data() {
     return {
@@ -155,22 +165,46 @@ export default {
       allEvents: [],
       displayedEvents: [],
       filters: {
-        date: '',
+        dateRange: 'all',
+        customDate: '',
         genre: '',
-        location: ''
+        location: '',
+        sortBy: 'date',
       },
       allGenres: [
-        'Pop', 'Rock', 'Hip Hop', 'R&B', 'Electronic', 
-        'Jazz', 'Classical', 'Country', 'Indie', 'Folk',
-        'Metal', 'Punk', 'Reggae', 'Blues', 'Alternative',
-        'K-Pop', 'Mandopop', 'Cantopop'
+        'Pop',
+        'Rock',
+        'Hip Hop',
+        'R&B',
+        'Electronic',
+        'Jazz',
+        'Classical',
+        'Country',
+        'Indie',
+        'Folk',
+        'Metal',
+        'Punk',
+        'Reggae',
+        'Blues',
+        'Alternative',
+        'K-Pop',
+        'Mandopop',
+        'Cantopop',
       ],
       isLoading: true,
-      viewMode: 'grid'
+      viewMode: 'grid',
+      mapKey: 0, // FIX: Add key for map re-rendering
     }
   },
+  watch: {
+    // FIX: Watch viewMode and increment mapKey to force map re-render
+    viewMode(newMode) {
+      if (newMode === 'map') {
+        this.mapKey++
+      }
+    },
+  },
   async mounted() {
-    await this.loadUserData()
     await this.loadEvents()
   },
   methods: {
@@ -196,13 +230,10 @@ export default {
     async loadEvents() {
       try {
         this.isLoading = true
-        
+
         // Get all events from Firestore
         const eventsSnapshot = await getDocs(
-          query(
-            collection(db, 'events'),
-            orderBy('date', 'asc')
-          )
+          query(collection(db, 'events'), orderBy('date', 'asc')),
         )
 
         const now = new Date()
@@ -210,18 +241,17 @@ export default {
 
         // Filter for upcoming events only
         this.allEvents = eventsSnapshot.docs
-          .map(doc => ({
+          .map((doc) => ({
             id: doc.id,
-            ...doc.data()
+            ...doc.data(),
           }))
-          .filter(event => {
+          .filter((event) => {
             // Handle Firestore Timestamp
             const eventDate = event.date?.toDate ? event.date.toDate() : new Date(event.date)
             return eventDate >= now
           })
 
         this.displayedEvents = [...this.allEvents]
-        
       } catch (error) {
         console.error('Error loading events:', error)
         alert('Failed to load events')
@@ -232,24 +262,53 @@ export default {
 
     applyFilters() {
       let filtered = [...this.allEvents]
+      const now = new Date()
+      now.setHours(0, 0, 0, 0)
 
-      // Filter by date
-      if (this.filters.date) {
-        filtered = filtered.filter(event => {
+      // Filter by date range
+      if (this.filters.dateRange !== 'all') {
+        filtered = filtered.filter((event) => {
           const eventDate = event.date?.toDate ? event.date.toDate() : new Date(event.date)
-          const filterDate = new Date(this.filters.date)
-          
-          return (
-            eventDate.getFullYear() === filterDate.getFullYear() &&
-            eventDate.getMonth() === filterDate.getMonth() &&
-            eventDate.getDate() === filterDate.getDate()
-          )
+
+          switch (this.filters.dateRange) {
+            case 'today':
+              return (
+                eventDate.getFullYear() === now.getFullYear() &&
+                eventDate.getMonth() === now.getMonth() &&
+                eventDate.getDate() === now.getDate()
+              )
+
+            case 'thisWeek':
+              const weekEnd = new Date(now)
+              weekEnd.setDate(now.getDate() + 7)
+              return eventDate >= now && eventDate <= weekEnd
+
+            case 'thisMonth':
+              return (
+                eventDate.getFullYear() === now.getFullYear() &&
+                eventDate.getMonth() === now.getMonth()
+              )
+
+            case 'custom':
+              if (this.filters.customDate) {
+                const filterDate = new Date(this.filters.customDate)
+                return (
+                  eventDate.getFullYear() === filterDate.getFullYear() &&
+                  eventDate.getMonth() === filterDate.getMonth() &&
+                  eventDate.getDate() === filterDate.getDate()
+                )
+              }
+              return true
+
+            default:
+              return true
+          }
         })
       }
 
       // Filter by genre
       if (this.filters.genre) {
-        filtered = filtered.filter(event => {
+        filtered = filtered.filter((event) => {
           return event.genres?.includes(this.filters.genre)
         })
       }
@@ -257,7 +316,7 @@ export default {
       // Filter by location
       if (this.filters.location) {
         const locationQuery = this.filters.location.toLowerCase()
-        filtered = filtered.filter(event => {
+        filtered = filtered.filter((event) => {
           return (
             event.venue?.toLowerCase().includes(locationQuery) ||
             event.location?.toLowerCase().includes(locationQuery)
@@ -265,14 +324,41 @@ export default {
         })
       }
 
+      // Sort results
+      filtered.sort((a, b) => {
+        const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date)
+        const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date)
+        const createdA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt)
+        const createdB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt)
+
+        switch (this.filters.sortBy) {
+          case 'date':
+            return dateA - dateB // Earliest first
+
+          case 'dateDesc':
+            return dateB - dateA // Latest first
+
+          case 'popularity':
+            return (b.interestedCount || 0) - (a.interestedCount || 0) // Most popular first
+
+          case 'newest':
+            return createdB - createdA // Newest added first
+
+          default:
+            return dateA - dateB
+        }
+      })
+
       this.displayedEvents = filtered
     },
 
     clearFilters() {
       this.filters = {
-        date: '',
+        dateRange: 'all',
+        customDate: '',
         genre: '',
-        location: ''
+        location: '',
+        sortBy: 'date',
       }
       this.displayedEvents = [...this.allEvents]
     },
@@ -285,7 +371,7 @@ export default {
     //     console.error('Logout error:', error)
     //   }
     // }
-  }
+  },
 }
 </script>
 
@@ -297,7 +383,7 @@ export default {
 
 .navbar {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-logo {

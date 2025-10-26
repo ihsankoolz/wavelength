@@ -1,5 +1,5 @@
 <!-- EventDetails.vue -->
- <template>
+<template>
   <div class="event-details-page">
     <!-- Navigation Bar -->
     <NavigationBar />
@@ -20,9 +20,7 @@
         <i class="bi bi-exclamation-triangle fs-1 text-warning mb-3"></i>
         <h3>Event Not Found</h3>
         <p class="text-muted">This event may have been removed.</p>
-        <router-link to="/events" class="btn btn-primary">
-          Browse All Events
-        </router-link>
+        <router-link to="/events" class="btn btn-primary"> Browse All Events </router-link>
       </div>
     </div>
 
@@ -30,12 +28,10 @@
     <div v-else class="content-wrapper">
       <div class="container py-4">
         <div class="row">
-          
           <!-- Main Event Info -->
           <div class="col-12 col-lg-8 mb-4">
             <div class="card shadow-lg border-0">
               <div class="card-body p-4 p-md-5">
-                
                 <!-- Event Title -->
                 <h1 class="display-4 fw-bold mb-3">{{ event.title }}</h1>
 
@@ -71,11 +67,11 @@
                 <div class="mb-4">
                   <h6 class="mb-2">Genres:</h6>
                   <div class="d-flex flex-wrap gap-2">
-                    <span 
-                      v-for="genre in event.genres" 
+                    <span
+                      v-for="genre in event.genres"
                       :key="genre"
                       class="badge bg-primary"
-                      style="font-size: 0.9rem; padding: 0.5rem 1rem;"
+                      style="font-size: 0.9rem; padding: 0.5rem 1rem"
                     >
                       {{ genre }}
                     </span>
@@ -85,48 +81,45 @@
                 <!-- Description -->
                 <div class="mb-4">
                   <h5 class="mb-3">About This Event</h5>
-                  <p class="text-muted" style="font-size: 1.1rem; line-height: 1.8;">
+                  <p class="text-muted" style="font-size: 1.1rem; line-height: 1.8">
                     {{ event.description || 'No description provided.' }}
                   </p>
                 </div>
 
                 <!-- MAP section -->
                 <div class="mb-4">
-                  <h5 class="mb-3">
-                    <i class="bi bi-map"></i> Event Location
-                  </h5>
-                  <EventMap 
-                    :location="event.location" 
-                    :title="event.venue"
-                    size="large"
-                  />
+                  <h5 class="mb-3"><i class="bi bi-map"></i> Event Location</h5>
+                  <EventMap :location="event.location" :title="event.venue" size="large" />
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="d-grid gap-2 d-md-flex">
-                  <button 
-                    class="btn btn-primary btn-lg flex-fill"
+                  <button
+                    class="btn btn-lg flex-fill"
+                    :class="isInterested ? 'btn-success' : 'btn-primary'"
                     @click="markInterested"
-                    :disabled="isInterested"
+                    :disabled="isProcessing"
                   >
-                    <i class="bi" :class="isInterested ? 'bi-star-fill' : 'bi-star'"></i>
-                    {{ isInterested ? 'You\'re Interested!' : 'Mark as Interested' }}
+                    <span v-if="isProcessing" class="spinner-border spinner-border-sm me-2"></span>
+                    <i v-else class="bi" :class="isInterested ? 'bi-star-fill' : 'bi-star'"></i>
+                    {{
+                      isProcessing
+                        ? 'Updating...'
+                        : isInterested
+                          ? "You're Interested!"
+                          : 'Mark as Interested'
+                    }}
                   </button>
-                  <button 
-                    class="btn btn-outline-primary btn-lg"
-                    @click="getDirections"
-                  >
+                  <button class="btn btn-outline-primary btn-lg" @click="getDirections">
                     <i class="bi bi-map"></i> Get Directions
                   </button>
                 </div>
-
               </div>
             </div>
           </div>
 
           <!-- Sidebar -->
           <div class="col-12 col-lg-4">
-            
             <!-- Artist Info Card -->
             <div class="card shadow-sm mb-4">
               <div class="card-body">
@@ -134,8 +127,8 @@
                 <p class="mb-3">
                   <strong>{{ event.artistName }}</strong>
                 </p>
-                <router-link 
-                  :to="`/artist/${event.artistId}`" 
+                <router-link
+                  :to="`/artist/${event.artistId}`"
                   class="btn btn-outline-primary w-100"
                 >
                   View Artist Profile
@@ -155,9 +148,7 @@
                 </div>
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
     </div>
@@ -166,7 +157,7 @@
 
 <script>
 import { auth, db } from '@/services/firebase'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, increment } from 'firebase/firestore'
 import EventMap from '@/components/EventMap.vue'
 import NavigationBar from '@/components/NavigationBar.vue'
 
@@ -174,28 +165,30 @@ export default {
   name: 'EventDetails',
   components: {
     EventMap,
-    NavigationBar
+    NavigationBar,
   },
   data() {
     return {
       event: null,
       loading: true,
-      isInterested: false
+      isInterested: false,
+      isProcessing: false,
     }
   },
   async mounted() {
     await this.loadEvent()
+    await this.checkIfInterested()
   },
   methods: {
     async loadEvent() {
       try {
         const eventId = this.$route.params.id
         const eventDoc = await getDoc(doc(db, 'events', eventId))
-        
+
         if (eventDoc.exists()) {
           this.event = {
             id: eventDoc.id,
-            ...eventDoc.data()
+            ...eventDoc.data(),
           }
         }
       } catch (error) {
@@ -205,23 +198,78 @@ export default {
       }
     },
 
+    async checkIfInterested() {
+      try {
+        const user = auth.currentUser
+        if (!user) return
+
+        const userDoc = await getDoc(doc(db, 'users', user.uid))
+        if (userDoc.exists()) {
+          const userData = userDoc.data()
+          this.isInterested = userData.interestedEvents?.includes(this.$route.params.id) || false
+        }
+      } catch (error) {
+        console.error('Error checking interest:', error)
+      }
+    },
+
     formatDate(date) {
       if (!date) return 'TBA'
-      
+
       const eventDate = date.toDate ? date.toDate() : new Date(date)
-      
+
       return eventDate.toLocaleDateString('en-SG', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
       })
     },
 
-    markInterested() {
-      // TODO: Implement interested functionality with Firestore
-      this.isInterested = true
-      alert('Marked as interested! (Feature will be fully implemented soon)')
+    async markInterested() {
+      if (this.isProcessing) return
+
+      try {
+        const user = auth.currentUser
+        if (!user) {
+          this.$router.push('/login')
+          return
+        }
+
+        this.isProcessing = true
+        const eventId = this.$route.params.id
+
+        if (this.isInterested) {
+          // Remove interest
+          await updateDoc(doc(db, 'users', user.uid), {
+            interestedEvents: arrayRemove(eventId),
+          })
+
+          await updateDoc(doc(db, 'events', eventId), {
+            interestedCount: increment(-1),
+          })
+
+          this.isInterested = false
+          this.event.interestedCount = Math.max(0, (this.event.interestedCount || 0) - 1)
+        } else {
+          // Add interest
+          await updateDoc(doc(db, 'users', user.uid), {
+            interestedEvents: arrayUnion(eventId),
+          })
+
+          await updateDoc(doc(db, 'events', eventId), {
+            interestedCount: increment(1),
+          })
+
+          this.isInterested = true
+          this.event.interestedCount = (this.event.interestedCount || 0) + 1
+        }
+      } catch (error) {
+        console.error('Error updating interest:', error)
+        alert('Failed to update interest. Please try again.')
+      } finally {
+        this.isProcessing = false
+      }
     },
 
     getDirections() {
@@ -231,18 +279,38 @@ export default {
 
     shareEvent() {
       if (navigator.share) {
-        navigator.share({
-          title: this.event.title,
-          text: `Check out ${this.event.title} by ${this.event.artistName}!`,
-          url: window.location.href
-        }).catch(err => console.log('Share failed:', err))
+        navigator
+          .share({
+            title: this.event.title,
+            text: `Check out ${this.event.title} by ${this.event.artistName}!`,
+            url: window.location.href,
+          })
+          .catch((err) => console.log('Share failed:', err))
       } else {
         // Fallback: copy link
         navigator.clipboard.writeText(window.location.href)
         alert('Link copied to clipboard!')
       }
-    }
-  }
+    },
+  },
+  watch: {
+    // Watch for route changes (when navigating from one event to another)
+    '$route.params.id': {
+      handler(newId, oldId) {
+        if (newId && newId !== oldId) {
+          // Reset state
+          this.loading = true
+          this.event = null
+          this.isInterested = false
+
+          // Reload data for new event
+          this.loadEvent()
+          this.checkIfInterested()
+        }
+      },
+      immediate: false,
+    },
+  },
 }
 </script>
 
@@ -254,7 +322,7 @@ export default {
 
 .navbar {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-logo {
@@ -312,7 +380,7 @@ export default {
   .content-wrapper {
     margin-top: 100px;
   }
-  
+
   .display-4 {
     font-size: 2rem;
   }
