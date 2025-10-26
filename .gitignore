@@ -16,6 +16,9 @@ coverage
 *.local
 .env
 
+# Documentation (development only)
+docs/
+
 /cypress/videos/
 /cypress/screenshots/
 

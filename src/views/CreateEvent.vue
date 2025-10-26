@@ -2,19 +2,7 @@
 <template>
   <div class="create-event-page">
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container">
-        <router-link to="/home" class="navbar-brand">
-          <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo">
-        </router-link>
-        
-        <div class="ms-auto d-flex gap-2 align-items-center">
-          <router-link to="/artist/dashboard" class="btn btn-outline-light">
-            Back to Dashboard
-          </router-link>
-        </div>
-      </div>
-    </nav>
+    <NavigationBar />
 
     <!-- Main Content -->
     <div class="content-wrapper">
@@ -177,9 +165,13 @@
 <script>
 import { auth, db } from '@/services/firebase'
 import { collection, addDoc, doc, getDoc, serverTimestamp } from 'firebase/firestore'
+import NavigationBar from '@/components/NavigationBar.vue';
 
 export default {
   name: 'CreateEvent',
+  components:{
+    NavigationBar
+  },
   data() {
     return {
       formData: {
