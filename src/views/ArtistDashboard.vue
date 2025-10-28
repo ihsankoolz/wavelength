@@ -1,6 +1,8 @@
 <!-- artistDashbord.vue -->
 <template>
   <div class="dashboard-content">
+    <NavigationBar />
+
     <!-- Loading State -->
     <div v-if="loading" class="container-fluid bg-light p-4">
       <div class="row justify-content-center">
@@ -12,307 +14,355 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Error State -->
     <div v-else-if="error" class="container-fluid bg-danger text-white p-4">
       <div class="row justify-content-center">
         <div class="col-md-8 text-center">
           <h3>Profile Setup Required</h3>
           <p>{{ error }}</p>
-          <button @click="goToSetup" class="btn btn-light">
-            Complete Profile Setup
-          </button>
+          <button @click="goToSetup" class="btn btn-light">Complete Profile Setup</button>
         </div>
       </div>
     </div>
 
     <!-- Artist Profile Display -->
-    <div v-else class="container-fluid p-4">
-        <!-- nav bar -->
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div class="container">
-            <router-link to="/home" class="navbar-brand">
-            <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo">
-            </router-link>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="ms-auto d-flex gap-2 align-items-center">
-                <router-link to="/home" class="btn btn-outline-light">
-                <i class="bi bi-arrow-left"></i> Back
-                </router-link>
-            </div>
-            </div>
-        </div>
-        </nav> 
-        <div class="content-wrapper">
-            <div class="container-fluid p-4">
+    <div v-else class="content-wrapper">
+      <div class="container-fluid p-4">
         <div class="row justify-content-center">
-            <!-- Artist Header -->
-            <div class="col-12 text-center mb-4">
-                <h1 class="display-4 fw-bold mb-2">{{ artistData.artistName || 'Artist Name' }}</h1>
-                <p class="lead mb-3">{{ artistData.bio || 'No bio available' }}</p>
-            </div>
+          <!-- Artist Header -->
+          <div class="col-12 text-center mb-4">
+            <h1 class="display-4 fw-bold mb-2">{{ artistData.artistName || 'Artist Name' }}</h1>
+            <p class="lead mb-3">{{ artistData.bio || 'No bio available' }}</p>
+          </div>
 
-            <!-- Genres Display -->
-            <div class="col-12 text-center mb-4">
-                <h6 class="mb-3">Music Genres</h6>
-                <div v-if="artistData.genres && artistData.genres.length > 0">
-                    <span 
-                    v-for="genre in artistData.genres" 
-                    :key="genre"
-                    class="badge bg-dark me-2 mb-2 px-3 py-2"
-                    style="font-size: 0.9rem;">
-                    {{ genre }}</span>
+          <!-- Genres Display -->
+          <div class="col-12 text-center mb-4">
+            <h6 class="mb-3">Music Genres</h6>
+            <div v-if="artistData.genres && artistData.genres.length > 0">
+              <span
+                v-for="genre in artistData.genres"
+                :key="genre"
+                class="badge bg-dark me-2 mb-2 px-3 py-2"
+                style="font-size: 0.9rem"
+              >
+                {{ genre }}</span
+              >
+            </div>
+            <div v-else>
+              <span class="badge bg-secondary">No genres selected</span>
+            </div>
+          </div>
+
+          <!-- Navigation Tabs -->
+          <div class="col-12">
+            <ul class="nav nav-tabs nav-justified mb-4" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  :class="{ active: activeTab === 'music' }"
+                  @click="activeTab = 'music'"
+                  type="button"
+                >
+                  Music
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  :class="{ active: activeTab === 'events' }"
+                  @click="activeTab = 'events'"
+                  type="button"
+                >
+                  Events
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  :class="{ active: activeTab === 'about' }"
+                  @click="activeTab = 'about'"
+                  type="button"
+                >
+                  About
+                </button>
+              </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+              <!-- Music Tab - NEW MusicManager Component -->
+              <div
+                v-if="activeTab === 'music'"
+                class="tab-pane show active"
+                style="display: block !important; opacity: 1 !important"
+              >
+                <div class="music-tab-wrapper">
+                  <MusicManager
+                    v-if="artistData.uid"
+                    :artistId="artistData.uid"
+                    @music-updated="onMusicUpdated"
+                  />
+                </div>
+              </div>
+
+              <!-- Events Tab -->
+              <div
+                v-if="activeTab === 'events'"
+                class="tab-pane show active"
+                style="display: block !important; opacity: 1 !important"
+              >
+                <div v-if="eventsLoading" class="text-center py-4">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading events...</span>
+                  </div>
+                  <p class="mt-2 text-muted">Loading your events...</p>
                 </div>
                 <div v-else>
-                    <span class="badge bg-secondary">No genres selected</span>
+                  <!-- Header with Add Event Button -->
+                  <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                      <h4 class="mb-1">🎪 My Events</h4>
+                      <p class="text-muted mb-0">Manage your upcoming performances</p>
+                    </div>
+                    <button @click="addEvent" class="btn btn-primary">📅 Add New Event</button>
+                  </div>
                 </div>
-            </div>
 
-            <!-- Navigation Tabs -->
-            <div class="col-12">
-                <ul class="nav nav-tabs nav-justified mb-4" role="tablist">
-                    <li class="nav-item" role="presentation">
-                    <button 
-                        class="nav-link"
-                        :class="{ active: activeTab === 'music' }"
-                        @click="activeTab = 'music'"
-                        type="button">Music</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                    <button 
-                        class="nav-link"
-                        :class="{ active: activeTab === 'events' }"
-                        @click="activeTab = 'events'"
-                        type="button">Events</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                    <button 
-                        class="nav-link"
-                        :class="{ active: activeTab === 'about' }"
-                        @click="activeTab = 'about'"
-                        type="button">About</button>
-                    </li>
-                </ul>
-
-        <!-- Tab Content -->
-        <div class="tab-content">
-        <!-- Music Tab -->
-        <div 
-            v-if="activeTab === 'music'" 
-            class="tab-pane show active"
-            style="display: block !important; opacity: 1 !important;"
-        >
-            <div class="visible-content" style="background: white; padding: 20px; margin: 20px 0; border: 2px solid #007bff; border-radius: 10px;">
-            
-        <!-- Latest Single -->
-        <div style="background: #f8f9fa; padding: 20px; margin: 15px 0; border-left: 4px solid #28a745; border-radius: 5px;">
-            <h5 style="color: #28a745; margin-bottom: 15px;">🎵 Latest Single: {{ artistData.latestSingle || 'No title yet' }}</h5>
-            <div style="background: #e9ecef; padding: 20px; border-radius: 8px; text-align: center;">
-            <p class="text-muted">Watch my latest video here:</p>
-            
-            <div v-if="artistData.youtubeVideoUrl" class="embed-container">
-        
-        <div class="video-wrapper">
-          <iframe 
-            :src="getYouTubeEmbedUrl(artistData.youtubeVideoUrl)"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-            class="youtube-iframe"
-          ></iframe>
-            </div>
-        </div>
-            </div>
-        </div>
-
-      <!-- Latest Album -->
-        <div style="background: #f8f9fa; padding: 20px; margin: 15px 0; border-left: 4px solid #1db954; border-radius: 5px;">
-            <h5 style="color: #1db954; margin-bottom: 15px;">💿 Album: {{ artistData.latestAlbum || 'No album yet' }}</h5>
-            <div style="background: #e9ecef; padding: 20px; border-radius: 8px; text-align: center;">
-            <p class="text-muted">Listen to my music here:</p>
-            
-            <div v-if="artistData.spotifyTrackUrl" class="embed-container">
-     
-        <div class="spotify-wrapper">
-          <iframe 
-            :src="getSpotifyEmbedUrl(artistData.spotifyTrackUrl)"
-            width="100%" 
-            height="352" 
-            frameborder="0" 
-            allowtransparency="true" 
-            allow="encrypted-media"
-            class="spotify-iframe"
-          ></iframe>
+                <div v-if="artistEvents.length === 0" class="text-center py-5">
+                  <div
+                    style="
+                      background: #f8f9fa;
+                      padding: 40px;
+                      border-radius: 10px;
+                      border: 2px dashed #dee2e6;
+                    "
+                  >
+                    <i class="bi bi-calendar-event display-4 text-muted mb-3"></i>
+                    <h5 class="text-muted mb-3">No events scheduled yet</h5>
+                    <p class="text-muted mb-4">
+                      Create your first event to start building your audience!
+                    </p>
+                    <button @click="addEvent" class="btn btn-primary btn-lg">
+                      📅 Create Your First Event
+                    </button>
+                  </div>
                 </div>
-            </div>
-                </div>
-            </div>
-            </div>
-        </div>
 
-        <!-- Events Tab -->
-        <div v-if="activeTab === 'events'" 
-            class="tab-pane show active"
-            style="display: block !important; opacity: 1 !important;">
-            
-            <div v-if="eventsLoading" class="text-center py-4">
-                        <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading events...</span>
+                <div v-else class="row g-4">
+                  <div
+                    v-for="event in artistEvents"
+                    :key="event.id"
+                    class="col-12 col-md-6 col-lg-4"
+                  >
+                    <div class="card h-100 event-card">
+                      <div class="card-body d-flex flex-column">
+                        <!-- Event Title -->
+                        <h5 class="card-title text-primary fw-bold mb-2">
+                          {{ event.title || 'Untitled Event' }}
+                        </h5>
+
+                        <!-- Event Date & Time -->
+                        <div class="mb-2">
+                          <small class="text-muted">
+                            <i class="bi bi-calendar me-1"></i>
+                            {{ formatEventDate(event.date) }}
+                            <span v-if="formatEventTime(event.date)" class="ms-2">
+                              <i class="bi bi-clock me-1"></i>
+                              {{ formatEventTime(event.date) }}
+                            </span>
+                          </small>
                         </div>
-                        <p class="mt-2 text-muted">Loading your events...</p>
-                    </div>
-            <div v-else>
-                    <!-- Header with Add Event Button -->
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                      <div>
-                        <h4 class="mb-1">🎪 My Events</h4>
-                        <p class="text-muted mb-0">Manage your upcoming performances</p>
+
+                        <!-- Event Location -->
+                        <div v-if="event.location" class="mb-2">
+                          <small class="text-muted">
+                            <i class="bi bi-geo-alt me-1"></i>
+                            {{ event.location }}
+                          </small>
+                        </div>
+
+                        <!-- Event Description -->
+                        <p v-if="event.description" class="card-text text-muted small mb-3">
+                          {{
+                            event.description.length > 100
+                              ? event.description.substring(0, 100) + '...'
+                              : event.description
+                          }}
+                        </p>
                       </div>
-                      <button @click="addEvent" class="btn btn-primary">
-                        📅 Add New Event
-                      </button>
-                    </div>
-            </div>
 
-            <div v-if="artistEvents.length === 0" class="text-center py-5">
-                      <div style="background: #f8f9fa; padding: 40px; border-radius: 10px; border: 2px dashed #dee2e6;">
-                        <i class="bi bi-calendar-event display-4 text-muted mb-3"></i>
-                        <h5 class="text-muted mb-3">No events scheduled yet</h5>
-                        <p class="text-muted mb-4">Create your first event to start building your audience!</p>
-                        <button @click="addEvent" class="btn btn-primary btn-lg">
-                          📅 Create Your First Event
-                        </button>
-                      </div>
-                    </div>
-                    
-            <div v-else class="row g-4">
-                      <div 
-                        v-for="event in artistEvents" 
-                        :key="event.id"
-                        class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 event-card">
-                          
-
-                          <div class="card-body d-flex flex-column">
-                            <!-- Event Title -->
-                            <h5 class="card-title text-primary fw-bold mb-2">{{ event.title || 'Untitled Event' }}</h5>
-                            
-                            <!-- Event Date & Time -->
-                            <div class="mb-2">
-                              <small class="text-muted">
-                                <i class="bi bi-calendar me-1"></i>
-                                {{ formatEventDate(event.date) }}
-                                <span v-if="formatEventTime(event.date)" class="ms-2">
-                                  <i class="bi bi-clock me-1"></i>
-                                  {{ formatEventTime(event.date) }}
-                                </span>
-                              </small>
-                            </div>
-
-                            <!-- Event Location -->
-                            <div v-if="event.location" class="mb-2">
-                              <small class="text-muted">
-                                <i class="bi bi-geo-alt me-1"></i>
-                                {{ event.location }}
-                              </small>
-                            </div>
-
-                            <!-- Event Description -->
-                            <p v-if="event.description" class="card-text text-muted small mb-3">
-                              {{ event.description.length > 100 ? event.description.substring(0, 100) + '...' : event.description }}
-                            </p>
-
-                          </div>
-
-                          <!-- Card Actions -->
-                          <div class="card-footer bg-light">
-                            <div class="btn-group w-100" role="group">
-                              <button class="btn btn-outline-primary btn-sm" @click="editEvent(event.id)">
-                                <i class="bi bi-pencil"></i> Edit
-                              </button>
-                              <button class="btn btn-outline-info btn-sm" @click="viewEvent(event.id)">
-                                <i class="bi bi-eye"></i> View
-                              </button>
-                              <button class="btn btn-outline-danger btn-sm" @click="deleteEvent(event.id)">
-                                <i class="bi bi-trash"></i> Delete
-                              </button>
-                            </div>
-                          </div>
+                      <!-- Card Actions -->
+                      <div class="card-footer bg-light">
+                        <div class="btn-group w-100" role="group">
+                          <button
+                            class="btn btn-outline-primary btn-sm"
+                            @click="editEvent(event.id)"
+                          >
+                            <i class="bi bi-pencil"></i> Edit
+                          </button>
+                          <button class="btn btn-outline-info btn-sm" @click="viewEvent(event.id)">
+                            <i class="bi bi-eye"></i> View
+                          </button>
+                          <button
+                            class="btn btn-outline-danger btn-sm"
+                            @click="deleteEvent(event.id)"
+                          >
+                            <i class="bi bi-trash"></i> Delete
+                          </button>
                         </div>
                       </div>
                     </div>
-                  
-            <!-- <div style="background: #007bff; color: white; padding: 40px; text-align: center; border-radius: 10px;">
+                  </div>
+                </div>
+
+                <!-- <div style="background: #007bff; color: white; padding: 40px; text-align: center; border-radius: 10px;">
             <h4>🎪 EVENTS TAB IS WORKING!</h4>
             <p>No events scheduled at the moment</p>
             <button @click="addEvent" class="btn btn-light">📅 Add Event</button>
             </div> -->
-        </div>
+              </div>
 
-        <!-- About Tab -->
-        <div 
-            v-if="activeTab === 'about'" 
-            class="tab-pane show active"
-            style="display: block !important; opacity: 1 !important;"
-        >
-            <div style="background: #28a745; color: white; padding: 40px; text-align: center; border-radius: 10px;">
-            <h4>About {{ artistData.artistName || 'Artist Name' }}!</h4>
-            <p>{{ artistData.aboutSection || 'No about section available.' }}</p>
-            <div v-if="hasSocialLinks" class="social-links mt-4">
-                <h5>Connect With Me!</h5>
+              <!-- About Tab -->
+              <div
+                v-if="activeTab === 'about'"
+                class="tab-pane show active"
+                style="display: block !important; opacity: 1 !important"
+              >
+                <div
+                  style="
+                    background: #28a745;
+                    color: white;
+                    padding: 40px;
+                    text-align: center;
+                    border-radius: 10px;
+                  "
+                >
+                  <h4>About {{ artistData.artistName || 'Artist Name' }}!</h4>
+                  <p>{{ artistData.aboutSection || 'No about section available.' }}</p>
+                  <div v-if="hasSocialLinks" class="social-links mt-4">
+                    <h5>Connect With Me!</h5>
                     <div class="d-flex flex-wrap gap-2 justify-content-center">
-                                <a 
-                                v-if="artistData.socialLinks?.spotify" 
-                                :href="artistData.socialLinks.spotify" 
-                                target="_blank"
-                                class="btn btn-success btn-sm"
-                                >
-                                Spotify
-                                </a>
-                                <a 
-                                v-if="artistData.socialLinks?.youtube" 
-                                :href="artistData.socialLinks.youtube" 
-                                target="_blank"
-                                class="btn btn-danger btn-sm"
-                                >
-                                YouTube
-                                </a>
-                                <a 
-                                v-if="artistData.socialLinks?.instagram" 
-                                :href="artistData.socialLinks.instagram" 
-                                target="_blank"
-                                class="btn btn-primary btn-sm"
-                                >
-                                Instagram
-                                </a>
-                            </div>
-                            </div>
-
+                      <a
+                        v-if="artistData.socialLinks?.spotify"
+                        :href="artistData.socialLinks.spotify"
+                        target="_blank"
+                        class="btn btn-success btn-sm"
+                      >
+                        Spotify
+                      </a>
+                      <a
+                        v-if="artistData.socialLinks?.youtube"
+                        :href="artistData.socialLinks.youtube"
+                        target="_blank"
+                        class="btn btn-danger btn-sm"
+                      >
+                        YouTube
+                      </a>
+                      <a
+                        v-if="artistData.socialLinks?.instagram"
+                        :href="artistData.socialLinks.instagram"
+                        target="_blank"
+                        class="btn btn-primary btn-sm"
+                      >
+                        Instagram
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-        </div>
-        </div>  
-        </div>
+          </div>
 
-        <!-- Quick Actions - Only show for profile owner -->
-<div v-if="isOwner" class="col-12 text-center mt-4">
-  <div class="btn-group" role="group">
-    <button @click="editProfile" class="btn btn-outline-dark">
-      ✏️ Edit Profile
-    </button>
-    <button @click="viewAnalytics" class="btn btn-outline-dark">
-      📊 Analytics
-    </button>
-  </div>
-</div>
-      </div> <!-- End of main row -->
-    </div> <!-- End of Artist Profile Display -->
+          <!-- Quick Actions - Only show for profile owner -->
+          <div v-if="isOwner" class="col-12 text-center mt-4">
+            <div class="btn-group" role="group">
+              <button @click="editProfile" class="btn btn-outline-dark">✏️ Edit Profile</button>
+              <button @click="viewAnalytics" class="btn btn-outline-dark">📊 Analytics</button>
+            </div>
+          </div>
+        </div>
+        <!-- End of main row -->
+      </div>
+      <!-- End of container-fluid -->
     </div>
+    <!-- End of content-wrapper -->
+    <!-- End of v-else (Artist Profile Display) -->
+  </div>
+  <!-- End of dashboard-content -->
+
+  <!-- Delete Confirmation Modal -->
+  <div
+    class="modal fade"
+    id="deleteEventModal"
+    tabindex="-1"
+    aria-labelledby="deleteEventModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="deleteEventModalLabel">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>Confirm Delete
+          </h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-0">Are you sure you want to delete this event?</p>
+          <p class="text-muted small mb-0">This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" @click="confirmDelete" :disabled="deleting">
+            <span v-if="deleting" class="spinner-border spinner-border-sm me-2"></span>
+            <i v-else class="bi bi-trash me-2"></i>
+            {{ deleting ? 'Deleting...' : 'Delete Event' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Toast -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header bg-success text-white">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <strong class="me-auto">Success</strong>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="toast-body">
+        {{ successMessage }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Toast -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header bg-danger text-white">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <strong class="me-auto">Error</strong>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="toast-body">
+        {{ errorMessage }}
+      </div>
     </div>
   </div>
 </template>
@@ -320,12 +370,20 @@
 <script>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
+import { doc, getDoc, collection, query, where, getDocs, deleteDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '@/services/firebase'
+import NavigationBar from '@/components/NavigationBar.vue'
+import EventCard from '@/components/EventCard.vue'
+import MusicManager from '@/components/MusicManager.vue'
 
 export default {
   name: 'ArtistDashboard',
+  components: {
+    NavigationBar,
+    EventCard,
+    MusicManager,
+  },
   setup() {
     const router = useRouter()
     const loading = ref(true)
@@ -335,7 +393,13 @@ export default {
     //event tab
     const artistEvents = ref([])
     const eventsLoading = ref(false)
-    
+
+    // Delete modal state
+    const eventToDelete = ref(null)
+    const deleting = ref(false)
+    const successMessage = ref('')
+    const errorMessage = ref('')
+
     // Initialize artistData with uid field
     const artistData = reactive({
       uid: '', // Add uid to store the profile owner's ID
@@ -348,13 +412,13 @@ export default {
       socialLinks: {
         spotify: '',
         youtube: '',
-        instagram: ''
+        instagram: '',
       },
       followerCount: 0,
       musicLinks: [],
       verified: false,
       createdAt: null,
-      profileSetupCompleted: false
+      profileSetupCompleted: false,
     })
 
     // DECLARE ALL FUNCTIONS AND COMPUTED PROPERTIES FIRST
@@ -370,134 +434,47 @@ export default {
       return currentUser.value && currentUser.value.uid === artistData.uid
     })
 
-    
-const loadArtistEvents = async (artistId) => {
-  try {
-    eventsLoading.value = true
-    
-    console.log('Looking for events with artistId:', artistId)
-    
-    // Query events where artistId matches the current artist
-    const eventsQuery = query(
-      collection(db, 'events'),
-      where('artistId', '==', artistId)
-    )
-    
-    const eventsSnapshot = await getDocs(eventsQuery)
-    
-    console.log('Found events:', eventsSnapshot.docs.length)
-    
-    artistEvents.value = eventsSnapshot.docs.map(doc => {
-      const data = doc.data()
-      console.log('Event data:', data)
-      return {
-        id: doc.id,
-        ...data
+    const loadArtistEvents = async (artistId) => {
+      try {
+        eventsLoading.value = true
+
+        console.log('Looking for events with artistId:', artistId)
+
+        // Query events where artistId matches the current artist
+        const eventsQuery = query(collection(db, 'events'), where('artistId', '==', artistId))
+
+        const eventsSnapshot = await getDocs(eventsQuery)
+
+        console.log('Found events:', eventsSnapshot.docs.length)
+
+        artistEvents.value = eventsSnapshot.docs.map((doc) => {
+          const data = doc.data()
+          console.log('Event data:', data)
+          return {
+            id: doc.id,
+            ...data,
+          }
+        })
+
+        // Sort events by date in JavaScript instead of Firestore
+        artistEvents.value.sort((a, b) => {
+          const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date)
+          const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date)
+          return dateA - dateB
+        })
+
+        console.log('Loaded and sorted artist events:', artistEvents.value)
+      } catch (err) {
+        console.error('Error loading artist events:', err)
+      } finally {
+        eventsLoading.value = false
       }
-    })
-    
-    // Sort events by date in JavaScript instead of Firestore
-    artistEvents.value.sort((a, b) => {
-      const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date)
-      const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date)
-      return dateA - dateB
-    })
-    
-    console.log('Loaded and sorted artist events:', artistEvents.value)
-  } catch (err) {
-    console.error('Error loading artist events:', err)
-  } finally {
-    eventsLoading.value = false
-  }
-}
-
-
-// Format date for events
-const formatEventDate = (timestamp) => {
-  if (!timestamp) return 'Date TBD'
-  
-  let date
-  if (timestamp.toDate) {
-    date = timestamp.toDate()
-  } else if (timestamp instanceof Date) {
-    date = timestamp
-  } else {
-    date = new Date(timestamp)
-  }
-  
-  return date.toLocaleDateString('en-US', { 
-    weekday: 'short',
-    year: 'numeric', 
-    month: 'short',
-    day: 'numeric'
-  })
-}
-
-// Format time for events
-const formatEventTime = (timestamp) => {
-  if (!timestamp) return ''
-  
-  let date
-  if (timestamp.toDate) {
-    date = timestamp.toDate()
-  } else if (timestamp instanceof Date) {
-    date = timestamp
-  } else {
-    date = new Date(timestamp)
-  }
-  
-  return date.toLocaleTimeString('en-US', { 
-    hour: 'numeric',
-    minute: '2-digit'
-  })
-}
-
-// Event management -- placeholders for now
-const editEvent = (eventId) => {
-  router.push(`/events/edit/${eventId}`)
-}
-
-const viewEvent = (eventId) => {
-  router.push(`/events/${eventId}`)
-}
-
-const deleteEvent = async (eventId) => {
-  if (confirm('Are you sure you want to delete this event?')) {
-    try {
-      console.log('Deleting event:', eventId)
-    } catch (error) {
-      console.error('Error deleting event:', error)
     }
-  }
-}
 
+    // Format date for events
+    const formatEventDate = (timestamp) => {
+      if (!timestamp) return 'Date TBD'
 
-
-
-    const getSpotifyEmbedUrl = (url) => {
-  if (!url) return null
-  // Convert https://open.spotify.com/track/4iV5W9uYEdYUVa79Axb7Rh
-  // to https://open.spotify.com/embed/track/4iV5W9uYEdYUVa79Axb7Rh
-  return url.replace('open.spotify.com/', 'open.spotify.com/embed/')
-}
-
-const getYouTubeEmbedUrl = (url) => {
-  if (!url) return null
-  let videoId = ''
-  
-  if (url.includes('youtube.com/watch?v=')) {
-    videoId = url.split('watch?v=')[1].split('&')[0]
-  } else if (url.includes('youtu.be/')) {
-    videoId = url.split('youtu.be/')[1].split('?')[0]
-  }
-  
-  return videoId ? `https://www.youtube.com/embed/${videoId}` : null
-}
-
-    // Format date for display
-    const formatDate = (timestamp) => {
-      if (!timestamp) return 'N/A'
-      
       let date
       if (timestamp.toDate) {
         date = timestamp.toDate()
@@ -506,10 +483,133 @@ const getYouTubeEmbedUrl = (url) => {
       } else {
         date = new Date(timestamp)
       }
-      
-      return date.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short' 
+
+      return date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+    }
+
+    // Format time for events
+    const formatEventTime = (timestamp) => {
+      if (!timestamp) return ''
+
+      let date
+      if (timestamp.toDate) {
+        date = timestamp.toDate()
+      } else if (timestamp instanceof Date) {
+        date = timestamp
+      } else {
+        date = new Date(timestamp)
+      }
+
+      return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+      })
+    }
+
+    // Event management -- placeholders for now
+    const editEvent = (eventId) => {
+      router.push(`/events/edit/${eventId}`)
+    }
+
+    const viewEvent = (eventId) => {
+      router.push(`/events/${eventId}`)
+    }
+
+    const deleteEvent = (eventId) => {
+      // Store the event ID and show the modal
+      eventToDelete.value = eventId
+      const modal = new window.bootstrap.Modal(document.getElementById('deleteEventModal'))
+      modal.show()
+    }
+
+    const confirmDelete = async () => {
+      if (!eventToDelete.value) return
+
+      deleting.value = true
+
+      try {
+        // Delete the event from Firestore
+        await deleteDoc(doc(db, 'events', eventToDelete.value))
+
+        // Remove the event from the local array to update UI immediately
+        artistEvents.value = artistEvents.value.filter((event) => event.id !== eventToDelete.value)
+
+        // Close the modal
+        const modal = window.bootstrap.Modal.getInstance(
+          document.getElementById('deleteEventModal'),
+        )
+        modal.hide()
+
+        // Show success toast
+        successMessage.value = 'Event deleted successfully!'
+        showToast('successToast')
+
+        console.log('Event deleted successfully:', eventToDelete.value)
+      } catch (error) {
+        console.error('Error deleting event:', error)
+
+        // Close the modal
+        const modal = window.bootstrap.Modal.getInstance(
+          document.getElementById('deleteEventModal'),
+        )
+        modal.hide()
+
+        // Show error toast
+        errorMessage.value = 'Failed to delete event. Please try again.'
+        showToast('errorToast')
+      } finally {
+        deleting.value = false
+        eventToDelete.value = null
+      }
+    }
+
+    const showToast = (toastId) => {
+      const toastElement = document.getElementById(toastId)
+      const toast = new window.bootstrap.Toast(toastElement)
+      toast.show()
+    }
+
+    const getSpotifyEmbedUrl = (url) => {
+      if (!url) return null
+      // Convert https://open.spotify.com/track/4iV5W9uYEdYUVa79Axb7Rh
+      // to https://open.spotify.com/embed/track/4iV5W9uYEdYUVa79Axb7Rh
+      return url.replace('open.spotify.com/', 'open.spotify.com/embed/')
+    }
+
+    const getYouTubeEmbedUrl = (url) => {
+      if (!url) return null
+      let videoId = ''
+
+      if (url.includes('youtube.com/watch?v=')) {
+        videoId = url.split('watch?v=')[1].split('&')[0]
+      } else if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0]
+      }
+
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : null
+    }
+
+    // Format date for display
+    const formatDate = (timestamp) => {
+      if (!timestamp) return 'N/A'
+
+      let date
+      if (timestamp.toDate) {
+        date = timestamp.toDate()
+      } else if (timestamp instanceof Date) {
+        date = timestamp
+      } else {
+        date = new Date(timestamp)
+      }
+
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
       })
     }
 
@@ -519,7 +619,7 @@ const getYouTubeEmbedUrl = (url) => {
     }
 
     const editProfile = () => {
-      router.push('/artist/setup')
+      router.push('/artist/edit-profile')
     }
 
     const addEvent = () => {
@@ -527,7 +627,15 @@ const getYouTubeEmbedUrl = (url) => {
     }
 
     const viewAnalytics = () => {
-      alert('Analytics feature coming soon!')
+      router.push('/artist/analytics')
+    }
+
+    // Handle music updates from MusicManager component
+    const onMusicUpdated = async () => {
+      console.log('Music updated - refreshing artist data')
+      if (currentUser.value) {
+        await loadArtistData(currentUser.value.uid)
+      }
     }
 
     // Load artist data from Firestore
@@ -538,11 +646,11 @@ const getYouTubeEmbedUrl = (url) => {
 
         // Get artist document from Firestore
         const artistDoc = await getDoc(doc(db, 'artists', userId))
-        
+
         if (artistDoc.exists()) {
           const data = artistDoc.data()
           console.log('Artist data loaded:', data)
-          
+
           // Check if profile setup is completed
           if (!data.profileSetupCompleted) {
             error.value = 'Please complete your profile setup to access the dashboard.'
@@ -557,26 +665,24 @@ const getYouTubeEmbedUrl = (url) => {
             aboutSection: data.aboutSection || '',
             latestSingle: data.latestSingle || '',
             latestAlbum: data.latestAlbum || '',
-            spotifyTrackUrl: data.spotifyTrackUrl || '',      
-            youtubeVideoUrl: data.youtubeVideoUrl || '', 
+            spotifyTrackUrl: data.spotifyTrackUrl || '',
+            youtubeVideoUrl: data.youtubeVideoUrl || '',
             genres: data.genres || [],
             socialLinks: data.socialLinks || {
               spotify: '',
               youtube: '',
-              instagram: ''
+              instagram: '',
             },
             followerCount: data.followerCount || 0,
             musicLinks: data.musicLinks || [],
             verified: data.verified || false,
             createdAt: data.createdAt,
-            profileSetupCompleted: data.profileSetupCompleted || false
+            profileSetupCompleted: data.profileSetupCompleted || false,
           })
           await loadArtistEvents(userId)
-
         } else {
           error.value = 'Artist profile not found. Please complete your registration.'
         }
-
       } catch (err) {
         console.error('Error loading artist data:', err)
         error.value = 'Failed to load artist profile. Please try refreshing the page.'
@@ -606,30 +712,37 @@ const getYouTubeEmbedUrl = (url) => {
       error,
       activeTab,
       hasSocialLinks,
-      isOwner, 
+      isOwner,
       artistEvents,
       eventsLoading,
       formatDate,
-      formatEventDate, // ✅ ADD THIS
-  formatEventTime, // ✅ ADD THIS
-  editEvent, // ✅ ADD THIS
-  viewEvent, // ✅ ADD THIS
-  deleteEvent, // ✅ ADD THIS
+      formatEventDate,
+      formatEventTime,
+      editEvent,
+      viewEvent,
+      deleteEvent,
+      confirmDelete,
+      eventToDelete,
+      deleting,
+      successMessage,
+      errorMessage,
       goToSetup,
       editProfile,
       addEvent,
       viewAnalytics,
-      getSpotifyEmbedUrl,    
-      getYouTubeEmbedUrl   
+      getSpotifyEmbedUrl,
+      getYouTubeEmbedUrl,
+      onMusicUpdated,
     }
-  }
+  },
 }
 </script>
-
 
 <style scoped>
 .dashboard-content {
   min-height: 100vh;
+  padding-top: 100px; /* ⭐ Space for fixed navbar */
+  background: #f8f9fa; /* Optional: add background color */
 }
 
 .display-4 {
@@ -668,7 +781,9 @@ const getYouTubeEmbedUrl = (url) => {
   background: white;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  min-height: 150px;
 }
 
 .music-placeholder {
@@ -676,10 +791,11 @@ const getYouTubeEmbedUrl = (url) => {
   padding: 40px 20px;
   border-radius: 8px;
   text-align: center;
+  min-height: 100px;
 }
 
 .content-wrapper {
-  margin-top: 110px; 
+  margin-top: 110px;
   padding-bottom: 40px;
 }
 
@@ -689,11 +805,12 @@ const getYouTubeEmbedUrl = (url) => {
   margin: 20px 0;
   border-radius: 5px;
   border: 2px dashed #adb5bd;
+  min-height: 80px;
 }
 
 .spotify-embed {
-  background: #1db954;
-  color: white;
+  background: #1db954 !important;
+  color: white !important;
 }
 
 /* About Section */
@@ -701,7 +818,7 @@ const getYouTubeEmbedUrl = (url) => {
   background: white;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .about-text {
@@ -747,75 +864,31 @@ const getYouTubeEmbedUrl = (url) => {
   height: 3rem;
 }
 
-@media (max-width: 768px) {
-  .display-4 {
-    font-size: 2rem;
-  }
-  
-  .btn-group {
-    flex-direction: column;
-  }
-  
-  .btn-group .btn {
-    border-radius: 0.375rem !important;
-    margin-bottom: 0.5rem;
-  }
-
-  .nav-tabs .nav-link {
-    padding: 10px 15px;
-    font-size: 14px;
-  }
-}
 .tab-content {
-  min-height: 300px; /* Ensure container has minimum height */
+  min-height: 300px;
 }
 
 .tab-pane {
-  display: block !important; /* Override Bootstrap's display: none */
-  min-height: 200px; /* Ensure each tab pane has height */
+  display: block !important;
+  min-height: 200px;
 }
 
 .tab-pane:not(.show) {
-  display: none !important; /* Hide non-active tabs */
+  display: none !important;
 }
 
-/* Ensure music sections are visible */
-.music-section {
+/* Music Tab Wrapper */
+.music-tab-wrapper {
   background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
-  min-height: 150px; /* Ensure minimum height */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
-
-.music-placeholder {
-  background: #f8f9fa;
-  padding: 40px 20px;
-  border-radius: 8px;
-  text-align: center;
-  min-height: 100px; /* Ensure placeholder is visible */
-}
-
-.embed-placeholder {
-  background: #e9ecef;
-  padding: 30px;
-  margin: 20px 0;
-  border-radius: 5px;
-  border: 2px dashed #adb5bd;
-  min-height: 80px; /* Ensure embed area is visible */
-}
-
-.spotify-embed {
-  background: #1db954 !important;
-  color: white !important;
-}
-
 
 /* Embed Wrappers */
 .video-wrapper {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
   border-radius: 12px;
@@ -842,7 +915,6 @@ const getYouTubeEmbedUrl = (url) => {
   min-height: 152px;
 }
 
-/* Enhanced embed containers */
 .embed-container {
   background: #f8f9fa;
   padding: 20px;
@@ -857,12 +929,34 @@ const getYouTubeEmbedUrl = (url) => {
   text-align: center;
 }
 
-/* Responsive embeds */
+/* ⭐ MOBILE RESPONSIVE */
 @media (max-width: 768px) {
+  .dashboard-content {
+    padding-top: 80px; /* ⭐ Less padding for mobile navbar */
+  }
+
+  .display-4 {
+    font-size: 2rem;
+  }
+
+  .btn-group {
+    flex-direction: column;
+  }
+
+  .btn-group .btn {
+    border-radius: 0.375rem !important;
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-tabs .nav-link {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
   .spotify-iframe {
     height: 152px;
   }
-  
+
   .embed-container {
     padding: 15px;
   }

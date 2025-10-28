@@ -2,19 +2,7 @@
 <template>
   <div class="create-event-page">
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container">
-        <router-link to="/home" class="navbar-brand">
-          <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo">
-        </router-link>
-        
-        <div class="ms-auto d-flex gap-2 align-items-center">
-          <router-link to="/artist/dashboard" class="btn btn-outline-light">
-            Back to Dashboard
-          </router-link>
-        </div>
-      </div>
-    </nav>
+    <NavigationBar />
 
     <!-- Main Content -->
     <div class="content-wrapper">
@@ -147,6 +135,22 @@
                     <div class="form-text">{{ formData.description.length }}/500 characters</div>
                   </div>
 
+                  <!-- Tickets -->
+                    <div class="mb-4">
+                      <label for="ticket" class="form-label fw-bold">
+                        <i class="bi bi-geo-alt text-primary"></i> Ticketing Link
+                      </label>
+                      <input
+                        type="text"
+                        id="ticket"
+                        v-model="formData.ticket"
+                        class="form-control form-control-lg"
+                        placeholder="https://ticketmaster.sg/activity/detail/25sg_blackpink"
+                        required
+                      />
+                      <div class="form-text">Add your event ticket link here</div>
+                    </div>
+
                   <!-- Submit Button -->
                   <div class="d-grid gap-2">
                     <button 
@@ -177,9 +181,13 @@
 <script>
 import { auth, db } from '@/services/firebase'
 import { collection, addDoc, doc, getDoc, serverTimestamp } from 'firebase/firestore'
+import NavigationBar from '@/components/NavigationBar.vue';
 
 export default {
   name: 'CreateEvent',
+  components:{
+    NavigationBar
+  },
   data() {
     return {
       formData: {
@@ -188,7 +196,8 @@ export default {
         genres: [],
         venue: '',
         location: '',
-        description: ''
+        description: '',
+        ticket: ''
       },
       availableGenres: [
         'Pop', 'Rock', 'Hip Hop', 'R&B', 'Electronic', 
@@ -291,7 +300,8 @@ export default {
           genres: this.formData.genres,
           description: this.formData.description,
           interestedCount: 0,
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
+          ticket: this.formData.ticket
         }
 
         // Add to Firestore
@@ -307,7 +317,8 @@ export default {
           genres: [],
           venue: '',
           location: '',
-          description: ''
+          description: '',
+          ticket: ''
         }
 
         // Redirect after 2 seconds
