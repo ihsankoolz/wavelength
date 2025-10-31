@@ -149,70 +149,87 @@
                   </div>
                 </div>
 
-                <div v-else class="row g-4">
-                  <div
-                    v-for="event in artistEvents"
-                    :key="event.id"
-                    class="col-12 col-md-6 col-lg-4"
-                  >
-                    <div class="card h-100 event-card">
-                      <div class="card-body d-flex flex-column">
-                        <!-- Event Title -->
-                        <h5 class="card-title text-primary fw-bold mb-2">
-                          {{ event.title || 'Untitled Event' }}
-                        </h5>
+                <div v-else>
+                  <div class="events-grid">
+                    <div v-for="event in displayedEvents" :key="event.id">
+                      <div class="card h-100 event-card">
+                        <div class="card-body d-flex flex-column">
+                          <!-- Event Title -->
+                          <h5 class="card-title text-primary fw-bold mb-2">
+                            {{ event.title || 'Untitled Event' }}
+                          </h5>
 
-                        <!-- Event Date & Time -->
-                        <div class="mb-2">
-                          <small class="text-muted">
-                            <i class="bi bi-calendar me-1"></i>
-                            {{ formatEventDate(event.date) }}
-                            <span v-if="formatEventTime(event.date)" class="ms-2">
-                              <i class="bi bi-clock me-1"></i>
-                              {{ formatEventTime(event.date) }}
-                            </span>
-                          </small>
+                          <!-- Event Date & Time -->
+                          <div class="mb-2">
+                            <small class="text-muted">
+                              <i class="bi bi-calendar me-1"></i>
+                              {{ formatEventDate(event.date) }}
+                              <span v-if="formatEventTime(event.date)" class="ms-2">
+                                <i class="bi bi-clock me-1"></i>
+                                {{ formatEventTime(event.date) }}
+                              </span>
+                            </small>
+                          </div>
+
+                          <!-- Event Location -->
+                          <div v-if="event.location" class="mb-2">
+                            <small class="text-muted">
+                              <i class="bi bi-geo-alt me-1"></i>
+                              {{ event.location }}
+                            </small>
+                          </div>
+
+                          <!-- Event Description -->
+                          <p v-if="event.description" class="card-text text-muted small mb-3">
+                            {{
+                              event.description.length > 100
+                                ? event.description.substring(0, 100) + '...'
+                                : event.description
+                            }}
+                          </p>
                         </div>
 
-                        <!-- Event Location -->
-                        <div v-if="event.location" class="mb-2">
-                          <small class="text-muted">
-                            <i class="bi bi-geo-alt me-1"></i>
-                            {{ event.location }}
-                          </small>
-                        </div>
-
-                        <!-- Event Description -->
-                        <p v-if="event.description" class="card-text text-muted small mb-3">
-                          {{
-                            event.description.length > 100
-                              ? event.description.substring(0, 100) + '...'
-                              : event.description
-                          }}
-                        </p>
-                      </div>
-
-                      <!-- Card Actions -->
-                      <div class="card-footer bg-light">
-                        <div class="btn-group w-100" role="group">
-                          <button
-                            class="btn btn-outline-primary btn-sm"
-                            @click="editEvent(event.id)"
-                          >
-                            <i class="bi bi-pencil"></i> Edit
-                          </button>
-                          <button class="btn btn-outline-info btn-sm" @click="viewEvent(event.id)">
-                            <i class="bi bi-eye"></i> View
-                          </button>
-                          <button
-                            class="btn btn-outline-danger btn-sm"
-                            @click="deleteEvent(event.id)"
-                          >
-                            <i class="bi bi-trash"></i> Delete
-                          </button>
+                        <!-- Card Actions -->
+                        <div class="card-footer bg-light">
+                          <div class="btn-group w-100" role="group">
+                            <button
+                              class="btn btn-outline-primary btn-sm"
+                              @click="editEvent(event.id)"
+                            >
+                              <i class="bi bi-pencil"></i> Edit
+                            </button>
+                            <button
+                              class="btn btn-outline-info btn-sm"
+                              @click="viewEvent(event.id)"
+                            >
+                              <i class="bi bi-eye"></i> View
+                            </button>
+                            <button
+                              class="btn btn-outline-danger btn-sm"
+                              @click="deleteEvent(event.id)"
+                            >
+                              <i class="bi bi-trash"></i> Delete
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  <!-- See More Events Button -->
+                  <div v-if="artistEvents.length > 6 && !showAllEvents" class="text-center mt-4">
+                    <button class="btn btn-outline-primary btn-lg" @click="showAllEvents = true">
+                      <i class="bi bi-chevron-down"></i>
+                      See More Events ({{ artistEvents.length - 6 }} more)
+                    </button>
+                  </div>
+
+                  <!-- Show Less Events Button -->
+                  <div v-if="showAllEvents && artistEvents.length > 6" class="text-center mt-4">
+                    <button class="btn btn-outline-secondary" @click="showAllEvents = false">
+                      <i class="bi bi-chevron-up"></i>
+                      Show Less
+                    </button>
                   </div>
                 </div>
 
@@ -365,6 +382,16 @@
       </div>
     </div>
   </div>
+
+  <!-- Event Modal -->
+  <EventModal
+    :show="showEventModal"
+    :event="eventToEdit"
+    :artistId="artistData.uid"
+    :artistName="artistData.artistName"
+    @close="closeEventModal"
+    @event-saved="onEventSaved"
+  />
 </template>
 
 <script>
@@ -376,6 +403,7 @@ import { auth, db } from '@/services/firebase'
 import NavigationBar from '@/components/NavigationBar.vue'
 import EventCard from '@/components/EventCard.vue'
 import MusicManager from '@/components/MusicManager.vue'
+import EventModal from '@/components/EventModal.vue'
 
 export default {
   name: 'ArtistDashboard',
@@ -383,6 +411,7 @@ export default {
     NavigationBar,
     EventCard,
     MusicManager,
+    EventModal,
   },
   setup() {
     const router = useRouter()
@@ -393,6 +422,11 @@ export default {
     //event tab
     const artistEvents = ref([])
     const eventsLoading = ref(false)
+    const showAllEvents = ref(false) // Track if showing all events or just first 6
+
+    // Event Modal state
+    const showEventModal = ref(false)
+    const eventToEdit = ref(null)
 
     // Delete modal state
     const eventToDelete = ref(null)
@@ -432,6 +466,14 @@ export default {
     // ✅ FIXED: Computed property to check if current user is profile owner
     const isOwner = computed(() => {
       return currentUser.value && currentUser.value.uid === artistData.uid
+    })
+
+    // Computed property for displayed events (show first 6 or all)
+    const displayedEvents = computed(() => {
+      if (showAllEvents.value) {
+        return artistEvents.value
+      }
+      return artistEvents.value.slice(0, 6)
     })
 
     const loadArtistEvents = async (artistId) => {
@@ -511,9 +553,13 @@ export default {
       })
     }
 
-    // Event management -- placeholders for now
+    // Event management
     const editEvent = (eventId) => {
-      router.push(`/events/edit/${eventId}`)
+      const event = artistEvents.value.find((e) => e.id === eventId)
+      if (event) {
+        eventToEdit.value = event
+        showEventModal.value = true
+      }
     }
 
     const viewEvent = (eventId) => {
@@ -623,7 +669,20 @@ export default {
     }
 
     const addEvent = () => {
-      router.push('/events/create')
+      eventToEdit.value = null // Clear any previous event
+      showEventModal.value = true
+    }
+
+    const closeEventModal = () => {
+      showEventModal.value = false
+      eventToEdit.value = null
+    }
+
+    const onEventSaved = async () => {
+      // Reload events after creating/updating
+      if (artistData.uid) {
+        await loadArtistEvents(artistData.uid)
+      }
     }
 
     const viewAnalytics = () => {
@@ -715,6 +774,10 @@ export default {
       isOwner,
       artistEvents,
       eventsLoading,
+      showAllEvents,
+      displayedEvents,
+      showEventModal,
+      eventToEdit,
       formatDate,
       formatEventDate,
       formatEventTime,
@@ -729,6 +792,8 @@ export default {
       goToSetup,
       editProfile,
       addEvent,
+      closeEventModal,
+      onEventSaved,
       viewAnalytics,
       getSpotifyEmbedUrl,
       getYouTubeEmbedUrl,
@@ -929,6 +994,24 @@ export default {
   text-align: center;
 }
 
+/* Events Grid */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.event-card {
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
 /* ⭐ MOBILE RESPONSIVE */
 @media (max-width: 768px) {
   .dashboard-content {
@@ -959,6 +1042,17 @@ export default {
 
   .embed-container {
     padding: 15px;
+  }
+
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet responsive - 2 columns for medium screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>

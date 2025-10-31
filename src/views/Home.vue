@@ -74,138 +74,165 @@
               <p class="text-muted small">Check back soon as artists add more music!</p>
             </div>
 
-            <!-- Song Cards Grid -->
-            <div v-else class="songs-grid">
-              <div
-                v-for="song in displayedSongs"
-                :key="`${song.artistId}_${song.id}`"
-                class="song-card"
+            <!-- Song Cards Carousel -->
+            <div v-else class="carousel-container">
+              <!-- Navigation Arrows -->
+              <button
+                v-if="currentSongPage > 0"
+                @click="previousSongPage"
+                class="carousel-arrow left"
+                aria-label="Previous songs"
               >
-                <!-- Artist Info Header -->
-                <div class="song-artist-header">
-                  <img
-                    :src="song.artistPhoto || '/default-avatar.png'"
-                    :alt="song.artistName"
-                    class="artist-photo"
-                    @click="navigateToArtist(song.artistId)"
-                    style="cursor: pointer"
-                  />
-                  <div class="artist-info">
-                    <router-link :to="`/artist/${song.artistId}`" class="artist-name">
-                      {{ song.artistName }}
-                    </router-link>
-                    <div class="song-title">{{ song.title }}</div>
-                  </div>
+                <i class="bi bi-chevron-left"></i>
+              </button>
 
-                  <!-- Follow Button -->
-                  <button
-                    v-if="!isFollowing(song.artistId)"
-                    @click="followArtist(song.artistId)"
-                    class="btn-follow"
-                    :disabled="followingInProgress[song.artistId]"
+              <div class="songs-carousel">
+                <div
+                  class="songs-grid-carousel"
+                  :style="{ transform: `translateX(-${currentSongPage * 100}%)` }"
+                >
+                  <div
+                    v-for="(page, pageIndex) in paginatedSongs"
+                    :key="`page-${pageIndex}`"
+                    class="carousel-page"
                   >
-                    <i class="bi bi-plus"></i>
-                  </button>
-                  <span v-else class="following-badge">
-                    <i class="bi bi-check-circle-fill"></i> Following
-                  </span>
-                </div>
+                    <div
+                      v-for="song in page"
+                      :key="`${song.artistId}_${song.id}`"
+                      class="song-card"
+                      @click="openSongDetail(song)"
+                    >
+                      <!-- Artist Info Header -->
+                      <div class="song-artist-header" @click.stop>
+                        <img
+                          :src="song.artistPhoto || '/default-avatar.png'"
+                          :alt="song.artistName"
+                          class="artist-photo"
+                          @click="navigateToArtist(song.artistId)"
+                          style="cursor: pointer"
+                        />
+                        <div class="artist-info">
+                          <router-link :to="`/artist/${song.artistId}`" class="artist-name">
+                            {{ song.artistName }}
+                          </router-link>
+                          <div class="song-title">{{ song.title }}</div>
+                        </div>
+                      </div>
 
-                <!-- Embedded Player -->
-                <div class="player-container" @click="handlePlayerClick(song)">
-                  <!-- Spotify Embed -->
-                  <iframe
-                    v-if="song.platform === 'spotify'"
-                    :src="`https://open.spotify.com/embed/track/${song.spotifyId}`"
-                    width="100%"
-                    height="152"
-                    frameborder="0"
-                    allowtransparency="true"
-                    allow="encrypted-media"
-                    loading="lazy"
-                  ></iframe>
+                      <!-- Embedded Player -->
+                      <div class="player-container" @click.stop="handlePlayerClick(song)">
+                        <!-- Spotify Embed -->
+                        <iframe
+                          v-if="song.platform === 'spotify'"
+                          :src="`https://open.spotify.com/embed/track/${song.spotifyId}`"
+                          width="100%"
+                          height="152"
+                          frameborder="0"
+                          allowtransparency="true"
+                          allow="encrypted-media"
+                          loading="lazy"
+                        ></iframe>
 
-                  <!-- SoundCloud Embed -->
-                  <iframe
-                    v-else-if="song.platform === 'soundcloud'"
-                    width="100%"
-                    height="166"
-                    scrolling="no"
-                    frameborder="no"
-                    allow="autoplay"
-                    :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
-                      song.url,
-                    )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
-                    loading="lazy"
-                  ></iframe>
+                        <!-- SoundCloud Embed -->
+                        <iframe
+                          v-else-if="song.platform === 'soundcloud'"
+                          width="100%"
+                          height="166"
+                          scrolling="no"
+                          frameborder="no"
+                          allow="autoplay"
+                          :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
+                            song.url,
+                          )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
+                          loading="lazy"
+                        ></iframe>
 
-                  <!-- YouTube Embed -->
-                  <iframe
-                    v-else-if="song.platform === 'youtube'"
-                    width="100%"
-                    height="200"
-                    :src="`https://www.youtube.com/embed/${song.youtubeId}`"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    loading="lazy"
-                  ></iframe>
+                        <!-- YouTube Embed -->
+                        <iframe
+                          v-else-if="song.platform === 'youtube'"
+                          width="100%"
+                          height="200"
+                          :src="`https://www.youtube.com/embed/${song.youtubeId}`"
+                          frameborder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowfullscreen
+                          loading="lazy"
+                        ></iframe>
 
-                  <!-- Fallback Link -->
-                  <a
-                    v-else
-                    :href="song.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="song-link"
-                  >
-                    🎵 Open {{ song.platform }} →
-                  </a>
-                </div>
+                        <!-- Fallback Link -->
+                        <a
+                          v-else
+                          :href="song.url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="song-link"
+                        >
+                          🎵 Open {{ song.platform }} →
+                        </a>
+                      </div>
 
-                <!-- Genre Tags -->
-                <div class="genre-tags" v-if="song.genres && song.genres.length > 0">
-                  <span v-for="genre in song.genres.slice(0, 3)" :key="genre" class="genre-tag">
-                    {{ genre }}
-                  </span>
-                </div>
+                      <!-- Genre Tags -->
+                      <div class="genre-tags" v-if="song.genres && song.genres.length > 0">
+                        <span
+                          v-for="genre in song.genres.slice(0, 3)"
+                          :key="genre"
+                          class="genre-tag"
+                        >
+                          {{ genre }}
+                        </span>
+                      </div>
 
-                <!-- Song Stats & Actions -->
-                <div class="song-stats">
-                  <button
-                    @click="toggleLike(song)"
-                    class="stat-button"
-                    :class="{ liked: isSongLiked(song) }"
-                    :disabled="likingInProgress[`${song.artistId}_${song.id}`]"
-                  >
-                    <span class="icon">❤️</span>
-                    <span class="count">{{ song.likes || 0 }}</span>
-                  </button>
+                      <!-- Song Stats & Actions -->
+                      <div class="song-stats">
+                        <button
+                          @click.stop="toggleLike(song)"
+                          class="stat-button"
+                          :class="{ liked: isSongLiked(song) }"
+                          :disabled="likingInProgress[`${song.artistId}_${song.id}`]"
+                          :title="
+                            isSongLiked(song)
+                              ? 'Unlike and remove from saved songs'
+                              : 'Like this song and save it to My Music'
+                          "
+                        >
+                          <span class="icon">❤️</span>
+                          <span class="count">{{ song.likes || 0 }}</span>
+                        </button>
 
-                  <div class="stat-item">
-                    <span class="icon">💬</span>
-                    <span class="count">{{ song.commentCount || 0 }}</span>
+                        <button
+                          @click.stop="openSongDetail(song)"
+                          class="stat-button"
+                          title="View and post comments"
+                        >
+                          <span class="icon">💬</span>
+                          <span class="count">{{ song.commentCount || 0 }}</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <button
+                v-if="currentSongPage < totalSongPages - 1"
+                @click="nextSongPage"
+                class="carousel-arrow right"
+                aria-label="Next songs"
+              >
+                <i class="bi bi-chevron-right"></i>
+              </button>
             </div>
 
-            <!-- Load More Button -->
-            <div
-              v-if="displayedSongs.length > 0 && displayedSongs.length < filteredSongs.length"
-              class="text-center mt-4"
-            >
+            <!-- Carousel Indicators -->
+            <div v-if="totalSongPages > 1" class="carousel-indicators">
               <button
-                @click="loadMoreSongs"
-                class="btn btn-outline-primary"
-                :disabled="loadingMore"
-              >
-                <span v-if="loadingMore">
-                  <span class="spinner-border spinner-border-sm me-2"></span>
-                  Loading...
-                </span>
-                <span v-else> Load More Songs </span>
-              </button>
+                v-for="(page, index) in totalSongPages"
+                :key="`indicator-${index}`"
+                @click="goToSongPage(index)"
+                class="indicator"
+                :class="{ active: currentSongPage === index }"
+                :aria-label="`Go to page ${index + 1}`"
+              ></button>
             </div>
           </section>
 
@@ -218,15 +245,54 @@
               </div>
             </div>
 
-            <!-- Artist Cards - One Row (Horizontal Scroll on Mobile) -->
-            <div class="artists-row">
-              <div
-                v-for="artist in recommendedArtists.slice(0, 6)"
-                :key="artist.id"
-                class="artist-card-wrapper"
+            <!-- Artist Cards Carousel -->
+            <div class="carousel-container">
+              <button
+                v-if="currentArtistPage > 0"
+                @click="previousArtistPage"
+                class="carousel-arrow left"
+                aria-label="Previous artists"
               >
-                <ArtistCard :artist="artist" />
+                <i class="bi bi-chevron-left"></i>
+              </button>
+
+              <div class="artists-carousel">
+                <div
+                  class="artists-grid-carousel"
+                  :style="{ transform: `translateX(-${currentArtistPage * 100}%)` }"
+                >
+                  <div
+                    v-for="(page, pageIndex) in paginatedArtists"
+                    :key="`artist-page-${pageIndex}`"
+                    class="carousel-page artists-page"
+                  >
+                    <div v-for="artist in page" :key="artist.id" class="artist-card-wrapper">
+                      <ArtistCard :artist="artist" />
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              <button
+                v-if="currentArtistPage < totalArtistPages - 1"
+                @click="nextArtistPage"
+                class="carousel-arrow right"
+                aria-label="Next artists"
+              >
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+
+            <!-- Carousel Indicators -->
+            <div v-if="totalArtistPages > 1" class="carousel-indicators">
+              <button
+                v-for="(page, index) in totalArtistPages"
+                :key="`artist-indicator-${index}`"
+                @click="goToArtistPage(index)"
+                class="indicator"
+                :class="{ active: currentArtistPage === index }"
+                :aria-label="`Go to artist page ${index + 1}`"
+              ></button>
             </div>
           </section>
 
@@ -292,6 +358,14 @@
         </div>
       </div>
     </div>
+
+    <!-- Song Detail Modal (combines embed + comments) -->
+    <SongDetailModal
+      :show="showSongDetailModal"
+      :song="selectedSongForDetail"
+      @close="closeSongDetailModal"
+      @comment-posted="handleDetailCommentPosted"
+    />
   </div>
 </template>
 
@@ -301,6 +375,7 @@ import { collection, getDocs, doc, getDoc } from 'firebase/firestore'
 import NavigationBar from '@/components/NavigationBar.vue'
 import ArtistCard from '@/components/ArtistCard.vue'
 import EventMap from '@/components/EventMap.vue'
+import SongDetailModal from '@/components/SongDetailModal.vue'
 import { getRecommendedSongs, filterSongsByGenre, sortSongs } from '@/utils/recommendationEngine'
 import { toggleSongLike, getUserLikedSongs } from '@/utils/musicInteractions'
 import { toggleFollowArtist, getUserFollowedArtists } from '@/utils/artistInteractions'
@@ -316,6 +391,7 @@ export default {
     ArtistCard,
     NavigationBar,
     EventMap,
+    SongDetailModal,
   },
   data() {
     return {
@@ -327,12 +403,18 @@ export default {
       recommendedSongs: [],
       filteredSongs: [],
       displayedSongs: [],
-      songsPerPage: 8,
-      currentSongsLoaded: 8,
+
+      // Carousel state for songs
+      currentSongPage: 0,
+      songsPerPage: 6, // 2 rows × 3 cards
 
       // Artists data
       allArtists: [],
       recommendedArtists: [],
+
+      // Carousel state for artists
+      currentArtistPage: 0,
+      artistsPerPage: 5, // 5 artists per page
 
       // Events data
       upcomingEvents: [],
@@ -341,7 +423,28 @@ export default {
       // Filters & Sort
       selectedGenreFilter: '',
       selectedSort: 'recommended',
-      allGenres: [],
+      allGenres: [
+        'Indie',
+        'Jazz',
+        'Electronic',
+        'Rock',
+        'Pop',
+        'Hip Hop',
+        'R&B',
+        'Folk',
+        'Classical',
+        'Metal',
+        'Alternative',
+        'Soul',
+        'Blues',
+        'Punk',
+        'Reggae',
+        'Country',
+        'K-Pop',
+        'EDM',
+        'Funk',
+        'Gospel',
+      ],
 
       // User interactions
       likedSongsSet: new Set(),
@@ -353,6 +456,10 @@ export default {
       loadingMore: false,
       likingInProgress: {},
       followingInProgress: {},
+
+      // Song Detail Modal (combines embed + comments)
+      showSongDetailModal: false,
+      selectedSongForDetail: null,
 
       auth,
     }
@@ -367,6 +474,32 @@ export default {
         return `Personalized for you based on your taste`
       }
       return `Based on your interests: ${this.userGenres.slice(0, 3).join(', ')}`
+    },
+
+    // Paginate songs into pages of 6 (2 rows × 3 cards)
+    paginatedSongs() {
+      const pages = []
+      for (let i = 0; i < this.displayedSongs.length; i += this.songsPerPage) {
+        pages.push(this.displayedSongs.slice(i, i + this.songsPerPage))
+      }
+      return pages
+    },
+
+    totalSongPages() {
+      return this.paginatedSongs.length
+    },
+
+    // Paginate artists into pages of 5
+    paginatedArtists() {
+      const pages = []
+      for (let i = 0; i < this.recommendedArtists.length; i += this.artistsPerPage) {
+        pages.push(this.recommendedArtists.slice(i, i + this.artistsPerPage))
+      }
+      return pages
+    },
+
+    totalArtistPages() {
+      return this.paginatedArtists.length
     },
   },
 
@@ -415,14 +548,6 @@ export default {
         this.recommendedSongs = await getRecommendedSongs(this.userId, {
           limit: 50,
         })
-
-        // Extract all unique genres for filter dropdown
-        const genresSet = new Set()
-        this.recommendedSongs.forEach((song) => {
-          const genres = song.genres || song.artistGenres || []
-          genres.forEach((g) => genresSet.add(g))
-        })
-        this.allGenres = Array.from(genresSet).sort()
 
         // Apply initial filters and sort
         this.applyFiltersAndSort()
@@ -542,43 +667,53 @@ export default {
       // Apply sort
       this.filteredSongs = sortSongs(filtered, this.selectedSort)
 
-      // Reset displayed songs to first page
-      this.currentSongsLoaded = this.songsPerPage
-      this.displayedSongs = this.filteredSongs.slice(0, this.currentSongsLoaded)
+      // Show ALL songs for carousel (not limited)
+      this.displayedSongs = this.filteredSongs
+
+      // Reset to first page
+      this.currentSongPage = 0
 
       console.log('🔍 Filtered:', this.filteredSongs.length, 'songs')
     },
 
-    loadMoreSongs() {
-      this.loadingMore = true
-
-      setTimeout(() => {
-        this.currentSongsLoaded += this.songsPerPage
-        this.displayedSongs = this.filteredSongs.slice(0, this.currentSongsLoaded)
-        this.loadingMore = false
-      }, 300)
-    },
-
     async toggleLike(song) {
+      console.log('🔥 toggleLike called!', song.title)
       const songKey = `${song.artistId}_${song.id}`
-      if (this.likingInProgress[songKey]) return
+      if (this.likingInProgress[songKey]) {
+        console.log('⚠️ Already in progress, skipping')
+        return
+      }
 
       try {
         this.likingInProgress[songKey] = true
         const isLiked = this.isSongLiked(song)
+        console.log('❤️ Current like status:', isLiked)
 
         const result = await toggleSongLike(song.artistId, song.id, isLiked)
+        console.log('✅ Toggle result:', result)
 
         if (result.success) {
-          // Update local state
+          // Update local state - Create new Set to trigger reactivity
+          const newSet = new Set(this.likedSongsSet)
           if (isLiked) {
-            this.likedSongsSet.delete(songKey)
+            newSet.delete(songKey)
+            console.log('💔 Unliked song')
           } else {
-            this.likedSongsSet.add(songKey)
+            newSet.add(songKey)
+            console.log('❤️ Liked song')
           }
+          this.likedSongsSet = newSet
 
-          // Update song's like count in UI
-          song.likes = result.newLikeCount
+          // Update song's like count in UI - Find and update in array
+          const songIndex = this.recommendedSongs.findIndex(
+            (s) => s.artistId === song.artistId && s.id === song.id,
+          )
+          if (songIndex !== -1) {
+            this.recommendedSongs[songIndex].likes = result.newLikeCount
+          }
+          console.log('📊 New like count:', result.newLikeCount)
+        } else {
+          console.error('❌ Toggle failed:', result.error)
         }
       } catch (error) {
         console.error('Error toggling like:', error)
@@ -597,12 +732,14 @@ export default {
         const result = await toggleFollowArtist(artistId, isFollowing)
 
         if (result.success) {
-          // Update local state
+          // Update local state - Create new Set to trigger reactivity
+          const newSet = new Set(this.followedArtistsSet)
           if (isFollowing) {
-            this.followedArtistsSet.delete(artistId)
+            newSet.delete(artistId)
           } else {
-            this.followedArtistsSet.add(artistId)
+            newSet.add(artistId)
           }
+          this.followedArtistsSet = newSet
         }
       } catch (error) {
         console.error('Error following artist:', error)
@@ -618,6 +755,68 @@ export default {
 
     isFollowing(artistId) {
       return this.followedArtistsSet.has(artistId)
+    },
+
+    // Song Detail Modal (combines embed + comments)
+    openSongDetail(song) {
+      console.log('🎵 Opening song detail for:', song.title, {
+        artistId: song.artistId,
+        songId: song.id,
+        platform: song.platform,
+      })
+      this.selectedSongForDetail = song
+      this.showSongDetailModal = true
+    },
+
+    closeSongDetailModal() {
+      this.showSongDetailModal = false
+      this.selectedSongForDetail = null
+    },
+
+    handleDetailCommentPosted() {
+      // Reload song data to get updated comment count
+      const song = this.recommendedSongs.find(
+        (s) =>
+          s.artistId === this.selectedSongForDetail.artistId &&
+          s.id === this.selectedSongForDetail.id,
+      )
+      if (song) {
+        song.commentCount = (song.commentCount || 0) + 1
+      }
+    },
+
+    // Song Carousel Navigation
+    nextSongPage() {
+      if (this.currentSongPage < this.totalSongPages - 1) {
+        this.currentSongPage++
+      }
+    },
+
+    previousSongPage() {
+      if (this.currentSongPage > 0) {
+        this.currentSongPage--
+      }
+    },
+
+    goToSongPage(pageIndex) {
+      this.currentSongPage = pageIndex
+    },
+
+    // Artist Carousel Navigation
+    nextArtistPage() {
+      if (this.currentArtistPage < this.totalArtistPages - 1) {
+        this.currentArtistPage++
+      }
+    },
+
+    previousArtistPage() {
+      if (this.currentArtistPage > 0) {
+        this.currentArtistPage--
+      }
+    },
+
+    goToArtistPage(pageIndex) {
+      this.currentArtistPage = pageIndex
     },
 
     handlePlayerClick(song) {
@@ -694,7 +893,121 @@ export default {
   outline: none;
 }
 
-/* Songs Grid */
+/* Carousel Container */
+.carousel-container {
+  position: relative;
+  padding: 0 3rem;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: 2px solid #667eea;
+  color: #667eea;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-arrow:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+}
+
+.carousel-arrow.left {
+  left: 0;
+}
+
+.carousel-arrow.right {
+  right: 0;
+}
+
+.carousel-arrow i {
+  font-size: 1.5rem;
+}
+
+.songs-carousel {
+  overflow: hidden;
+  width: 100%;
+}
+
+.songs-grid-carousel {
+  display: flex;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-page {
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  grid-template-rows: repeat(2, 1fr); /* 2 rows */
+  gap: 1.5rem;
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #dee2e6;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.indicator:hover {
+  background: #adb5bd;
+}
+
+.indicator.active {
+  background: #667eea;
+  width: 32px;
+  border-radius: 6px;
+}
+
+/* Artists Carousel */
+.artists-carousel {
+  overflow: hidden;
+  width: 100%;
+}
+
+.artists-grid-carousel {
+  display: flex;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.artists-grid-carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-page.artists-page {
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns for artists */
+  grid-template-rows: 1fr;
+  gap: 1.5rem;
+}
+
+/* Songs Grid (fallback for non-carousel) */
 .songs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -707,6 +1020,7 @@ export default {
   padding: 1rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .song-card:hover {
@@ -864,12 +1178,19 @@ export default {
   cursor: pointer;
   padding: 0.4rem 0.75rem;
   border-radius: 16px;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
   font-size: 0.9rem;
+  position: relative;
 }
 
 .stat-button:hover:not(:disabled) {
   background: #f8f8f8;
+  transform: scale(1.05);
+}
+
+.stat-button:active:not(:disabled) {
+  transform: scale(0.95);
+  background: #f0f0f0;
 }
 
 .stat-button:disabled {
@@ -879,6 +1200,28 @@ export default {
 
 .stat-button.liked {
   color: #e74c3c;
+  background: #ffebee;
+}
+
+.stat-button.liked:hover:not(:disabled) {
+  background: #ffcdd2;
+}
+
+/* Pulse animation when liked */
+.stat-button.liked .icon {
+  animation: heartPulse 0.3s ease-in-out;
+}
+
+@keyframes heartPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .stat-item {
@@ -1028,22 +1371,31 @@ export default {
     font-size: 2rem;
   }
 
+  /* Carousel adjustments for mobile */
+  .carousel-container {
+    padding: 0 2.5rem;
+  }
+
+  .carousel-arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carousel-arrow i {
+    font-size: 1.2rem;
+  }
+
+  .carousel-page {
+    grid-template-columns: 1fr; /* 1 column on mobile */
+    grid-template-rows: auto;
+  }
+
+  .carousel-page.artists-page {
+    grid-template-columns: 1fr; /* 1 artist per page on mobile */
+  }
+
   .songs-grid {
     grid-template-columns: 1fr;
-  }
-
-  .artists-row {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .artist-card-wrapper {
-    scroll-snap-align: start;
-    flex-shrink: 0;
   }
 
   .events-grid {
@@ -1067,22 +1419,31 @@ export default {
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-  .songs-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .carousel-page {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
   }
 
-  .artists-row {
-    grid-template-columns: repeat(3, 1fr);
+  .carousel-page.artists-page {
+    grid-template-columns: repeat(3, 1fr); /* 3 artists for tablets */
+  }
+
+  .songs-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1025px) {
-  .songs-grid {
-    grid-template-columns: repeat(4, 1fr);
+  .carousel-page {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
+    grid-template-rows: repeat(2, 1fr); /* 2 rows for desktop */
   }
 
-  .artists-row {
-    grid-template-columns: repeat(6, 1fr);
+  .carousel-page.artists-page {
+    grid-template-columns: repeat(5, 1fr); /* 5 artists for desktop */
+  }
+
+  .songs-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 </style>

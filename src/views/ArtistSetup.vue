@@ -341,24 +341,26 @@ export default {
     })
 
     const availableGenres = [
-      'Pop',
+      'Indie',
+      'Jazz',
+      'Electronic',
       'Rock',
+      'Pop',
       'Hip Hop',
       'R&B',
-      'Electronic',
-      'Jazz',
-      'Classical',
-      'Country',
-      'Indie',
       'Folk',
+      'Classical',
       'Metal',
+      'Alternative',
+      'Soul',
+      'Blues',
       'Punk',
       'Reggae',
-      'Blues',
-      'Alternative',
+      'Country',
       'K-Pop',
-      'Mandopop',
-      'Cantopop',
+      'EDM',
+      'Funk',
+      'Gospel',
     ]
 
     const loadExistingData = async (userId) => {
