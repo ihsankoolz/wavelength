@@ -190,7 +190,7 @@
                   <!-- Music Grid -->
                   <div v-if="filteredMusicLinks.length > 0" class="music-grid">
                     <div
-                      v-for="music in filteredMusicLinks"
+                      v-for="music in displayedMusicLinks"
                       :key="music.id"
                       class="music-item-card"
                     >
@@ -281,16 +281,16 @@
                           :disabled="likingInProgress[music.id]"
                           title="Like this song"
                         >
-                          <i class="bi" :class="isLiked(music) ? 'bi-heart-fill' : 'bi-heart'"></i>
-                          <span class="ms-1">{{ music.likes || 0 }}</span>
+                          <span class="icon">❤️</span>
+                          <span class="count ms-1">{{ music.likes || 0 }}</span>
                         </button>
                         <button
                           class="btn btn-sm action-btn"
                           @click="toggleComments(music.id)"
                           title="View comments"
                         >
-                          <i class="bi bi-chat-dots"></i>
-                          <span class="ms-1">{{ getCommentCount(music.id) }}</span>
+                          <span class="icon">💬</span>
+                          <span class="count ms-1">{{ getCommentCount(music.id) }}</span>
                         </button>
                       </div>
 
@@ -465,16 +465,36 @@
                     </div>
                   </div>
 
+                  <!-- See More Music Button -->
+                  <div
+                    v-if="filteredMusicLinks.length > 6 && !showAllMusic"
+                    class="text-center mt-4"
+                  >
+                    <button class="btn btn-outline-primary btn-lg" @click="showAllMusic = true">
+                      <i class="bi bi-chevron-down"></i>
+                      See More Music ({{ filteredMusicLinks.length - 6 }} more)
+                    </button>
+                  </div>
+
+                  <!-- Show Less Music Button -->
+                  <div
+                    v-if="showAllMusic && filteredMusicLinks.length > 6"
+                    class="text-center mt-4"
+                  >
+                    <button class="btn btn-outline-secondary" @click="showAllMusic = false">
+                      <i class="bi bi-chevron-up"></i>
+                      Show Less
+                    </button>
+                  </div>
+
                   <!-- No Music Message -->
-                  <div v-else class="text-center py-5">
+                  <div v-if="musicLinks.length === 0" class="text-center py-5">
                     <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
-                    <p class="text-muted">
-                      {{
-                        musicFilter === 'all'
-                          ? "This artist hasn't uploaded any music yet."
-                          : `No ${musicFilter}s found.`
-                      }}
-                    </p>
+                    <p class="text-muted">This artist hasn't uploaded any music yet.</p>
+                  </div>
+                  <div v-else-if="filteredMusicLinks.length === 0" class="text-center py-5">
+                    <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
+                    <p class="text-muted">No {{ musicFilter }}s found.</p>
                   </div>
                 </div>
               </div>
@@ -495,9 +515,27 @@
               </div>
 
               <!-- Events List -->
-              <div v-else class="row g-4">
-                <div v-for="event in artistEvents" :key="event.id" class="col-12 col-md-6">
-                  <EventCard :event="event" />
+              <div v-else>
+                <div class="events-grid">
+                  <div v-for="event in displayedEvents" :key="event.id">
+                    <EventCard :event="event" />
+                  </div>
+                </div>
+
+                <!-- See More Events Button -->
+                <div v-if="artistEvents.length > 6 && !showAllEvents" class="text-center mt-4">
+                  <button class="btn btn-outline-primary btn-lg" @click="showAllEvents = true">
+                    <i class="bi bi-chevron-down"></i>
+                    See More Events ({{ artistEvents.length - 6 }} more)
+                  </button>
+                </div>
+
+                <!-- Show Less Events Button -->
+                <div v-if="showAllEvents && artistEvents.length > 6" class="text-center mt-4">
+                  <button class="btn btn-outline-secondary" @click="showAllEvents = false">
+                    <i class="bi bi-chevron-up"></i>
+                    Show Less
+                  </button>
                 </div>
               </div>
             </div>
@@ -548,6 +586,9 @@
         </div>
       </div>
     </div>
+
+    <!-- Song Detail Modal -->
+    <SongDetailModal :show="showSongModal" :song="selectedSong" @close="closeSongModal" />
   </div>
 </template>
 
@@ -556,6 +597,7 @@ import { auth, db } from '@/services/firebase'
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import EventCard from '@/components/EventCard.vue'
 import NavigationBar from '@/components/NavigationBar.vue'
+import SongDetailModal from '@/components/SongDetailModal.vue'
 import { followArtist, unfollowArtist, isUserFollowingArtist } from '@/utils/userInteractions'
 import {
   toggleSongLike,
@@ -573,6 +615,7 @@ export default {
   components: {
     EventCard,
     NavigationBar,
+    SongDetailModal,
   },
   data() {
     return {
@@ -598,6 +641,10 @@ export default {
       replyText: {}, // Store reply text for each comment: { commentId: text }
       expandedReplies: {}, // Track which comments have expanded replies: { commentId: true/false }
       deletingComment: {}, // Track comments being deleted: { commentId: true/false }
+      showAllMusic: false, // Track if showing all music or just first 6
+      showAllEvents: false, // Track if showing all events or just first 6
+      selectedSong: null, // Song to display in modal
+      showSongModal: false, // Control modal visibility
     }
   },
   computed: {
@@ -611,12 +658,40 @@ export default {
       }
       return this.musicLinks.filter((music) => music.type === this.musicFilter)
     },
+    displayedMusicLinks() {
+      // Show first 6 items (3x2 grid) unless "See More" is clicked
+      if (this.showAllMusic) {
+        return this.filteredMusicLinks
+      }
+      return this.filteredMusicLinks.slice(0, 6)
+    },
+    displayedEvents() {
+      // Show first 6 items (3x2 grid) unless "See More" is clicked
+      if (this.showAllEvents) {
+        return this.artistEvents
+      }
+      return this.artistEvents.slice(0, 6)
+    },
   },
   async mounted() {
     await this.loadArtistProfile()
     await this.loadArtistEvents()
     await this.checkFollowStatus()
     await this.loadUserLikedSongs()
+
+    // Note: checkForSongModal is called inside loadArtistProfile after musicLinks are loaded
+  },
+  watch: {
+    // Reset "Show All" when filter changes
+    musicFilter() {
+      this.showAllMusic = false
+    },
+    // Watch for route query changes (notifications)
+    '$route.query.song'(newSongId) {
+      if (newSongId) {
+        this.checkForSongModal()
+      }
+    },
   },
   methods: {
     async loadArtistProfile() {
@@ -643,6 +718,11 @@ export default {
 
           console.log('Artist loaded:', this.artist.artistName)
           console.log('Music links:', this.musicLinks.length)
+
+          // Check if we need to open a song modal from notification
+          this.$nextTick(() => {
+            this.checkForSongModal()
+          })
         } else {
           console.warn('Artist not found:', artistId)
         }
@@ -1086,6 +1166,49 @@ export default {
     getReplyCount(comment) {
       return comment.replyCount || 0
     },
+
+    // Song Modal Methods
+    checkForSongModal() {
+      const songId = this.$route.query.song
+      console.log('🔍 Checking for song modal, songId:', songId)
+      console.log('🔍 musicLinks available:', this.musicLinks.length)
+
+      if (songId && this.musicLinks.length > 0) {
+        const song = this.musicLinks.find((s) => s.id === songId)
+        console.log('🔍 Found song:', song ? song.title : 'NOT FOUND')
+
+        if (song) {
+          this.openSongDetail(song)
+          // Switch to music tab if not already there
+          this.activeTab = 'music'
+        } else {
+          console.warn('⚠️ Song not found in musicLinks:', songId)
+        }
+      }
+    },
+
+    openSongDetail(song) {
+      console.log('🎵 Opening song detail modal for:', song.title)
+      this.selectedSong = {
+        ...song,
+        artistId: this.artist.id,
+        artistName: this.artist.artistName,
+      }
+      this.showSongModal = true
+      console.log('🎵 Modal state:', this.showSongModal, 'Selected song:', this.selectedSong?.title)
+    },
+
+    closeSongModal() {
+      this.showSongModal = false
+      this.selectedSong = null
+
+      // Remove song query parameter from URL
+      if (this.$route.query.song) {
+        this.$router.replace({
+          query: { ...this.$route.query, song: undefined },
+        })
+      }
+    },
   },
   watch: {
     // Watch for route changes (when navigating from one artist to another)
@@ -1267,7 +1390,14 @@ export default {
 /* Music Grid Styles */
 .music-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* Events Grid Styles */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
@@ -1458,8 +1588,13 @@ export default {
   transform: none;
 }
 
-.action-btn i {
+.action-btn .icon {
   font-size: 1.1rem;
+}
+
+.action-btn .count {
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 /* Comments Section */
@@ -1724,6 +1859,10 @@ export default {
     grid-template-columns: 1fr;
   }
 
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+
   .nav-pills {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -1731,6 +1870,17 @@ export default {
 
   .nav-pills .nav-link {
     white-space: nowrap;
+  }
+}
+
+/* Tablet responsive - 2 columns for medium screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .music-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>
