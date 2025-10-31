@@ -99,6 +99,8 @@ export default {
       this.showDropdown = !this.showDropdown
       if (this.showDropdown) {
         await this.loadNotifications()
+        // Mark all as read when dropdown opens
+        await this.markAllNotificationsAsRead()
       }
     },
 
@@ -116,6 +118,22 @@ export default {
       }
     },
 
+    async markAllNotificationsAsRead() {
+      const user = auth.currentUser
+      if (!user || this.unreadCount === 0) return
+
+      try {
+        // Mark all as read in Firestore
+        await markAllAsRead(user.uid)
+
+        // Update local state
+        this.notifications.forEach((n) => (n.read = true))
+        this.unreadCount = 0
+      } catch (error) {
+        console.error('Error marking notifications as read:', error)
+      }
+    },
+
     async updateUnreadCount() {
       const user = auth.currentUser
       if (!user) return
@@ -128,6 +146,10 @@ export default {
     },
 
     async handleNotificationClick(notification) {
+      console.log('🔔 Notification clicked:', notification)
+      console.log('🔔 Notification link:', notification.link)
+      console.log('🔔 Notification metadata:', notification.metadata)
+
       // Mark as read
       if (!notification.read) {
         await markAsRead(notification.id)
@@ -137,18 +159,15 @@ export default {
 
       // Navigate to link
       if (notification.link) {
+        console.log('🔔 Navigating to:', notification.link)
         this.$router.push(notification.link)
         this.showDropdown = false
       }
     },
 
     async handleMarkAllRead() {
-      const user = auth.currentUser
-      if (!user) return
-
-      await markAllAsRead(user.uid)
-      this.notifications.forEach((n) => (n.read = true))
-      this.unreadCount = 0
+      // This is now redundant but kept for explicit user action
+      await this.markAllNotificationsAsRead()
     },
 
     handleClickOutside(event) {

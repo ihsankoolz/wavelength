@@ -154,7 +154,7 @@
                 @click="mobileMenuOpen = false"
               >
                 <i class="bi bi-heart"></i>
-                <span class="ms-1">My Interests</span>
+                <span class="ms-1">My Waves</span>
               </router-link>
             </li>
 
@@ -166,20 +166,20 @@
                 @click="mobileMenuOpen = false"
               >
                 <i class="bi bi-music-note-list"></i>
-                <span class="ms-1">My Music</span>
+                <span class="ms-1">My Songs</span>
               </router-link>
             </li>
 
             <!-- Artist-Only Links -->
             <li v-if="userType === 'artist'" class="nav-item">
               <router-link
-                to="/artist/dashboard"
+                to="/artist/analytics"
                 class="nav-link"
-                :class="{ active: isActive('/artist/dashboard') }"
+                :class="{ active: isActive('/artist/analytics') }"
                 @click="mobileMenuOpen = false"
               >
-                <i class="bi bi-speedometer2"></i>
-                <span class="ms-1">Dashboard</span>
+                <i class="bi bi-bar-chart-line"></i>
+                <span class="ms-1">My Analytics</span>
               </router-link>
             </li>
           </ul>
@@ -202,14 +202,12 @@
 
             <!-- Dropdown Menu -->
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <li v-if="userType === 'fan' && currentUserId">
-                <router-link :to="`/profile/${currentUserId}`" class="dropdown-item">
+              <li v-if="currentUserId">
+                <router-link
+                  :to="userType === 'artist' ? '/artist/dashboard' : `/profile/${currentUserId}`"
+                  class="dropdown-item"
+                >
                   <i class="bi bi-person"></i> My Profile
-                </router-link>
-              </li>
-              <li v-if="userType === 'artist'">
-                <router-link to="/artist/dashboard" class="dropdown-item">
-                  <i class="bi bi-speedometer2"></i> My Dashboard
                 </router-link>
               </li>
               <li v-if="currentUserId">
@@ -222,11 +220,6 @@
                   class="dropdown-item"
                 >
                   <i class="bi bi-pencil"></i> Edit Profile
-                </router-link>
-              </li>
-              <li v-if="userType === 'artist'">
-                <router-link to="/events/create" class="dropdown-item">
-                  <i class="bi bi-plus-circle"></i> Create Event
                 </router-link>
               </li>
               <li><hr class="dropdown-divider" /></li>

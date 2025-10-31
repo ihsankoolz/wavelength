@@ -564,7 +564,7 @@ export async function postCommentReply(artistId, songId, commentId, replyText) {
 
       // Send notification to original commenter
       if (originalCommenterId) {
-        notifyOnReply(originalCommenterId, userId, userName, artistId, songTitle)
+        notifyOnReply(originalCommenterId, userId, userName, artistId, songTitle, songId)
       }
 
       return {

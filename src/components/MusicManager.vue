@@ -50,7 +50,7 @@
 
     <!-- Music Grid -->
     <div v-if="filteredMusicLinks.length > 0" class="music-grid">
-      <div v-for="music in filteredMusicLinks" :key="music.id" class="music-card">
+      <div v-for="music in displayedMusicLinks" :key="music.id" class="music-card">
         <!-- Platform Badge -->
         <div class="platform-badge" :class="music.platform">
           <i class="bi" :class="music.platform === 'spotify' ? 'bi-spotify' : 'bi-youtube'"></i>
@@ -83,8 +83,37 @@
           </div>
         </div>
 
+        <!-- Embedded Player -->
+        <div class="embed-container mt-3">
+          <!-- Spotify Embed -->
+          <div v-if="music.platform === 'spotify'" class="spotify-embed-wrapper">
+            <iframe
+              :src="music.embedUrl"
+              width="100%"
+              height="152"
+              frameborder="0"
+              allowtransparency="true"
+              allow="encrypted-media"
+              loading="lazy"
+            ></iframe>
+          </div>
+
+          <!-- YouTube Embed -->
+          <div v-if="music.platform === 'youtube'" class="youtube-embed-wrapper">
+            <iframe
+              :src="music.embedUrl"
+              width="100%"
+              height="200"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+
         <!-- Action Buttons -->
-        <div class="music-actions">
+        <div class="music-actions mt-3">
           <button class="btn btn-sm btn-outline-primary" @click="editMusic(music)" title="Edit">
             <i class="bi bi-pencil"></i>
           </button>
@@ -99,8 +128,24 @@
       </div>
     </div>
 
+    <!-- See More Music Button -->
+    <div v-if="filteredMusicLinks.length > 6 && !showAllMusic" class="text-center mt-4">
+      <button class="btn btn-outline-primary btn-lg" @click="showAllMusic = true">
+        <i class="bi bi-chevron-down"></i>
+        See More Music ({{ filteredMusicLinks.length - 6 }} more)
+      </button>
+    </div>
+
+    <!-- Show Less Music Button -->
+    <div v-if="showAllMusic && filteredMusicLinks.length > 6" class="text-center mt-4">
+      <button class="btn btn-outline-secondary" @click="showAllMusic = false">
+        <i class="bi bi-chevron-up"></i>
+        Show Less
+      </button>
+    </div>
+
     <!-- Empty State -->
-    <div v-else class="empty-state text-center py-5">
+    <div v-if="filteredMusicLinks.length === 0" class="empty-state text-center py-5">
       <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
       <h5 class="text-muted">
         {{ filterType === 'all' ? 'No music added yet' : `No ${filterType}s found` }}
@@ -364,6 +409,7 @@ export default {
       },
       currentEditingId: null,
       musicToDelete: null,
+      showAllMusic: false, // Track if showing all music or just first 6
       availableGenres: [
         'Pop',
         'Rock',
@@ -393,8 +439,19 @@ export default {
       }
       return this.musicLinks.filter((music) => music.type === this.filterType)
     },
+    displayedMusicLinks() {
+      // Show first 6 items (3x2 grid) unless "See More" is clicked
+      if (this.showAllMusic) {
+        return this.filteredMusicLinks
+      }
+      return this.filteredMusicLinks.slice(0, 6)
+    },
   },
   watch: {
+    // Reset "Show All" when filter changes
+    filterType() {
+      this.showAllMusic = false
+    },
     // Auto-adjust type when platform changes
     'formData.platform'(newPlatform) {
       if (newPlatform === 'spotify') {
@@ -659,7 +716,7 @@ export default {
 /* Music Grid */
 .music-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
@@ -754,6 +811,26 @@ export default {
 
 .music-actions .btn {
   flex: 1;
+}
+
+/* Embed Containers */
+.embed-container {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8f9fa;
+}
+
+.spotify-embed-wrapper iframe {
+  border-radius: 12px;
+}
+
+.youtube-embed-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.youtube-embed-wrapper iframe {
+  border-radius: 12px;
 }
 
 /* Empty State */
@@ -857,6 +934,13 @@ export default {
 
   .modal-dialog {
     width: 95%;
+  }
+}
+
+/* Tablet responsive - 2 columns for medium screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .music-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>

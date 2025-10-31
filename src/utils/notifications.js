@@ -133,7 +133,7 @@ export async function notifyOnComment(artistId, songId, songTitle, commenterId, 
       senderName: commenterName,
       title: 'New comment on your song',
       message: `${commenterName} commented on "${songTitle}"`,
-      link: `/artist/${artistId}`,
+      link: `/artist/${artistId}?song=${songId}`,
       metadata: {
         songId,
         songTitle,
@@ -153,6 +153,7 @@ export async function notifyOnComment(artistId, songId, songTitle, commenterId, 
  * @param {string} replierName - Replier's name
  * @param {string} artistId - Artist ID
  * @param {string} songTitle - Song title
+ * @param {string} songId - Song ID (optional)
  */
 export async function notifyOnReply(
   originalCommenterId,
@@ -160,6 +161,7 @@ export async function notifyOnReply(
   replierName,
   artistId,
   songTitle,
+  songId = null,
 ) {
   try {
     if (originalCommenterId === replierId) return // Don't notify self
@@ -171,9 +173,10 @@ export async function notifyOnReply(
       senderName: replierName,
       title: 'New reply to your comment',
       message: `${replierName} replied to your comment on "${songTitle}"`,
-      link: `/artist/${artistId}`,
+      link: songId ? `/artist/${artistId}?song=${songId}` : `/artist/${artistId}`,
       metadata: {
         songTitle,
+        songId,
       },
     })
 

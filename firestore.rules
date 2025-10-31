@@ -2,6 +2,12 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Helper function to check if only musicLinks array is being updated
+    function onlyUpdatingMusicLinks(newData, existingData) {
+      let affectedKeys = newData.diff(existingData).affectedKeys();
+      return affectedKeys.hasOnly(['musicLinks']);
+    }
+
     // Users collection - users can read all, write own
     match /users/{userId} {
       allow read: if request.auth != null;
@@ -11,7 +17,20 @@ service cloud.firestore {
     // Artists collection - artists can read all, write own
     match /artists/{artistId} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == artistId;
+      allow create, delete: if request.auth != null && request.auth.uid == artistId;
+      
+      // Allow artists to update their own profile
+      allow update: if request.auth != null && request.auth.uid == artistId;
+      
+      // Allow any authenticated user to update musicLinks array (for likes/plays/comments counts)
+      allow update: if request.auth != null && 
+                       onlyUpdatingMusicLinks(request.resource.data, resource.data);
+      
+      // MusicLinks subcollection - allow authenticated users to read and write
+      match /musicLinks/{musicId} {
+        allow read: if request.auth != null;
+        allow write: if request.auth != null;
+      }
     }
 
     // Events - all can read, only event owner can write
