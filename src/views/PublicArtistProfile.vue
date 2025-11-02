@@ -49,7 +49,7 @@
                 <div class="follower-count">{{ artist.followerCount || 500 }} Followers</div>
                 <button class="btn-follow" :class="{ 'btn-unfollow': isFollowing }" @click="toggleFollow" :disabled="followLoading">
                   <span v-if="followLoading" class="spinner-border spinner-border-sm me-2"></span>
-                  <span v-else-if="!isFollowing" class="follow-plus">+</span>
+                  <span v-else-if="!isFollowing">+</span>
                   {{ isFollowing ? 'UNFOLLOW' : 'FOLLOW' }}
                 </button>
 
@@ -158,15 +158,17 @@
                       <div class="embed-container">
                         <!-- Spotify Embed -->
                         <div v-if="music.platform === 'spotify'" class="spotify-embed-wrapper">
-                          <iframe :src="music.embedUrl" width="102%" height="250" frameborder="0"
-                            allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
+                          <iframe :src="music.embedUrl" width="100%" height="232" frameborder="0"
+                            allowtransparency="true" allow="encrypted-media" loading="lazy"
+                            style="height: 232px !important; min-height: 232px !important; max-height: 232px !important;"></iframe>
                         </div>
 
                         <!-- YouTube Embed -->
                         <div v-if="music.platform === 'youtube'" class="youtube-embed-wrapper">
-                          <iframe :src="music.embedUrl" width="100%" height="200" frameborder="0"
+                          <iframe :src="music.embedUrl" width="100%" height="232" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen loading="lazy"></iframe>
+                            allowfullscreen loading="lazy"
+                            style="height: 232px !important; min-height: 232px !important; max-height: 232px !important;"></iframe>
                         </div>
                       </div>
 
@@ -1186,6 +1188,7 @@ export default {
 
 .btn-follow:hover:not(:disabled) {
   background: #6E0B0B;
+  border: 2px solid #6E0B0B;
   color: white;
 }
 
@@ -1205,17 +1208,13 @@ export default {
   cursor: not-allowed;
 }
 
-.follow-plus {
-  font-size: 1.3rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-right: 4px;
-}
 
 .social-links {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
 }
 
 .social-icon {
@@ -1252,7 +1251,6 @@ export default {
   height: 180px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -1893,32 +1891,41 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 0;
+  height: 232px !important;
+  min-height: 232px !important;
+  max-height: 232px !important;
+  position: relative;
+  box-sizing: border-box;
 }
 
-.spotify-embed-wrapper {
-  width: 100%;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 0;
-}
-
-.spotify-embed-wrapper iframe {
-  border-radius: 8px;
-  display: block;
-  margin-bottom: 0;
-}
-
+.spotify-embed-wrapper,
 .youtube-embed-wrapper {
-  width: 100%;
+  width: 100% !important;
+  height: 232px !important;
+  min-height: 232px !important;
+  max-height: 232px !important;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: hidden !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  clip-path: inset(0 0 0 0);
 }
 
+.spotify-embed-wrapper iframe,
 .youtube-embed-wrapper iframe {
+  width: 100% !important;
+  height: 232px !important;
+  min-height: 232px !important;
+  max-height: 232px !important;
   border-radius: 8px;
-  display: block;
+  display: block !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
 }
 
 .video-wrapper-small {
