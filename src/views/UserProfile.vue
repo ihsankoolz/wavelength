@@ -1,64 +1,47 @@
-<!-- userprofile.vue - Fan Profile View -->
 <template>
   <div class="user-profile-page">
     <!-- Dynamic Wave Background -->
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
-          <animate attributeName="d" 
-            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
-                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
-            dur="3s" repeatCount="indefinite"/>
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" 
-            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
-                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
-            dur="4s" repeatCount="indefinite"/>
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
-          <animate attributeName="d" 
-            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
-                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
-            dur="5s" repeatCount="indefinite"/>
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" 
-            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
-                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
-            dur="2.5s" repeatCount="indefinite"/>
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
-          <animate attributeName="d" 
-            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
-                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
-            dur="3.5s" repeatCount="indefinite"/>
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
-          <animate attributeName="d" 
-            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
-                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
-            dur="4.5s" repeatCount="indefinite"/>
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
-          <animate attributeName="d" 
-            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
-                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
-            dur="6s" repeatCount="indefinite"/>
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
-          <animate attributeName="d" 
-            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
-                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
-            dur="2s" repeatCount="indefinite"/>
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
         </path>
       </svg>
     </div>
@@ -66,128 +49,102 @@
     <!-- Navigation Bar -->
     <NavigationBar />
 
-    <!-- Main Content Container -->
-    <div v-if="loading" class="container py-5" style="position: relative; z-index: 1;">
-      <div class="text-center">
-        <div class="spinner-border text-danger" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-3 text-white">Loading profile...</p>
-      </div>
-    </div>
-
-    <div v-else-if="userData" class="container py-5" style="position: relative; z-index: 1;">
-      <!-- Profile Section -->
-      <div class="profile-section">
-        <div class="row align-items-center">
-          <!-- Profile Picture -->
-          <div class="col-auto">
-            <img
-              :src="userData.profileImage || defaultPfp"
-              alt="Profile Picture"
-              class="profile-picture"
-            />
+    <!-- Main Content -->
+    <div class="content-wrapper">
+      <div v-if="loading" class="container py-5">
+        <div class="text-center">
+          <div class="spinner-border text-danger" role="status">
+            <span class="visually-hidden">Loading...</span>
           </div>
-
-          <!-- User Information -->
-          <div class="col">
-            <h1 class="user-name">{{ userData.displayName || 'User' }}</h1>
-            <p class="user-email">{{ userData.email || '' }}</p>
-            <p class="user-last-active"><b>
-              Last active: {{ formatLastActive(userData.lastActive) }}
-            </b></p>
-
-            <!-- Genre Tags -->
-            <div class="genre-tags">
-              <span
-                v-for="genre in (userData.preferredGenres || userData.preferences?.genres || []).slice(0, 2)"
-                :key="genre"
-                class="genre-tag"
-              >
-                {{ genre.toUpperCase() }}
-              </span>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="action-buttons mt-3">
-              <button @click="goToEditProfile" class="btn-edit">EDIT PROFILE</button>
-              <button @click="confirmDelete" class="btn-delete">DELETE PROFILE</button>
-            </div>
-          </div>
+          <p class="mt-3 text-white">Loading profile...</p>
         </div>
       </div>
 
-      <!-- Following Section -->
-      <div class="following-section">
-        <h2 class="section-title">FOLLOWING</h2>
-        <p class="section-subtitle"><b>YOU ARE FOLLOWING {{ followingCount }} ARTISTS</b></p>
-
-        <!-- Carousel -->
-        <div class="carousel-wrapper" @mouseenter="showCarouselControls = true" @mouseleave="showCarouselControls = false">
-          <!-- Left Arrow -->
-          <button
-            v-if="showCarouselControls && followingArtists.length > 5"
-            @click="scrollCarousel('left')"
-            class="carousel-nav carousel-nav-left"
-          >
-            <i class="bi bi-chevron-left"></i>
-          </button>
-
-          <!-- Artist Cards Container -->
-          <div class="carousel-container" ref="carouselContainer">
-            <div
-              v-if="followingArtists.length === 0"
-              class="text-center py-5"
-            >
-              <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
-              <p class="text-white"><b>Not following any artists yet.</b></p>
+      <div v-else-if="userData" class="container py-5">
+        <!-- Profile Section -->
+        <div class="profile-section">
+          <div class="row align-items-center">
+            <!-- Profile Picture -->
+            <div class="col-auto">
+              <img :src="userData.profileImage || defaultPfp" alt="Profile Picture" class="profile-picture" />
             </div>
-            
-            <div class="carousel-items" :style="{ transform: `translateX(-${carouselOffset}px)` }">
-              <div
-                v-for="artist in followingArtists"
-                :key="artist.id"
-                class="artist-card-item"
-                @click="goToArtistProfile(artist.id)"
-              >
-                <div class="artist-avatar-wrapper">
-                  <img
-                    :src="artist.profileImage || 'https://ui-avatars.com/api/?name=' + artist.artistName + '&size=200&background=667eea&color=fff'"
-                    :alt="artist.artistName"
-                    class="artist-avatar"
-                  />
-                  <button 
-                    v-if="userId && isCurrentUser"
-                    class="follow-button"
-                    :class="{ followed: isFollowingArtist(artist.id) }"
-                    @click.stop="toggleArtistFollow(artist.id)"
-                    :title="isFollowingArtist(artist.id) ? 'Unfollow' : 'Follow'"
-                  >
-                    <i :class="isFollowingArtist(artist.id) ? 'bi bi-check-lg' : 'bi bi-plus-lg'"></i>
-                  </button>
-                </div>
-                <h5 class="artist-name">{{ artist.artistName }}</h5>
-                <p class="artist-genres">
-                  {{ (artist.genres || []).slice(0, 3).join(', ') }}{{ (artist.genres || []).length > 3 ? '..' : '' }}
-                </p>
+
+            <!-- User Information -->
+            <div class="col">
+              <h1 class="user-name">{{ userData.displayName || 'User' }}</h1>
+              <p class="user-email">{{ userData.email || '' }}</p>
+              <p class="user-last-active"><b>
+                  Last active: {{ formatLastActive(userData.lastActive) }}
+                </b></p>
+
+              <!-- Genre Tags -->
+              <div class="genre-tags">
+                <span v-for="genre in (userData.preferredGenres || userData.preferences?.genres || [])" :key="genre"
+                  class="genre-tag">
+                  {{ genre.toUpperCase() }}
+                </span>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="action-buttons mt-3">
+                <button @click="goToEditProfile" class="btn-edit">EDIT PROFILE</button>
+                <button @click="confirmDelete" class="btn-delete">DELETE PROFILE</button>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Right Arrow -->
-          <button
-            v-if="showCarouselControls && followingArtists.length > 5"
-            @click="scrollCarousel('right')"
-            class="carousel-nav carousel-nav-right"
-          >
-            <i class="bi bi-chevron-right"></i>
-          </button>
+        <!-- Following Section -->
+        <div class="following-section">
+          <h2 class="section-title">FOLLOWING</h2>
+          <p class="section-subtitle"><b>YOU ARE FOLLOWING {{ followingCount }} ARTISTS</b></p>
+
+          <!-- Carousel -->
+          <div class="carousel-wrapper" @mouseenter="showCarouselControls = true"
+            @mouseleave="showCarouselControls = false">
+            <!-- Left Arrow -->
+            <button v-if="showCarouselControls && followingArtists.length > 5" @click="scrollCarousel('left')"
+              class="carousel-nav carousel-nav-left">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+
+            <!-- Artist Cards Container -->
+            <div class="carousel-container" ref="carouselContainer">
+              <div v-if="followingArtists.length === 0" class="text-center py-5">
+                <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
+                <p class="text-white"><b>Not following any artists yet.</b></p>
+              </div>
+
+              <div class="carousel-items" :style="{ transform: `translateX(-${carouselOffset}px)` }">
+                <div v-for="artist in followingArtists" :key="artist.id" class="artist-card-item"
+                  @click="goToArtistProfile(artist.id)">
+                  <div class="artist-avatar-wrapper">
+                    <img
+                      :src="artist.profileImage || 'https://ui-avatars.com/api/?name=' + artist.artistName + '&size=200&background=667eea&color=fff'"
+                      :alt="artist.artistName" class="artist-avatar" />
+                    <button v-if="userId && isCurrentUser" class="follow-button"
+                      :class="{ followed: isFollowingArtist(artist.id) }" @click.stop="toggleArtistFollow(artist.id)"
+                      :title="isFollowingArtist(artist.id) ? 'Unfollow' : 'Follow'">
+                      <i :class="isFollowingArtist(artist.id) ? 'bi bi-check-lg' : 'bi bi-plus-lg'"></i>
+                    </button>
+                  </div>
+                  <h5 class="artist-name">{{ artist.artistName }}</h5>
+                  <p class="artist-genres">
+                    {{ (artist.genres || []).slice(0, 3).join(', ') }}{{ (artist.genres || []).length > 3 ? '..' : '' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Arrow -->
+            <button v-if="showCarouselControls && followingArtists.length > 5" @click="scrollCarousel('right')"
+              class="carousel-nav carousel-nav-right">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
-
-
-
   </div>
 </template>
 
@@ -302,7 +259,7 @@ export default {
           // Update local state
           this.userData.followingArtists = this.userData.followingArtists.filter(id => id !== artistId)
           this.followingCount = this.followingCount - 1
-          
+
           // Remove from displayed list
           this.followingArtists = this.followingArtists.filter(artist => artist.id !== artistId)
         } else {
@@ -326,7 +283,7 @@ export default {
     async loadFollowingArtists(artistIds) {
       try {
         const artists = []
-        
+
         // Load each artist in batches of 10
         const batches = []
         for (let i = 0; i < artistIds.length; i += 10) {
@@ -338,7 +295,7 @@ export default {
             collection(db, 'artists'),
             where('__name__', 'in', batch)
           )
-          
+
           const artistsSnapshot = await getDocs(artistsQuery)
           artistsSnapshot.docs.forEach(doc => {
             artists.push({
@@ -359,11 +316,11 @@ export default {
       // Calculate card width dynamically based on container width
       const container = this.$refs.carouselContainer
       if (!container) return
-      
+
       const containerWidth = container.offsetWidth
       const gap = 32 // 2rem
       const cardWidth = (containerWidth - (gap * 4)) / 5 + gap // 5 cards visible
-      
+
       const maxOffset = Math.max(0, (this.followingArtists.length - 5) * cardWidth)
 
       if (direction === 'right') {
@@ -448,9 +405,9 @@ export default {
             // Firestore data is already deleted, but Auth needs re-authentication
             alert(
               '⚠️ Your account data has been deleted from our database.\n\n' +
-                'However, for security reasons, you need to log out and log back in, ' +
-                'then delete your account again to fully remove it from the authentication system.\n\n' +
-                'This will allow you to reuse your email address.',
+              'However, for security reasons, you need to log out and log back in, ' +
+              'then delete your account again to fully remove it from the authentication system.\n\n' +
+              'This will allow you to reuse your email address.',
             )
             await signOut(auth)
             this.$router.push('/login')
@@ -458,9 +415,9 @@ export default {
             // Unexpected error - alert user
             alert(
               '⚠️ Partial deletion occurred.\n\n' +
-                'Your data was removed from our database, but there was an issue with the authentication system.\n\n' +
-                'Please contact support with this error code: ' +
-                authError.code,
+              'Your data was removed from our database, but there was an issue with the authentication system.\n\n' +
+              'Please contact support with this error code: ' +
+              authError.code,
             )
             await signOut(auth)
             this.$router.push('/')
@@ -472,9 +429,9 @@ export default {
         // If Firestore deletion failed, show error
         alert(
           '❌ Failed to delete account.\n\n' +
-            'Please try again or contact support if the issue persists.\n\n' +
-            'Error: ' +
-            (error.message || 'Unknown error'),
+          'Please try again or contact support if the issue persists.\n\n' +
+          'Error: ' +
+          (error.message || 'Unknown error'),
         )
       }
     },
@@ -514,6 +471,13 @@ export default {
   position: relative;
 }
 
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+  padding-top: 40px;
+  padding-bottom: 60px;
+}
+
 /* Dynamic Wave Background */
 .wave-svg {
   position: fixed;
@@ -541,7 +505,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: 
+  background:
     radial-gradient(ellipse at center, rgba(187, 24, 20, 0.08) 0%, transparent 70%),
     radial-gradient(ellipse at 30% 50%, rgba(199, 53, 53, 0.06) 0%, transparent 50%),
     radial-gradient(ellipse at 70% 50%, rgba(187, 24, 20, 0.08) 0%, transparent 50%);
@@ -714,7 +678,7 @@ export default {
   transform: translateY(-5px);
 }
 
-.artist-card-item > * {
+.artist-card-item>* {
   position: relative;
   z-index: 1;
 }
@@ -877,6 +841,10 @@ export default {
 @media (max-width: 768px) {
   .user-profile-page {
     padding-top: 80px;
+  }
+
+  .content-wrapper {
+    padding-top: 20px;
   }
 
   .profile-section .row {
