@@ -735,16 +735,16 @@ export default {
 
 /* Search Results Dropdown */
 .search-results-dropdown {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  background: var(--color-background-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
   max-height: 400px;
   overflow-y: auto;
   z-index: 1061;
 }
 
 .search-section {
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .search-section:last-child {
@@ -767,6 +767,7 @@ export default {
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
+  color: var(--color-text-dark);
   transition: all 0.2s ease;
   border-bottom: 1px solid #f1f3f5;
 }
