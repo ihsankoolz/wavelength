@@ -94,55 +94,34 @@
           </div>
         </div>
 
-        <!-- Following Section -->
-        <div class="following-section">
-          <h2 class="section-title">FOLLOWING</h2>
-          <p class="section-subtitle"><b>YOU ARE FOLLOWING {{ followingCount }} ARTISTS</b></p>
+          <!-- Following Artists Section -->
+          <section class="genre-picks-section">
+            <h2 class="genre-heading">FOLLOWING</h2>
+            <div class="header-subtitle mb-4">
+              You are following <span class="highlight-number">{{ followingArtists.length }}</span> artist{{ followingArtists.length !== 1 ? 's' : '' }}
+            </div>
 
-          <!-- Carousel -->
-          <div class="carousel-wrapper" @mouseenter="showCarouselControls = true"
-            @mouseleave="showCarouselControls = false">
-            <!-- Left Arrow -->
-            <button v-if="showCarouselControls && followingArtists.length > 5" @click="scrollCarousel('left')"
-              class="carousel-nav carousel-nav-left">
-              <i class="bi bi-chevron-left"></i>
-            </button>
-
-            <!-- Artist Cards Container -->
-            <div class="carousel-container" ref="carouselContainer">
-              <div v-if="followingArtists.length === 0" class="text-center py-5">
+            <!-- No Following Artists -->
+            <div v-if="followingArtists.length === 0" class="card shadow-sm">
+              <div class="card-body text-center py-5">
                 <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
-                <p class="text-white"><b>Not following any artists yet.</b></p>
-              </div>
-
-              <div class="carousel-items" :style="{ transform: `translateX(-${carouselOffset}px)` }">
-                <div v-for="artist in followingArtists" :key="artist.id" class="artist-card-item"
-                  @click="goToArtistProfile(artist.id)">
-                  <div class="artist-avatar-wrapper">
-                    <img
-                      :src="artist.profileImage || 'https://ui-avatars.com/api/?name=' + artist.artistName + '&size=200&background=667eea&color=fff'"
-                      :alt="artist.artistName" class="artist-avatar" />
-                    <button v-if="userId && isCurrentUser" class="follow-button"
-                      :class="{ followed: isFollowingArtist(artist.id) }" @click.stop="toggleArtistFollow(artist.id)"
-                      :title="isFollowingArtist(artist.id) ? 'Unfollow' : 'Follow'">
-                      <i :class="isFollowingArtist(artist.id) ? 'bi bi-check-lg' : 'bi bi-plus-lg'"></i>
-                    </button>
-                  </div>
-                  <h5 class="artist-name">{{ artist.artistName }}</h5>
-                  <p class="artist-genres">
-                    {{ (artist.genres || []).slice(0, 3).join(', ') }}{{ (artist.genres || []).length > 3 ? '..' : '' }}
-                  </p>
-                </div>
+                <p class="text-muted">You're not following any artists yet.</p>
+                <router-link to="/home" class="btn btn-primary">
+                  Discover Artists
+                </router-link>
               </div>
             </div>
 
-            <!-- Right Arrow -->
-            <button v-if="showCarouselControls && followingArtists.length > 5" @click="scrollCarousel('right')"
-              class="carousel-nav carousel-nav-right">
-              <i class="bi bi-chevron-right"></i>
-            </button>
-          </div>
-        </div>
+            <!-- Artists Grid -->
+            <div v-else class="horizontal-scroll">
+              <div class="d-flex gap-3">
+                <div v-for="artist in followingArtists" :key="artist.id" class="flex-shrink-0 artist-card-container">
+                  <ArtistCard :artist="artist" />
+                </div>
+              </div>
+            </div>
+          </section>
+
       </div>
     </div>
   </div>
@@ -154,11 +133,13 @@ import { doc, getDoc, deleteDoc, collection, getDocs, query, where, updateDoc, a
 import { auth, db } from '@/services/firebase'
 import NavigationBar from '@/components/NavigationBar.vue'
 import defaultPfp from '@/assets/defaultPfp.jpg'
+import ArtistCard from '@/components/ArtistCard.vue'
 
 export default {
   name: 'UserProfile',
   components: {
     NavigationBar,
+    ArtistCard,
   },
   data() {
     return {
@@ -169,8 +150,6 @@ export default {
       interestedCount: 0,
       defaultPfp: defaultPfp,
       followingArtists: [],
-      showCarouselControls: false,
-      carouselOffset: 0,
     }
   },
   computed: {
@@ -475,7 +454,7 @@ export default {
   position: relative;
   z-index: 1;
   padding-top: 40px;
-  padding-bottom: 60px;
+  padding-bottom: 30px;
 }
 
 /* Dynamic Wave Background */
@@ -514,6 +493,10 @@ export default {
 }
 
 /* Profile Section */
+.profile-section {
+  margin-bottom: 60px;
+}
+
 .profile-picture {
   width: 200px;
   height: 200px;
@@ -611,10 +594,52 @@ export default {
   text-transform: uppercase;
 }
 
+/* Genre Heading (matching EditProfile) */
+.genre-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.genre-picks-section {
+  margin-bottom: 30px;
+}
+
 .section-subtitle {
   font-size: 1rem;
   color: #ccc;
   margin-bottom: 2rem;
+}
+
+/* Following Section - Horizontal Scroll */
+.horizontal-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 10px 0;
+  min-height: 350px;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background-color: #B51414;
+  border-radius: 4px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-track {
+  background: #2a2a2a;
+}
+
+.artist-card-container {
+  min-width: 250px;
+  width: 250px;
+  height: 100%;
+  display: flex;
 }
 
 /* Carousel */
