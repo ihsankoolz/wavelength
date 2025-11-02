@@ -137,6 +137,21 @@
                   <div class="form-text">{{ formData.description.length }}/500 characters</div>
                 </div>
 
+                <div class="mb-3">
+                      <label for="ticket" class="form-label fw-bold">
+                        <i class="bi bi-geo-alt text-primary"></i> Ticketing Link
+                      </label>
+                      <input
+                        type="text"
+                        id="ticket"
+                        v-model="formData.ticket"
+                        class="form-control form-control-lg"
+                        placeholder="e.g., https://ticketmaster.sg/activity/detail/25sg_blackpink"
+                        required
+                      />
+                      <div class="form-text">Add your event ticket link here</div>
+                    </div>
+
                 <!-- Submit Buttons -->
                 <div class="d-grid gap-2">
                   <button type="submit" class="btn btn-primary" :disabled="loading">
@@ -191,6 +206,7 @@ export default {
         venue: '',
         location: '',
         description: '',
+        ticket: '',
       },
       loading: false,
       successMessage: '',
@@ -241,6 +257,7 @@ export default {
             venue: this.event.venue || '',
             location: this.event.location || '',
             description: this.event.description || '',
+            ticket: this.event.ticket || '',
           }
         } else {
           // Create mode - reset form
@@ -297,6 +314,7 @@ export default {
           description: this.formData.description.trim(),
           artistId: this.artistId,
           artistName: this.artistName,
+          ticket: this.formData.ticket,
           updatedAt: Timestamp.now(),
         }
 
@@ -341,6 +359,7 @@ export default {
         venue: '',
         location: '',
         description: '',
+        ticket: '',
       }
       this.errors = {}
     },
