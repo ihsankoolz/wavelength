@@ -4,6 +4,67 @@
     <!-- Navigation Bar -->
     <NavigationBar />
 
+    <div class="wave-svg">
+      <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
+          <animate attributeName="d" 
+            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+                   M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
+            dur="3s" repeatCount="indefinite"/>
+        </path>
+        <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
+          <animate attributeName="d" 
+            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+                   M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
+            dur="4s" repeatCount="indefinite"/>
+        </path>
+        <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
+          <animate attributeName="d" 
+            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+                   M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
+            dur="5s" repeatCount="indefinite"/>
+        </path>
+        <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
+          <animate attributeName="d" 
+            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+                   M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
+            dur="2.5s" repeatCount="indefinite"/>
+        </path>
+        <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
+          <animate attributeName="d" 
+            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+                   M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
+            dur="3.5s" repeatCount="indefinite"/>
+        </path>
+        <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
+          <animate attributeName="d" 
+            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+                   M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
+            dur="4.5s" repeatCount="indefinite"/>
+        </path>
+        <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
+          <animate attributeName="d" 
+            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+                   M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
+            dur="6s" repeatCount="indefinite"/>
+        </path>
+        <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
+          <animate attributeName="d" 
+            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+                   M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
+            dur="2s" repeatCount="indefinite"/>
+        </path>
+      </svg>
+    </div>
+
     <!-- Main Content -->
     <div class="content-wrapper">
       <div class="container py-4">
@@ -164,7 +225,7 @@
 
 <script>
 import { auth, db } from '@/services/firebase'
-import { collection, getDocs, query, orderBy } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy, arrayUnion, arrayRemove, increment } from 'firebase/firestore'
 import NavigationBar from '@/components/NavigationBar.vue'
 import EventCard from '@/components/EventCard.vue'
 import DiscoveryMap from '@/components/DiscoveryMap.vue'
@@ -225,6 +286,7 @@ export default {
   },
   async mounted() {
     await this.loadEvents()
+    await this.checkIfInterested()
   },
   methods: {
     // async loadUserData() {
@@ -391,7 +453,66 @@ export default {
     };
     updateList(this.displayedEvents);
     updateList(this.allEvents);
-  }
+  },
+  async checkIfInterested() {
+      try {
+        const user = auth.currentUser
+        if (!user) return
+
+        const userDoc = await getDoc(doc(db, 'users', user.uid))
+        if (userDoc.exists()) {
+          const userData = userDoc.data()
+          this.isInterested = userData.interestedEvents?.includes(this.$route.params.id) || false
+        }
+      } catch (error) {
+        console.error('Error checking interest:', error)
+      }
+    },
+  async markInterested() {
+      if (this.isProcessing) return
+
+      try {
+        const user = auth.currentUser
+        if (!user) {
+          this.$router.push('/login')
+          return
+        }
+
+        this.isProcessing = true
+        const eventId = this.$route.params.id
+
+        if (this.isInterested) {
+          // Remove interest
+          await updateDoc(doc(db, 'users', user.uid), {
+            interestedEvents: arrayRemove(eventId),
+          })
+
+          await updateDoc(doc(db, 'events', eventId), {
+            interestedCount: increment(-1),
+          })
+
+          this.isInterested = false
+          this.event.interestedCount = Math.max(0, (this.event.interestedCount || 0) - 1)
+        } else {
+          // Add interest
+          await updateDoc(doc(db, 'users', user.uid), {
+            interestedEvents: arrayUnion(eventId),
+          })
+
+          await updateDoc(doc(db, 'events', eventId), {
+            interestedCount: increment(1),
+          })
+
+          this.isInterested = true
+          this.event.interestedCount = (this.event.interestedCount || 0) + 1
+        }
+      } catch (error) {
+        console.error('Error updating interest:', error)
+        alert('Failed to update interest. Please try again.')
+      } finally {
+        this.isProcessing = false
+      }
+    },
 
 
     // async logout() {
@@ -446,8 +567,6 @@ export default {
   font-weight: 600;
   margin-bottom: 0.45rem;
 }
-
-
 
 /* Filter buttons */
 .btn-primary {
@@ -600,14 +719,30 @@ input::placeholder {
   height: 300px;
   transform: translateY(-50%);
   pointer-events: none;
-  z-index: -1;
-  opacity: 0.45;
+  z-index: 0;
+  opacity: 0.4;
   overflow: hidden;
 }
+
 .wave-svg svg {
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.browse-events-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: 
+    radial-gradient(ellipse at center, rgba(187, 24, 20, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse at 30% 50%, rgba(199, 53, 53, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(187, 24, 20, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 
