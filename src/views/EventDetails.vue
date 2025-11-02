@@ -3,7 +3,66 @@
   <div class="event-details-page">
     <!-- Navigation Bar -->
     <NavigationBar />
-
+<div class="wave-svg">
+      <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="wave1" fill="none" stroke="#B51414" stroke-width="2" opacity="0.6">
+          <animate attributeName="d" 
+            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+                   M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
+            dur="3s" repeatCount="indefinite"/>
+        </path>
+        <path id="wave2" fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
+          <animate attributeName="d" 
+            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+                   M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
+            dur="4s" repeatCount="indefinite"/>
+        </path>
+        <path id="wave3" fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
+          <animate attributeName="d" 
+            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+                   M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
+            dur="5s" repeatCount="indefinite"/>
+        </path>
+        <path id="wave4" fill="none" stroke="#B51414" stroke-width="1.5" opacity="0.5">
+          <animate attributeName="d" 
+            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+                   M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
+            dur="2.5s" repeatCount="indefinite"/>
+        </path>
+        <path id="wave5" fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
+          <animate attributeName="d" 
+            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+                   M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
+            dur="3.5s" repeatCount="indefinite"/>
+        </path>
+        <path id="wave6" fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
+          <animate attributeName="d" 
+            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+                   M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
+            dur="4.5s" repeatCount="indefinite"/>
+        </path>
+        <path id="wave7" fill="none" stroke="#B51414" stroke-width="0.8" opacity="0.3">
+          <animate attributeName="d" 
+            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+                   M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
+            dur="6s" repeatCount="indefinite"/>
+        </path>
+        <path id="wave8" fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
+          <animate attributeName="d" 
+            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+                   M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
+            dur="2s" repeatCount="indefinite"/>
+        </path>
+      </svg>
+    </div>
     <!-- Loading State -->
     <div v-if="loading" class="content-wrapper">
       <div class="container text-center py-5">
@@ -26,145 +85,115 @@
 
     <!-- Event Details -->
     <div v-else class="content-wrapper">
-      <div class="container py-4">
-        <div class="row">
-          <!-- Main Event Info -->
-          <div class="col-12 col-lg-8 mb-4">
-            <div class="card shadow-lg border-0">
-              <div class="card-body p-4 p-md-5">
-                <!-- Event Title -->
-                <h1 class="display-4 fw-bold mb-3">{{ event.title }}</h1>
+    
+  <div class="container py-4">
+    <!-- EVENT TITLE AND ARTIST -->
+    <div class="mb-3">
+      <h1 class="event-title-header mb-2">{{ event.title }}</h1>
+      <div class="d-flex align-items-center mb-2">
+        <img
+          :src="event.artistProfileImage || defaultImage"
+          :alt="event.artistName"
+          class="artist-profile-header"
+        />
+        <span class="artist-header-name ms-2 fw-bold">{{ event.artistName }}</span>
+      </div>
+      
+<div class="event-desc">
+  <p>{{ event.description }}</p>
+</div>
 
-                <!-- Artist Name -->
-                <div class="mb-4">
-                  <h4 class="text-primary mb-0">
-                    <i class="bi bi-music-note-beamed"></i>
-                    {{ event.artistName }}
-                  </h4>
-                </div>
+<div class="d-flex align-items-center justify-content-between mb-4 meta-action-bar">
+  <div>
+    <div class="event-datetime fw-bold mb-1">
+      Date: {{ formatDate(event.date) }}
+    </div>
+    <div class="event-venue fw-bold">
+      Venue: {{ event.venue }}
+    </div>
+    <div class="event-interest-count fw-bold ">
+        {{ event.interestedCount || 0 }} people interested
+    </div>
+    
+  </div>
+  
+  <div class="text-center">
+    <button
+      class="btn btn-interest-header"
+      :class="{ active: isInterested }"
+      @click="markInterested"
+      :disabled="isProcessing"
+    >
+     
+       {{ isInterested ? 'IM INTERESTED' : 'Mark as Interested' }}
+    </button>
+    <div>
+      
+    </div>
+  </div>
+</div>
 
-                <!-- Event Meta Info -->
-                <div class="event-meta mb-4">
-                  <div class="meta-item">
-                    <i class="bi bi-calendar3 text-primary"></i>
-                    <strong>Date:</strong> {{ formatDate(event.date) }}
-                  </div>
-                  <div class="meta-item">
-                    <i class="bi bi-building text-primary"></i>
-                    <strong>Venue:</strong> {{ event.venue }}
-                  </div>
-                  <div class="meta-item">
-                    <i class="bi bi-geo-alt text-primary"></i>
-                    <strong>Location:</strong> {{ event.location }}
-                  </div>
-                  <div class="meta-item">
-                    <i class="bi bi-people text-primary"></i>
-                    <strong>Interested:</strong> {{ event.interestedCount || 0 }} people
-                  </div>
-                </div>
 
-                <!-- Genres -->
-                <div class="mb-4">
-                  <h6 class="mb-2">Genres:</h6>
-                  <div class="d-flex flex-wrap gap-2">
-                    <span
-                      v-for="genre in event.genres"
-                      :key="genre"
-                      class="badge bg-primary"
-                      style="font-size: 0.9rem; padding: 0.5rem 1rem"
-                    >
-                      {{ genre }}
-                    </span>
-                  </div>
-                </div>
-
-                <!-- Description -->
-                <div class="mb-4">
-                  <h5 class="mb-3">About This Event</h5>
-                  <p class="text-muted" style="font-size: 1.1rem; line-height: 1.8">
-                    {{ event.description || 'No description provided.' }}
-                  </p>
-                </div>
-
-                <!-- MAP section -->
-                <div class="mb-4">
-                  <h5 class="mb-3"><i class="bi bi-map"></i> Event Location</h5>
-                  <EventMap :location="event.location" :title="event.venue" size="large" />
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="d-grid gap-2 d-md-flex">
-                  <button
-                    class="btn btn-lg flex-fill"
-                    :class="isInterested ? 'btn-success' : 'btn-primary'"
-                    @click="markInterested"
-                    :disabled="isProcessing"
-                  >
-                    <span v-if="isProcessing" class="spinner-border spinner-border-sm me-2"></span>
-                    <i v-else class="bi" :class="isInterested ? 'bi-star-fill' : 'bi-star'"></i>
-                    {{
-                      isProcessing
-                        ? 'Updating...'
-                        : isInterested
-                          ? "You're Interested!"
-                          : 'Mark as Interested'
-                    }}
-                  </button>
-                  <button class="btn btn-outline-primary btn-lg" @click="getDirections">
-                    <i class="bi bi-map"></i> Get Directions
-                  </button>
-                  <div class="d-grid mt-2">
-                                    <a
-                    v-if="event.ticket"
-                    :href="event.ticket"
-                    target="_blank"
-                    
-                    class="btn btn-lg btn-primary"
-                  >
-                    Purchase Tickets
-                  </a>
-
-                </div>
-                </div>
-              </div>
+      <!-- <div class="event-desc mb-2">
+        {{ event.description || 'No description provided.' }}
+      </div>
+      <div class="event-datetime-location mb-4 fw-bold">
+        Date: {{ formatDate(event.date) }} <br>
+        Venue: {{ event.venue }}
+      </div>
+      <button
+        class="btn btn-interest-header"
+        :class="{ active: isInterested }"
+        @click="markInterested"
+        :disabled="isProcessing"
+      >
+        I'M INTERESTED
+      </button> -->
+    </div>
+    <!-- MAIN CARD ROW -->
+    <div class="row">
+      <div class="col-12 col-lg-8 mb-4">
+        <!-- Big map and address -->
+        <div class="card shadow-sm border-0 mb-3">
+          <div class="card-body">
+            <EventMap :location="event.location" :title="event.venue" size="large" />
+            <div class="mt-3 fw-bold">
+              Address: {{ event.location }}
             </div>
+            <button class="btn btn-directions" @click="getDirections">GET DIRECTIONS</button>
           </div>
-
-          <!-- Sidebar -->
-          <div class="col-12 col-lg-4">
-            <!-- Artist Info Card -->
-            <div class="card shadow-sm mb-4">
-              <div class="card-body">
-                <h5 class="card-title">About the Artist</h5>
-                <p class="mb-3">
-                  <strong>{{ event.artistName }}</strong>
-                </p>
-                <router-link
-                  :to="`/artist/${event.artistId}`"
-                  class="btn btn-outline-primary w-100"
-                >
-                  View Artist Profile
-                </router-link>
-              </div>
-            </div>
-
-            <!-- Share Card -->
-            <div class="card shadow-sm">
-              <div class="card-body">
-                <h5 class="card-title">Share This Event</h5>
-                <p class="text-muted small">Spread the word!</p>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-outline-secondary" @click="shareEvent">
-                    <i class="bi bi-share"></i> Share Event
-                  </button>
-                </div>
-              </div>
-            </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4">
+        <!-- TICKETS and SHARE -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <div class="mb-3"><b>GET THE TICKETS</b></div>
+            <div class="mb-2">Get {{ event.title }} tickets here:</div>
+            <a
+              v-if="event.ticket"
+              :href="event.ticket"
+              target="_blank"
+              class="btn btn-ticket w-100 mb-3"
+            >
+              PURCHASE TICKETS
+            </a>
+          </div>
+        </div>
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="mb-2"><b>SHARE THIS EVENT</b></div>
+            <div class="text-muted small mb-2">Spread the word!</div>
+            <button class="btn btn-share w-100" @click="shareEvent">
+              SHARE EVENT
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+</div>
 </template>
 
 <script>
@@ -326,75 +355,216 @@ export default {
 }
 </script>
 
+<style>
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background:
+    radial-gradient(ellipse at center, rgba(181, 20, 20, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse at 30% 50%, rgba(199, 53, 53, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(181, 20, 20, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.wave-svg {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100vw;
+  height: 300px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: -1;
+   opacity: 0.6; /* slightly more opacity */
+  overflow: visible; /* ensure not clipped */
+}
+.wave-svg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+</style>
+
 <style scoped>
-.event-details-page {
-  min-height: 100vh;
-  background: #f8f9fa;
-}
-
-.navbar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-logo {
-  height: 80px;
-  width: auto;
-}
 
 .content-wrapper {
-  margin-top: 120px;
+  margin-top: 65px;
   padding-bottom: 40px;
+}
+.event-details-page {
+  min-height: 100vh;
+  background: #19181c;
+}
+
+.event-title-header {
+  color: #fff;
+  font-weight: 700;
+  font-size: 2.1rem;
+  margin-bottom: 0.6rem;
+  letter-spacing: 1px;
+}
+
+.artist-profile-header {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #fff;
+  box-shadow: none;
+  margin-right: 8px;
+}
+
+.artist-header-name {
+  color: #fff;
+  font-size: 1.12rem;
+}
+
+.event-desc {
+  color: #fff;
+  background: rgba(255,255,255,0.07);
+  font-size: 1.1rem;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 0.4rem;
+}
+
+.event-datetime-location {
+  color: #fff;
+  font-size: 1.03rem;
+  margin-bottom: 0.9rem;
+}
+
+.btn-interest-header {
+  background: #bb1814;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.17rem;
+  border-radius: 22px;
+  border: none;
+  padding: 8px 28px;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+  margin-bottom: 22px;
+  transition: all 0.2s;
+}
+.btn-interest-header.active, .btn-interest-header:hover {
+  background: #a30c0e;
+  color: #fff;
 }
 
 .card {
-  border-radius: 12px;
+  border-radius: 16px;
+  background: #fff;
 }
 
-.event-meta {
-  background: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 8px;
-}
-
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
+.btn-ticket {
+  background: #bb1814;
+  color: #fff;
+  border-radius: 22px;
   font-size: 1.1rem;
-}
-
-.meta-item i {
-  font-size: 1.3rem;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-weight: 600;
   border: none;
+  padding: 8px 0;
+  letter-spacing: 0.4px;
+}
+.btn-ticket:hover {
+  background: #a30c0e;
 }
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+.btn-share {
+  background: #bb1814;
+  color: #fff;
+  border-radius: 22px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  padding: 8px 0;
+  letter-spacing: 0.4px;
+  margin-bottom: 0.5rem;
+}
+.btn-share:hover {
+  background: #a30c0e;
 }
 
-.btn-outline-light {
-  border: 2px solid white;
-  color: white;
+.btn-directions {
+  background: #bb1814;
+  color: #fff;
+  border-radius: 22px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  border: none;
+  padding: 8px 22px;
+  letter-spacing: 0.3px;
+  margin-top: 10px;
 }
 
-.btn-outline-light:hover {
-  background: white;
-  color: #667eea;
+.container {
+  max-width: 900px;
 }
 
 @media (max-width: 768px) {
-  .content-wrapper {
-    margin-top: 100px;
+  .event-title-header {
+    font-size: 1.3rem;
   }
-
-  .display-4 {
-    font-size: 2rem;
+  .container {
+    max-width: 100%;
+    padding: 0 1.35rem;
   }
 }
+
+.meta-action-bar {
+  background: transparent;
+}
+
+.event-datetime,
+.event-venue,
+.event-interest-count {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.btn-interest-header {
+  background: #bb1814;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 22px;
+  border: none;
+  padding: 10px 28px;
+  letter-spacing: 0.5px;
+  margin-left: 40px;
+  white-space: nowrap;
+  box-shadow: none;
+  transition: all 0.18s;
+}
+.btn-interest-header.active,
+.btn-interest-header:hover {
+  background: #a30c0e;
+  color: #fff;
+}
+
+
+.event-desc {
+  color: #fff;
+  background: none;
+  margin: 0.85rem 0 0.8rem 0; /* no left margin, add spacing below only if desired */
+  padding: 0;           /* ensure no left padding */
+  
+}
+
+.event-desc p {
+  margin: 0;
+  padding: 0;
+}
+
+
 </style>
+

@@ -9,14 +9,14 @@
       <div class="container py-4">
         <!-- Header -->
         <div class="welcome-section mb-5">
-          <h1 class="display-5 fw-bold mb-2">🎪 Upcoming Events</h1>
+          <h1 class="display-5 fw-bold mb-2">UPCOMING EVENTS</h1>
           <p class="text-muted">Discover live music performances happening in Singapore</p>
         </div>
 
         <!-- Filter Section -->
-        <div class="card shadow-sm mb-4">
+        <div class="card shadow-sm mb-4 filter-card">
           <div class="card-body">
-            <h5 class="card-title mb-3"><i class="bi bi-funnel"></i> Filter Events</h5>
+            <h5 class="card-title mb-3">FILTER EVENTS</h5>
             <div class="row g-3">
               <!-- Date Range Filter -->
               <div class="col-md-3">
@@ -54,7 +54,7 @@
                   type="text"
                   class="form-control"
                   v-model="filters.location"
-                  placeholder="Search by venue or area"
+                  placeholder="Search by Venue"
                 />
               </div>
 
@@ -70,12 +70,12 @@
               </div>
             </div>
 
-            <div class="mt-3 d-flex gap-2">
+            <div class="mt-3 d-flex gap-2 justify-content-center">
               <button class="btn btn-primary" @click="applyFilters">
-                <i class="bi bi-search"></i> Apply Filters
+                 Apply Filters
               </button>
               <button class="btn btn-secondary" @click="clearFilters">
-                <i class="bi bi-x-circle"></i> Clear
+                Clear
               </button>
             </div>
           </div>
@@ -89,11 +89,11 @@
           <p class="mt-3 text-muted">Loading events...</p>
         </div>
 
-        <!-- Results Header -->
-        <div v-else class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Results Header removed from figma-->
+        <!-- <div v-else class="d-flex justify-content-between align-items-center mb-4">
           <h5 class="mb-0">Available Events</h5>
           <span class="badge bg-primary fs-6">{{ displayedEvents.length }} events</span>
-        </div>
+        </div> -->
 
         <!-- No Events Message -->
         <div v-if="!isLoading && displayedEvents.length === 0" class="text-center py-5">
@@ -103,7 +103,24 @@
         </div>
 
         <!-- ADD THIS: View Toggle Buttons -->
-        <div class="btn-group mb-4" role="group">
+         <div class="custom-tab-bar mb-4">
+  <button
+    class="tab-btn"
+    :class="{ active: viewMode === 'grid' }"
+    @click="viewMode = 'grid'"
+  >
+    GRID VIEW
+  </button>
+  <button
+    class="tab-btn"
+    :class="{ active: viewMode === 'map' }"
+    @click="viewMode = 'map'"
+  >
+    MAP VIEW
+  </button>
+</div>
+        <!-- old tabs -->
+        <!-- <div class="btn-group mb-4" role="group">
           <button
             type="button"
             class="btn btn-outline-primary"
@@ -120,7 +137,7 @@
           >
             <i class="bi bi-map"></i> Map View
           </button>
-        </div>
+        </div> -->
 
         <!-- Map View -->
         <div v-if="viewMode === 'map'" class="mb-4">
@@ -137,7 +154,7 @@
         <!-- Events Grid -->
         <div v-else class="row g-4">
           <div v-for="event in displayedEvents" :key="event.id" class="col-12 col-md-6 col-lg-4">
-            <EventCard :event="event" />
+            <EventCard :event="event" @interest-changed="handleInterestChange"/>
           </div>
         </div>
       </div>
@@ -364,6 +381,18 @@ export default {
       }
       this.displayedEvents = [...this.allEvents]
     },
+    handleInterestChange({ eventId, interested, count }) {
+    // Update displayedEvents and allEvents for that event
+    const updateList = (list) => {
+      const evt = list.find(ev => ev.id === eventId);
+      if (evt) {
+        evt.interestedCount = count;
+      }
+    };
+    updateList(this.displayedEvents);
+    updateList(this.allEvents);
+  }
+
 
     // async logout() {
     //   try {
@@ -380,71 +409,206 @@ export default {
 <style scoped>
 .browse-events-page {
   min-height: 100vh;
-  background: #f8f9fa;
-}
-
-.navbar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-logo {
-  height: 80px;
-  width: auto;
-}
-
-.btn-outline-light {
-  border: 2px solid white;
-  color: white;
-}
-
-.btn-outline-light:hover {
-  background: white;
-  color: #667eea;
-}
-
-.btn-light {
-  background: white;
-  color: #667eea;
-}
-
-.btn-light:hover {
-  background: #f8f9fa;
-  color: #667eea;
+  background: #16171a;
+  color: #fff;
 }
 
 .content-wrapper {
-  margin-top: 120px;
+  margin-top: 65px;
   padding-bottom: 40px;
 }
 
 .welcome-section h1 {
-  color: #2c3e50;
+  color: #fff;
+  letter-spacing: 1px;
+  font-size: 2.3rem;
+}
+
+.welcome-section p {
+  color: #d4d5db;
+  font-size: 1.1rem;
 }
 
 .card {
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
+  background: #232326;
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
 }
 
+.card-title {
+  color: #fff;
+  font-weight: 700;
+}
+
+.form-label {
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 0.45rem;
+}
+
+
+
+/* Filter buttons */
 .btn-primary {
-  background-color: #667eea;
-  border-color: #667eea;
-  font-weight: 500;
+  background-color: #e51c23;
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.03em;
 }
 
 .btn-primary:hover {
-  background-color: #5568d3;
-  border-color: #5568d3;
+  background-color: #d41419;
+  border: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: 500;
+}
+
+.btn-secondary:hover {
+  background: #26262a;
+  color: #e51c23;
+}
+
+/* Badge for event count */
+.badge.bg-primary {
+  background-color: #e51c23!important;
+  color: #fff;
+  font-size: 1rem;
+}
+
+/* Toggle tab styles */
+.btn-group .btn {
+  background: #232326;
+  color: #fff;
+  border: 1px solid #232326;
+}
+
+.btn-group .btn.active, .btn-group .btn:focus, .btn-group .btn:hover {
+  background: #e51c23;
+  color: #fff;
+  border: 1px solid #e51c23;
+  box-shadow: 0 2px 8px 0 rgba(229,28,35,0.12);
+}
+
+/* Grid cards */
+.row .card {
+  background: #232326;
+  color: #fff;
+  border-radius: 15px;
+}
+
+.text-muted {
+  color: #b0b1ba!important;
+}
+
+input::placeholder {
+  color: #767683!important;
+  opacity: 1;
 }
 
 @media (max-width: 768px) {
   .content-wrapper {
-    margin-top: 100px;
+    margin-top: 70px;
   }
-
   .welcome-section h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: #232326;
+}
+::-webkit-scrollbar-thumb {
+  background: #25272a;
+  border-radius: 14px;
+}
+
+.card.filter-card .form-select,
+.card.filter-card .form-control {
+  background: #fff;
+  color: #16171a;
+  border: 1px solid #e0e2e7;
+}
+
+.card.filter-card .form-select:focus,
+.card.filter-card .form-control:focus {
+  border-color: #e51c23;
+  background: #fff;
+  color: #16171a;
+}
+
+.custom-tab-bar {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  background: transparent;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  flex: 1 1 auto;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  color: #fff;
+  padding: 18px 0 15px 0;
+  text-align: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color .13s, background .13s;
+  z-index: 2;
+}
+
+.tab-btn.active {
+  background: #bb1814;
+  color: #fff;
+  border-radius: 16px 16px 0 0;
+  position: relative;
+  box-shadow: none;
+}
+
+.custom-tab-bar::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: #bb1814;
+  z-index: 1;
+}
+
+/* Optional: space between tabs */
+.tab-btn:not(:last-child) {
+  margin-right: 28px;
+}
+
+.wave-svg {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100vw;
+  height: 300px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.45;
+  overflow: hidden;
+}
+.wave-svg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+
 </style>
