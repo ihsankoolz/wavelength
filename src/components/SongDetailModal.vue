@@ -36,18 +36,19 @@
                 v-if="song?.platform === 'spotify' && song?.embedUrl"
                 :src="song.embedUrl"
                 width="100%"
-                height="152"
+                height="232"
                 frameborder="0"
                 allowtransparency="true"
                 allow="encrypted-media"
                 loading="lazy"
+                style="min-height: 232px"
               ></iframe>
 
               <!-- YouTube Embed -->
               <iframe
                 v-else-if="song?.platform === 'youtube' && song?.embedUrl"
                 width="100%"
-                height="200"
+                height="232"
                 :src="song.embedUrl"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -59,7 +60,7 @@
               <iframe
                 v-else-if="song?.platform === 'soundcloud' && song?.url"
                 width="100%"
-                height="166"
+                height="232"
                 scrolling="no"
                 frameborder="no"
                 allow="autoplay"
@@ -610,9 +611,19 @@ export default {
 
 .embed-container {
   width: 100%;
+  height: 232px;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.embed-container iframe {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .song-link {

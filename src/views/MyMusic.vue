@@ -124,20 +124,21 @@
               <!-- Spotify Embed -->
               <iframe
                 v-if="song.platform === 'spotify'"
-                :src="`https://open.spotify.com/embed/track/${song.spotifyId}`"
+                :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`"
                 width="100%"
-                height="152"
+                height="232"
                 frameborder="0"
                 allowtransparency="true"
                 allow="encrypted-media"
                 loading="lazy"
+                style="min-height: 232px"
               ></iframe>
 
               <!-- SoundCloud Embed -->
               <iframe
                 v-else-if="song.platform === 'soundcloud'"
                 width="100%"
-                height="166"
+                height="232"
                 scrolling="no"
                 frameborder="no"
                 allow="autoplay"
@@ -151,7 +152,7 @@
               <iframe
                 v-else-if="song.platform === 'youtube'"
                 width="100%"
-                height="200"
+                height="232"
                 :src="`https://www.youtube.com/embed/${song.youtubeId}`"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -207,16 +208,28 @@
                   <span class="count">{{ song.likes || 0 }}</span>
                 </button>
 
-                <div class="stat-item" title="Comments">
+                <button
+                  @click.stop="openSongDetail(song)"
+                  class="stat-button"
+                  title="View and post comments"
+                >
                   <span class="icon">💬</span>
                   <span class="count">{{ song.commentCount || 0 }}</span>
-                </div>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Song Detail Modal (combines embed + comments) -->
+    <SongDetailModal
+      :show="showSongDetailModal"
+      :song="selectedSongForDetail"
+      @close="closeSongDetailModal"
+      @comment-posted="handleDetailCommentPosted"
+    />
   </div>
 </template>
 
@@ -225,11 +238,13 @@ import { auth, db } from '@/services/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import { toggleSongLike } from '@/utils/musicInteractions'
 import NavigationBar from '@/components/NavigationBar.vue'
+import SongDetailModal from '@/components/SongDetailModal.vue'
 
 export default {
   name: 'MyMusic',
   components: {
     NavigationBar,
+    SongDetailModal,
   },
 
   data() {
@@ -237,6 +252,11 @@ export default {
       loading: true,
       savedSongs: [],
       unlikingInProgress: {},
+
+      // Song Detail Modal (combines embed + comments)
+      showSongDetailModal: false,
+      selectedSongForDetail: null,
+
       auth,
     }
   },
@@ -402,6 +422,61 @@ export default {
 
       return date.toLocaleDateString()
     },
+
+    // Song Detail Modal (combines embed + comments)
+    openSongDetail(song) {
+      console.log('🎵 Opening song detail for:', song.title, {
+        artistId: song.artistId,
+        songId: song.songId,
+        platform: song.platform,
+      })
+
+      // Generate embedUrl based on platform
+      let embedUrl = null
+      if (song.platform === 'spotify' && song.spotifyId) {
+        embedUrl = `https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`
+      } else if (song.platform === 'youtube' && song.youtubeId) {
+        embedUrl = `https://www.youtube.com/embed/${song.youtubeId}`
+      }
+
+      // Convert the saved song format to the format expected by SongDetailModal
+      this.selectedSongForDetail = {
+        id: song.songId,
+        artistId: song.artistId,
+        title: song.title,
+        url: song.url,
+        platform: song.platform,
+        embedUrl: embedUrl, // Add the embedUrl for SongDetailModal
+        spotifyId: song.spotifyId,
+        soundcloudUrl: song.soundcloudUrl,
+        youtubeId: song.youtubeId,
+        likes: song.likes,
+        commentCount: song.commentCount,
+        artistName: song.artistName,
+        artistGenre: song.artistGenre,
+        artistPhoto: song.artistPhoto,
+      }
+      this.showSongDetailModal = true
+    },
+
+    closeSongDetailModal() {
+      this.showSongDetailModal = false
+      this.selectedSongForDetail = null
+    },
+
+    handleDetailCommentPosted() {
+      // Find and update the comment count for the song
+      const song = this.savedSongs.find(
+        (s) =>
+          s.artistId === this.selectedSongForDetail.artistId &&
+          s.songId === this.selectedSongForDetail.id,
+      )
+      if (song) {
+        song.commentCount = (song.commentCount || 0) + 1
+        // Also update the selected song for detail modal
+        this.selectedSongForDetail.commentCount = song.commentCount
+      }
+    },
   },
 }
 </script>
@@ -523,15 +598,26 @@ export default {
   border-radius: 12px 12px 0 0;
   overflow: hidden;
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  height: 232px;
+  position: relative;
 }
 
 .player-container iframe {
   border: none;
   width: 100%;
+  height: 100%;
   display: block;
   overflow: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Ensure Spotify embed fills the container */
+.player-container iframe[src*='spotify'] {
+  min-height: 232px;
 }
 
 .player-container iframe::-webkit-scrollbar {

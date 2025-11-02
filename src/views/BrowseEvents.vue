@@ -675,16 +675,48 @@ input::placeholder {
 
 .card.filter-card .form-select,
 .card.filter-card .form-control {
-  background: #fff;
-  color: #191717;
-  border: 1px solid #e0e2e7;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card.filter-card .form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23bb1814' viewBox='0 0 16 16'%3e%3cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+}
+
+.card.filter-card .form-select:hover,
+.card.filter-card .form-control:hover {
+  border-color: #bb1814;
+  box-shadow: 0 4px 12px rgba(187, 24, 20, 0.3);
+  transform: translateY(-2px);
 }
 
 .card.filter-card .form-select:focus,
 .card.filter-card .form-control:focus {
   border-color: #bb1814;
-  background: #fff;
-  color: #191717;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(187, 24, 20, 0.3);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.card.filter-card .form-select option {
+  background: #2a2a2a;
+  color: #fff;
+  padding: 0.5rem;
+  border: none;
 }
 
 .custom-tab-bar {
