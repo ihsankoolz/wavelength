@@ -7,10 +7,10 @@
     <!-- Loading State -->
     <div v-if="loading" class="content-wrapper">
       <div class="container text-center py-5">
-        <div class="spinner-border text-primary" role="status">
+        <div class="spinner-border text-danger" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
-        <p class="mt-3 text-muted">Loading artist profile...</p>
+        <p class="mt-3 text-white">Loading artist profile...</p>
       </div>
     </div>
 
@@ -18,188 +18,116 @@
     <div v-else-if="!artist" class="content-wrapper">
       <div class="container text-center py-5">
         <i class="bi bi-exclamation-triangle fs-1 text-warning mb-3"></i>
-        <h3>Artist Not Found</h3>
-        <p class="text-muted">This artist profile doesn't exist or has been removed.</p>
-        <router-link to="/home" class="btn btn-primary"> Back to Home </router-link>
+        <h3 class="text-white">Artist Not Found</h3>
+        <p class="text-white">This artist profile doesn't exist or has been removed.</p>
+        <router-link to="/home" class="btn-back-home"> Back to Home </router-link>
       </div>
     </div>
 
     <!-- Artist Profile Content -->
-    <div v-else class="content-wrapper">
-      <div class="container py-4">
-        <!-- Artist Header -->
-        <div class="artist-header text-center mb-5">
-          <div class="position-relative d-inline-block mb-3">
-            <img
-              :src="artist.profileImage || defaultImage"
-              :alt="artist.artistName"
-              class="artist-avatar"
-            />
-            <div v-if="artist.verified" class="verified-badge-large">
-              <i class="bi bi-patch-check-fill"></i>
-            </div>
-          </div>
-
-          <h1 class="display-4 fw-bold mb-2">{{ artist.artistName }}</h1>
-          <p class="lead text-muted mb-3">{{ artist.bio || 'No bio available' }}</p>
-
-          <!-- Genres -->
-          <div class="mb-4">
-            <span
-              v-for="genre in artist.genres"
-              :key="genre"
-              class="badge bg-primary me-2 mb-2"
-              style="font-size: 1rem; padding: 0.5rem 1rem"
-            >
-              {{ genre }}
-            </span>
-          </div>
-
-          <!-- Stats & Follow Button -->
-          <div class="d-flex justify-content-center align-items-center gap-4 mb-4">
-            <div class="stat-item">
-              <i class="bi bi-people fs-4 text-primary"></i>
-              <span class="ms-2 fw-bold">{{ artist.followerCount || 0 }} followers</span>
-            </div>
-            <button class="btn btn-primary btn-lg" @click="toggleFollow" :disabled="followLoading">
-              <span v-if="followLoading" class="spinner-border spinner-border-sm me-2"></span>
-              <i class="bi" :class="isFollowing ? 'bi-check-circle-fill' : 'bi-plus-circle'"></i>
-              {{ isFollowing ? 'Following' : 'Follow' }}
-            </button>
-          </div>
-
-          <!-- Social Links -->
-          <div v-if="hasSocialLinks" class="social-links">
-            <a
-              v-if="artist.socialLinks?.spotify"
-              :href="artist.socialLinks.spotify"
-              target="_blank"
-              class="btn btn-success btn-sm me-2"
-            >
-              <i class="bi bi-spotify"></i> Spotify
-            </a>
-            <a
-              v-if="artist.socialLinks?.youtube"
-              :href="artist.socialLinks.youtube"
-              target="_blank"
-              class="btn btn-danger btn-sm me-2"
-            >
-              <i class="bi bi-youtube"></i> YouTube
-            </a>
-            <a
-              v-if="artist.socialLinks?.instagram"
-              :href="artist.socialLinks.instagram"
-              target="_blank"
-              class="btn btn-outline-dark btn-sm"
-            >
-              <i class="bi bi-instagram"></i> Instagram
-            </a>
-          </div>
-        </div>
-
-        <!-- Tabs Section -->
-        <div class="row">
-          <div class="col-12">
-            <ul class="nav nav-tabs nav-justified mb-4" role="tablist">
-              <li class="nav-item">
-                <button
-                  class="nav-link"
-                  :class="{ active: activeTab === 'music' }"
-                  @click="activeTab = 'music'"
-                >
-                  <i class="bi bi-music-note-beamed"></i> Music
-                </button>
-              </li>
-              <li class="nav-item">
-                <button
-                  class="nav-link"
-                  :class="{ active: activeTab === 'events' }"
-                  @click="activeTab = 'events'"
-                >
-                  <i class="bi bi-calendar-event"></i> Events
-                </button>
-              </li>
-              <li class="nav-item">
-                <button
-                  class="nav-link"
-                  :class="{ active: activeTab === 'about' }"
-                  @click="activeTab = 'about'"
-                >
-                  <i class="bi bi-info-circle"></i> About
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Tab Content -->
-        <div class="row justify-content-center">
-          <div class="col-12 col-lg-10">
-            <!-- Music Tab -->
-            <div v-if="activeTab === 'music'" class="tab-content-section">
-              <div class="card shadow-sm mb-4">
-                <div class="card-body p-4">
-                  <!-- Music Grid Header -->
-                  <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="mb-0"><i class="bi bi-music-note-list"></i> Music Library</h4>
-                    <span class="badge bg-primary">
-                      {{ musicLinks.length }} track{{ musicLinks.length !== 1 ? 's' : '' }}
-                    </span>
+    <div v-else>
+      <!-- Artist Hero Section with Blurred Background -->
+      <div class="artist-hero-section">
+        <div class="hero-background" :style="{ backgroundImage: `url(${artist.profileImage || defaultImage})` }"></div>
+        <div class="hero-content">
+          <div class="container py-5">
+            <div class="row align-items-center">
+              <!-- Profile Picture -->
+              <div class="col-auto">
+                <div class="position-relative d-inline-block">
+                  <img :src="artist.profileImage || defaultImage" :alt="artist.artistName" class="artist-avatar" />
+                  <div v-if="artist.verified" class="verified-badge-large">
+                    <i class="bi bi-patch-check-fill"></i>
                   </div>
+                </div>
+              </div>
+
+              <!-- Artist Info -->
+              <div class="col">
+                <h1 class="artist-name">{{ artist.artistName }}</h1>
+                <p class="artist-bio">{{ artist.bio || 'Whatever bio they have.' }}</p>
+                <div class="follower-count">{{ artist.followerCount || 500 }} Followers</div>
+                <button class="btn-follow" :class="{ 'btn-unfollow': isFollowing }" @click="toggleFollow" :disabled="followLoading">
+                  <span v-if="followLoading" class="spinner-border spinner-border-sm me-2"></span>
+                  <span v-else-if="!isFollowing" class="follow-plus">+</span>
+                  {{ isFollowing ? 'UNFOLLOW' : 'FOLLOW' }}
+                </button>
+
+                <!-- Social Links -->
+                <div v-if="hasSocialLinks" class="social-links">
+                  <a v-if="artist.socialLinks?.spotify" :href="artist.socialLinks.spotify" target="_blank"
+                    class="social-icon spotify">
+                    <i class="bi bi-spotify"></i>
+                  </a>
+                  <a v-if="artist.socialLinks?.youtube" :href="artist.socialLinks.youtube" target="_blank"
+                    class="social-icon youtube">
+                    <i class="bi bi-youtube"></i>
+                  </a>
+                  <a v-if="artist.socialLinks?.instagram" :href="artist.socialLinks.instagram" target="_blank"
+                    class="social-icon instagram">
+                    <i class="bi bi-instagram"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-wrapper">
+        <div class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+
+          <!-- Tabs Section -->
+          <div class="row">
+            <div class="col-12">
+              <div class="custom-tab-bar mb-4">
+                <button class="tab-btn" :class="{ active: activeTab === 'music' }" @click="activeTab = 'music'">
+                  MY MUSIC
+                </button>
+                <button class="tab-btn" :class="{ active: activeTab === 'events' }" @click="activeTab = 'events'">
+                  MY EVENTS
+                </button>
+                <button class="tab-btn" :class="{ active: activeTab === 'about' }" @click="activeTab = 'about'">
+                  ABOUT ME
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Content -->
+          <div class="row">
+            <div class="col-12">
+              <!-- Music Tab -->
+              <div v-if="activeTab === 'music'" class="tab-content-section">
+                <div class="music-library-section">
+                  <!-- Music Grid Header -->
+                  <h2 class="music-library-title">MUSIC LIBRARY</h2>
 
                   <!-- Filter Tabs -->
-                  <ul v-if="musicLinks.length > 0" class="nav nav-pills mb-4">
-                    <li class="nav-item">
-                      <button
-                        class="nav-link"
-                        :class="{ active: musicFilter === 'all' }"
-                        @click="musicFilter = 'all'"
-                      >
-                        All ({{ musicLinks.length }})
-                      </button>
-                    </li>
-                    <li class="nav-item">
-                      <button
-                        class="nav-link"
-                        :class="{ active: musicFilter === 'single' }"
-                        @click="musicFilter = 'single'"
-                      >
-                        Singles ({{ getMusicByType('single').length }})
-                      </button>
-                    </li>
-                    <li class="nav-item">
-                      <button
-                        class="nav-link"
-                        :class="{ active: musicFilter === 'album' }"
-                        @click="musicFilter = 'album'"
-                      >
-                        Albums ({{ getMusicByType('album').length }})
-                      </button>
-                    </li>
-                    <li class="nav-item">
-                      <button
-                        class="nav-link"
-                        :class="{ active: musicFilter === 'video' }"
-                        @click="musicFilter = 'video'"
-                      >
-                        Videos ({{ getMusicByType('video').length }})
-                      </button>
-                    </li>
-                  </ul>
+                  <div v-if="musicLinks.length > 0" class="filter-tabs mb-4">
+                    <button class="filter-tab" :class="{ active: musicFilter === 'all' }" @click="musicFilter = 'all'">
+                      ALL ({{ musicLinks.length }})
+                    </button>
+                    <button class="filter-tab" :class="{ active: musicFilter === 'single' }"
+                      @click="musicFilter = 'single'">
+                      SINGLES ({{ getMusicByType('single').length }})
+                    </button>
+                    <button class="filter-tab" :class="{ active: musicFilter === 'album' }"
+                      @click="musicFilter = 'album'">
+                      ALBUMS ({{ getMusicByType('album').length }})
+                    </button>
+                    <button class="filter-tab" :class="{ active: musicFilter === 'video' }"
+                      @click="musicFilter = 'video'">
+                      VIDEOS ({{ getMusicByType('video').length }})
+                    </button>
+                  </div>
 
                   <!-- Music Grid -->
                   <div v-if="filteredMusicLinks.length > 0" class="music-grid">
-                    <div
-                      v-for="music in displayedMusicLinks"
-                      :key="music.id"
-                      class="music-item-card"
-                    >
+                    <div v-for="music in displayedMusicLinks" :key="music.id" class="music-item-card">
                       <!-- Platform Badge -->
                       <div class="platform-badge-public" :class="music.platform">
-                        <i
-                          class="bi"
-                          :class="music.platform === 'spotify' ? 'bi-spotify' : 'bi-youtube'"
-                        ></i>
+                        <i class="bi" :class="music.platform === 'spotify' ? 'bi-spotify' : 'bi-youtube'"></i>
                       </div>
 
                       <!-- Music Type Badge -->
@@ -209,35 +137,18 @@
 
                       <!-- Music Info -->
                       <div class="music-item-info">
-                        <h5 class="music-item-title">{{ music.title }}</h5>
-                        <p class="music-item-artist">
-                          <i class="bi bi-person"></i>
-                          {{ artist.artistName }}
-                        </p>
-
-                        <!-- Stats -->
-                        <div class="music-item-stats">
-                          <span class="stat">
-                            <i class="bi bi-heart"></i> {{ music.likes || 0 }}
-                          </span>
-                          <span class="stat">
-                            <i class="bi bi-play-circle"></i> {{ music.plays || 0 }}
-                          </span>
-                          <span class="stat">
-                            <i class="bi bi-calendar3"></i> {{ formatDate(music.addedAt) }}
-                          </span>
+                        <div class="music-item-header">
+                          <img :src="artist.profileImage || defaultImage" :alt="artist.artistName"
+                            class="music-artist-avatar" />
+                          <div class="music-title-artist">
+                            <h5 class="music-item-title">{{ music.title }}</h5>
+                            <p class="music-item-artist">{{ artist.artistName }}</p>
+                          </div>
                         </div>
 
                         <!-- Genres -->
-                        <div
-                          v-if="music.genres && music.genres.length > 0"
-                          class="music-item-genres"
-                        >
-                          <span
-                            v-for="genre in music.genres.slice(0, 3)"
-                            :key="genre"
-                            class="genre-tag-small"
-                          >
+                        <div v-if="music.genres && music.genres.length > 0" class="music-item-genres">
+                          <span v-for="genre in music.genres.slice(0, 2)" :key="genre" class="genre-tag-small">
                             {{ genre }}
                           </span>
                         </div>
@@ -247,50 +158,28 @@
                       <div class="embed-container">
                         <!-- Spotify Embed -->
                         <div v-if="music.platform === 'spotify'" class="spotify-embed-wrapper">
-                          <iframe
-                            :src="music.embedUrl"
-                            width="102%"
-                            height="250"
-                            frameborder="0"
-                            allowtransparency="true"
-                            allow="encrypted-media"
-                            loading="lazy"
-                          ></iframe>
+                          <iframe :src="music.embedUrl" width="102%" height="250" frameborder="0"
+                            allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
                         </div>
 
                         <!-- YouTube Embed -->
                         <div v-if="music.platform === 'youtube'" class="youtube-embed-wrapper">
-                          <iframe
-                            :src="music.embedUrl"
-                            width="100%"
-                            height="200"
-                            frameborder="0"
+                          <iframe :src="music.embedUrl" width="100%" height="200" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            loading="lazy"
-                          ></iframe>
+                            allowfullscreen loading="lazy"></iframe>
                         </div>
                       </div>
 
                       <!-- Action Buttons (Like & Comment) -->
                       <div class="music-actions mt-3">
-                        <button
-                          class="btn btn-sm action-btn"
-                          :class="{ liked: isLiked(music) }"
-                          @click="toggleLike(music)"
-                          :disabled="likingInProgress[music.id]"
-                          title="Like this song"
-                        >
+                        <button class="action-btn" :class="{ liked: isLiked(music) }" @click="toggleLike(music)"
+                          :disabled="likingInProgress[music.id]" title="Like this song">
                           <span class="icon">❤️</span>
-                          <span class="count ms-1">{{ music.likes || 0 }}</span>
+                          <span class="count">{{ music.likes || 0 }}</span>
                         </button>
-                        <button
-                          class="btn btn-sm action-btn"
-                          @click="toggleComments(music.id)"
-                          title="View comments"
-                        >
+                        <button class="action-btn" @click="toggleComments(music.id)" title="View comments">
                           <span class="icon">💬</span>
-                          <span class="count ms-1">{{ getCommentCount(music.id) }}</span>
+                          <span class="count">{{ getCommentCount(music.id) }}</span>
                         </button>
                       </div>
 
@@ -298,18 +187,11 @@
                       <div v-if="expandedComments[music.id]" class="comments-section mt-3">
                         <!-- Comment Input -->
                         <div class="comment-input-wrapper">
-                          <textarea
-                            v-model="commentText[music.id]"
-                            class="form-control comment-input"
-                            placeholder="Add a comment..."
-                            rows="2"
-                            @keydown.enter.ctrl="postComment(music.id)"
-                          ></textarea>
-                          <button
-                            class="btn btn-primary btn-sm mt-2"
-                            @click="postComment(music.id)"
-                            :disabled="!commentText[music.id]?.trim() || postingComment[music.id]"
-                          >
+                          <textarea v-model="commentText[music.id]" class="form-control comment-input"
+                            placeholder="Add a comment..." rows="2"
+                            @keydown.enter.ctrl="postComment(music.id)"></textarea>
+                          <button class="btn-post-comment mt-2" @click="postComment(music.id)"
+                            :disabled="!commentText[music.id]?.trim() || postingComment[music.id]">
                             <span v-if="postingComment[music.id]">Posting...</span>
                             <span v-else>Post Comment</span>
                           </button>
@@ -318,93 +200,62 @@
                         <!-- Comments List -->
                         <div class="comments-list mt-3">
                           <div v-if="loadingComments[music.id]" class="text-center py-3">
-                            <div class="spinner-border spinner-border-sm text-primary"></div>
-                            <span class="ms-2">Loading comments...</span>
+                            <div class="spinner-border spinner-border-sm text-danger"></div>
+                            <span class="ms-2 text-white">Loading comments...</span>
                           </div>
 
-                          <div
-                            v-else-if="getComments(music.id).length === 0"
-                            class="text-center text-muted py-3"
-                          >
+                          <div v-else-if="getComments(music.id).length === 0" class="text-center text-white-soft py-3">
                             <i class="bi bi-chat"></i> No comments yet. Be the first!
                           </div>
 
-                          <div
-                            v-else
-                            v-for="comment in getComments(music.id)"
-                            :key="comment.id"
-                            class="comment-item"
-                          >
+                          <div v-else v-for="comment in getComments(music.id)" :key="comment.id" class="comment-item">
                             <div class="comment-header">
                               <div>
-                                <strong>{{ comment.userName }}</strong>
-                                <small class="text-muted ms-2">{{
+                                <strong class="text-white">{{ comment.userName }}</strong>
+                                <small class="text-white-soft ms-2">{{
                                   formatCommentDate(comment.createdAt)
-                                }}</small>
+                                  }}</small>
                               </div>
                               <div class="comment-actions">
                                 <!-- Like Comment -->
-                                <button
-                                  class="btn btn-sm btn-link p-0 me-2"
+                                <button class="btn btn-sm btn-link p-0 me-2"
                                   :class="{ 'text-danger': isCommentLiked(comment) }"
                                   @click="toggleCommentLike(music.id, comment.id)"
-                                  :title="isCommentLiked(comment) ? 'Unlike' : 'Like'"
-                                >
-                                  <i
-                                    class="bi"
-                                    :class="isCommentLiked(comment) ? 'bi-heart-fill' : 'bi-heart'"
-                                  ></i>
+                                  :title="isCommentLiked(comment) ? 'Unlike' : 'Like'">
+                                  <i class="bi" :class="isCommentLiked(comment) ? 'bi-heart-fill' : 'bi-heart'"></i>
                                   <span v-if="comment.likes > 0" class="ms-1">{{
                                     comment.likes
-                                  }}</span>
+                                    }}</span>
                                 </button>
 
                                 <!-- Reply Button -->
-                                <button
-                                  class="btn btn-sm btn-link p-0 me-2 text-primary"
-                                  @click="toggleReply(comment.id)"
-                                >
+                                <button class="btn btn-sm btn-link p-0 me-2 text-primary"
+                                  @click="toggleReply(comment.id)">
                                   <i class="bi bi-reply"></i> Reply
                                 </button>
 
                                 <!-- Delete Comment (if owner) -->
-                                <button
-                                  v-if="auth.currentUser && comment.userId === auth.currentUser.uid"
+                                <button v-if="auth.currentUser && comment.userId === auth.currentUser.uid"
                                   class="btn btn-sm btn-link p-0 text-danger"
-                                  @click="deleteComment(music.id, comment.id)"
-                                  :disabled="deletingComment[comment.id]"
-                                >
-                                  <span
-                                    v-if="deletingComment[comment.id]"
-                                    class="spinner-border spinner-border-sm"
-                                  ></span>
+                                  @click="deleteComment(music.id, comment.id)" :disabled="deletingComment[comment.id]">
+                                  <span v-if="deletingComment[comment.id]"
+                                    class="spinner-border spinner-border-sm"></span>
                                   <i v-else class="bi bi-trash"></i>
                                 </button>
                               </div>
                             </div>
-                            <p class="comment-text">{{ comment.text }}</p>
+                            <p class="comment-text text-white">{{ comment.text }}</p>
 
                             <!-- Reply Input -->
                             <div v-if="replyingTo[comment.id]" class="reply-input mt-2">
                               <div class="d-flex gap-2">
-                                <input
-                                  type="text"
-                                  v-model="replyText[comment.id]"
-                                  class="form-control form-control-sm"
-                                  placeholder="Write a reply..."
-                                  @keyup.enter="postReply(music.id, comment.id)"
-                                />
-                                <button
-                                  class="btn btn-sm btn-primary"
-                                  @click="postReply(music.id, comment.id)"
-                                  :disabled="!replyText[comment.id]?.trim()"
-                                >
+                                <input type="text" v-model="replyText[comment.id]" class="form-control form-control-sm"
+                                  placeholder="Write a reply..." @keyup.enter="postReply(music.id, comment.id)" />
+                                <button class="btn-reply-submit" @click="postReply(music.id, comment.id)"
+                                  :disabled="!replyText[comment.id]?.trim()">
                                   <i class="bi bi-send"></i>
                                 </button>
-                                <button
-                                  class="btn btn-sm btn-outline-secondary"
-                                  @click="toggleReply(comment.id)"
-                                >
+                                <button class="btn-reply-cancel" @click="toggleReply(comment.id)">
                                   Cancel
                                 </button>
                               </div>
@@ -412,50 +263,36 @@
 
                             <!-- Replies -->
                             <div v-if="getReplyCount(comment) > 0" class="replies-section mt-2">
-                              <button
-                                class="btn btn-sm btn-link p-0 text-muted"
-                                @click="toggleReplies(comment.id)"
-                              >
-                                <i
-                                  class="bi"
-                                  :class="
-                                    expandedReplies[comment.id]
-                                      ? 'bi-chevron-up'
-                                      : 'bi-chevron-down'
-                                  "
-                                ></i>
+                              <button class="btn-replies-toggle" @click="toggleReplies(comment.id)">
+                                <i class="bi" :class="expandedReplies[comment.id]
+                                    ? 'bi-chevron-up'
+                                    : 'bi-chevron-down'
+                                  "></i>
                                 {{ expandedReplies[comment.id] ? 'Hide' : 'View' }}
                                 {{ getReplyCount(comment) }}
                                 {{ getReplyCount(comment) === 1 ? 'reply' : 'replies' }}
                               </button>
 
                               <div v-if="expandedReplies[comment.id]" class="replies-list mt-2">
-                                <div
-                                  v-for="reply in getReplies(comment)"
-                                  :key="reply.id"
-                                  class="reply-item"
-                                >
+                                <div v-for="reply in getReplies(comment)" :key="reply.id" class="reply-item">
                                   <div class="reply-header">
                                     <div>
-                                      <strong>{{ reply.userName }}</strong>
-                                      <small class="text-muted ms-2">{{
+                                      <strong class="text-white">{{ reply.userName }}</strong>
+                                      <small class="text-white-soft ms-2">{{
                                         formatCommentDate(reply.createdAt)
-                                      }}</small>
+                                        }}</small>
                                     </div>
                                     <div class="reply-actions">
                                       <!-- Delete Reply (if owner) -->
-                                      <button
-                                        v-if="
-                                          auth.currentUser && reply.userId === auth.currentUser.uid
-                                        "
-                                        class="btn btn-sm btn-link p-0 text-danger"
-                                        @click="deleteReply(music.id, comment.id, reply.id)"
-                                      >
+                                      <button v-if="
+                                        auth.currentUser && reply.userId === auth.currentUser.uid
+                                      " class="btn btn-sm btn-link p-0 text-danger"
+                                        @click="deleteReply(music.id, comment.id, reply.id)">
                                         <i class="bi bi-trash"></i>
                                       </button>
                                     </div>
                                   </div>
-                                  <p class="reply-text">{{ reply.text }}</p>
+                                  <p class="reply-text text-white">{{ reply.text }}</p>
                                 </div>
                               </div>
                             </div>
@@ -466,22 +303,16 @@
                   </div>
 
                   <!-- See More Music Button -->
-                  <div
-                    v-if="filteredMusicLinks.length > 6 && !showAllMusic"
-                    class="text-center mt-4"
-                  >
-                    <button class="btn btn-outline-primary btn-lg" @click="showAllMusic = true">
+                  <div v-if="filteredMusicLinks.length > 6 && !showAllMusic" class="text-center mt-4">
+                    <button class="btn-see-more" @click="showAllMusic = true">
                       <i class="bi bi-chevron-down"></i>
                       See More Music ({{ filteredMusicLinks.length - 6 }} more)
                     </button>
                   </div>
 
                   <!-- Show Less Music Button -->
-                  <div
-                    v-if="showAllMusic && filteredMusicLinks.length > 6"
-                    class="text-center mt-4"
-                  >
-                    <button class="btn btn-outline-secondary" @click="showAllMusic = false">
+                  <div v-if="showAllMusic && filteredMusicLinks.length > 6" class="text-center mt-4">
+                    <button class="btn-see-less" @click="showAllMusic = false">
                       <i class="bi bi-chevron-up"></i>
                       Show Less
                     </button>
@@ -489,93 +320,91 @@
 
                   <!-- No Music Message -->
                   <div v-if="musicLinks.length === 0" class="text-center py-5">
-                    <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
-                    <p class="text-muted">This artist hasn't uploaded any music yet.</p>
+                    <i class="bi bi-music-note-list fs-1 text-white mb-3"></i>
+                    <p class="text-white">This artist hasn't uploaded any music yet.</p>
                   </div>
                   <div v-else-if="filteredMusicLinks.length === 0" class="text-center py-5">
-                    <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
-                    <p class="text-muted">No {{ musicFilter }}s found.</p>
+                    <i class="bi bi-music-note-list fs-1 text-white mb-3"></i>
+                    <p class="text-white">No {{ musicFilter }}s found.</p>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Events Tab -->
-            <div v-if="activeTab === 'events'" class="tab-content-section">
-              <!-- Loading Events -->
-              <div v-if="loadingEvents" class="text-center py-5">
-                <div class="spinner-border text-primary"></div>
-                <p class="mt-3">Loading events...</p>
-              </div>
+              <!-- Events Tab -->
+              <div v-if="activeTab === 'events'" class="tab-content-section">
+                <!-- Loading Events -->
+                <div v-if="loadingEvents" class="text-center py-5">
+                  <div class="spinner-border text-danger"></div>
+                  <p class="mt-3 text-white">Loading events...</p>
+                </div>
 
-              <!-- No Events -->
-              <div v-else-if="artistEvents.length === 0" class="text-center py-5">
-                <i class="bi bi-calendar-x fs-1 text-muted mb-3"></i>
-                <p class="text-muted">No upcoming events scheduled.</p>
-              </div>
+                <!-- No Events -->
+                <div v-else-if="artistEvents.length === 0" class="text-center py-5">
+                  <i class="bi bi-calendar-x fs-1 text-white mb-3"></i>
+                  <p class="text-white">No upcoming events scheduled.</p>
+                </div>
 
-              <!-- Events List -->
-              <div v-else>
-                <div class="events-grid">
-                  <div v-for="event in displayedEvents" :key="event.id">
-                    <EventCard :event="event" />
+                <!-- Events List -->
+                <div v-else>
+                  <div class="events-grid">
+                    <div v-for="event in displayedEvents" :key="event.id">
+                      <EventCard :event="event" />
+                    </div>
+                  </div>
+
+                  <!-- See More Events Button -->
+                  <div v-if="artistEvents.length > 6 && !showAllEvents" class="text-center mt-4">
+                    <button class="btn-see-more" @click="showAllEvents = true">
+                      <i class="bi bi-chevron-down"></i>
+                      See More Events ({{ artistEvents.length - 6 }} more)
+                    </button>
+                  </div>
+
+                  <!-- Show Less Events Button -->
+                  <div v-if="showAllEvents && artistEvents.length > 6" class="text-center mt-4">
+                    <button class="btn-see-less" @click="showAllEvents = false">
+                      <i class="bi bi-chevron-up"></i>
+                      Show Less
+                    </button>
                   </div>
                 </div>
-
-                <!-- See More Events Button -->
-                <div v-if="artistEvents.length > 6 && !showAllEvents" class="text-center mt-4">
-                  <button class="btn btn-outline-primary btn-lg" @click="showAllEvents = true">
-                    <i class="bi bi-chevron-down"></i>
-                    See More Events ({{ artistEvents.length - 6 }} more)
-                  </button>
-                </div>
-
-                <!-- Show Less Events Button -->
-                <div v-if="showAllEvents && artistEvents.length > 6" class="text-center mt-4">
-                  <button class="btn btn-outline-secondary" @click="showAllEvents = false">
-                    <i class="bi bi-chevron-up"></i>
-                    Show Less
-                  </button>
-                </div>
               </div>
-            </div>
 
-            <!-- About Tab -->
-            <div v-if="activeTab === 'about'" class="tab-content-section">
-              <div class="card shadow-sm">
-                <div class="card-body p-5">
-                  <h4 class="mb-4">About {{ artist.artistName }}</h4>
+              <!-- About Tab -->
+              <div v-if="activeTab === 'about'" class="tab-content-section">
+                <div class="about-section">
+                  <h2 class="about-title">About {{ artist.artistName }}</h2>
 
                   <div v-if="artist.aboutSection" class="about-text mb-4">
                     <p style="font-size: 1.1rem; line-height: 1.8; white-space: pre-wrap">
                       {{ artist.aboutSection }}
                     </p>
                   </div>
-                  <div v-else class="alert alert-info">
+                  <div v-else class="about-empty">
                     <i class="bi bi-info-circle"></i> No additional information available.
                   </div>
 
                   <!-- Artist Stats -->
                   <div class="stats-grid mt-4">
                     <div class="stat-box">
-                      <i class="bi bi-calendar3 text-primary fs-4"></i>
+                      <i class="bi bi-calendar3 fs-4"></i>
                       <div>
                         <div class="fw-bold">Member Since</div>
-                        <div class="text-muted">{{ formatDate(artist.createdAt) }}</div>
+                        <div class="text-white-soft">{{ formatDate(artist.createdAt) }}</div>
                       </div>
                     </div>
                     <div class="stat-box">
-                      <i class="bi bi-music-note-list text-primary fs-4"></i>
+                      <i class="bi bi-music-note-list fs-4"></i>
                       <div>
                         <div class="fw-bold">Genres</div>
-                        <div class="text-muted">{{ artist.genres?.length || 0 }} genres</div>
+                        <div class="text-white-soft">{{ artist.genres?.length || 0 }} genres</div>
                       </div>
                     </div>
                     <div class="stat-box">
-                      <i class="bi bi-calendar-event text-primary fs-4"></i>
+                      <i class="bi bi-calendar-event fs-4"></i>
                       <div>
                         <div class="fw-bold">Upcoming Events</div>
-                        <div class="text-muted">{{ artistEvents.length }} events</div>
+                        <div class="text-white-soft">{{ artistEvents.length }} events</div>
                       </div>
                     </div>
                   </div>
@@ -1247,18 +1076,19 @@ export default {
 <style scoped>
 .public-artist-profile {
   min-height: 100vh;
-  background: #f8f9fa;
+  background: #191717;
+  color: white;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
 }
 
-.navbar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Only show dark background after hero section */
+.public-artist-profile .content-wrapper {
+  background: #191717;
 }
 
-.navbar-logo {
-  height: 80px;
-  width: auto;
-}
 
 .btn-outline-light {
   border: 2px solid white;
@@ -1271,25 +1101,159 @@ export default {
 }
 
 .content-wrapper {
-  margin-top: 120px;
+  position: relative;
+  z-index: 1;
   padding-bottom: 40px;
+  margin-top: 0;
+  padding-top: 0;
 }
 
-/* Artist Header */
-.artist-header {
-  background: white;
-  padding: 3rem 2rem;
-  border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/* Artist Hero Section */
+.artist-hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  overflow: hidden;
+  margin: 0;
+  margin-bottom: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.hero-background {
+  position: absolute;
+  top: -80px;
+  /* Extend above to cover navbar area */
+  left: 0;
+  width: 100%;
+  height: calc(100% + 80px);
+  /* Add navbar height to cover behind it */
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px) brightness(0.3);
+  transform: scale(1.05);
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  padding-top: 100px;
+  /* Account for fixed navbar */
+  background: transparent;
+}
+
+.artist-name {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.artist-bio {
+  font-size: 1.1rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.follower-count {
+  font-size: 1rem;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.btn-follow {
+  background: #bb1814;
+  color: #fff;
+  border-radius: 22px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: 2px solid #bb1814;
+  padding: 8px 0;
+  letter-spacing: 0.4px;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 180px;
+}
+
+.btn-follow:hover:not(:disabled) {
+  background: #6E0B0B;
+  color: white;
+}
+
+.btn-follow.btn-unfollow {
+  background-color: transparent;
+  border: 2px solid #bb1814;
+  color: white;
+}
+
+.btn-follow.btn-unfollow:hover:not(:disabled) {
+  background-color: #bb1814;
+  color: white;
+}
+
+.btn-follow:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.follow-plus {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-right: 4px;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: white;
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+}
+
+.social-icon.spotify {
+  background: #1DB954;
+}
+
+.social-icon.youtube {
+  background: #FF0000;
+}
+
+.social-icon.instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
 }
 
 .artist-avatar {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   object-fit: cover;
-  border: 5px solid #667eea;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .verified-badge-large {
@@ -1307,39 +1271,58 @@ export default {
 }
 
 .verified-badge-large i {
-  color: #667eea;
+  color: #bb1814;
   font-size: 2rem;
 }
 
-.stat-item {
-  font-size: 1.1rem;
-}
-
-.social-links a {
-  text-decoration: none;
-}
-
 /* Tabs */
-.nav-tabs {
-  border-bottom: 3px solid #667eea;
+.custom-tab-bar {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  background: transparent;
+  margin-bottom: 1.5rem;
 }
 
-.nav-tabs .nav-link {
+.tab-btn {
+  flex: 1 1 auto;
+  background: transparent;
   border: none;
-  color: #666;
-  font-weight: 600;
-  padding: 15px 20px;
-  font-size: 1.1rem;
-}
-
-.nav-tabs .nav-link.active {
-  background-color: #667eea;
+  outline: none;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  font-weight: 700;
   color: white;
-  border-radius: 10px 10px 0 0;
+  padding: 18px 0 15px 0;
+  text-align: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 2;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.nav-tabs .nav-link:hover {
-  color: #667eea;
+.tab-btn.active {
+  background: #bb1814;
+  color: white;
+  border-radius: 16px 16px 0 0;
+  position: relative;
+}
+
+.tab-btn:not(.active):hover {
+  color: #bb1814;
+}
+
+.custom-tab-bar::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: #bb1814;
+  z-index: 1;
 }
 
 /* Tab Content */
@@ -1352,6 +1335,7 @@ export default {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1387,6 +1371,50 @@ export default {
   border-radius: 12px;
 }
 
+/* Music Library Section */
+.music-library-section {
+  margin-bottom: 40px;
+}
+
+.music-library-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-tab {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.filter-tab:hover {
+  border-color: #bb1814;
+  color: #bb1814;
+}
+
+.filter-tab.active {
+  background: #bb1814;
+  border-color: #bb1814;
+  color: white;
+}
+
 /* Music Grid Styles */
 .music-grid {
   display: grid;
@@ -1402,20 +1430,16 @@ export default {
 }
 
 .music-item-card {
-  background: #f8f9fa;
+  background: rgba(35, 35, 38, 0.8);
   border-radius: 12px;
   padding: 1.5rem;
   position: relative;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .music-item-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  border-color: #667eea;
 }
 
 .platform-badge-public {
@@ -1456,17 +1480,37 @@ export default {
   margin-top: 0.5rem;
 }
 
+.music-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.music-artist-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.music-title-artist {
+  flex: 1;
+  min-width: 0;
+}
+
 .music-item-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
-  margin-bottom: 0.5rem;
+  color: white;
+  margin-bottom: 0.25rem;
 }
 
 .music-item-artist {
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
-  margin-bottom: 0.75rem;
+  margin: 0;
 }
 
 .music-item-stats {
@@ -1490,13 +1534,13 @@ export default {
 }
 
 .genre-tag-small {
-  background: white;
-  color: #666;
-  padding: 3px 8px;
-  border-radius: 10px;
+  background: #bb1814;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
   font-size: 0.75rem;
-  font-weight: 500;
-  border: 1px solid #e0e0e0;
+  font-weight: 600;
+  margin-right: 0.5rem;
 }
 
 /* Like Button - Inline with Title */
@@ -1546,44 +1590,35 @@ export default {
 /* Music Actions (Like & Comment buttons under embed) */
 .music-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 1rem;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .action-btn {
-  background: white;
-  border: 1px solid #e0e0e0;
-  color: #666;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0.5rem 0;
   font-size: 0.9rem;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.5rem;
+  cursor: pointer;
 }
 
-.action-btn:hover {
-  background: #f8f9fa;
-  border-color: #667eea;
-  color: #667eea;
+.action-btn:hover:not(:disabled) {
+  color: #bb1814;
   transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .action-btn.liked {
-  background: #667eea;
-  border-color: #667eea;
-  color: white;
-}
-
-.action-btn.liked:hover {
-  background: #5568d3;
-  border-color: #5568d3;
+  color: #bb1814;
 }
 
 .action-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
 }
@@ -1599,10 +1634,11 @@ export default {
 
 /* Comments Section */
 .comments-section {
-  background: #f8f9fa;
+  background: rgba(35, 35, 38, 0.6);
   border-radius: 8px;
   padding: 1rem;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
 }
 
 .comment-input-wrapper {
@@ -1614,11 +1650,42 @@ export default {
   min-height: 60px;
   border-radius: 8px;
   font-size: 0.9rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
 .comment-input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  border-color: #bb1814;
+  box-shadow: 0 0 0 0.2rem rgba(187, 24, 20, 0.25);
+  outline: none;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.comment-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-post-comment {
+  background: #bb1814;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-post-comment:hover:not(:disabled) {
+  background: #9d1310;
+  transform: translateY(-2px);
+}
+
+.btn-post-comment:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .comments-list {
@@ -1627,11 +1694,11 @@ export default {
 }
 
 .comment-item {
-  background: white;
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   padding: 0.75rem;
   margin-bottom: 0.75rem;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .comment-item:last-child {
@@ -1646,12 +1713,20 @@ export default {
 }
 
 .comment-header strong {
-  color: #667eea;
+  color: white;
   font-size: 0.9rem;
 }
 
 .comment-header small {
   font-size: 0.75rem;
+}
+
+.text-white {
+  color: white !important;
+}
+
+.text-white-soft {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .comment-actions {
@@ -1671,7 +1746,7 @@ export default {
 
 .comment-text {
   margin: 0;
-  color: #495057;
+  color: white;
   font-size: 0.9rem;
   line-height: 1.5;
   white-space: pre-wrap;
@@ -1687,6 +1762,69 @@ export default {
 .reply-input .form-control {
   border-radius: 20px;
   font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.reply-input .form-control:focus {
+  border-color: #bb1814;
+  background: rgba(0, 0, 0, 0.4);
+  outline: none;
+}
+
+.reply-input .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-reply-submit {
+  background: #bb1814;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-reply-submit:hover:not(:disabled) {
+  background: #9d1310;
+}
+
+.btn-reply-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-reply-cancel {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-reply-cancel:hover {
+  border-color: #bb1814;
+  color: #bb1814;
+}
+
+.btn-replies-toggle {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-replies-toggle:hover {
+  color: #bb1814;
 }
 
 /* Replies Section */
@@ -1701,11 +1839,11 @@ export default {
 }
 
 .reply-item {
-  background: #f8f9fa;
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 6px;
   padding: 0.5rem 0.75rem;
   margin-bottom: 0.5rem;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .reply-item:last-child {
@@ -1720,7 +1858,7 @@ export default {
 }
 
 .reply-header strong {
-  color: #667eea;
+  color: white;
   font-size: 0.85rem;
 }
 
@@ -1735,7 +1873,7 @@ export default {
 
 .reply-text {
   margin: 0;
-  color: #495057;
+  color: white;
   font-size: 0.85rem;
   line-height: 1.4;
   white-space: pre-wrap;
@@ -1751,7 +1889,7 @@ export default {
 /* Embed Container - Always visible */
 .embed-container {
   width: 100%;
-  background: #fff;
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 0;
@@ -1792,23 +1930,33 @@ export default {
   background: #000;
 }
 
-/* Filter Pills */
-.nav-pills .nav-link {
-  color: #666;
-  font-weight: 500;
-  border-radius: 20px;
-  padding: 8px 16px;
-}
-
-.nav-pills .nav-link.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
 /* About Section */
+.about-section {
+  background: rgba(35, 35, 38, 0.8);
+  border-radius: 12px;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.about-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
 .about-text {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: #495057;
+  color: white;
+}
+
+.about-empty {
+  color: rgba(255, 255, 255, 0.7);
+  padding: 2rem;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
 }
 
 .stats-grid {
@@ -1822,33 +1970,84 @@ export default {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #f8f9fa;
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.stat-box i {
+  color: #bb1814;
+  font-size: 1.5rem;
+}
+
+.stat-box .fw-bold {
+  color: white;
+  font-size: 1rem;
+}
+
+.btn-back-home {
+  background: #bb1814;
+  color: white;
   border: none;
+  border-radius: 22px;
+  padding: 10px 30px;
+  font-size: 1rem;
   font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
 }
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+.btn-back-home:hover {
+  background: #9d1310;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(187, 24, 20, 0.4);
+}
+
+.btn-see-more,
+.btn-see-less {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 22px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-see-more:hover,
+.btn-see-less:hover {
+  border-color: #bb1814;
+  color: #bb1814;
   transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
   .content-wrapper {
-    margin-top: 100px;
+    margin-top: 70px;
+  }
+
+  .artist-hero-section {
+    min-height: 300px;
+  }
+
+  .hero-content {
+    min-height: 300px;
   }
 
   .artist-avatar {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
   }
 
-  .display-4 {
+  .artist-name {
     font-size: 2rem;
+  }
+
+  .artist-bio {
+    font-size: 1rem;
   }
 
   .stats-grid {
@@ -1863,13 +2062,23 @@ export default {
     grid-template-columns: 1fr;
   }
 
-  .nav-pills {
+  .filter-tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
   }
 
-  .nav-pills .nav-link {
+  .filter-tab {
     white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tab-btn {
+    font-size: 0.85rem;
+    padding: 12px 0 10px 0;
+  }
+
+  .music-library-title {
+    font-size: 1.5rem;
   }
 }
 
