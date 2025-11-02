@@ -849,63 +849,89 @@ export default {
 <style scoped>
 .fan-homepage {
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--color-background-dark);
 }
 
 .content-wrapper {
-  margin-top: 100px;
+  margin-top: 80px;
   padding-bottom: 40px;
 }
 
 .welcome-section h1 {
-  color: #2c3e50;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-section p {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
 }
 
 .section-header h2,
 .section-header h4 {
-  color: #2c3e50;
-  font-weight: 600;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.75rem;
 }
 
 .section-header p {
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 /* Controls Bar */
 .controls-bar {
-  background: white;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: transparent;
+  padding: 1.5rem 0;
+  border-radius: 0;
+  box-shadow: none;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 2rem;
+}
+
+.controls-bar label {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
 }
 
 .controls-bar select {
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
-  padding: 0.375rem 2rem 0.375rem 0.75rem; /* Add more right padding for arrow */
+  border-radius: 25px;
+  border: none;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
   background-color: white;
+  color: var(--color-text-dark);
   cursor: pointer;
+  font-weight: 500;
 }
 
 .controls-bar select:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  border: none;
+  box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.2);
   outline: none;
 }
 
 /* Carousel Container */
 .carousel-container {
   position: relative;
-  padding: 0 3rem;
+  padding: 0;
 }
 
 .carousel-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: white;
-  border: 2px solid #667eea;
-  color: #667eea;
+  background: var(--color-background-card);
+  border: none;
+  color: var(--color-text-dark);
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -915,22 +941,22 @@ export default {
   cursor: pointer;
   z-index: 10;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .carousel-arrow:hover {
-  background: #667eea;
+  background: var(--color-primary-red);
   color: white;
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 .carousel-arrow.left {
-  left: 0;
+  left: -25px;
 }
 
 .carousel-arrow.right {
-  right: 0;
+  right: -25px;
 }
 
 .carousel-arrow i {
@@ -950,23 +976,23 @@ export default {
 .carousel-page {
   min-width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns */
-  grid-template-rows: repeat(2, 1fr); /* 2 rows */
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2rem;
 }
 
 .carousel-indicators {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
 
 .indicator {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: #dee2e6;
+  background: rgba(255, 255, 255, 0.3);
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -974,24 +1000,19 @@ export default {
 }
 
 .indicator:hover {
-  background: #adb5bd;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .indicator.active {
-  background: #667eea;
-  width: 32px;
-  border-radius: 6px;
+  background: var(--color-primary-red);
+  width: 30px;
+  border-radius: 5px;
 }
 
 /* Artists Carousel */
 .artists-carousel {
   overflow: hidden;
   width: 100%;
-}
-
-.artists-grid-carousel {
-  display: flex;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .artists-grid-carousel {
@@ -1015,17 +1036,19 @@ export default {
 }
 
 .song-card {
-  background: white;
-  border-radius: 16px;
-  padding: 1rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background: var(--color-background-card);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
   cursor: pointer;
+  border: 1px solid transparent;
 }
 
 .song-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-red);
 }
 
 /* Artist Header in Song Card */
@@ -1033,17 +1056,17 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   padding-bottom: 0.75rem;
   border-bottom: 1px solid #f0f0f0;
 }
 
 .artist-photo {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #667eea;
+  border: 2px solid var(--color-primary-red);
   flex-shrink: 0;
 }
 
@@ -1054,8 +1077,8 @@ export default {
 
 .artist-name {
   font-size: 0.85rem;
-  font-weight: 600;
-  color: #667eea;
+  font-weight: 700;
+  color: var(--color-text-dark);
   text-decoration: none;
   display: block;
   white-space: nowrap;
@@ -1064,32 +1087,36 @@ export default {
 }
 
 .artist-name:hover {
-  color: #764ba2;
+  color: var(--color-primary-red);
 }
 
 .song-title {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #666;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 500;
 }
 
 /* Follow Button */
 .btn-follow {
-  background: #667eea;
+  background: var(--color-primary-red);
   color: white;
   border: none;
   border-radius: 20px;
   padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
   flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .btn-follow:hover:not(:disabled) {
-  background: #764ba2;
+  background: var(--color-primary-red-hover);
   transform: scale(1.05);
 }
 
@@ -1147,17 +1174,19 @@ export default {
 .genre-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .genre-tag {
-  font-size: 0.7rem;
-  background: #f0f0f0;
-  color: #666;
-  padding: 0.25rem 0.6rem;
+  font-size: 0.65rem;
+  background: var(--color-primary-red);
+  color: white;
+  padding: 0.35rem 0.75rem;
   border-radius: 12px;
-  font-weight: 500;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Song Stats */
