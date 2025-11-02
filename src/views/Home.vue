@@ -95,7 +95,7 @@
       <div class="container py-4">
         <!-- Welcome Header -->
         <div class="welcome-section mb-4">
-          <h1 class="display-5 fw-bold mb-2">RECOMMEND SONGS</h1>
+          <h1 class="display-5 fw-bold mb-2">Curated for your taste</h1>
           <p class="text-muted">TRENDING SONGS FROM LOCAL ARTISTS</p>
         </div>
 
@@ -111,45 +111,49 @@
         <div v-else>
           <!-- Recommended Songs Section -->
           <section class="recommended-songs-section mb-5">
-            <div class="section-header d-flex justify-content-between align-items-center mb-3">
-              <div>
+            <!-- Filter and Sort Controls -->
+            <div
+              class="controls-bar mb-4 d-flex flex-wrap gap-3 align-items-center justify-content-between"
+            >
+              <!-- Filter Header Text -->
+              <div class="filter-header">
                 <h2 class="h3 mb-1">FILTER SONGS</h2>
                 <p class="text-muted mb-0 small">{{ getRecommendationSubtitle }}</p>
               </div>
-            </div>
 
-            <!-- Filter and Sort Controls -->
-            <div class="controls-bar mb-4 d-flex flex-wrap gap-3 align-items-center">
-              <!-- Genre Filter -->
-              <div class="filter-group">
-                <label class="small text-muted me-2">Filter by Genre:</label>
-                <select
-                  v-model="selectedGenreFilter"
-                  @change="applyFiltersAndSort"
-                  class="form-select form-select-sm"
-                  style="width: auto; display: inline-block"
-                >
-                  <option value="">All Genres</option>
-                  <option v-for="genre in allGenres" :key="genre" :value="genre">
-                    {{ genre }}
-                  </option>
-                </select>
-              </div>
+              <!-- Filter Controls -->
+              <div class="filter-controls d-flex flex-wrap gap-3 align-items-center">
+                <!-- Genre Filter -->
+                <div class="filter-group">
+                  <label class="small text-muted me-2">Filter by Genre:</label>
+                  <select
+                    v-model="selectedGenreFilter"
+                    @change="applyFiltersAndSort"
+                    class="form-select form-select-sm"
+                    style="width: auto; display: inline-block"
+                  >
+                    <option value="">All Genres</option>
+                    <option v-for="genre in allGenres" :key="genre" :value="genre">
+                      {{ genre }}
+                    </option>
+                  </select>
+                </div>
 
-              <!-- Sort Options -->
-              <div class="sort-group">
-                <label class="small text-muted me-2">Sort by:</label>
-                <select
-                  v-model="selectedSort"
-                  @change="applyFiltersAndSort"
-                  class="form-select form-select-sm"
-                  style="width: auto; display: inline-block"
-                >
-                  <option value="recommended">Recommended</option>
-                  <option value="popular">Most Popular</option>
-                  <option value="recent">Recently Added</option>
-                  <option value="trending">Trending</option>
-                </select>
+                <!-- Sort Options -->
+                <div class="sort-group">
+                  <label class="small text-muted me-2">Sort by:</label>
+                  <select
+                    v-model="selectedSort"
+                    @change="applyFiltersAndSort"
+                    class="form-select form-select-sm"
+                    style="width: auto; display: inline-block"
+                  >
+                    <option value="recommended">Recommended</option>
+                    <option value="popular">Most Popular</option>
+                    <option value="recent">Recently Added</option>
+                    <option value="trending">Trending</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -193,20 +197,21 @@
                         <!-- Spotify Embed -->
                         <iframe
                           v-if="song.platform === 'spotify'"
-                          :src="`https://open.spotify.com/embed/track/${song.spotifyId}`"
+                          :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`"
                           width="100%"
-                          height="152"
+                          height="232"
                           frameborder="0"
                           allowtransparency="true"
                           allow="encrypted-media"
                           loading="lazy"
+                          style="min-height: 232px"
                         ></iframe>
 
                         <!-- SoundCloud Embed -->
                         <iframe
                           v-else-if="song.platform === 'soundcloud'"
                           width="100%"
-                          height="166"
+                          height="232"
                           scrolling="no"
                           frameborder="no"
                           allow="autoplay"
@@ -220,7 +225,7 @@
                         <iframe
                           v-else-if="song.platform === 'youtube'"
                           width="100%"
-                          height="200"
+                          height="232"
                           :src="`https://www.youtube.com/embed/${song.youtubeId}`"
                           frameborder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -334,7 +339,7 @@
           <section class="discover-artists-section mb-5">
             <div class="section-header d-flex justify-content-between align-items-center mb-3">
               <div>
-                <h2 class="h4 mb-1">DISCOVER ARTISTS</h2>
+                <h2 class="h4 mb-1">Artists to watch out for</h2>
                 <p class="text-muted mb-0 small">EXPLORE TALENTED LOCAL ARTISTS</p>
               </div>
             </div>
@@ -1235,6 +1240,32 @@ export default {
   margin-bottom: 2rem;
 }
 
+/* Filter Header */
+.filter-header {
+  flex-shrink: 0;
+  margin-right: 2rem;
+}
+
+.filter-header h2 {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.filter-header p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Filter Controls Container */
+.filter-controls {
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+}
+
 .controls-bar label {
   color: #fff;
   font-weight: 600;
@@ -1244,19 +1275,42 @@ export default {
 }
 
 .controls-bar select {
-  border-radius: 25px;
-  border: none;
-  padding: 0.5rem 2.5rem 0.5rem 1rem;
-  background-color: white;
-  color: #000;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+  color: #fff;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23bb1814' viewBox='0 0 16 16'%3e%3cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+}
+
+.controls-bar select:hover {
+  border-color: #bb1814;
+  box-shadow: 0 4px 12px rgba(187, 24, 20, 0.3);
+  transform: translateY(-2px);
 }
 
 .controls-bar select:focus {
-  border: none;
+  border-color: #bb1814;
   box-shadow: 0 0 0 3px rgba(187, 24, 20, 0.3);
   outline: none;
+  transform: translateY(-2px);
+}
+
+.controls-bar select option {
+  background: #2a2a2a;
+  color: #fff;
+  padding: 0.5rem;
+  border: none;
 }
 
 /* Carousel Container */
@@ -1311,8 +1365,10 @@ export default {
 }
 
 .songs-carousel {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
   width: 100%;
+  padding-top: 12px;
 }
 
 .songs-grid-carousel {
@@ -1326,6 +1382,7 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 2rem;
+  padding-top: 6px;
 }
 
 .carousel-indicators {
@@ -1397,6 +1454,8 @@ export default {
   transform: translateY(-6px);
   box-shadow: 0 8px 24px rgba(187, 24, 20, 0.3);
   border-color: #bb1814;
+  z-index: 10;
+  position: relative;
 }
 
 /* Player Container at Top */
@@ -1404,15 +1463,26 @@ export default {
   border-radius: 12px 12px 0 0;
   overflow: hidden;
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  height: 232px;
+  position: relative;
 }
 
 .player-container iframe {
   border: none;
   width: 100%;
+  height: 100%;
   display: block;
   overflow: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Ensure Spotify embed fills the container */
+.player-container iframe[src*='spotify'] {
+  min-height: 232px;
 }
 
 .player-container iframe::-webkit-scrollbar {
@@ -1833,6 +1903,18 @@ export default {
   .controls-bar {
     flex-direction: column;
     align-items: stretch !important;
+    gap: 1.5rem !important;
+  }
+
+  .filter-header {
+    margin-right: 0;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .filter-controls {
+    justify-content: center;
+    gap: 1rem !important;
   }
 
   .filter-group,
