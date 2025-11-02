@@ -21,13 +21,12 @@
                 <h2 class="song-title">{{ song?.title || 'Song Title' }}</h2>
                 <p class="artist-name">{{ song?.artistName || 'Artist Name' }}</p>
               </div>
-            </div>
-
-            <!-- Genre Tags -->
-            <div class="genre-tags" v-if="song?.genres && song.genres.length > 0">
-              <span v-for="genre in song.genres.slice(0, 2)" :key="genre" class="genre-tag">
-                {{ genre }}
-              </span>
+              <!-- Genre Tags moved to the right -->
+              <div class="genre-tags" v-if="song?.genres && song.genres.length > 0">
+                <span v-for="genre in song.genres.slice(0, 2)" :key="genre" class="genre-tag">
+                  {{ genre }}
+                </span>
+              </div>
             </div>
 
             <!-- Spotify Embed -->
@@ -454,23 +453,55 @@ export default {
 </script>
 
 <style scoped>
+/* Custom Scrollbar Styling */
+.modal-container::-webkit-scrollbar,
+.comments-section-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-container::-webkit-scrollbar-track,
+.comments-section-wrapper::-webkit-scrollbar-track {
+  background: #2a2a2a;
+  border-radius: 4px;
+}
+
+.modal-container::-webkit-scrollbar-thumb,
+.comments-section-wrapper::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #bb1814 0%, #8b1410 100%);
+  border-radius: 4px;
+  border: 1px solid #333;
+}
+
+.modal-container::-webkit-scrollbar-thumb:hover,
+.comments-section-wrapper::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #d41e1e 0%, #9f1612 100%);
+}
+
+/* Firefox Scrollbar */
+.modal-container,
+.comments-section-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: #bb1814 #2a2a2a;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
   padding: 0;
   overflow-y: auto;
+  font-family: 'Poppins', sans-serif;
 }
 
 .modal-container {
-  background: white;
+  background: #191717;
   width: 100%;
   height: 100%;
   max-width: 100vw;
@@ -479,13 +510,14 @@ export default {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  color: white;
 }
 
 .close-button {
   position: absolute;
   top: 16px;
   right: 16px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(187, 24, 20, 0.8);
   border: none;
   width: 40px;
   height: 40px;
@@ -501,21 +533,22 @@ export default {
 }
 
 .close-button:hover {
-  background: rgba(0, 0, 0, 0.7);
+  background: #bb1814;
 }
 
 /* Song Details Section */
 .song-details-section {
-  background: white;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
   padding: 50px 20px 16px;
   flex-shrink: 0;
+  border-bottom: 1px solid #333;
 }
 
 .artist-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .artist-photo {
@@ -523,58 +556,77 @@ export default {
   height: 48px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #bb1814;
+  flex-shrink: 0;
 }
 
 .artist-info {
   flex: 1;
+  min-width: 0;
 }
 
 .song-title {
   font-size: 1.1rem;
   font-weight: 700;
   margin: 0 0 2px 0;
-  color: #1a1a1a;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .artist-name {
   font-size: 0.9rem;
-  color: #666;
+  color: #ccc;
   margin: 0;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .genre-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: 4px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+  max-width: 120px;
 }
 
 .genre-tag {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #bb1814 0%, #8b1410 100%);
   color: white;
-  padding: 4px 12px;
-  border-radius: 16px;
-  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
   font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .embed-container {
   width: 100%;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .song-link {
   display: block;
   padding: 30px;
   text-align: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #bb1814 0%, #8b1410 100%);
   color: white;
   text-decoration: none;
   font-size: 1rem;
   font-weight: 600;
   transition: opacity 0.3s;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
 }
 
 .song-link:hover {
@@ -584,7 +636,7 @@ export default {
 /* Comments Section */
 .comments-section-wrapper {
   flex: 1;
-  background: #f8f9fa;
+  background: #191717;
   padding: 20px;
   overflow-y: auto;
   min-height: 0;
@@ -594,39 +646,53 @@ export default {
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 16px;
-  color: #1a1a1a;
+  color: white;
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+}
+
+.comments-header i {
+  color: #bb1814;
 }
 
 .add-comment-section {
-  background: white;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
   padding: 16px;
   border-radius: 12px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #333;
 }
 
 .comment-input {
   width: 100%;
-  border: 1px solid #dee2e6;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: white;
   border-radius: 8px;
-  padding: 12px;
-  font-size: 0.95rem;
+  padding: 8px 12px;
+  font-size: 0.9rem;
   resize: vertical;
   margin-bottom: 12px;
-  font-family: inherit;
+  font-family: 'Poppins', sans-serif;
+  min-height: 60px;
+  max-height: 100px;
 }
 
 .comment-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #bb1814;
+  box-shadow: 0 0 0 2px rgba(187, 24, 20, 0.2);
+}
+
+.comment-input::placeholder {
+  color: #888;
 }
 
 .comment-button {
-  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  background: linear-gradient(135deg, #bb1814 0%, #8b1410 100%);
   color: white;
   border: none;
   padding: 12px 32px;
@@ -638,11 +704,13 @@ export default {
     transform 0.2s,
     box-shadow 0.2s;
   width: 100%;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
 }
 
 .comment-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+  box-shadow: 0 4px 12px rgba(187, 24, 20, 0.3);
 }
 
 .comment-button:disabled {
@@ -657,18 +725,20 @@ export default {
 .no-comments {
   text-align: center;
   padding: 60px 20px;
-  color: #6c757d;
+  color: #888;
 }
 
 .no-comments i {
   font-size: 3rem;
   margin-bottom: 16px;
   opacity: 0.3;
+  color: #bb1814;
 }
 
 .no-comments p {
   font-size: 1rem;
   margin: 0;
+  font-family: 'Poppins', sans-serif;
 }
 
 .comments-list {
@@ -678,10 +748,10 @@ export default {
 }
 
 .comment-wrapper {
-  background: white;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #333;
 }
 
 .comment-item {
@@ -695,7 +765,7 @@ export default {
 
 .comment-avatar i {
   font-size: 2.5rem;
-  color: #667eea;
+  color: #bb1814;
 }
 
 .comment-avatar.small i {
@@ -716,20 +786,23 @@ export default {
 
 .comment-author {
   font-weight: 700;
-  color: #1a1a1a;
+  color: white;
   font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 .comment-time {
-  color: #6c757d;
+  color: #888;
   font-size: 0.85rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 .comment-text {
-  color: #333;
+  color: #ccc;
   margin: 0 0 12px 0;
   line-height: 1.5;
   word-wrap: break-word;
+  font-family: 'Poppins', sans-serif;
 }
 
 .comment-actions {
@@ -741,7 +814,7 @@ export default {
 .action-btn {
   background: none;
   border: none;
-  color: #6c757d;
+  color: #888;
   cursor: pointer;
   font-size: 0.85rem;
   display: flex;
@@ -750,29 +823,30 @@ export default {
   padding: 4px 8px;
   border-radius: 6px;
   transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
 }
 
 .action-btn:hover {
-  background: #f8f9fa;
-  color: #495057;
+  background: rgba(187, 24, 20, 0.1);
+  color: #bb1814;
 }
 
 .action-btn.liked {
-  color: #dc3545;
+  color: #bb1814;
 }
 
 .action-btn.delete {
-  color: #dc3545;
+  color: #bb1814;
 }
 
 .action-btn.delete:hover {
-  background: #ffe6e6;
+  background: rgba(187, 24, 20, 0.2);
 }
 
 .replies-list {
   margin-top: 16px;
   padding-left: 16px;
-  border-left: 3px solid #e9ecef;
+  border-left: 3px solid #bb1814;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -786,24 +860,31 @@ export default {
 .reply-input-section {
   margin-top: 12px;
   padding: 12px;
-  background: #f8f9fa;
+  background: rgba(42, 42, 42, 0.5);
   border-radius: 8px;
+  border: 1px solid #444;
 }
 
 .reply-input {
   width: 100%;
-  border: 1px solid #dee2e6;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: white;
   border-radius: 6px;
   padding: 10px;
   font-size: 0.9rem;
   resize: vertical;
   margin-bottom: 8px;
-  font-family: inherit;
+  font-family: 'Poppins', sans-serif;
 }
 
 .reply-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #bb1814;
+}
+
+.reply-input::placeholder {
+  color: #888;
 }
 
 .reply-buttons {
@@ -821,24 +902,25 @@ export default {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
 }
 
 .btn-cancel {
-  background: #e9ecef;
-  color: #495057;
+  background: #444;
+  color: #ccc;
 }
 
 .btn-cancel:hover {
-  background: #dee2e6;
+  background: #555;
 }
 
 .btn-submit {
-  background: #667eea;
+  background: #bb1814;
   color: white;
 }
 
 .btn-submit:hover:not(:disabled) {
-  background: #5568d3;
+  background: #a01511;
 }
 
 .btn-submit:disabled {
@@ -874,6 +956,7 @@ export default {
     max-height: 90vh;
     border-radius: 16px;
     margin: 20px;
+    border: 1px solid #333;
   }
 
   .close-button {
@@ -886,7 +969,7 @@ export default {
   }
 
   .artist-header {
-    margin-bottom: 14px;
+    margin-bottom: 18px;
   }
 
   .artist-photo {
@@ -902,6 +985,15 @@ export default {
     font-size: 0.95rem;
   }
 
+  .genre-tags {
+    max-width: 140px;
+  }
+
+  .genre-tag {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+
   .comments-section-wrapper {
     padding: 24px;
   }
@@ -909,11 +1001,20 @@ export default {
   .comments-header {
     font-size: 1.15rem;
   }
+
+  .comment-input {
+    min-height: 80px;
+    max-height: 120px;
+  }
 }
 
 @media (min-width: 1024px) {
   .modal-container {
     max-width: 700px;
+  }
+
+  .genre-tags {
+    max-width: 160px;
   }
 }
 </style>

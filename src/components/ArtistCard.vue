@@ -1,64 +1,35 @@
 <!-- artistcard.vue component -->
 <template>
-  <div class="artist-card">
-    <div class="card h-100 shadow-sm" @click="viewProfile" style="cursor: pointer;">
-      <div class="card-body text-center">
-        <!-- Artist Image -->
-        <div class="position-relative d-inline-block mb-3">
-          <img 
-            :src="artist.profileImage || defaultImage" 
-            :alt="artist.artistName"
-            class="artist-image rounded-circle"
-          >
-          <!-- Verified Badge -->
-          <div v-if="artist.verified" class="verified-badge">
-            <i class="bi bi-patch-check-fill text-primary"></i>
-          </div>
-        </div>
+  <div class="artist-card" @click="viewProfile">
+    <!-- Artist Image -->
+    <div class="artist-image-wrapper">
+      <img
+        :src="artist.profileImage || defaultImage"
+        :alt="artist.artistName"
+        class="artist-image"
+      />
 
-        <!-- Artist Name -->
-        <h5 class="card-title mb-2">{{ artist.artistName }}</h5>
-
-        <!-- Bio -->
-        <p class="card-text text-muted small mb-3" style="min-height: 40px;">
-          {{ truncateBio(artist.bio) }}
-        </p>
-
-        <!-- Genres -->
-        <div class="mb-3">
-          <span 
-            v-for="genre in artist.genres?.slice(0, 2)" 
-            :key="genre"
-            class="badge bg-light text-dark me-1"
-            style="font-size: 0.75rem;"
-          >
-            {{ genre }}
-          </span>
-        </div>
-
-        <!-- Follower Count -->
-        <div class="mb-3">
-          <small class="text-muted">
-            <i class="bi bi-people"></i>
-            {{ artist.followerCount || 0 }} followers
-          </small>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="d-grid gap-2" @click.stop>
-          <button 
-            class="btn btn-sm"
-            :class="isFollowing ? 'btn-success' : 'btn-outline-primary'"
-            @click="toggleFollow"
-            :disabled="loading"
-          >
-            <span v-if="loading" class="spinner-border spinner-border-sm me-1"></span>
-            <i v-else class="bi" :class="isFollowing ? 'bi-check-circle-fill' : 'bi-plus-circle'"></i>
-            {{ isFollowing ? 'Following' : 'Follow' }}
-          </button>
-        </div>
-      </div>
+      <!-- Follow Button (appears on hover) -->
+      <button
+        class="follow-button"
+        :class="{ following: isFollowing }"
+        @click.stop="toggleFollow"
+        :disabled="loading"
+        :title="isFollowing ? 'Unfollow' : 'Follow'"
+      >
+        <i v-if="loading" class="bi bi-arrow-repeat spin"></i>
+        <i v-else-if="isFollowing" class="bi bi-check"></i>
+        <i v-else class="bi bi-plus"></i>
+      </button>
     </div>
+
+    <!-- Artist Name -->
+    <h5 class="artist-name">{{ artist.artistName }}</h5>
+
+    <!-- Genres -->
+    <p class="artist-genres">
+      {{ formatGenres(artist.genres) }}
+    </p>
   </div>
 </template>
 
@@ -71,14 +42,14 @@ export default {
   props: {
     artist: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       isFollowing: false,
       loading: false,
-      defaultImage: 'https://ui-avatars.com/api/?name=Artist&size=200&background=667eea&color=fff'
+      defaultImage: 'https://ui-avatars.com/api/?name=Artist&size=200&background=667eea&color=fff',
     }
   },
   async mounted() {
@@ -99,7 +70,7 @@ export default {
     async toggleFollow() {
       const user = auth.currentUser
       if (!user) {
-        alert('Please log in to follow artists')
+        this.$router.push('/login')
         return
       }
 
@@ -111,10 +82,12 @@ export default {
           const result = await unfollowArtist(user.uid, this.artist.id)
           if (result.success) {
             this.isFollowing = false
-            // Update local count
+            // Update local count if it exists
             if (this.artist.followerCount > 0) {
               this.artist.followerCount--
             }
+          } else {
+            throw new Error(result.error || 'Failed to unfollow')
           }
         } else {
           // Follow
@@ -123,100 +96,138 @@ export default {
             this.isFollowing = true
             // Update local count
             this.artist.followerCount = (this.artist.followerCount || 0) + 1
+          } else {
+            throw new Error(result.error || 'Failed to follow')
           }
         }
       } catch (error) {
         console.error('Error toggling follow:', error)
-        alert('Failed to update follow status. Please try again.')
+        alert(error.message || 'Failed to update follow status. Please try again.')
       } finally {
         this.loading = false
       }
     },
 
-    truncateBio(bio) {
-      if (!bio) return 'No bio available'
-      return bio.length > 60 ? bio.substring(0, 60) + '...' : bio
+    formatGenres(genres) {
+      if (!genres || genres.length === 0) return 'No genres listed'
+      return genres.join(', ')
     },
 
     viewProfile() {
       this.$router.push(`/artist/${this.artist.id}`)
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style scoped>
 .artist-card {
-  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 1rem;
 }
 
 .artist-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
 }
 
-.card {
-  border: none;
-  border-radius: 12px;
+.artist-card:hover .artist-image {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(187, 24, 20, 0.4);
+  border-color: #bb1814;
+}
+
+.artist-image-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.artist-card:hover .follow-button {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .artist-image {
-  width: 120px;
-  height: 120px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #667eea;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.verified-badge {
+.follow-button {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  background: white;
+  bottom: 5px;
+  right: 5px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  background: #bb1814;
+  border: 3px solid #191717;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.verified-badge i {
-  font-size: 1.5rem;
-}
-
-.card-title {
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.btn {
-  font-weight: 500;
+  cursor: pointer;
   transition: all 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  font-size: 1.5rem;
+  z-index: 10;
 }
 
-.btn-success {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-  border: none;
+.follow-button:hover {
+  background: #960f0c;
+  transform: scale(1.1);
 }
 
-.btn-success:hover {
-  background: linear-gradient(135deg, #218838 0%, #1aa179 100%);
+.follow-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-.btn-outline-primary {
-  border-color: #667eea;
-  color: #667eea;
+.follow-button.following {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.btn-outline-primary:hover {
-  background-color: #667eea;
-  border-color: #667eea;
-  color: white;
+.follow-button i {
+  font-weight: bold;
+  line-height: 1;
 }
 
-.spinner-border-sm {
-  width: 1rem;
-  height: 1rem;
-  border-width: 0.15em;
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.artist-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.artist-genres {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #b0b1ba;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
 }
 </style>
