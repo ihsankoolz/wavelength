@@ -1,112 +1,146 @@
-<!-- userprofile.vue - Fan Profile View -->
 <template>
   <div class="user-profile-page">
+    <!-- Dynamic Wave Background -->
+    <div class="wave-svg">
+      <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
+          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+                   M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
+        </path>
+        <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
+          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+                   M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
+        </path>
+        <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
+          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+                   M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
+        </path>
+        <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
+          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+                   M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
+        </path>
+        <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
+          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+                   M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
+        </path>
+        <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
+          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+                   M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
+        </path>
+        <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
+          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+                   M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
+        </path>
+        <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
+          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+                   M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
+        </path>
+      </svg>
+    </div>
+
     <!-- Navigation Bar -->
     <NavigationBar />
 
     <!-- Main Content -->
     <div class="content-wrapper">
-      <div class="container py-4">
-        <div class="row justify-content-center">
-          <div class="col-12 col-lg-8">
-            <!-- Loading State -->
-            <div v-if="loading" class="text-center py-5">
-              <div class="spinner-border text-primary"></div>
-              <p class="mt-3 text-muted">Loading profile...</p>
+      <div v-if="loading" class="container py-5">
+        <div class="text-center">
+          <div class="spinner-border text-danger" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3 text-white">Loading profile...</p>
+        </div>
+      </div>
+
+      <div v-else-if="userData" class="container py-5">
+        <!-- Profile Section -->
+        <div class="profile-section">
+          <div class="row align-items-center">
+            <!-- Profile Picture -->
+            <div class="col-auto">
+              <img :src="userData.profileImage || defaultPfp" alt="Profile Picture" class="profile-picture" />
             </div>
 
-            <!-- Profile Card -->
-            <div v-else-if="userData" class="card shadow-lg border-0">
-              <div class="card-body p-4 p-md-5">
-                <!-- Profile Header -->
-                <div class="text-center mb-4">
-                  <img
-                    :src="userData.profileImage || defaultPfp"
-                    alt="Profile Picture"
-                    class="profile-img mb-3"
-                  />
-                  <h2 class="mb-2">{{ userData.displayName || 'Unnamed User' }}</h2>
-                  <p class="text-muted mb-1">
-                    <i class="bi bi-envelope me-2"></i>{{ userData.email }}
+            <!-- User Information -->
+            <div class="col">
+              <h1 class="user-name">{{ userData.displayName || 'User' }}</h1>
+              <p class="user-email">{{ userData.email || '' }}</p>
+              <p class="user-last-active"><b>
+                  Last active: {{ formatLastActive(userData.lastActive) }}
+                </b></p>
+
+              <!-- Genre Tags -->
+              <div class="genre-tags">
+                <span v-for="genre in (userData.preferredGenres || userData.preferences?.genres || [])" :key="genre"
+                  class="genre-tag">
+                  {{ genre.toUpperCase() }}
+                </span>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="action-buttons mt-3">
+                <button @click="goToEditProfile" class="btn-edit">EDIT PROFILE</button>
+                <button @click="confirmDelete" class="btn-delete">DELETE PROFILE</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Following Section -->
+        <div class="following-section">
+          <h2 class="section-title">FOLLOWING</h2>
+          <p class="section-subtitle"><b>YOU ARE FOLLOWING {{ followingCount }} ARTISTS</b></p>
+
+          <!-- Carousel -->
+          <div class="carousel-wrapper" @mouseenter="showCarouselControls = true"
+            @mouseleave="showCarouselControls = false">
+            <!-- Left Arrow -->
+            <button v-if="showCarouselControls && followingArtists.length > 5" @click="scrollCarousel('left')"
+              class="carousel-nav carousel-nav-left">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+
+            <!-- Artist Cards Container -->
+            <div class="carousel-container" ref="carouselContainer">
+              <div v-if="followingArtists.length === 0" class="text-center py-5">
+                <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
+                <p class="text-white"><b>Not following any artists yet.</b></p>
+              </div>
+
+              <div class="carousel-items" :style="{ transform: `translateX(-${carouselOffset}px)` }">
+                <div v-for="artist in followingArtists" :key="artist.id" class="artist-card-item"
+                  @click="goToArtistProfile(artist.id)">
+                  <div class="artist-avatar-wrapper">
+                    <img
+                      :src="artist.profileImage || 'https://ui-avatars.com/api/?name=' + artist.artistName + '&size=200&background=667eea&color=fff'"
+                      :alt="artist.artistName" class="artist-avatar" />
+                    <button v-if="userId && isCurrentUser" class="follow-button"
+                      :class="{ followed: isFollowingArtist(artist.id) }" @click.stop="toggleArtistFollow(artist.id)"
+                      :title="isFollowingArtist(artist.id) ? 'Unfollow' : 'Follow'">
+                      <i :class="isFollowingArtist(artist.id) ? 'bi bi-check-lg' : 'bi bi-plus-lg'"></i>
+                    </button>
+                  </div>
+                  <h5 class="artist-name">{{ artist.artistName }}</h5>
+                  <p class="artist-genres">
+                    {{ (artist.genres || []).slice(0, 3).join(', ') }}{{ (artist.genres || []).length > 3 ? '..' : '' }}
                   </p>
-                  <p class="text-muted small">
-                    <i class="bi bi-clock me-2"></i>Last active:
-                    {{ formatLastActive(userData.lastActive) }}
-                  </p>
-                </div>
-
-                <!-- Music Preferences Section -->
-                <div class="preferences-section mb-4">
-                  <h5 class="mb-3">
-                    <i class="bi bi-music-note-list text-primary"></i> Music Preferences
-                  </h5>
-                  <div
-                    v-if="userData.preferences?.genres && userData.preferences.genres.length > 0"
-                  >
-                    <div class="genres-display">
-                      <span
-                        v-for="genre in userData.preferences.genres"
-                        :key="genre"
-                        class="badge bg-primary me-2 mb-2"
-                        style="font-size: 0.95rem; padding: 0.5rem 1rem"
-                      >
-                        {{ genre }}
-                      </span>
-                    </div>
-                  </div>
-                  <div v-else class="alert alert-info">
-                    <i class="bi bi-info-circle me-2"></i>
-                    No music preferences set yet.
-                    <router-link :to="`/edit-profile/${userId}`">Add your preferences</router-link>
-                    to get personalized recommendations!
-                  </div>
-                </div>
-
-                <!-- Account Stats -->
-                <div class="stats-section mb-4">
-                  <div class="row text-center g-3">
-                    <div class="col-6">
-                      <div class="stat-box p-3">
-                        <i class="bi bi-people fs-3 text-primary mb-2"></i>
-                        <div class="fw-bold fs-4">{{ followingCount }}</div>
-                        <div class="text-muted small">Following Artists</div>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <div class="stat-box p-3">
-                        <i class="bi bi-heart fs-3 text-danger mb-2"></i>
-                        <div class="fw-bold fs-4">{{ interestedCount }}</div>
-                        <div class="text-muted small">Interested Events</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="d-grid gap-2 mb-3">
-                  <button @click="goToEditProfile" class="btn btn-primary btn-lg">
-                    <i class="bi bi-pencil me-2"></i> Edit Profile
-                  </button>
-                  <router-link to="/my-interests" class="btn btn-outline-primary">
-                    <i class="bi bi-heart me-2"></i> View My Interests
-                  </router-link>
-                </div>
-
-                <!-- Delete Account Button -->
-                <div class="text-center pt-3 border-top">
-                  <button @click="confirmDelete" class="btn btn-link text-danger small">
-                    <i class="bi bi-trash me-2"></i> Delete Account
-                  </button>
                 </div>
               </div>
             </div>
 
-            <!-- No Profile Found -->
-            <div v-else class="text-center py-5">
-              <i class="bi bi-exclamation-triangle fs-1 text-warning mb-3"></i>
-              <h3>Profile Not Found</h3>
-              <p class="text-muted">Unable to load profile information.</p>
-            </div>
+            <!-- Right Arrow -->
+            <button v-if="showCarouselControls && followingArtists.length > 5" @click="scrollCarousel('right')"
+              class="carousel-nav carousel-nav-right">
+              <i class="bi bi-chevron-right"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -115,9 +149,9 @@
 </template>
 
 <script>
-import { getAuth, deleteUser } from 'firebase/auth'
-import { doc, getDoc, deleteDoc } from 'firebase/firestore'
-import { db } from '@/services/firebase'
+import { getAuth, deleteUser, signOut } from 'firebase/auth'
+import { doc, getDoc, deleteDoc, collection, getDocs, query, where, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
+import { auth, db } from '@/services/firebase'
 import NavigationBar from '@/components/NavigationBar.vue'
 import defaultPfp from '@/assets/defaultPfp.jpg'
 
@@ -134,7 +168,15 @@ export default {
       followingCount: 0,
       interestedCount: 0,
       defaultPfp: defaultPfp,
+      followingArtists: [],
+      showCarouselControls: false,
+      carouselOffset: 0,
     }
+  },
+  computed: {
+    isCurrentUser() {
+      return auth.currentUser && this.userId === auth.currentUser.uid
+    },
   },
   async mounted() {
     await this.loadUserProfile()
@@ -154,6 +196,11 @@ export default {
           // Calculate stats
           this.followingCount = this.userData.followingArtists?.length || 0
           this.interestedCount = this.userData.interestedEvents?.length || 0
+
+          // Load following artists if they exist
+          if (this.userData.followingArtists && this.userData.followingArtists.length > 0) {
+            await this.loadFollowingArtists(this.userData.followingArtists)
+          }
         } else {
           console.warn('No such user!')
         }
@@ -178,6 +225,109 @@ export default {
 
     goToEditProfile() {
       this.$router.push(`/edit-profile/${this.userId}`)
+    },
+
+    goToArtistProfile(artistId) {
+      this.$router.push(`/artist/${artistId}`)
+    },
+
+    isFollowingArtist(artistId) {
+      return this.userData?.followingArtists?.includes(artistId) || false
+    },
+
+    async toggleArtistFollow(artistId) {
+      if (!auth.currentUser) {
+        alert('Please log in to follow artists')
+        return
+      }
+
+      if (!this.isCurrentUser) {
+        // Don't allow following from someone else's profile
+        return
+      }
+
+      try {
+        const user = auth.currentUser
+        const userDocRef = doc(db, 'users', user.uid)
+        const isFollowing = this.isFollowingArtist(artistId)
+
+        if (isFollowing) {
+          // Unfollow
+          await updateDoc(userDocRef, {
+            followingArtists: arrayRemove(artistId)
+          })
+          // Update local state
+          this.userData.followingArtists = this.userData.followingArtists.filter(id => id !== artistId)
+          this.followingCount = this.followingCount - 1
+
+          // Remove from displayed list
+          this.followingArtists = this.followingArtists.filter(artist => artist.id !== artistId)
+        } else {
+          // Follow
+          await updateDoc(userDocRef, {
+            followingArtists: arrayUnion(artistId)
+          })
+          // Update local state
+          if (!this.userData.followingArtists) {
+            this.userData.followingArtists = []
+          }
+          this.userData.followingArtists.push(artistId)
+          this.followingCount = this.followingCount + 1
+        }
+      } catch (error) {
+        console.error('Error toggling follow:', error)
+        alert('Failed to update follow status. Please try again.')
+      }
+    },
+
+    async loadFollowingArtists(artistIds) {
+      try {
+        const artists = []
+
+        // Load each artist in batches of 10
+        const batches = []
+        for (let i = 0; i < artistIds.length; i += 10) {
+          batches.push(artistIds.slice(i, i + 10))
+        }
+
+        for (const batch of batches) {
+          const artistsQuery = query(
+            collection(db, 'artists'),
+            where('__name__', 'in', batch)
+          )
+
+          const artistsSnapshot = await getDocs(artistsQuery)
+          artistsSnapshot.docs.forEach(doc => {
+            artists.push({
+              id: doc.id,
+              ...doc.data()
+            })
+          })
+        }
+
+        this.followingArtists = artists
+
+      } catch (error) {
+        console.error('Error loading following artists:', error)
+      }
+    },
+
+    scrollCarousel(direction) {
+      // Calculate card width dynamically based on container width
+      const container = this.$refs.carouselContainer
+      if (!container) return
+
+      const containerWidth = container.offsetWidth
+      const gap = 32 // 2rem
+      const cardWidth = (containerWidth - (gap * 4)) / 5 + gap // 5 cards visible
+
+      const maxOffset = Math.max(0, (this.followingArtists.length - 5) * cardWidth)
+
+      if (direction === 'right') {
+        this.carouselOffset = Math.min(this.carouselOffset + cardWidth * 5, maxOffset)
+      } else if (direction === 'left') {
+        this.carouselOffset = Math.max(this.carouselOffset - cardWidth * 5, 0)
+      }
     },
 
     confirmDelete() {
@@ -255,21 +405,21 @@ export default {
             // Firestore data is already deleted, but Auth needs re-authentication
             alert(
               '⚠️ Your account data has been deleted from our database.\n\n' +
-                'However, for security reasons, you need to log out and log back in, ' +
-                'then delete your account again to fully remove it from the authentication system.\n\n' +
-                'This will allow you to reuse your email address.',
+              'However, for security reasons, you need to log out and log back in, ' +
+              'then delete your account again to fully remove it from the authentication system.\n\n' +
+              'This will allow you to reuse your email address.',
             )
-            await auth.signOut()
+            await signOut(auth)
             this.$router.push('/login')
           } else {
             // Unexpected error - alert user
             alert(
               '⚠️ Partial deletion occurred.\n\n' +
-                'Your data was removed from our database, but there was an issue with the authentication system.\n\n' +
-                'Please contact support with this error code: ' +
-                authError.code,
+              'Your data was removed from our database, but there was an issue with the authentication system.\n\n' +
+              'Please contact support with this error code: ' +
+              authError.code,
             )
-            await auth.signOut()
+            await signOut(auth)
             this.$router.push('/')
           }
         }
@@ -279,9 +429,9 @@ export default {
         // If Firestore deletion failed, show error
         alert(
           '❌ Failed to delete account.\n\n' +
-            'Please try again or contact support if the issue persists.\n\n' +
-            'Error: ' +
-            (error.message || 'Unknown error'),
+          'Please try again or contact support if the issue persists.\n\n' +
+          'Error: ' +
+          (error.message || 'Unknown error'),
         )
       }
     },
@@ -297,6 +447,8 @@ export default {
           this.userId = ''
           this.followingCount = 0
           this.interestedCount = 0
+          this.followingArtists = []
+          this.carouselOffset = 0
 
           // Reload data for new user
           this.loadUserProfile()
@@ -310,80 +462,471 @@ export default {
 
 <style scoped>
 .user-profile-page {
+  font-family: 'Poppins', sans-serif;
+  background: #191717;
   min-height: 100vh;
-  background: #f8f9fa;
+  width: 100%;
+  color: white;
+  padding-top: 100px;
+  position: relative;
 }
 
 .content-wrapper {
-  margin-top: 120px;
-  padding-bottom: 40px;
+  position: relative;
+  z-index: 1;
+  padding-top: 40px;
+  padding-bottom: 60px;
 }
 
-.card {
-  border-radius: 16px;
+/* Dynamic Wave Background */
+.wave-svg {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100vw;
+  height: 300px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+  overflow: hidden;
 }
 
-.profile-img {
-  width: 150px;
-  height: 150px;
+.wave-svg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.user-profile-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background:
+    radial-gradient(ellipse at center, rgba(187, 24, 20, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse at 30% 50%, rgba(199, 53, 53, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(187, 24, 20, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Profile Section */
+.profile-picture {
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #667eea;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.genres-display {
+.user-name {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.user-email {
+  font-size: 1rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.user-last-active {
+  font-size: 1rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.genre-tags {
   display: flex;
-  flex-wrap: wrap;
   gap: 0.5rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
 }
 
-.preferences-section {
-  background: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 12px;
+.genre-tag {
+  background-color: #bb1814;
+  color: white;
+  padding: 0.1rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
-.stat-box {
-  background: #f8f9fa;
-  border-radius: 12px;
-  transition: transform 0.3s;
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
 }
 
-.stat-box:hover {
-  transform: translateY(-5px);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.btn-edit,
+.btn-delete {
+  background: #bb1814;
+  color: #fff;
+  border-radius: 22px;
+  font-size: 1.1rem;
+  font-weight: 600;
   border: none;
-  font-weight: 600;
+  padding: 8px 0;
+  letter-spacing: 0.4px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 200px;
+  min-width: 200px;
 }
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
-  transform: translateY(-2px);
-}
-
-.btn-outline-primary {
-  border: 2px solid #667eea;
-  color: #667eea;
-  font-weight: 600;
-}
-
-.btn-outline-primary:hover {
-  background: #667eea;
+.btn-edit:hover,
+.btn-delete:hover {
+  background: #6E0B0B;
   color: white;
 }
 
-@media (max-width: 768px) {
-  .content-wrapper {
-    margin-top: 100px;
+.btn-delete {
+  background-color: transparent;
+  border: 2px solid #bb1814;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #bb1814;
+  color: white;
+}
+
+/* Following Section */
+.following-section {
+  margin-top: 60px;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 2rem;
+}
+
+/* Carousel */
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+  padding-top: 10px;
+  margin-top: -10px;
+}
+
+.carousel-container {
+  overflow: hidden;
+  width: 100%;
+  padding: 20px 0;
+  margin: -20px 0;
+}
+
+.carousel-items {
+  display: flex;
+  gap: 2rem;
+  transition: transform 0.5s ease;
+  padding-bottom: 1rem;
+}
+
+.artist-card-item {
+  flex: 0 0 calc((100% - 8rem) / 5);
+  width: calc((100% - 8rem) / 5);
+  min-width: 0;
+  max-width: calc((100% - 8rem) / 5);
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  padding: 1.5rem 1rem 1rem 1rem;
+  border-radius: 15px;
+  box-sizing: border-box;
+}
+
+.artist-card-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.artist-card-item:hover::before {
+  opacity: 1;
+}
+
+.artist-card-item:hover {
+  transform: translateY(-5px);
+}
+
+.artist-card-item>* {
+  position: relative;
+  z-index: 1;
+}
+
+.artist-avatar-wrapper {
+  position: relative;
+  margin: 0 auto 1rem;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.artist-avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #333;
+  transition: border-color 0.3s ease;
+}
+
+.artist-card-item:hover .artist-avatar-wrapper {
+  border-color: #bb1814;
+  transform: scale(1.05);
+}
+
+.artist-card-item:hover .artist-avatar {
+  border-color: #bb1814;
+  transform: scale(1.1);
+}
+
+/* Follow Button */
+.follow-button {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #bb1814;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.follow-button i {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.artist-card-item:hover .follow-button {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.follow-button:hover {
+  background: #a01511;
+  transform: scale(1.1);
+}
+
+.follow-button.followed {
+  background: #bb1814;
+}
+
+.follow-button.followed:hover {
+  background: #a01511;
+  transform: scale(1.1);
+}
+
+.artist-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.3rem;
+  transition: color 0.3s ease;
+}
+
+.artist-card-item:hover .artist-name {
+  color: #bb1814;
+}
+
+.artist-genres {
+  font-size: 0.75rem;
+  color: #999;
+  transition: color 0.3s ease;
+  margin: 0;
+}
+
+.artist-card-item:hover .artist-genres {
+  color: #ccc;
+}
+
+/* Carousel Navigation */
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.carousel-nav i {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.carousel-nav:hover {
+  color: #bb1814;
+  transform: translateY(-50%) scale(1.2);
+}
+
+.carousel-nav:active {
+  transform: translateY(-50%) scale(1);
+}
+
+.carousel-nav-left {
+  left: 10px;
+}
+
+.carousel-nav-right {
+  right: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .carousel-items {
+    gap: 1.5rem;
   }
 
-  .profile-img {
+  .artist-card-item {
+    flex: 0 0 calc((100% - 3rem) / 3);
+    width: calc((100% - 3rem) / 3);
+    max-width: calc((100% - 3rem) / 3);
+  }
+
+  .artist-avatar {
+    width: 140px;
+    height: 140px;
+  }
+
+  .carousel-nav i {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .user-profile-page {
+    padding-top: 80px;
+  }
+
+  .content-wrapper {
+    padding-top: 20px;
+  }
+
+  .profile-section .row {
+    flex-direction: column;
+    align-items: center !important;
+    text-align: center;
+  }
+
+  .profile-picture {
+    margin-bottom: 20px;
+  }
+
+  .user-name {
+    font-size: 2rem;
+  }
+
+  .action-buttons {
+    justify-content: center;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .genre-tags {
+    justify-content: center;
+  }
+
+  .carousel-items {
+    gap: 1.5rem;
+  }
+
+  .artist-card-item {
+    flex: 0 0 calc((100% - 3rem) / 3);
+    width: calc((100% - 3rem) / 3);
+    max-width: calc((100% - 3rem) / 3);
+  }
+
+  .artist-avatar {
+    width: 140px;
+    height: 140px;
+  }
+
+  .carousel-nav i {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-items {
+    gap: 1rem;
+  }
+
+  .artist-card-item {
+    flex: 0 0 calc((100% - 1rem) / 2);
+    width: calc((100% - 1rem) / 2);
+    max-width: calc((100% - 1rem) / 2);
+  }
+
+  .artist-avatar {
     width: 120px;
     height: 120px;
+  }
+
+  .carousel-nav-left {
+    left: 5px;
+  }
+
+  .carousel-nav-right {
+    right: 5px;
+  }
+
+  .carousel-nav i {
+    font-size: 36px;
+  }
+
+  .user-name {
+    font-size: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
   }
 }
 </style>

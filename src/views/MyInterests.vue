@@ -1,19 +1,53 @@
 <!-- MyInterests.vue page -->
- <template>
+<template>
   <div class="my-interests-page">
     <NavigationBar />
-
+    <div class="wave-svg">
+      <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="wave1" fill="none" stroke="#B51414" stroke-width="2" opacity="0.6">
+          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
+                    M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
+        </path>
+        <path id="wave2" fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
+          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
+                    M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
+        </path>
+        <path id="wave3" fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
+          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
+                    M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
+        </path>
+        <path id="wave4" fill="none" stroke="#B51414" stroke-width="1.5" opacity="0.5">
+          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
+                    M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
+        </path>
+        <path id="wave5" fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
+          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
+                    M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
+        </path>
+        <path id="wave6" fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
+          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
+                    M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
+        </path>
+        <path id="wave7" fill="none" stroke="#B51414" stroke-width="0.8" opacity="0.3">
+          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
+                    M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
+        </path>
+        <path id="wave8" fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
+          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
+                    M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
+        </path>
+      </svg>
+    </div>
     <div class="content-wrapper">
       <div class="container py-4">
-        
-        <!-- Header -->
-        <div class="text-center mb-5">
-          <h1 class="display-5 fw-bold mb-2">
-            <i class="bi bi-heart-fill text-danger"></i>
-            My Interests
-          </h1>
-          <p class="text-muted">Events you're interested in and artists you follow</p>
-        </div>
 
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-5">
@@ -25,15 +59,17 @@
 
         <!-- Main Content -->
         <div v-else>
-          
+
           <!-- Interested Events Section -->
           <section class="mb-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <h3>
+            <div class="mb-2">
+              <div class="header">
                 <i class="bi bi-star-fill text-warning"></i>
                 Interested Events
-              </h3>
-              <span class="badge bg-primary">{{ interestedEvents.length }}</span>
+              </div>
+            </div>
+            <div class="header-subtitle mb-4">
+              You are interested in <span class="highlight-number">{{ interestedEvents.length }}</span> event{{ interestedEvents.length !== 1 ? 's' : '' }}
             </div>
 
             <!-- No Interested Events -->
@@ -48,25 +84,25 @@
             </div>
 
             <!-- Events Grid -->
-            <div v-else class="row g-4">
-              <div 
-                v-for="event in interestedEvents" 
-                :key="event.id"
-                class="col-12 col-md-6 col-lg-4"
-              >
-                <EventCard :event="event" />
+            <div v-else class="horizontal-scroll">
+              <div class="d-flex gap-3">
+                <div v-for="event in interestedEvents" :key="event.id" class="flex-shrink-0 event-card-container">
+                  <EventCard :event="event" />
+                </div>
               </div>
             </div>
           </section>
 
           <!-- Following Artists Section -->
           <section>
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <h3>
+            <div class="mb-2">
+              <div class="header">
                 <i class="bi bi-people-fill text-primary"></i>
-                Following
-              </h3>
-              <span class="badge bg-primary">{{ followingArtists.length }}</span>
+                FOLLOWING
+              </div>
+            </div>
+            <div class="header-subtitle mb-4">
+              You are following <span class="highlight-number">{{ followingArtists.length }}</span> artist{{ followingArtists.length !== 1 ? 's' : '' }}
             </div>
 
             <!-- No Following Artists -->
@@ -81,13 +117,11 @@
             </div>
 
             <!-- Artists Grid -->
-            <div v-else class="row g-4">
-              <div 
-                v-for="artist in followingArtists" 
-                :key="artist.id"
-                class="col-12 col-sm-6 col-md-4 col-lg-3"
-              >
-                <ArtistCard :artist="artist" />
+            <div v-else class="horizontal-scroll">
+              <div class="d-flex gap-3">
+                <div v-for="artist in followingArtists" :key="artist.id" class="flex-shrink-0 artist-card-container">
+                  <ArtistCard :artist="artist" />
+                </div>
               </div>
             </div>
           </section>
@@ -134,7 +168,7 @@ export default {
 
         // Get user's interested events and following artists
         const userDoc = await getDoc(doc(db, 'users', user.uid))
-        
+
         if (userDoc.exists()) {
           const userData = userDoc.data()
           const interestedEventIds = userData.interestedEvents || []
@@ -162,7 +196,7 @@ export default {
     async loadInterestedEvents(eventIds) {
       try {
         const events = []
-        
+
         // Load each event (Firestore doesn't support WHERE IN with more than 10 items)
         // So we batch them
         const batches = []
@@ -175,7 +209,7 @@ export default {
             collection(db, 'events'),
             where('__name__', 'in', batch)
           )
-          
+
           const eventsSnapshot = await getDocs(eventsQuery)
           eventsSnapshot.docs.forEach(doc => {
             events.push({
@@ -208,7 +242,7 @@ export default {
     async loadFollowingArtists(artistIds) {
       try {
         const artists = []
-        
+
         // Load each artist in batches of 10
         const batches = []
         for (let i = 0; i < artistIds.length; i += 10) {
@@ -220,7 +254,7 @@ export default {
             collection(db, 'artists'),
             where('__name__', 'in', batch)
           )
-          
+
           const artistsSnapshot = await getDocs(artistsQuery)
           artistsSnapshot.docs.forEach(doc => {
             artists.push({
@@ -243,22 +277,100 @@ export default {
 <style scoped>
 .my-interests-page {
   min-height: 100vh;
-  background: #f8f9fa;
+  background: #19181c;
   padding-top: 100px;
+}
+
+.wave-svg {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100vw;
+  height: 300px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+  overflow: hidden;
+}
+
+.wave-svg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.my-interests-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background:
+    radial-gradient(ellipse at center, rgba(187, 24, 20, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse at 30% 50%, rgba(199, 53, 53, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(187, 24, 20, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .content-wrapper {
   padding-bottom: 40px;
+  position: relative;
+  z-index: 1;
 }
 
-h3 {
-  color: #2c3e50;
-  font-weight: 600;
+.header {
+  color: #fff;
+  letter-spacing: 1px;
+  font-size: 2.3rem;
+  font-weight: 700;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.header-subtitle {
+  color: #b0b1ba;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.header-subtitle .highlight-number {
+  font-weight: 700;
+  font-size: 1.3rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.text-muted {
+  color: #999 !important;
 }
 
 .card {
   border: none;
   border-radius: 12px;
+  background: #2a2a2a;
+}
+
+.card-body {
+  color: #999;
+}
+
+.badge {
+  background-color: #B51414 !important;
+}
+
+.btn-primary {
+  background: #B51414;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #a01828;
+}
+
+.spinner-border {
+  color: #B51414 !important;
 }
 
 @media (max-width: 768px) {
@@ -266,8 +378,38 @@ h3 {
     padding-top: 80px;
   }
 
-  .display-5 {
-    font-size: 2rem;
+  .header {
+    font-size: 1.8rem;
   }
+}
+
+.horizontal-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 10px 0;
+  min-height: 350px;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background-color: #B51414;
+  border-radius: 4px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-track {
+  background: #2a2a2a;
+}
+
+/* Event cards - wider for content */
+.event-card-container {
+  width: 300px;
+}
+
+/* Artist cards - narrower, matching ArtistCard design */
+.artist-card-container {
+  width: 250px;
 }
 </style>
