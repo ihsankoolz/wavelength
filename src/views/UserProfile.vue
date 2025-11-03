@@ -94,33 +94,48 @@
           </div>
         </div>
 
-          <!-- Following Artists Section -->
-          <section class="genre-picks-section">
-            <h2 class="genre-heading">FOLLOWING</h2>
-            <div class="header-subtitle mb-4">
-              You are following <span class="highlight-number">{{ followingArtists.length }}</span> artist{{ followingArtists.length !== 1 ? 's' : '' }}
-            </div>
+        <!-- Following Artists Section -->
+        <section class="genre-picks-section">
+          <h2 class="genre-heading">FOLLOWING</h2>
+          <div class="header-subtitle text-muted mb-4">
+            You are following <span class="highlight-number">{{ followingArtists.length }}</span> artist{{
+              followingArtists.length !== 1 ? 's' : '' }}
+          </div>
 
-            <!-- No Following Artists -->
-            <div v-if="followingArtists.length === 0" class="card shadow-sm">
-              <div class="card-body text-center py-5">
-                <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
-                <p class="text-muted">You're not following any artists yet.</p>
-                <router-link to="/home" class="btn btn-primary">
-                  Discover Artists
-                </router-link>
-              </div>
-            </div>
+          <!-- No Following Artists -->
+          <div v-if="followingArtists.length === 0" class="text-center py-5">
+            <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
+            <h2 class="h4 mb-3 text-white">No following artists yet</h2>
+            <p class="text-muted mb-4">Start exploring and follow artists you love!</p>
+            <router-link to="/home#discover-artists" class="btn btn-primary">
+              Discover Artists
+            </router-link>
+          </div>
 
-            <!-- Artists Grid -->
-            <div v-else class="horizontal-scroll">
-              <div class="d-flex gap-3">
-                <div v-for="artist in followingArtists" :key="artist.id" class="flex-shrink-0 artist-card-container">
-                  <ArtistCard :artist="artist" />
+          <!-- Artists Carousel -->
+          <div v-else class="carousel-container">
+            <button v-if="currentArtistPage > 0" @click="previousArtistPage" class="carousel-arrow left"
+              aria-label="Previous artists">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+
+            <div class="artists-carousel">
+              <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentArtistPage * 100}%)` }">
+                <div v-for="(page, pageIndex) in paginatedFollowingArtists" :key="`artist-page-${pageIndex}`"
+                  class="carousel-page artists-page row g-3">
+                  <div v-for="artist in page" :key="artist.id" class="col-lg-3 col-md-4 col-sm-6">
+                    <ArtistCard :artist="artist" />
+                  </div>
                 </div>
               </div>
             </div>
-          </section>
+
+            <button v-if="currentArtistPage < totalArtistPages - 1" @click="nextArtistPage" class="carousel-arrow right"
+              aria-label="Next artists">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </section>
 
       </div>
     </div>
@@ -150,11 +165,27 @@ export default {
       interestedCount: 0,
       defaultPfp: defaultPfp,
       followingArtists: [],
+      currentArtistPage: 0,
+      artistsPerPage: 4,
     }
   },
   computed: {
     isCurrentUser() {
       return auth.currentUser && this.userId === auth.currentUser.uid
+    },
+    paginatedFollowingArtists() {
+      const pages = []
+      let startIndex = 0
+
+      while (startIndex < this.followingArtists.length) {
+        const endIndex = Math.min(startIndex + this.artistsPerPage, this.followingArtists.length)
+        pages.push(this.followingArtists.slice(startIndex, endIndex))
+        startIndex = endIndex
+      }
+      return pages
+    },
+    totalArtistPages() {
+      return this.paginatedFollowingArtists.length
     },
   },
   async mounted() {
@@ -309,6 +340,18 @@ export default {
       }
     },
 
+    nextArtistPage() {
+      if (this.currentArtistPage < this.totalArtistPages - 1) {
+        this.currentArtistPage++
+      }
+    },
+
+    previousArtistPage() {
+      if (this.currentArtistPage > 0) {
+        this.currentArtistPage--
+      }
+    },
+
     confirmDelete() {
       if (
         confirm(
@@ -427,7 +470,7 @@ export default {
           this.followingCount = 0
           this.interestedCount = 0
           this.followingArtists = []
-          this.carouselOffset = 0
+          this.currentArtistPage = 0
 
           // Reload data for new user
           this.loadUserProfile()
@@ -581,6 +624,20 @@ export default {
   color: white;
 }
 
+.btn-primary {
+  background: #bb1814;
+  border: none;
+  border-radius: 25px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transform: none;
+}
+
+.btn-primary:hover {
+  background: #960f0c;
+}
+
 /* Following Section */
 .following-section {
   margin-top: 60px;
@@ -614,6 +671,10 @@ export default {
   margin-bottom: 2rem;
 }
 
+.text-muted {
+  color: #b0b1ba !important;
+}
+
 /* Following Section - Horizontal Scroll */
 .horizontal-scroll {
   overflow-x: auto;
@@ -642,228 +703,73 @@ export default {
   display: flex;
 }
 
-/* Carousel */
-.carousel-wrapper {
-  position: relative;
-  width: 100%;
-  overflow: visible;
-  padding-top: 10px;
-  margin-top: -10px;
-}
-
+/* Carousel Container */
 .carousel-container {
-  overflow: hidden;
-  width: 100%;
-  padding: 20px 0;
-  margin: -20px 0;
-}
-
-.carousel-items {
-  display: flex;
-  gap: 2rem;
-  transition: transform 0.5s ease;
-  padding-bottom: 1rem;
-}
-
-.artist-card-item {
-  flex: 0 0 calc((100% - 8rem) / 5);
-  width: calc((100% - 8rem) / 5);
-  min-width: 0;
-  max-width: calc((100% - 8rem) / 5);
-  text-align: center;
-  cursor: pointer;
   position: relative;
-  padding: 1.5rem 1rem 1rem 1rem;
-  border-radius: 15px;
-  box-sizing: border-box;
+  padding: 0;
 }
 
-.artist-card-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 0;
-}
-
-.artist-card-item:hover::before {
-  opacity: 1;
-}
-
-.artist-card-item:hover {
-  transform: translateY(-5px);
-}
-
-.artist-card-item>* {
-  position: relative;
-  z-index: 1;
-}
-
-.artist-avatar-wrapper {
-  position: relative;
-  margin: 0 auto 1rem;
-  transition: border-color 0.3s ease, transform 0.3s ease;
-}
-
-.artist-avatar {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #333;
-  transition: border-color 0.3s ease;
-}
-
-.artist-card-item:hover .artist-avatar-wrapper {
-  border-color: #bb1814;
-  transform: scale(1.05);
-}
-
-.artist-card-item:hover .artist-avatar {
-  border-color: #bb1814;
-  transform: scale(1.1);
-}
-
-/* Follow Button */
-.follow-button {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #bb1814;
-  color: white;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.3s ease;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.follow-button i {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.artist-card-item:hover .follow-button {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.follow-button:hover {
-  background: #a01511;
-  transform: scale(1.1);
-}
-
-.follow-button.followed {
-  background: #bb1814;
-}
-
-.follow-button.followed:hover {
-  background: #a01511;
-  transform: scale(1.1);
-}
-
-.artist-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 0.3rem;
-  transition: color 0.3s ease;
-}
-
-.artist-card-item:hover .artist-name {
-  color: #bb1814;
-}
-
-.artist-genres {
-  font-size: 0.75rem;
-  color: #999;
-  transition: color 0.3s ease;
-  margin: 0;
-}
-
-.artist-card-item:hover .artist-genres {
-  color: #ccc;
-}
-
-/* Carousel Navigation */
-.carousel-nav {
+.carousel-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
+  background: white;
   border: none;
-  color: white;
-  padding: 0;
+  color: #000;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
 }
 
-.carousel-nav i {
-  font-size: 48px;
-  font-weight: bold;
+.carousel-container:hover .carousel-arrow {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.carousel-nav:hover {
-  color: #bb1814;
-  transform: translateY(-50%) scale(1.2);
+.carousel-arrow:hover {
+  background: #bb1814;
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.carousel-nav:active {
-  transform: translateY(-50%) scale(1);
+.carousel-arrow.left {
+  left: -25px;
 }
 
-.carousel-nav-left {
-  left: 10px;
+.carousel-arrow.right {
+  right: -25px;
 }
 
-.carousel-nav-right {
-  right: 10px;
+.carousel-arrow i {
+  font-size: 1.5rem;
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
-  .carousel-items {
-    gap: 1.5rem;
-  }
-
-  .artist-card-item {
-    flex: 0 0 calc((100% - 3rem) / 3);
-    width: calc((100% - 3rem) / 3);
-    max-width: calc((100% - 3rem) / 3);
-  }
-
-  .artist-avatar {
-    width: 140px;
-    height: 140px;
-  }
-
-  .carousel-nav i {
-    font-size: 40px;
-  }
+.artists-carousel {
+  overflow: hidden;
+  width: 100%;
 }
 
-@media (max-width: 768px) {
+.artists-grid-carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-page.artists-page {
+  min-width: 100%;
+}
+
+/* Responsive Design - Bootstrap breakpoints */
+@media (max-width: 991.98px) {
   .user-profile-page {
     padding-top: 80px;
   }
@@ -897,55 +803,9 @@ export default {
   .genre-tags {
     justify-content: center;
   }
-
-  .carousel-items {
-    gap: 1.5rem;
-  }
-
-  .artist-card-item {
-    flex: 0 0 calc((100% - 3rem) / 3);
-    width: calc((100% - 3rem) / 3);
-    max-width: calc((100% - 3rem) / 3);
-  }
-
-  .artist-avatar {
-    width: 140px;
-    height: 140px;
-  }
-
-  .carousel-nav i {
-    font-size: 40px;
-  }
 }
 
-@media (max-width: 576px) {
-  .carousel-items {
-    gap: 1rem;
-  }
-
-  .artist-card-item {
-    flex: 0 0 calc((100% - 1rem) / 2);
-    width: calc((100% - 1rem) / 2);
-    max-width: calc((100% - 1rem) / 2);
-  }
-
-  .artist-avatar {
-    width: 120px;
-    height: 120px;
-  }
-
-  .carousel-nav-left {
-    left: 5px;
-  }
-
-  .carousel-nav-right {
-    right: 5px;
-  }
-
-  .carousel-nav i {
-    font-size: 36px;
-  }
-
+@media (max-width: 575.98px) {
   .user-name {
     font-size: 1.5rem;
   }
