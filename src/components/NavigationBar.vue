@@ -8,11 +8,22 @@
         </router-link>
         <div class="search-bar d-none d-lg-flex position-relative">
           <i class="bi bi-search search-icon"></i>
-          <input type="text" class="form-control" placeholder="Search artists, events..." v-model="searchQuery"
-            @input="handleSearch" @focus="searchFocused = true" @blur="handleBlur" />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search artists, events..."
+            v-model="searchQuery"
+            @input="handleSearch"
+            @focus="searchFocused = true"
+            @blur="handleBlur"
+          />
 
           <!-- Search Results Dropdown -->
-          <div v-if="showSearchResults" class="search-results-dropdown position-absolute w-100 mt-2" @mousedown.prevent>
+          <div
+            v-if="showSearchResults"
+            class="search-results-dropdown position-absolute w-100 mt-2"
+            @mousedown.prevent
+          >
             <!-- Loading State -->
             <div v-if="searchLoading" class="search-result-item text-center py-3">
               <div class="spinner-border spinner-border-sm text-primary" role="status">
@@ -28,9 +39,17 @@
                 <div class="search-section-header">
                   <i class="bi bi-music-note-beamed me-2"></i>Artists
                 </div>
-                <div v-for="artist in searchResults.artists" :key="artist.id" class="search-result-item"
-                  @click="navigateToArtist(artist.id)">
-                  <img :src="artist.profileImage || defaultAvatar" :alt="artist.artistName" class="result-avatar" />
+                <div
+                  v-for="artist in searchResults.artists"
+                  :key="artist.id"
+                  class="search-result-item"
+                  @click="navigateToArtist(artist.id)"
+                >
+                  <img
+                    :src="artist.profileImage || defaultAvatar"
+                    :alt="artist.artistName"
+                    class="result-avatar"
+                  />
                   <div class="result-info">
                     <div class="result-title">{{ artist.artistName }}</div>
                     <div class="result-subtitle">
@@ -45,8 +64,12 @@
                 <div class="search-section-header">
                   <i class="bi bi-calendar-event me-2"></i>Events
                 </div>
-                <div v-for="event in searchResults.events" :key="event.id" class="search-result-item"
-                  @click="navigateToEvent(event.id)">
+                <div
+                  v-for="event in searchResults.events"
+                  :key="event.id"
+                  class="search-result-item"
+                  @click="navigateToEvent(event.id)"
+                >
                   <div class="result-icon">
                     <i class="bi bi-calendar3"></i>
                   </div>
@@ -61,7 +84,10 @@
             </div>
 
             <!-- No Results -->
-            <div v-else-if="searchQuery.trim().length > 0" class="search-result-item text-center py-3 text-muted">
+            <div
+              v-else-if="searchQuery.trim().length > 0"
+              class="search-result-item text-center py-3 text-muted"
+            >
               <i class="bi bi-search me-2"></i>No results found for "{{ searchQuery }}"
             </div>
 
@@ -77,30 +103,48 @@
       <div class="d-flex align-items-center">
         <ul class="nav-links d-none d-lg-flex">
           <li>
-            <router-link to="/home" :class="{ active: isActive('/home') }" @click="mobileMenuOpen = false">
+            <router-link
+              to="/home"
+              :class="{ active: isActive('/home') }"
+              @click="mobileMenuOpen = false"
+            >
               HOME
             </router-link>
           </li>
           <li>
-            <router-link to="/events" :class="{ active: isActive('/events') }" @click="mobileMenuOpen = false">
+            <router-link
+              to="/events"
+              :class="{ active: isActive('/events') }"
+              @click="mobileMenuOpen = false"
+            >
               EVENTS
             </router-link>
           </li>
           <li>
-            <router-link to="/my-interests" :class="{ active: isActive('/my-interests') }"
-              @click="mobileMenuOpen = false">
+            <router-link
+              to="/my-interests"
+              :class="{ active: isActive('/my-interests') }"
+              @click="mobileMenuOpen = false"
+            >
               MY WAVES
             </router-link>
           </li>
           <li>
-            <router-link to="/my-music" :class="{ active: isActive('/my-music') }" @click="mobileMenuOpen = false">
+            <router-link
+              to="/my-music"
+              :class="{ active: isActive('/my-music') }"
+              @click="mobileMenuOpen = false"
+            >
               MY SONGS
             </router-link>
           </li>
           <!-- Artist-Only Links -->
           <li v-if="userType === 'artist'">
-            <router-link to="/artist/analytics" :class="{ active: isActive('/artist/analytics') }"
-              @click="mobileMenuOpen = false">
+            <router-link
+              to="/artist/analytics"
+              :class="{ active: isActive('/artist/analytics') }"
+              @click="mobileMenuOpen = false"
+            >
               MY ANALYTICS
             </router-link>
           </li>
@@ -112,8 +156,13 @@
 
           <!-- User Dropdown -->
           <div class="dropdown">
-            <button class="dropdown-toggle profile-dropdown-btn" type="button" id="userDropdown"
-              data-bs-toggle="dropdown" aria-expanded="false">
+            <button
+              class="dropdown-toggle profile-dropdown-btn"
+              type="button"
+              id="userDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               <div class="profile-icon-nav">
                 <img :src="userAvatar" :alt="userName" />
               </div>
@@ -122,16 +171,22 @@
             <!-- Dropdown Menu -->
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
               <li v-if="currentUserId">
-                <router-link :to="userType === 'artist' ? '/artist/dashboard' : `/profile/${currentUserId}`"
-                  class="dropdown-item">
+                <router-link
+                  :to="userType === 'artist' ? '/artist/dashboard' : `/profile/${currentUserId}`"
+                  class="dropdown-item"
+                >
                   Profile
                 </router-link>
               </li>
               <li v-if="currentUserId">
-                <router-link :to="userType === 'artist'
-                  ? '/artist/edit-profile'
-                  : `/edit-profile/${currentUserId}`
-                  " class="dropdown-item">
+                <router-link
+                  :to="
+                    userType === 'artist'
+                      ? '/artist/edit-profile'
+                      : `/edit-profile/${currentUserId}`
+                  "
+                  class="dropdown-item"
+                >
                   Edit Profile
                 </router-link>
               </li>
@@ -139,9 +194,7 @@
                 <hr class="dropdown-divider" />
               </li>
               <li>
-                <button @click="handleLogout" class="dropdown-item">
-                  Logout
-                </button>
+                <button @click="handleLogout" class="dropdown-item">Logout</button>
               </li>
             </ul>
           </div>
@@ -149,8 +202,12 @@
       </div>
 
       <!-- Mobile Toggle Button -->
-      <button class="navbar-toggler d-lg-none ms-2" type="button" @click="mobileMenuOpen = !mobileMenuOpen"
-        aria-label="Toggle navigation">
+      <button
+        class="navbar-toggler d-lg-none ms-2"
+        type="button"
+        @click="mobileMenuOpen = !mobileMenuOpen"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -159,11 +216,21 @@
         <div class="mobile-search-bar mb-3">
           <div class="search-bar position-relative">
             <i class="bi bi-search search-icon"></i>
-            <input type="text" class="form-control" placeholder="Search artists, events..." v-model="searchQuery"
-              @input="handleSearch" @focus="searchFocused = true" @blur="handleBlur" />
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search artists, events..."
+              v-model="searchQuery"
+              @input="handleSearch"
+              @focus="searchFocused = true"
+              @blur="handleBlur"
+            />
             <!-- Mobile Search Results Dropdown -->
-            <div v-if="showSearchResults" class="search-results-dropdown position-absolute w-100 mt-2"
-              @mousedown.prevent>
+            <div
+              v-if="showSearchResults"
+              class="search-results-dropdown position-absolute w-100 mt-2"
+              @mousedown.prevent
+            >
               <!-- Loading State -->
               <div v-if="searchLoading" class="search-result-item text-center py-3">
                 <div class="spinner-border spinner-border-sm text-primary" role="status">
@@ -179,9 +246,17 @@
                   <div class="search-section-header">
                     <i class="bi bi-music-note-beamed me-2"></i>Artists
                   </div>
-                  <div v-for="artist in searchResults.artists" :key="artist.id" class="search-result-item"
-                    @click="navigateToArtist(artist.id)">
-                    <img :src="artist.profileImage || defaultAvatar" :alt="artist.artistName" class="result-avatar" />
+                  <div
+                    v-for="artist in searchResults.artists"
+                    :key="artist.id"
+                    class="search-result-item"
+                    @click="navigateToArtist(artist.id)"
+                  >
+                    <img
+                      :src="artist.profileImage || defaultAvatar"
+                      :alt="artist.artistName"
+                      class="result-avatar"
+                    />
                     <div class="result-info">
                       <div class="result-title">{{ artist.artistName }}</div>
                       <div class="result-subtitle">
@@ -196,8 +271,12 @@
                   <div class="search-section-header">
                     <i class="bi bi-calendar-event me-2"></i>Events
                   </div>
-                  <div v-for="event in searchResults.events" :key="event.id" class="search-result-item"
-                    @click="navigateToEvent(event.id)">
+                  <div
+                    v-for="event in searchResults.events"
+                    :key="event.id"
+                    class="search-result-item"
+                    @click="navigateToEvent(event.id)"
+                  >
                     <div class="result-icon">
                       <i class="bi bi-calendar3"></i>
                     </div>
@@ -212,7 +291,10 @@
               </div>
 
               <!-- No Results -->
-              <div v-else-if="searchQuery.trim().length > 0" class="search-result-item text-center py-3 text-muted">
+              <div
+                v-else-if="searchQuery.trim().length > 0"
+                class="search-result-item text-center py-3 text-muted"
+              >
                 <i class="bi bi-search me-2"></i>No results found for "{{ searchQuery }}"
               </div>
 
@@ -225,32 +307,52 @@
         </div>
         <ul class="navbar-nav">
           <li class="nav-item">
-            <router-link to="/home" class="nav-link" :class="{ active: isActive('/home') }"
-              @click="mobileMenuOpen = false">
+            <router-link
+              to="/home"
+              class="nav-link"
+              :class="{ active: isActive('/home') }"
+              @click="mobileMenuOpen = false"
+            >
               HOME
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/events" class="nav-link" :class="{ active: isActive('/events') }"
-              @click="mobileMenuOpen = false">
+            <router-link
+              to="/events"
+              class="nav-link"
+              :class="{ active: isActive('/events') }"
+              @click="mobileMenuOpen = false"
+            >
               EVENTS
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/my-interests" class="nav-link" :class="{ active: isActive('/my-interests') }"
-              @click="mobileMenuOpen = false">
+            <router-link
+              to="/my-interests"
+              class="nav-link"
+              :class="{ active: isActive('/my-interests') }"
+              @click="mobileMenuOpen = false"
+            >
               MY WAVES
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/my-music" class="nav-link" :class="{ active: isActive('/my-music') }"
-              @click="mobileMenuOpen = false">
+            <router-link
+              to="/my-music"
+              class="nav-link"
+              :class="{ active: isActive('/my-music') }"
+              @click="mobileMenuOpen = false"
+            >
               MY SONGS
             </router-link>
           </li>
           <li v-if="userType === 'artist'" class="nav-item">
-            <router-link to="/artist/analytics" class="nav-link" :class="{ active: isActive('/artist/analytics') }"
-              @click="mobileMenuOpen = false">
+            <router-link
+              to="/artist/analytics"
+              class="nav-link"
+              :class="{ active: isActive('/artist/analytics') }"
+              @click="mobileMenuOpen = false"
+            >
               MY ANALYTICS
             </router-link>
           </li>
@@ -258,24 +360,35 @@
         <div class="mobile-nav-icons d-flex align-items-center justify-content-between mt-3">
           <NotificationBell />
           <div class="dropdown">
-            <button class="dropdown-toggle profile-dropdown-btn" type="button" id="userDropdownMobile"
-              data-bs-toggle="dropdown" aria-expanded="false">
+            <button
+              class="dropdown-toggle profile-dropdown-btn"
+              type="button"
+              id="userDropdownMobile"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               <div class="profile-icon-nav">
                 <img :src="userAvatar" :alt="userName" />
               </div>
             </button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownMobile">
               <li v-if="currentUserId">
-                <router-link :to="userType === 'artist' ? '/artist/dashboard' : `/profile/${currentUserId}`"
-                  class="dropdown-item">
+                <router-link
+                  :to="userType === 'artist' ? '/artist/dashboard' : `/profile/${currentUserId}`"
+                  class="dropdown-item"
+                >
                   Profile
                 </router-link>
               </li>
               <li v-if="currentUserId">
-                <router-link :to="userType === 'artist'
-                  ? '/artist/edit-profile'
-                  : `/edit-profile/${currentUserId}`
-                  " class="dropdown-item">
+                <router-link
+                  :to="
+                    userType === 'artist'
+                      ? '/artist/edit-profile'
+                      : `/edit-profile/${currentUserId}`
+                  "
+                  class="dropdown-item"
+                >
                   Edit Profile
                 </router-link>
               </li>
@@ -283,9 +396,7 @@
                 <hr class="dropdown-divider" />
               </li>
               <li>
-                <button @click="handleLogout" class="dropdown-item">
-                  Logout
-                </button>
+                <button @click="handleLogout" class="dropdown-item">Logout</button>
               </li>
             </ul>
           </div>
@@ -496,7 +607,10 @@ export default {
     $route(to, from) {
       this.mobileMenuOpen = false
       // Reload user data when coming from edit profile pages
-      if (from && (from.path.includes('/edit-profile') || from.path.includes('/artist/edit-profile'))) {
+      if (
+        from &&
+        (from.path.includes('/edit-profile') || from.path.includes('/artist/edit-profile'))
+      ) {
         this.loadUserData()
       }
     },
@@ -565,29 +679,42 @@ export default {
 .search-bar .search-icon {
   position: absolute;
   left: 15px;
-  color: #666;
+  color: #bb1814;
   font-size: 16px;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
+  transition: all 0.3s ease;
 }
 
 .search-bar input {
-  background-color: #FFFFFF;
-  border: none;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+  border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 25px;
-  padding: 8px 20px 8px 45px;
-  color: #666;
+  padding: 12px 20px 12px 45px;
+  color: #fff;
   font-size: 14px;
   width: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .search-bar input::placeholder {
-  color: #999;
+  color: #b0b1ba;
+  font-weight: 400;
 }
 
 .search-bar input:focus {
   outline: none;
-  box-shadow: none;
+  border-color: #bb1814;
+  box-shadow: 0 0 0 3px rgba(187, 24, 20, 0.3);
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+}
+
+.search-bar input:focus + .search-icon {
+  color: #bb1814;
+  transform: scale(1.1);
 }
 
 /* Navigation Links */
@@ -606,7 +733,7 @@ export default {
 }
 
 .nav-links a {
-  color: #FFFFFF;
+  color: #ffffff;
   text-decoration: none;
   text-transform: uppercase;
   font-size: 14px;
@@ -619,7 +746,7 @@ export default {
 
 .nav-links a:hover,
 .nav-links a.active {
-  color: #B51414;
+  color: #b51414;
 }
 
 /* Nav Icons */
@@ -632,7 +759,7 @@ export default {
 
 .nav-icons i {
   font-size: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
   transition: color 0.3s;
   display: flex;
@@ -640,17 +767,17 @@ export default {
 }
 
 .nav-icons i:hover {
-  color: #B51414;
+  color: #b51414;
 }
 
 /* Notification Bell Icon */
 .nav-icons :deep(.notification-bell) {
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 .nav-icons :deep(.notification-bell:hover),
 .nav-icons :deep(.notification-bell.active) {
-  color: #B51414 !important;
+  color: #b51414 !important;
   background: rgba(181, 20, 20, 0.1) !important;
 }
 
@@ -682,7 +809,7 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #B51414;
+  background-color: #b51414;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -702,7 +829,7 @@ export default {
 
 /* Dropdown Menu */
 .dropdown-menu {
-  background-color: #1A1A1A;
+  background-color: #1a1a1a;
   border: 1px solid #333;
   border-radius: 10px;
   padding: 0.5rem 0;
@@ -711,10 +838,12 @@ export default {
 }
 
 .dropdown-item {
-  color: #FFFFFF;
+  color: #ffffff;
   padding: 0.6rem 1.5rem;
   font-size: 14px;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
   text-decoration: none;
   display: block;
   border: none;
@@ -724,8 +853,8 @@ export default {
 }
 
 .dropdown-item:hover {
-  background-color: #B51414;
-  color: #FFFFFF;
+  background-color: #b51414;
+  color: #ffffff;
 }
 
 .dropdown-divider {
@@ -735,16 +864,38 @@ export default {
 
 /* Search Results Dropdown */
 .search-results-dropdown {
-  background: white;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+  border: 2px solid rgba(187, 24, 20, 0.3);
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   max-height: 400px;
   overflow-y: auto;
   z-index: 1061;
+  top: calc(100% + 8px) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.search-results-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-thumb {
+  background: #bb1814;
+  border-radius: 3px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #d41e1e;
 }
 
 .search-section {
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .search-section:last-child {
@@ -753,22 +904,26 @@ export default {
 
 .search-section-header {
   padding: 0.75rem 1rem;
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: #B51414;
-  background-color: #f8f9fa;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #bb1814;
+  background: rgba(187, 24, 20, 0.1);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  font-family: 'Poppins', sans-serif;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .search-result-item {
-  padding: 0.75rem 1rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border-bottom: 1px solid #f1f3f5;
+  color: #fff;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: 'Poppins', sans-serif;
 }
 
 .search-result-item:last-child {
@@ -776,28 +931,31 @@ export default {
 }
 
 .search-result-item:hover {
-  background-color: #f8f9fa;
-  padding-left: 1.25rem;
+  background: rgba(187, 24, 20, 0.15);
+  transform: translateX(5px);
+  border-left: 3px solid #bb1814;
 }
 
 .result-avatar {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e9ecef;
+  border: 2px solid #bb1814;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .result-icon {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  background: #B51414;
+  background: linear-gradient(135deg, #bb1814 0%, #8b1410 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(187, 24, 20, 0.4);
 }
 
 .result-info {
@@ -807,24 +965,46 @@ export default {
 
 .result-title {
   font-weight: 600;
-  font-size: 0.9rem;
-  color: #2c3e50;
+  font-size: 0.95rem;
+  color: #fff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
 }
 
 .result-subtitle {
   font-size: 0.8rem;
-  color: #6c757d;
+  color: #b0b1ba;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/* Loading and Empty States */
+.search-result-item.text-center {
+  color: #b0b1ba;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+.search-result-item.text-center:hover {
+  background: none;
+  transform: none;
+  border-left: none;
+}
+
+.spinner-border-sm {
+  color: #bb1814 !important;
+}
+
+.text-primary {
+  color: #bb1814 !important;
+}
+
 /* Navbar Toggler */
 .navbar-toggler {
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   background-color: transparent;
 }
 
@@ -845,7 +1025,7 @@ export default {
 }
 
 .navbar-nav .nav-link {
-  color: #FFFFFF;
+  color: #ffffff;
   text-transform: uppercase;
   font-weight: 500;
   letter-spacing: 1px;
@@ -854,7 +1034,7 @@ export default {
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
-  color: #B51414;
+  color: #b51414;
 }
 
 .mobile-search-bar {
@@ -873,23 +1053,23 @@ export default {
 
 .nav-icon-mobile {
   font-size: 24px;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
   transition: color 0.3s;
 }
 
 .nav-icon-mobile:hover {
-  color: #B51414;
+  color: #b51414;
 }
 
 /* Mobile Notification Bell Icon */
 .mobile-nav-icons :deep(.notification-bell) {
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 .mobile-nav-icons :deep(.notification-bell:hover),
 .mobile-nav-icons :deep(.notification-bell.active) {
-  color: #B51414 !important;
+  color: #b51414 !important;
   background: rgba(181, 20, 20, 0.1) !important;
 }
 
@@ -936,8 +1116,11 @@ export default {
     position: fixed !important;
     left: 1rem;
     right: 1rem;
+    top: auto !important;
     width: auto !important;
     max-height: 60vh;
+    margin-top: 0.5rem;
+    transform: none !important;
   }
 
   .dropdown-menu {
@@ -945,7 +1128,17 @@ export default {
     transform: none !important;
     width: 100%;
     margin-top: 0.5rem !important;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(187, 24, 20, 0.3);
+    background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+  }
+
+  .dropdown-item {
+    color: #fff;
+  }
+
+  .dropdown-item:hover {
+    background-color: #bb1814;
+    color: #fff;
   }
 }
 

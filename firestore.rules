@@ -8,6 +8,18 @@ service cloud.firestore {
       return affectedKeys.hasOnly(['musicLinks']);
     }
 
+    // Helper function to check if only follower-related fields are being updated
+    function onlyUpdatingFollowers(newData, existingData) {
+      let affectedKeys = newData.diff(existingData).affectedKeys();
+      return affectedKeys.hasOnly(['followerCount', 'followers']);
+    }
+
+    // Helper function to check if only event interest fields are being updated
+    function onlyUpdatingEventInterest(newData, existingData) {
+      let affectedKeys = newData.diff(existingData).affectedKeys();
+      return affectedKeys.hasOnly(['interestedCount', 'interestedUsers']);
+    }
+
     // Users collection - users can read all, write own
     match /users/{userId} {
       allow read: if request.auth != null;
@@ -26,6 +38,10 @@ service cloud.firestore {
       allow update: if request.auth != null && 
                        onlyUpdatingMusicLinks(request.resource.data, resource.data);
       
+      // Allow any authenticated user to update follower-related fields (for follow/unfollow)
+      allow update: if request.auth != null && 
+                       onlyUpdatingFollowers(request.resource.data, resource.data);
+      
       // MusicLinks subcollection - allow authenticated users to read and write
       match /musicLinks/{musicId} {
         allow read: if request.auth != null;
@@ -38,8 +54,14 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow create: if request.auth != null &&
                        request.resource.data.artistId == request.auth.uid;
-      allow update, delete: if request.auth != null &&
-                               resource.data.artistId == request.auth.uid;
+      allow update: if request.auth != null &&
+                       resource.data.artistId == request.auth.uid;
+      allow delete: if request.auth != null &&
+                       resource.data.artistId == request.auth.uid;
+      
+      // Allow any authenticated user to update event interest fields
+      allow update: if request.auth != null && 
+                       onlyUpdatingEventInterest(request.resource.data, resource.data);
     }
 
     // Notifications - users can only read their own

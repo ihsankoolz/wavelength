@@ -1,35 +1,225 @@
-/* @import './base.css';
+@import './base.css';
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+  min-height: 100vh;
+  background: var(--color-background-dark);
 }
 
-a,
-.green {
+/* Global Link Styles */
+a {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+  color: inherit;
+  transition: all 0.3s ease;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+/* Container Utilities */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
+/* Button Styles */
+.btn-primary {
+  background: var(--color-primary-red);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-red-hover);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-primary-red);
+  color: var(--color-primary-red);
+}
+
+/* Card Styles */
+.card {
+  background: var(--color-background-card);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+/* Badge Styles */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-red {
+  background: var(--color-primary-red);
+  color: white;
+}
+
+.badge-outline {
+  background: transparent;
+  border: 1px solid currentColor;
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.mb-1 {
+  margin-bottom: var(--spacing-xs);
+}
+.mb-2 {
+  margin-bottom: var(--spacing-sm);
+}
+.mb-3 {
+  margin-bottom: var(--spacing-md);
+}
+.mb-4 {
+  margin-bottom: var(--spacing-lg);
+}
+.mb-5 {
+  margin-bottom: var(--spacing-xl);
+}
+
+.mt-1 {
+  margin-top: var(--spacing-xs);
+}
+.mt-2 {
+  margin-top: var(--spacing-sm);
+}
+.mt-3 {
+  margin-top: var(--spacing-md);
+}
+.mt-4 {
+  margin-top: var(--spacing-lg);
+}
+.mt-5 {
+  margin-top: var(--spacing-xl);
+}
+
+/* Global Form Select Dropdown Styles */
+.form-select,
+select.form-select {
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23bb1814' viewBox='0 0 16 16'%3e%3cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+}
+
+.form-select:hover,
+select.form-select:hover {
+  border-color: #bb1814;
+  box-shadow: 0 4px 12px rgba(187, 24, 20, 0.3);
+  transform: translateY(-2px);
+}
+
+.form-select:focus,
+select.form-select:focus {
+  border-color: #bb1814;
+  box-shadow: 0 0 0 3px rgba(187, 24, 20, 0.3);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.form-select option,
+select.form-select option {
+  background: #2a2a2a;
+  color: #fff;
+  padding: 0.5rem;
+  border: none;
+}
+
+/* Small variant */
+.form-select-sm {
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  background-size: 14px 10px;
+  background-position: right 0.5rem center;
+}
+
+/* Global Red Scrollbar Styling */
+/* WebKit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(25, 23, 23, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #bb1814 0%, #a30c0e 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(187, 24, 20, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #a30c0e 0%, #8b0a0c 100%);
+  box-shadow: 0 2px 8px rgba(187, 24, 20, 0.5);
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(25, 23, 23, 0.5);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #bb1814 rgba(25, 23, 23, 0.5);
+}
+
+/* Enhanced scrollbar for specific containers */
+.container,
+.content-wrapper,
+.dropdown-menu,
+.notifications-list {
+  scrollbar-width: thin;
+  scrollbar-color: #bb1814 rgba(25, 23, 23, 0.5);
+}
+
+/* Mobile scrollbar (for touch devices) */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
   }
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+  ::-webkit-scrollbar-thumb {
+    border-radius: 3px;
   }
-} */
+}

@@ -4,13 +4,99 @@
     <!-- Navigation Bar -->
     <NavigationBar />
 
+    <!-- Wave Background -->
+    <div class="wave-svg">
+      <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
+          <animate
+            attributeName="d"
+            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+                   M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
+            dur="3s"
+            repeatCount="indefinite"
+          />
+        </path>
+        <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
+          <animate
+            attributeName="d"
+            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+                   M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
+            dur="4s"
+            repeatCount="indefinite"
+          />
+        </path>
+        <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
+          <animate
+            attributeName="d"
+            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+                   M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
+            dur="5s"
+            repeatCount="indefinite"
+          />
+        </path>
+        <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
+          <animate
+            attributeName="d"
+            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+                   M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
+            dur="2.5s"
+            repeatCount="indefinite"
+          />
+        </path>
+        <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
+          <animate
+            attributeName="d"
+            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+                   M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
+            dur="3.5s"
+            repeatCount="indefinite"
+          />
+        </path>
+        <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
+          <animate
+            attributeName="d"
+            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+                   M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
+            dur="4.5s"
+            repeatCount="indefinite"
+          />
+        </path>
+        <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
+          <animate
+            attributeName="d"
+            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+                   M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
+            dur="6s"
+            repeatCount="indefinite"
+          />
+        </path>
+        <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
+          <animate
+            attributeName="d"
+            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+                   M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
+            dur="2s"
+            repeatCount="indefinite"
+          />
+        </path>
+      </svg>
+    </div>
+
     <!-- Main Content -->
     <div class="content-wrapper">
       <div class="container py-4">
         <!-- Welcome Header -->
         <div class="welcome-section mb-4">
-          <h1 class="display-5 fw-bold mb-2">Welcome back, {{ userName }}! 👋</h1>
-          <p class="text-muted">Discover new music tailored just for you</p>
+          <h1 class="display-5 fw-bold mb-2">Curated for your taste</h1>
+          <p class="text-muted">TRENDING SONGS FROM LOCAL ARTISTS</p>
         </div>
 
         <!-- Loading State -->
@@ -25,45 +111,49 @@
         <div v-else>
           <!-- Recommended Songs Section -->
           <section class="recommended-songs-section mb-5">
-            <div class="section-header d-flex justify-content-between align-items-center mb-3">
-              <div>
-                <h2 class="h3 mb-1">Recommended Songs</h2>
+            <!-- Filter and Sort Controls -->
+            <div
+              class="controls-bar mb-4 d-flex flex-wrap gap-3 align-items-center justify-content-between"
+            >
+              <!-- Filter Header Text -->
+              <div class="filter-header">
+                <h2 class="h3 mb-1">FILTER SONGS</h2>
                 <p class="text-muted mb-0 small">{{ getRecommendationSubtitle }}</p>
               </div>
-            </div>
 
-            <!-- Filter and Sort Controls -->
-            <div class="controls-bar mb-4 d-flex flex-wrap gap-3 align-items-center">
-              <!-- Genre Filter -->
-              <div class="filter-group">
-                <label class="small text-muted me-2">Filter by Genre:</label>
-                <select
-                  v-model="selectedGenreFilter"
-                  @change="applyFiltersAndSort"
-                  class="form-select form-select-sm"
-                  style="width: auto; display: inline-block"
-                >
-                  <option value="">All Genres</option>
-                  <option v-for="genre in allGenres" :key="genre" :value="genre">
-                    {{ genre }}
-                  </option>
-                </select>
-              </div>
+              <!-- Filter Controls -->
+              <div class="filter-controls d-flex flex-wrap gap-3 align-items-center">
+                <!-- Genre Filter -->
+                <div class="filter-group">
+                  <label class="small text-muted me-2">Filter by Genre:</label>
+                  <select
+                    v-model="selectedGenreFilter"
+                    @change="applyFiltersAndSort"
+                    class="form-select form-select-sm"
+                    style="width: auto; display: inline-block"
+                  >
+                    <option value="">All Genres</option>
+                    <option v-for="genre in allGenres" :key="genre" :value="genre">
+                      {{ genre }}
+                    </option>
+                  </select>
+                </div>
 
-              <!-- Sort Options -->
-              <div class="sort-group">
-                <label class="small text-muted me-2">Sort by:</label>
-                <select
-                  v-model="selectedSort"
-                  @change="applyFiltersAndSort"
-                  class="form-select form-select-sm"
-                  style="width: auto; display: inline-block"
-                >
-                  <option value="recommended">Recommended</option>
-                  <option value="popular">Most Popular</option>
-                  <option value="recent">Recently Added</option>
-                  <option value="trending">Trending</option>
-                </select>
+                <!-- Sort Options -->
+                <div class="sort-group">
+                  <label class="small text-muted me-2">Sort by:</label>
+                  <select
+                    v-model="selectedSort"
+                    @change="applyFiltersAndSort"
+                    class="form-select form-select-sm"
+                    style="width: auto; display: inline-block"
+                  >
+                    <option value="recommended">Recommended</option>
+                    <option value="popular">Most Popular</option>
+                    <option value="recent">Recently Added</option>
+                    <option value="trending">Trending</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -102,42 +192,26 @@
                       class="song-card"
                       @click="openSongDetail(song)"
                     >
-                      <!-- Artist Info Header -->
-                      <div class="song-artist-header" @click.stop>
-                        <img
-                          :src="song.artistPhoto || '/default-avatar.png'"
-                          :alt="song.artistName"
-                          class="artist-photo"
-                          @click="navigateToArtist(song.artistId)"
-                          style="cursor: pointer"
-                        />
-                        <div class="artist-info">
-                          <router-link :to="`/artist/${song.artistId}`" class="artist-name">
-                            {{ song.artistName }}
-                          </router-link>
-                          <div class="song-title">{{ song.title }}</div>
-                        </div>
-                      </div>
-
-                      <!-- Embedded Player -->
+                      <!-- Embedded Player at Top -->
                       <div class="player-container" @click.stop="handlePlayerClick(song)">
                         <!-- Spotify Embed -->
                         <iframe
                           v-if="song.platform === 'spotify'"
-                          :src="`https://open.spotify.com/embed/track/${song.spotifyId}`"
+                          :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`"
                           width="100%"
-                          height="152"
+                          height="232"
                           frameborder="0"
                           allowtransparency="true"
                           allow="encrypted-media"
                           loading="lazy"
+                          style="min-height: 232px"
                         ></iframe>
 
                         <!-- SoundCloud Embed -->
                         <iframe
                           v-else-if="song.platform === 'soundcloud'"
                           width="100%"
-                          height="166"
+                          height="232"
                           scrolling="no"
                           frameborder="no"
                           allow="autoplay"
@@ -151,7 +225,7 @@
                         <iframe
                           v-else-if="song.platform === 'youtube'"
                           width="100%"
-                          height="200"
+                          height="232"
                           :src="`https://www.youtube.com/embed/${song.youtubeId}`"
                           frameborder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -171,42 +245,67 @@
                         </a>
                       </div>
 
-                      <!-- Genre Tags -->
-                      <div class="genre-tags" v-if="song.genres && song.genres.length > 0">
-                        <span
-                          v-for="genre in song.genres.slice(0, 3)"
-                          :key="genre"
-                          class="genre-tag"
-                        >
-                          {{ genre }}
-                        </span>
-                      </div>
+                      <!-- Bottom Section: Artist Info, Genre Tags, and Stats -->
+                      <div class="song-footer">
+                        <!-- Left Side: Artist Info & Genre Tags -->
+                        <div class="song-footer-left">
+                          <div class="song-artist-info" @click.stop>
+                            <img
+                              :src="song.artistPhoto || '/default-avatar.png'"
+                              :alt="song.artistName"
+                              class="artist-photo-bottom"
+                              @click="navigateToArtist(song.artistId)"
+                              style="cursor: pointer"
+                            />
+                            <div class="song-details">
+                              <div class="song-title-bottom">{{ song.title }}</div>
+                              <router-link
+                                :to="`/artist/${song.artistId}`"
+                                class="artist-name-bottom"
+                              >
+                                {{ song.artistName }}
+                              </router-link>
+                            </div>
+                          </div>
 
-                      <!-- Song Stats & Actions -->
-                      <div class="song-stats">
-                        <button
-                          @click.stop="toggleLike(song)"
-                          class="stat-button"
-                          :class="{ liked: isSongLiked(song) }"
-                          :disabled="likingInProgress[`${song.artistId}_${song.id}`]"
-                          :title="
-                            isSongLiked(song)
-                              ? 'Unlike and remove from saved songs'
-                              : 'Like this song and save it to My Music'
-                          "
-                        >
-                          <span class="icon">❤️</span>
-                          <span class="count">{{ song.likes || 0 }}</span>
-                        </button>
+                          <!-- Genre Tags Below Artist Info -->
+                          <div class="genre-tags" v-if="song.genres && song.genres.length > 0">
+                            <span
+                              v-for="genre in song.genres.slice(0, 3)"
+                              :key="genre"
+                              class="genre-tag"
+                            >
+                              {{ genre }}
+                            </span>
+                          </div>
+                        </div>
 
-                        <button
-                          @click.stop="openSongDetail(song)"
-                          class="stat-button"
-                          title="View and post comments"
-                        >
-                          <span class="icon">💬</span>
-                          <span class="count">{{ song.commentCount || 0 }}</span>
-                        </button>
+                        <!-- Right Side: Stats & Actions -->
+                        <div class="song-stats">
+                          <button
+                            @click.stop="toggleLike(song)"
+                            class="stat-button"
+                            :class="{ liked: isSongLiked(song) }"
+                            :disabled="likingInProgress[`${song.artistId}_${song.id}`]"
+                            :title="
+                              isSongLiked(song)
+                                ? 'Unlike and remove from saved songs'
+                                : 'Like this song and save it to My Music'
+                            "
+                          >
+                            <span class="icon">❤️</span>
+                            <span class="count">{{ song.likes || 0 }}</span>
+                          </button>
+
+                          <button
+                            @click.stop="openSongDetail(song)"
+                            class="stat-button"
+                            title="View and post comments"
+                          >
+                            <span class="icon">💬</span>
+                            <span class="count">{{ song.commentCount || 0 }}</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -240,8 +339,8 @@
           <section class="discover-artists-section mb-5">
             <div class="section-header d-flex justify-content-between align-items-center mb-3">
               <div>
-                <h2 class="h4 mb-1">🎤 Discover Artists</h2>
-                <p class="text-muted mb-0 small">Explore talented local artists</p>
+                <h2 class="h4 mb-1">Artists to watch out for</h2>
+                <p class="text-muted mb-0 small">EXPLORE TALENTED LOCAL ARTISTS</p>
               </div>
             </div>
 
@@ -300,8 +399,8 @@
           <section class="upcoming-events-section mb-5">
             <div class="section-header d-flex justify-content-between align-items-center mb-3">
               <div>
-                <h2 class="h4 mb-1">📅 Upcoming Events</h2>
-                <p class="text-muted mb-0 small">Don't miss out on live performances</p>
+                <h2 class="h4 mb-1">UPCOMING EVENTS</h2>
+                <p class="text-muted mb-0 small">DON'T MISS OUT ON LIVE PERFORMANCES</p>
               </div>
               <router-link to="/events" class="btn btn-sm btn-outline-primary">
                 View All
@@ -318,33 +417,62 @@
             <!-- Events Grid -->
             <div v-else-if="upcomingEvents.length > 0" class="events-grid">
               <div v-for="event in upcomingEvents.slice(0, 4)" :key="event.id" class="event-card">
-                <div class="event-content" @click="$router.push(`/events/${event.id}`)">
-                  <div class="event-date">
-                    <div class="date-day">{{ formatEventDay(event.date) }}</div>
-                    <div class="date-month">{{ formatEventMonth(event.date) }}</div>
-                  </div>
-                  <div class="event-details">
-                    <h5 class="event-title">{{ event.title }}</h5>
-                    <p class="event-location"><i class="bi bi-geo-alt"></i> {{ event.location }}</p>
-                    <div class="event-artists">
-                      <span
-                        v-for="(artist, index) in event.artistNames"
-                        :key="index"
-                        class="artist-tag"
-                      >
-                        {{ artist }}
-                      </span>
-                    </div>
-                  </div>
+                <!-- Red Header with Event Title -->
+                <div class="event-header">
+                  {{ event.title }}
                 </div>
 
-                <!-- Small Map Preview -->
-                <div class="event-map-preview" @click.stop>
-                  <EventMap
-                    :location="event.location"
-                    :title="event.venue || event.title"
-                    size="small"
-                  />
+                <!-- Event Body -->
+                <div class="event-body">
+                  <!-- Artist Info & Details -->
+                  <div class="event-info" @click="$router.push(`/events/${event.id}`)">
+                    <img
+                      :src="event.artistImage || '/default-avatar.png'"
+                      :alt="event.artistName"
+                      class="event-artist-photo"
+                    />
+                    <div class="event-info-text">
+                      <h5 class="event-artist-name">{{ event.artistName || 'Artist' }}</h5>
+                      <p class="event-venue">{{ event.venue || event.location }}</p>
+                    </div>
+
+                    <!-- Date Box on Right -->
+                    <div class="event-date-box">
+                      <div class="date-day">{{ formatEventDay(event.date) }}</div>
+                      <div class="date-month">{{ formatEventMonth(event.date) }}</div>
+                    </div>
+                  </div>
+
+                  <!-- Genres as plain text -->
+                  <p class="event-genres-text" v-if="event.genres && event.genres.length > 0">
+                    {{ event.genres.join(', ') }}
+                  </p>
+
+                  <!-- Map Preview -->
+                  <div class="event-map-preview" @click.stop>
+                    <EventMap
+                      :location="event.location"
+                      :title="event.venue || event.title"
+                      size="small"
+                    />
+                  </div>
+
+                  <!-- Interested Count -->
+                  <p class="interested-count">
+                    {{ event.interestedCount || 0 }}
+                    {{ (event.interestedCount || 0) === 1 ? 'Other' : 'Others' }} Interested
+                  </p>
+
+                  <!-- I'm Interested Button -->
+                  <button
+                    class="btn-interested"
+                    :class="{ active: isEventInterested(event.id) }"
+                    @click.stop="toggleEventInterest(event)"
+                    :disabled="togglingInterest[event.id]"
+                  >
+                    <i v-if="isEventInterested(event.id)" class="bi bi-check-circle-fill me-2"></i>
+                    {{ isEventInterested(event.id) ? 'INTERESTED' : "I'M INTERESTED" }}
+                  </button>
                 </div>
               </div>
             </div>
@@ -450,12 +578,14 @@ export default {
       likedSongsSet: new Set(),
       followedArtistsSet: new Set(),
       playedSongsSet: new Set(), // Track which songs have been played
+      interestedEventsSet: new Set(), // Track events user is interested in
 
       // Loading states
       isLoading: true,
       loadingMore: false,
       likingInProgress: {},
       followingInProgress: {},
+      togglingInterest: {}, // Track interest toggle in progress
 
       // Song Detail Modal (combines embed + comments)
       showSongDetailModal: false,
@@ -476,12 +606,71 @@ export default {
       return `Based on your interests: ${this.userGenres.slice(0, 3).join(', ')}`
     },
 
-    // Paginate songs into pages of 6 (2 rows × 3 cards)
+    // Paginate songs with specific overlap logic - songs 3&6 become 1&4 in next page
     paginatedSongs() {
       const pages = []
-      for (let i = 0; i < this.displayedSongs.length; i += this.songsPerPage) {
-        pages.push(this.displayedSongs.slice(i, i + this.songsPerPage))
+      let songIndex = 0
+
+      while (songIndex < this.displayedSongs.length) {
+        if (pages.length === 0) {
+          // First page: normal sequential order (1,2,3,4,5,6)
+          const page = []
+          for (let i = 0; i < this.songsPerPage && songIndex < this.displayedSongs.length; i++) {
+            page.push(this.displayedSongs[songIndex])
+            songIndex++
+          }
+          pages.push(page)
+        } else {
+          // Subsequent pages: songs 3&6 from previous page become 1&4, fill with new songs
+          const prevPage = pages[pages.length - 1]
+          const page = []
+
+          // Position 1: Previous song 3 (index 2)
+          if (prevPage[2]) {
+            page[0] = prevPage[2]
+          }
+
+          // Position 2: New song
+          if (songIndex < this.displayedSongs.length) {
+            page[1] = this.displayedSongs[songIndex]
+            songIndex++
+          }
+
+          // Position 3: New song
+          if (songIndex < this.displayedSongs.length) {
+            page[2] = this.displayedSongs[songIndex]
+            songIndex++
+          }
+
+          // Position 4: Previous song 6 (index 5)
+          if (prevPage[5]) {
+            page[3] = prevPage[5]
+          }
+
+          // Position 5: New song
+          if (songIndex < this.displayedSongs.length) {
+            page[4] = this.displayedSongs[songIndex]
+            songIndex++
+          }
+
+          // Position 6: New song
+          if (songIndex < this.displayedSongs.length) {
+            page[5] = this.displayedSongs[songIndex]
+            songIndex++
+          }
+
+          // Only add page if it has content
+          if (page.some((song) => song)) {
+            pages.push(page.filter((song) => song))
+          }
+
+          // Break if no more new songs
+          if (songIndex >= this.displayedSongs.length && !page.some((song) => song)) {
+            break
+          }
+        }
       }
+
       return pages
     },
 
@@ -489,11 +678,21 @@ export default {
       return this.paginatedSongs.length
     },
 
-    // Paginate artists into pages of 5
+    // Paginate artists with overlap logic
     paginatedArtists() {
       const pages = []
-      for (let i = 0; i < this.recommendedArtists.length; i += this.artistsPerPage) {
-        pages.push(this.recommendedArtists.slice(i, i + this.artistsPerPage))
+      let startIndex = 0
+
+      while (startIndex < this.recommendedArtists.length) {
+        const endIndex = Math.min(startIndex + this.artistsPerPage, this.recommendedArtists.length)
+        pages.push(this.recommendedArtists.slice(startIndex, endIndex))
+
+        // For the next page, start from the overlap point (keep last 1 artist)
+        if (endIndex < this.recommendedArtists.length) {
+          startIndex = endIndex - 1 // Overlap of 1 artist
+        } else {
+          break
+        }
       }
       return pages
     },
@@ -533,9 +732,14 @@ export default {
           this.likedSongsSet = await getUserLikedSongs(user.uid)
           this.followedArtistsSet = await getUserFollowedArtists(user.uid)
 
+          // Load user's interested events
+          const interestedEvents = userData.interestedEvents || []
+          this.interestedEventsSet = new Set(interestedEvents)
+
           console.log('👤 User genres:', this.userGenres)
           console.log('❤️ Liked songs:', this.likedSongsSet.size)
           console.log('👥 Following:', this.followedArtistsSet.size)
+          console.log('📅 Interested in:', this.interestedEventsSet.size, 'events')
         }
       } catch (error) {
         console.error('Error loading user data:', error)
@@ -615,7 +819,7 @@ export default {
 
         // Filter for upcoming events only
         const now = new Date()
-        this.upcomingEvents = allEvents
+        let upcomingEvents = allEvents
           .filter((event) => {
             const eventDate = event.date?.toDate ? event.date.toDate() : new Date(event.date)
             return eventDate >= now
@@ -626,6 +830,23 @@ export default {
             return dateA - dateB
           })
 
+        // Fetch artist data for each event
+        for (const event of upcomingEvents) {
+          if (event.artistId) {
+            try {
+              const artistDoc = await getDoc(doc(db, 'artists', event.artistId))
+              if (artistDoc.exists()) {
+                const artistData = artistDoc.data()
+                event.artistImage = artistData.profileImage
+                event.artistName = event.artistName || artistData.artistName
+              }
+            } catch (error) {
+              console.error('Error fetching artist data for event:', event.id, error)
+            }
+          }
+        }
+
+        this.upcomingEvents = upcomingEvents
         console.log('📅 Loaded', this.upcomingEvents.length, 'upcoming events')
       } catch (error) {
         console.error('Error loading events:', error)
@@ -656,6 +877,81 @@ export default {
         'DEC',
       ]
       return months[eventDate.getMonth()]
+    },
+
+    formatEventDate(date) {
+      const eventDate = date?.toDate ? date.toDate() : new Date(date)
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+      const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ]
+      return `${days[eventDate.getDay()]}, ${eventDate.getDate()} ${months[eventDate.getMonth()]} ${eventDate.getFullYear()}`
+    },
+
+    isEventInterested(eventId) {
+      return this.interestedEventsSet.has(eventId)
+    },
+
+    async toggleEventInterest(event) {
+      if (this.togglingInterest[event.id]) return
+
+      const user = auth.currentUser
+      if (!user) {
+        this.$router.push('/login')
+        return
+      }
+
+      this.togglingInterest[event.id] = true
+
+      try {
+        const { markEventInterested, unmarkEventInterested } = await import(
+          '@/utils/userInteractions'
+        )
+
+        const isInterested = this.isEventInterested(event.id)
+
+        if (isInterested) {
+          // Unmark interest
+          const result = await unmarkEventInterested(user.uid, event.id)
+          if (result.success) {
+            this.interestedEventsSet.delete(event.id)
+            // Force reactivity update
+            this.interestedEventsSet = new Set(this.interestedEventsSet)
+            if (event.interestedCount > 0) {
+              event.interestedCount--
+            }
+          } else {
+            throw new Error(result.error || 'Failed to unmark interest')
+          }
+        } else {
+          // Mark interested
+          const result = await markEventInterested(user.uid, event.id)
+          if (result.success) {
+            this.interestedEventsSet.add(event.id)
+            // Force reactivity update
+            this.interestedEventsSet = new Set(this.interestedEventsSet)
+            event.interestedCount = (event.interestedCount || 0) + 1
+          } else {
+            throw new Error(result.error || 'Failed to mark interest')
+          }
+        }
+      } catch (error) {
+        console.error('Error toggling event interest:', error)
+        alert(error.message || 'Failed to update interest. Please try again.')
+      } finally {
+        this.togglingInterest[event.id] = false
+      }
     },
 
     applyFiltersAndSort() {
@@ -848,55 +1144,179 @@ export default {
 
 <style scoped>
 .fan-homepage {
+  font-family: 'Poppins', sans-serif;
+  background: #191717;
   min-height: 100vh;
-  background: #f8f9fa;
+  width: 100%;
+  color: white;
+  position: relative;
 }
 
 .content-wrapper {
-  margin-top: 100px;
-  padding-bottom: 40px;
+  position: relative;
+  z-index: 1;
+  margin-top: 70px;
+  padding-bottom: 60px;
+}
+
+/* Dynamic Wave Background */
+.wave-svg {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100vw;
+  height: 300px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+  overflow: hidden;
+}
+
+.wave-svg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.fan-homepage::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background:
+    radial-gradient(ellipse at center, rgba(187, 24, 20, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse at 30% 50%, rgba(199, 53, 53, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(187, 24, 20, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .welcome-section h1 {
-  color: #2c3e50;
+  color: #fff;
+  font-weight: 700;
+  font-size: 2.3rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.welcome-section p {
+  color: #d4d5db;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .section-header h2,
 .section-header h4 {
-  color: #2c3e50;
-  font-weight: 600;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.5rem;
 }
 
 .section-header p {
+  color: #b0b1ba;
   font-size: 0.9rem;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.text-muted {
+  color: #b0b1ba !important;
 }
 
 /* Controls Bar */
 .controls-bar {
-  background: white;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: transparent;
+  padding: 1.5rem 0;
+  border-radius: 0;
+  box-shadow: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 2rem;
+}
+
+/* Filter Header */
+.filter-header {
+  flex-shrink: 0;
+  margin-right: 2rem;
+}
+
+.filter-header h2 {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.filter-header p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Filter Controls Container */
+.filter-controls {
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.controls-bar label {
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
 }
 
 .controls-bar select {
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
-  padding: 0.375rem 2rem 0.375rem 0.75rem; /* Add more right padding for arrow */
-  background-color: white;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+  color: #fff;
   cursor: pointer;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23bb1814' viewBox='0 0 16 16'%3e%3cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+}
+
+.controls-bar select:hover {
+  border-color: #bb1814;
+  box-shadow: 0 4px 12px rgba(187, 24, 20, 0.3);
+  transform: translateY(-2px);
 }
 
 .controls-bar select:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  border-color: #bb1814;
+  box-shadow: 0 0 0 3px rgba(187, 24, 20, 0.3);
   outline: none;
+  transform: translateY(-2px);
+}
+
+.controls-bar select option {
+  background: #2a2a2a;
+  color: #fff;
+  padding: 0.5rem;
+  border: none;
 }
 
 /* Carousel Container */
 .carousel-container {
   position: relative;
-  padding: 0 3rem;
+  padding: 0;
 }
 
 .carousel-arrow {
@@ -904,8 +1324,8 @@ export default {
   top: 50%;
   transform: translateY(-50%);
   background: white;
-  border: 2px solid #667eea;
-  color: #667eea;
+  border: none;
+  color: #000;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -915,22 +1335,29 @@ export default {
   cursor: pointer;
   z-index: 10;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.carousel-container:hover .carousel-arrow {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .carousel-arrow:hover {
-  background: #667eea;
+  background: #bb1814;
   color: white;
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .carousel-arrow.left {
-  left: 0;
+  left: -25px;
 }
 
 .carousel-arrow.right {
-  right: 0;
+  right: -25px;
 }
 
 .carousel-arrow i {
@@ -938,8 +1365,10 @@ export default {
 }
 
 .songs-carousel {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
   width: 100%;
+  padding-top: 12px;
 }
 
 .songs-grid-carousel {
@@ -950,23 +1379,24 @@ export default {
 .carousel-page {
   min-width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns */
-  grid-template-rows: repeat(2, 1fr); /* 2 rows */
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2rem;
+  padding-top: 6px;
 }
 
 .carousel-indicators {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
 
 .indicator {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: #dee2e6;
+  background: rgba(255, 255, 255, 0.3);
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -974,24 +1404,19 @@ export default {
 }
 
 .indicator:hover {
-  background: #adb5bd;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .indicator.active {
-  background: #667eea;
-  width: 32px;
-  border-radius: 6px;
+  background: #bb1814;
+  width: 30px;
+  border-radius: 5px;
 }
 
 /* Artists Carousel */
 .artists-carousel {
   overflow: hidden;
   width: 100%;
-}
-
-.artists-grid-carousel {
-  display: flex;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .artists-grid-carousel {
@@ -1015,123 +1440,60 @@ export default {
 }
 
 .song-card {
-  background: white;
-  border-radius: 16px;
-  padding: 1rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
 }
 
 .song-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(187, 24, 20, 0.3);
+  border-color: #bb1814;
+  z-index: 10;
+  position: relative;
 }
 
-/* Artist Header in Song Card */
-.song-artist-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.artist-photo {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #667eea;
-  flex-shrink: 0;
-}
-
-.artist-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.artist-name {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #667eea;
-  text-decoration: none;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.artist-name:hover {
-  color: #764ba2;
-}
-
-.song-title {
-  font-size: 0.9rem;
-  color: #666;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Follow Button */
-.btn-follow {
-  background: #667eea;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-
-.btn-follow:hover:not(:disabled) {
-  background: #764ba2;
-  transform: scale(1.05);
-}
-
-.btn-follow:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.following-badge {
-  font-size: 0.75rem;
-  color: #28a745;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-/* Player Container */
+/* Player Container at Top */
 .player-container {
-  margin-bottom: 0.75rem;
-  border-radius: 12px;
+  border-radius: 12px 12px 0 0;
   overflow: hidden;
-  background: #f8f8f8;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  height: 232px;
+  position: relative;
 }
 
 .player-container iframe {
   border: none;
   width: 100%;
+  height: 100%;
   display: block;
-  /* Hide scrollbars */
   overflow: hidden;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Ensure Spotify embed fills the container */
+.player-container iframe[src*='spotify'] {
+  min-height: 232px;
 }
 
 .player-container iframe::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
 
 .song-link {
   display: block;
   padding: 2rem;
   text-align: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #bb1814 0%, #960f0c 100%);
   color: white;
   text-decoration: none;
   font-weight: 600;
@@ -1143,54 +1505,117 @@ export default {
   opacity: 0.9;
 }
 
+/* Song Footer Container */
+.song-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.song-footer-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+/* Artist Info at Bottom */
+.song-artist-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.artist-photo-bottom {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #bb1814;
+  flex-shrink: 0;
+}
+
+.song-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.song-title-bottom {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
+}
+
+.artist-name-bottom {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #b0b1ba;
+  text-decoration: none;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artist-name-bottom:hover {
+  color: #bb1814;
+}
+
 /* Genre Tags */
 .genre-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 0.75rem;
+  gap: 0.5rem;
 }
 
 .genre-tag {
   font-size: 0.7rem;
-  background: #f0f0f0;
-  color: #666;
-  padding: 0.25rem 0.6rem;
-  border-radius: 12px;
-  font-weight: 500;
+  background: #bb1814;
+  color: white;
+  padding: 0.3rem 0.7rem;
+  border-radius: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Song Stats */
+/* Song Stats - Bottom Right */
 .song-stats {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #f0f0f0;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .stat-button {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  background: none;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   cursor: pointer;
-  padding: 0.4rem 0.75rem;
-  border-radius: 16px;
+  padding: 0.4rem 0.7rem;
+  border-radius: 20px;
   transition: all 0.2s ease;
-  font-size: 0.9rem;
-  position: relative;
+  font-size: 0.85rem;
+  color: #fff;
 }
 
 .stat-button:hover:not(:disabled) {
-  background: #f8f8f8;
+  background: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
 }
 
 .stat-button:active:not(:disabled) {
   transform: scale(0.95);
-  background: #f0f0f0;
 }
 
 .stat-button:disabled {
@@ -1199,12 +1624,11 @@ export default {
 }
 
 .stat-button.liked {
-  color: #e74c3c;
-  background: #ffebee;
+  background: rgba(187, 24, 20, 0.3);
 }
 
 .stat-button.liked:hover:not(:disabled) {
-  background: #ffcdd2;
+  background: rgba(187, 24, 20, 0.5);
 }
 
 /* Pulse animation when liked */
@@ -1233,12 +1657,12 @@ export default {
 }
 
 .icon {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .count {
   font-weight: 600;
-  color: #333;
+  color: #fff;
   font-size: 0.85rem;
 }
 
@@ -1256,109 +1680,183 @@ export default {
 /* Events Grid */
 .events-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
 .event-card {
-  background: white;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
   border-radius: 12px;
-  padding: 1.5rem;
-  cursor: pointer;
+  overflow: hidden;
   transition: all 0.3s;
-  border: 1px solid #e9ecef;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .event-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  border-color: #667eea;
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(187, 24, 20, 0.3);
+  border-color: #bb1814;
 }
 
-.event-content {
+/* Red Header */
+.event-header {
+  background: #bb1814;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1rem 1.25rem;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* Event Body */
+.event-body {
+  padding: 1.25rem;
+}
+
+/* Event Info Section */
+.event-info {
   display: flex;
-  gap: 1.25rem;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
   cursor: pointer;
 }
 
-.event-date {
+.event-artist-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #bb1814;
+  flex-shrink: 0;
+}
+
+.event-info-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-artist-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.3rem;
+}
+
+.event-venue {
+  font-size: 0.85rem;
+  color: #b0b1ba;
+  margin: 0;
+}
+
+/* Date Box on Right */
+.event-date-box {
   flex-shrink: 0;
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #bb1814 0%, #960f0c 100%);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
+  box-shadow: 0 2px 8px rgba(187, 24, 20, 0.3);
 }
 
-.date-day {
+.event-date-box .date-day {
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1;
 }
 
-.date-month {
+.event-date-box .date-month {
   font-size: 0.75rem;
   font-weight: 600;
   margin-top: 0.25rem;
+  text-transform: uppercase;
 }
 
-.event-details {
-  flex: 1;
-  min-width: 0;
+/* Event Genres as Plain Text */
+.event-genres-text {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #b0b1ba;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
 }
 
-.event-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #212529;
-  margin-bottom: 0.5rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.event-location {
-  font-size: 0.875rem;
-  color: #6c757d;
-  margin-bottom: 0.75rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.event-location i {
-  margin-right: 0.25rem;
-}
-
-.event-artists {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.artist-tag {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  background: #f0f4ff;
-  color: #667eea;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
+/* Map Preview */
 .event-map-preview {
   width: 100%;
-  height: 200px;
+  height: 150px;
   border-radius: 8px;
   overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+/* Interested Count */
+.interested-count {
+  font-size: 0.9rem;
+  color: #b0b1ba;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* I'm Interested Button */
+.btn-interested {
+  width: 100%;
+  background: #bb1814;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-interested:hover:not(:disabled) {
+  background: #960f0c;
+  transform: scale(1.02);
+}
+
+.btn-interested:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-interested.active {
+  background: #4a4a4a;
+  color: #fff;
+}
+
+.btn-interested.active:hover:not(:disabled) {
+  background: #3a3a3a;
+}
+
+/* Button Overrides */
+.btn-outline-primary {
+  border-color: #bb1814;
+  color: #bb1814;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-outline-primary:hover {
+  background-color: #bb1814;
+  border-color: #bb1814;
+  color: white;
 }
 
 /* Responsive */
@@ -1405,6 +1903,18 @@ export default {
   .controls-bar {
     flex-direction: column;
     align-items: stretch !important;
+    gap: 1.5rem !important;
+  }
+
+  .filter-header {
+    margin-right: 0;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .filter-controls {
+    justify-content: center;
+    gap: 1rem !important;
   }
 
   .filter-group,
