@@ -1680,13 +1680,14 @@ export default {
   background: transparent;
   border: none;
   color: white;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
   font-size: 0.9rem;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 0.4rem;
   cursor: pointer;
+  border-radius: 20px;
 }
 
 .action-btn:hover:not(:disabled) {
