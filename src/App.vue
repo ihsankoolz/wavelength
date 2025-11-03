@@ -1,12 +1,19 @@
 <template>
   <div id="app">
     <RouterView />
+    <!-- AI Chatbot - Available globally for logged-in users -->
+    <AIChatbot />
   </div>
 </template>
 
 <script>
+import AIChatbot from '@/components/AIChatbot.vue'
+
 export default {
   name: 'App',
+  components: {
+    AIChatbot,
+  },
 }
 </script>
 
@@ -32,7 +39,7 @@ body::before {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: 
+  background:
     radial-gradient(ellipse at center, rgba(181, 20, 20, 0.08) 0%, transparent 70%),
     radial-gradient(ellipse at 30% 50%, rgba(199, 53, 53, 0.06) 0%, transparent 50%),
     radial-gradient(ellipse at 70% 50%, rgba(181, 20, 20, 0.08) 0%, transparent 50%);
