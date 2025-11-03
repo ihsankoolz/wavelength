@@ -46,12 +46,12 @@
       <!-- I'm Interested Button -->
       <button
         class="btn-interested"
-        :class="{ active: isInterested }"
+        :class="{ 'btn-interested-active': isInterested }"
         @click.stop="toggleInterest"
         :disabled="loading"
       >
         <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
-        <i v-else-if="isInterested" class="bi bi-check-circle-fill me-2"></i>
+        <span v-else-if="isInterested" class="me-2">✓</span>
         {{ loading ? 'Updating...' : isInterested ? 'INTERESTED' : "I'M INTERESTED" }}
       </button>
     </div>
@@ -328,15 +328,15 @@ export default {
 .btn-interested {
   width: 100%;
   background: #bb1814;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  padding: 0.85rem 1.5rem;
-  font-size: 0.95rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  color: #fff;
+  border: 2px solid #bb1814;
+  border-radius: 22px;
+  padding: 8px 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
   cursor: pointer;
+  box-sizing: border-box;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
@@ -344,23 +344,26 @@ export default {
   font-family: 'Poppins', sans-serif;
 }
 
-.btn-interested:hover:not(:disabled) {
-  background: #960f0c;
-  transform: scale(1.02);
+.btn-interested:hover {
+  background: #6E0B0B;
+  border: 2px solid #6E0B0B;
+  color: white;
+  transform: none;
+}
+
+.btn-interested.btn-interested-active {
+  background: transparent;
+  border: 2px solid #bb1814;
+}
+
+.btn-interested.btn-interested-active:hover:not(:disabled) {
+  background: #bb1814;
+  color: white;
 }
 
 .btn-interested:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-}
-
-.btn-interested.active {
-  background: #4a4a4a;
-  color: #fff;
-}
-
-.btn-interested.active:hover:not(:disabled) {
-  background: #3a3a3a;
 }
 
 .spinner-border-sm {
