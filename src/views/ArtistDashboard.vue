@@ -191,7 +191,10 @@
                   <!-- No Events -->
                   <div v-else-if="artistEvents.length === 0" class="text-center py-5">
                     <i class="bi bi-calendar-x fs-1 text-white mb-3"></i>
-                    <p class="text-white">No upcoming events scheduled.</p>
+                    <p class="text-white mb-4">No upcoming events scheduled.</p>
+                    <button class="btn-add-event" @click="addEvent">
+                      <i class="bi bi-plus-circle me-2"></i>CREATE YOUR FIRST EVENT
+                    </button>
                   </div>
 
                   <!-- Events List -->
@@ -204,68 +207,78 @@
                       </div>
 
                       <div class="events-grid">
-                        <div
-                          v-for="event in displayedEvents"
-                          :key="event.id"
-                          class="event-item-card"
-                        >
-                          <!-- Event Info -->
-                          <div class="event-item-info">
-                            <h5 class="event-item-title">{{ event.title || 'Untitled Event' }}</h5>
-
-                            <!-- Event Date & Time -->
-                            <div class="event-meta mb-2">
-                              <small class="event-meta-item">
-                                <i class="bi bi-calendar me-1"></i>
-                                {{ formatEventDate(event.date) }}
-                                <span v-if="formatEventTime(event.date)" class="ms-2">
-                                  <i class="bi bi-clock me-1"></i>
-                                  {{ formatEventTime(event.date) }}
-                                </span>
-                              </small>
-                            </div>
-
-                            <!-- Event Location -->
-                            <div v-if="event.location" class="event-meta mb-2">
-                              <small class="event-meta-item">
-                                <i class="bi bi-geo-alt me-1"></i>
-                                {{ event.location }}
-                              </small>
-                            </div>
-
-                            <!-- Event Description -->
-                            <p v-if="event.description" class="event-description">
-                              {{
-                                event.description.length > 100
-                                  ? event.description.substring(0, 100) + '...'
-                                  : event.description
-                              }}
-                            </p>
+                        <div v-for="event in displayedEvents" :key="event.id" class="event-card">
+                          <!-- Red Header with Event Title -->
+                          <div class="event-header">
+                            {{ event.title || 'Untitled Event' }}
                           </div>
 
-                          <!-- Action Buttons -->
-                          <div class="event-actions mt-3">
-                            <button
-                              class="btn-action-edit"
-                              @click="editEvent(event.id)"
-                              title="Edit"
+                          <!-- Event Body -->
+                          <div class="event-body">
+                            <!-- Venue and Date (No Artist Info on Profile Pages) -->
+                            <div class="event-venue-date">
+                              <div class="event-venue-text">
+                                <p class="event-venue">{{ event.venue || event.location }}</p>
+                                <p class="event-description-preview" v-if="event.description">
+                                  {{ event.description.split(' ').slice(0, 6).join(' ')
+                                  }}{{ event.description.split(' ').length > 6 ? '...' : '' }}
+                                </p>
+                              </div>
+                              <!-- Date Box on Right -->
+                              <div class="event-date-box">
+                                <div class="date-day">{{ formatEventDay(event.date) }}</div>
+                                <div class="date-month">{{ formatEventMonth(event.date) }}</div>
+                              </div>
+                            </div>
+
+                            <!-- Genres -->
+                            <p
+                              class="event-genres-text"
+                              v-if="event.genres && event.genres.length > 0"
                             >
-                              <i class="bi bi-pencil"></i> Edit
-                            </button>
-                            <button
-                              class="btn-action-view"
-                              @click="viewEvent(event.id)"
-                              title="View"
-                            >
-                              <i class="bi bi-eye"></i> View
-                            </button>
-                            <button
-                              class="btn-action-delete"
-                              @click="deleteEvent(event.id)"
-                              title="Delete"
-                            >
-                              <i class="bi bi-trash"></i> Delete
-                            </button>
+                              {{ event.genres.join(', ') }}
+                            </p>
+
+                            <!-- Map Preview -->
+                            <div class="event-map-preview" v-if="event.location">
+                              <EventMap
+                                :location="event.location"
+                                :title="event.venue || event.title"
+                                size="small"
+                              />
+                            </div>
+
+                            <!-- Interested Count -->
+                            <p class="interested-count">
+                              {{ event.interestedCount || 0 }}
+                              {{ (event.interestedCount || 0) === 1 ? 'Person' : 'People' }}
+                              Interested
+                            </p>
+
+                            <!-- Action Buttons (Owner Controls) -->
+                            <div class="event-owner-actions">
+                              <button
+                                class="btn-action-edit"
+                                @click="editEvent(event.id)"
+                                title="Edit Event"
+                              >
+                                <i class="bi bi-pencil"></i> Edit
+                              </button>
+                              <button
+                                class="btn-action-view"
+                                @click="viewEvent(event.id)"
+                                title="View Details"
+                              >
+                                <i class="bi bi-eye"></i> View
+                              </button>
+                              <button
+                                class="btn-action-delete"
+                                @click="deleteEvent(event.id)"
+                                title="Delete Event"
+                              >
+                                <i class="bi bi-trash"></i> Delete
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -477,6 +490,7 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '@/services/firebase'
 import NavigationBar from '@/components/NavigationBar.vue'
 import EventCard from '@/components/EventCard.vue'
+import EventMap from '@/components/EventMap.vue'
 import MusicManager from '@/components/MusicManager.vue'
 import EventModal from '@/components/EventModal.vue'
 import ArtistCard from '@/components/ArtistCard.vue'
@@ -486,6 +500,7 @@ export default {
   components: {
     NavigationBar,
     EventCard,
+    EventMap,
     MusicManager,
     EventModal,
     ArtistCard,
@@ -631,6 +646,34 @@ export default {
         hour: 'numeric',
         minute: '2-digit',
       })
+    }
+
+    // Format day for event date box
+    const formatEventDay = (timestamp) => {
+      if (!timestamp) return ''
+      let date
+      if (timestamp.toDate) {
+        date = timestamp.toDate()
+      } else if (timestamp instanceof Date) {
+        date = timestamp
+      } else {
+        date = new Date(timestamp)
+      }
+      return date.getDate()
+    }
+
+    // Format month for event date box
+    const formatEventMonth = (timestamp) => {
+      if (!timestamp) return ''
+      let date
+      if (timestamp.toDate) {
+        date = timestamp.toDate()
+      } else if (timestamp instanceof Date) {
+        date = timestamp
+      } else {
+        date = new Date(timestamp)
+      }
+      return date.toLocaleString('en-US', { month: 'short' }).toUpperCase()
     }
 
     // Event management
@@ -904,6 +947,8 @@ export default {
       formatDate,
       formatEventDate,
       formatEventTime,
+      formatEventDay,
+      formatEventMonth,
       editEvent,
       viewEvent,
       deleteEvent,
@@ -1580,6 +1625,173 @@ export default {
   font-size: 0.9rem;
   line-height: 1.5;
   margin-bottom: 0;
+}
+
+/* New Event Card Styles (matching EventCard.vue) */
+.event-card {
+  background: rgba(35, 35, 38, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(187, 24, 20, 0.3);
+}
+
+/* Event Header */
+.event-header {
+  background: linear-gradient(135deg, #bb1814 0%, #960f0c 100%);
+  padding: 1rem 1.25rem;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Event Body */
+.event-body {
+  padding: 1.25rem;
+}
+
+/* Venue and Date Section (No Artist Info on Profile Pages) */
+.event-venue-date {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.event-venue-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-venue {
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+}
+
+.event-description-preview {
+  font-size: 0.9rem;
+  color: #b0b1ba;
+  margin: 0;
+  line-height: 1.4;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Event Info Section */
+.event-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.event-artist-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #bb1814;
+  flex-shrink: 0;
+}
+
+.event-info-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-artist-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.3rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.event-venue {
+  font-size: 0.85rem;
+  color: #b0b1ba;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Date Box on Right */
+.event-date-box {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #bb1814 0%, #960f0c 100%);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 2px 8px rgba(187, 24, 20, 0.3);
+}
+
+.event-date-box .date-day {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+.event-date-box .date-month {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Event Genres as Plain Text */
+.event-genres-text {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #b0b1ba;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Map Preview */
+.event-map-preview {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+/* Interested Count */
+.interested-count {
+  font-size: 0.9rem;
+  color: #b0b1ba;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Event Owner Actions (for Artist Dashboard) */
+.event-owner-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
 }
 
 /* Event Actions */
