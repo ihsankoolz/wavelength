@@ -97,7 +97,7 @@
                   :disabled="followLoading"
                 >
                   <span v-if="followLoading" class="spinner-border spinner-border-sm me-2"></span>
-                  <span v-else-if="!isFollowing" class="follow-plus">+</span>
+                  <span v-else-if="!isFollowing">+</span>
                   {{ isFollowing ? 'UNFOLLOW' : 'FOLLOW' }}
                 </button>
 
@@ -1302,17 +1302,13 @@ export default {
   cursor: not-allowed;
 }
 
-.follow-plus {
-  font-size: 1.3rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-right: 4px;
-}
 
 .social-links {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
 }
 
 .social-icon {
@@ -1356,7 +1352,6 @@ export default {
   height: 180px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -2026,12 +2021,17 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: hidden !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
+.spotify-embed-wrapper iframe,
 .youtube-embed-wrapper iframe {
+  width: 100% !important;
+  height: 232px !important;
+  min-height: 232px !important;
+  max-height: 232px !important;
   border-radius: 8px;
   display: block;
   width: 100%;

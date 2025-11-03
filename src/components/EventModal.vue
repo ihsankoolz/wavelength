@@ -7,160 +7,139 @@
             <!-- Modal Header -->
             <div class="modal-header">
               <h5 class="modal-title">
-                <i class="bi bi-calendar-event"></i>
-                {{ isEditMode ? 'Edit Event' : 'Create New Event' }}
+                {{ isEditMode ? 'EDIT EVENT' : 'CREATE NEW EVENT' }}
               </h5>
-              <button type="button" class="btn-close" @click="closeModal"></button>
+              <button type="button" class="btn-close-modal" @click="closeModal">
+                <i class="bi bi-x-lg"></i>
+              </button>
             </div>
 
             <!-- Modal Body -->
             <div class="modal-body">
               <!-- Success Alert -->
-              <div
-                v-if="successMessage"
-                class="alert alert-success alert-dismissible fade show"
-                role="alert"
-              >
-                <i class="bi bi-check-circle-fill me-2"></i>
+              <div v-if="successMessage" class="modal-alert modal-alert-success">
+                <i class="bi bi-check-circle-fill"></i>
                 {{ successMessage }}
-                <button type="button" class="btn-close" @click="successMessage = ''"></button>
+                <button type="button" class="btn-close-alert" @click="successMessage = ''">
+                  <i class="bi bi-x"></i>
+                </button>
               </div>
 
               <!-- Error Alert -->
-              <div
-                v-if="errorMessage"
-                class="alert alert-danger alert-dismissible fade show"
-                role="alert"
-              >
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <div v-if="errorMessage" class="modal-alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>
                 {{ errorMessage }}
-                <button type="button" class="btn-close" @click="errorMessage = ''"></button>
+                <button type="button" class="btn-close-alert" @click="errorMessage = ''">
+                  <i class="bi bi-x"></i>
+                </button>
               </div>
 
               <form @submit.prevent="saveEvent">
                 <!-- Event Title -->
-                <div class="mb-3">
-                  <label for="title" class="form-label fw-bold">
-                    <i class="bi bi-music-note-beamed text-primary"></i> Event Title *
-                  </label>
+                <div class="modal-field">
+                  <label for="title" class="modal-label">EVENT TITLE *</label>
                   <input
                     type="text"
                     id="title"
                     v-model="formData.title"
-                    class="form-control"
+                    class="modal-input"
                     placeholder="e.g., Summer Jazz Night"
                     required
                     maxlength="100"
                   />
-                  <div class="form-text">Make it catchy and descriptive</div>
                 </div>
 
                 <!-- Event Date -->
-                <div class="mb-3">
-                  <label for="date" class="form-label fw-bold">
-                    <i class="bi bi-calendar3 text-primary"></i> Event Date *
-                  </label>
+                <div class="modal-field">
+                  <label for="date" class="modal-label">EVENT DATE *</label>
                   <input
                     type="date"
                     id="date"
                     v-model="formData.date"
                     :min="minDate"
-                    class="form-control"
+                    class="modal-input"
                     required
                   />
                 </div>
 
                 <!-- Genres (Multiple Selection) -->
-                <div class="mb-3">
-                  <label class="form-label fw-bold">
-                    <i class="bi bi-stars text-primary"></i> Music Genres
-                  </label>
+                <div class="modal-field">
+                  <label class="modal-label">MUSIC GENRES</label>
                   <div class="genres-grid">
                     <div
                       v-for="genre in availableGenres"
                       :key="genre"
-                      class="genre-chip"
+                      class="genre-chip-modal"
                       :class="{ selected: formData.genres.includes(genre) }"
                       @click="toggleGenre(genre)"
                     >
                       {{ genre }}
                     </div>
                   </div>
-                  <div class="form-text">Select genres that describe your event (max 3)</div>
-                  <div v-if="errors.genres" class="text-danger small mt-1">{{ errors.genres }}</div>
+                  <small class="genre-count">Select genres that describe your event (max 3)</small>
+                  <div v-if="errors.genres" class="error-text">{{ errors.genres }}</div>
                 </div>
 
                 <!-- Venue Name -->
-                <div class="mb-3">
-                  <label for="venue" class="form-label fw-bold">
-                    <i class="bi bi-building text-primary"></i> Venue Name *
-                  </label>
+                <div class="modal-field">
+                  <label for="venue" class="modal-label">VENUE NAME *</label>
                   <input
                     type="text"
                     id="venue"
                     v-model="formData.venue"
-                    class="form-control"
+                    class="modal-input"
                     placeholder="e.g., Esplanade Concert Hall"
                     required
                   />
                 </div>
 
                 <!-- Location (Address) -->
-                <div class="mb-3">
-                  <label for="location" class="form-label fw-bold">
-                    <i class="bi bi-geo-alt text-primary"></i> Location / Address *
-                  </label>
+                <div class="modal-field">
+                  <label for="location" class="modal-label">LOCATION / ADDRESS *</label>
                   <input
                     type="text"
                     id="location"
                     v-model="formData.location"
-                    class="form-control"
+                    class="modal-input"
                     placeholder="e.g., 1 Esplanade Drive, Singapore 038981"
                     required
                   />
-                  <div class="form-text">Include full address for better discoverability</div>
                 </div>
 
                 <!-- Description -->
-                <div class="mb-3">
-                  <label for="description" class="form-label fw-bold">
-                    <i class="bi bi-card-text text-primary"></i> Event Description
-                  </label>
+                <div class="modal-field">
+                  <label for="description" class="modal-label">EVENT DESCRIPTION</label>
                   <textarea
                     id="description"
                     v-model="formData.description"
-                    class="form-control"
+                    class="modal-input"
                     rows="3"
                     placeholder="Tell fans what makes this event special..."
                     maxlength="500"
                   ></textarea>
-                  <div class="form-text">{{ formData.description.length }}/500 characters</div>
+                  <small class="genre-count">{{ formData.description.length }}/500 characters</small>
                 </div>
 
-                <div class="mb-3">
-                      <label for="ticket" class="form-label fw-bold">
-                        <i class="bi bi-geo-alt text-primary"></i> Ticketing Link
-                      </label>
-                      <input
-                        type="text"
-                        id="ticket"
-                        v-model="formData.ticket"
-                        class="form-control form-control-lg"
-                        placeholder="e.g., https://ticketmaster.sg/activity/detail/25sg_blackpink"
-                        required
-                      />
-                      <div class="form-text">Add your event ticket link here</div>
-                    </div>
+                <div class="modal-field">
+                  <label for="ticket" class="modal-label">TICKETING LINK</label>
+                  <input
+                    type="text"
+                    id="ticket"
+                    v-model="formData.ticket"
+                    class="modal-input"
+                    placeholder="e.g., https://ticketmaster.sg/activity/detail/25sg_blackpink"
+                    required
+                  />
+                </div>
 
                 <!-- Submit Buttons -->
-                <div class="d-grid gap-2">
-                  <button type="submit" class="btn btn-primary" :disabled="loading">
+                <div class="modal-actions">
+                  <button type="submit" class="btn-modal-primary" :disabled="loading">
                     <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
-                    <i v-else class="bi bi-plus-circle me-2"></i>
-                    {{ loading ? 'Saving...' : isEditMode ? 'Update Event' : 'Create Event' }}
+                    {{ loading ? 'SAVING...' : isEditMode ? 'UPDATE EVENT' : 'CREATE EVENT' }}
                   </button>
-                  <button type="button" class="btn btn-outline-secondary" @click="closeModal">
-                    Cancel
+                  <button type="button" class="btn-modal-cancel" @click="closeModal">
+                    CANCEL
                   </button>
                 </div>
               </form>
@@ -390,11 +369,11 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 1050;
   padding: 1rem;
 }
 
@@ -402,43 +381,140 @@ export default {
   width: 100%;
   max-width: 600px;
   margin: auto;
+  max-height: 90vh;
 }
 
 .modal-content {
-  background: white;
-  border-radius: 12px;
+  background: #1a1a1a;
+  border-radius: 16px;
+  border: none;
   max-height: 90vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .modal-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.5rem;
-  border-bottom: 1px solid #e9ecef;
+  background: #1a1a1a;
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .modal-title {
+  color: white;
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin: 0;
+}
+
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.btn-close-modal:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #bb1814;
 }
 
 .modal-body {
   padding: 1.5rem;
+  background: #1a1a1a;
+  overflow-y: auto;
+  flex: 1 1 auto;
 }
 
-.btn-close {
-  background: none;
+.modal-alert {
+  background: rgba(220, 53, 69, 0.2);
+  border: 1px solid rgba(220, 53, 69, 0.5);
+  color: #ff6b6b;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.modal-alert-success {
+  background: rgba(25, 135, 84, 0.2);
+  border: 1px solid rgba(25, 135, 84, 0.5);
+  color: #75b798;
+}
+
+.btn-close-alert {
+  background: transparent;
   border: none;
-  font-size: 1.5rem;
+  color: #ff6b6b;
+  font-size: 1.25rem;
   cursor: pointer;
-  opacity: 0.5;
+  padding: 0;
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-close:hover {
-  opacity: 1;
+.modal-alert-success .btn-close-alert {
+  color: #75b798;
+}
+
+.modal-field {
+  margin-bottom: 1.5rem;
+}
+
+.modal-label {
+  display: block;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  color: #333;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.modal-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(187, 24, 20, 0.3);
+}
+
+.modal-input textarea {
+  resize: vertical;
+  font-family: inherit;
 }
 
 /* Genres Grid */
@@ -447,73 +523,118 @@ export default {
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 0.5rem;
   margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.genre-chip {
-  padding: 0.5rem;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
+.genre-chip-modal {
+  padding: 8px 12px;
+  background: transparent;
+  border: 2px solid #bb1814;
+  border-radius: 20px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.genre-chip:hover {
-  background: #f8f9fa;
-  border-color: #667eea;
-}
-
-.genre-chip.selected {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-color: #667eea;
-}
-
-/* Form Styles */
-.form-label {
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.form-control {
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
-  padding: 0.75rem;
-}
-
-.form-control:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.75rem;
+  color: #bb1814;
+  will-change: background-color, border-color, color;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
-  transform: translateY(-1px);
+.genre-chip-modal:hover {
+  background: rgba(187, 24, 20, 0.3);
+  border-color: #bb1814;
 }
 
-.btn-primary:disabled {
+.genre-chip-modal.selected {
+  background: #bb1814;
+  color: white;
+  border-color: #bb1814;
+}
+
+.genre-count {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.error-text {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* Modal Actions */
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-modal-primary {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: #bb1814;
+  color: white;
+  border: none;
+  border-radius: 22px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 0;
+}
+
+.btn-modal-primary:hover:not(:disabled) {
+  background: #9d1310;
+}
+
+.btn-modal-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.btn-modal-cancel {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: #bb1814;
+  border: 2px solid #bb1814;
+  border-radius: 22px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 0;
+}
+
+.btn-modal-cancel:hover {
+  background: #bb1814;
+  border-color: #bb1814;
+  color: white;
 }
 
 /* Mobile Responsive */
 @media (max-width: 576px) {
   .modal-content {
-    border-radius: 0;
+    border-radius: 16px;
     max-height: 100vh;
   }
 
   .genres-grid {
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+
+  .modal-dialog {
+    width: 95%;
   }
 }
 </style>

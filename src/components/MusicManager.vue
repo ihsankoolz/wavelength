@@ -1,100 +1,80 @@
 <template>
   <div class="music-manager">
-    <!-- Add Music Button -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h4 class="mb-0"><i class="bi bi-music-note-list"></i> My Music Library</h4>
-      <button class="btn btn-primary" @click="openAddModal">
-        <i class="bi bi-plus-circle"></i> Add New Music
-      </button>
-    </div>
+    <div class="music-library-section">
+      <!-- Music Grid Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="music-library-title">MUSIC LIBRARY</h2>
+        <button class="btn-add-music" @click="openAddModal">
+          + ADD MUSIC
+        </button>
+      </div>
 
-    <!-- Filter Tabs -->
-    <ul class="nav nav-pills mb-4">
-      <li class="nav-item">
-        <button
-          class="nav-link"
-          :class="{ active: filterType === 'all' }"
-          @click="filterType = 'all'"
-        >
-          All ({{ musicLinks.length }})
+      <!-- Filter Tabs -->
+      <div v-if="musicLinks.length > 0" class="filter-tabs mb-4">
+        <button class="filter-tab" :class="{ active: filterType === 'all' }" @click="filterType = 'all'">
+          ALL ({{ musicLinks.length }})
         </button>
-      </li>
-      <li class="nav-item">
-        <button
-          class="nav-link"
-          :class="{ active: filterType === 'single' }"
-          @click="filterType = 'single'"
-        >
-          Singles ({{ getSongsByType('single').length }})
+        <button class="filter-tab" :class="{ active: filterType === 'single' }"
+          @click="filterType = 'single'">
+          SINGLES ({{ getSongsByType('single').length }})
         </button>
-      </li>
-      <li class="nav-item">
-        <button
-          class="nav-link"
-          :class="{ active: filterType === 'album' }"
-          @click="filterType = 'album'"
-        >
-          Albums ({{ getSongsByType('album').length }})
+        <button class="filter-tab" :class="{ active: filterType === 'album' }"
+          @click="filterType = 'album'">
+          ALBUMS ({{ getSongsByType('album').length }})
         </button>
-      </li>
-      <li class="nav-item">
-        <button
-          class="nav-link"
-          :class="{ active: filterType === 'video' }"
-          @click="filterType = 'video'"
-        >
-          Videos ({{ getSongsByType('video').length }})
+        <button class="filter-tab" :class="{ active: filterType === 'video' }"
+          @click="filterType = 'video'">
+          VIDEOS ({{ getSongsByType('video').length }})
         </button>
-      </li>
-    </ul>
+      </div>
+    </div>
 
     <!-- Music Grid -->
     <div v-if="filteredMusicLinks.length > 0" class="music-grid">
-      <div v-for="music in displayedMusicLinks" :key="music.id" class="music-card">
+      <div v-for="music in displayedMusicLinks" :key="music.id" class="music-item-card">
         <!-- Platform Badge -->
-        <div class="platform-badge" :class="music.platform">
+        <div class="platform-badge-public" :class="music.platform">
           <i class="bi" :class="music.platform === 'spotify' ? 'bi-spotify' : 'bi-youtube'"></i>
         </div>
 
+        <!-- Music Type Badge -->
+        <span class="type-badge" :class="getTypeBadgeClass(music.type)">
+          {{ music.type }}
+        </span>
+
         <!-- Music Info -->
-        <div class="music-info">
-          <h5 class="music-title">{{ music.title }}</h5>
-          <div class="music-meta">
-            <span class="badge" :class="getTypeBadgeClass(music.type)">
-              {{ music.type }}
-            </span>
-            <span class="text-muted ms-2">
-              <i class="bi bi-calendar3"></i>
-              {{ formatDate(music.addedAt) }}
-            </span>
-          </div>
-          <div class="music-stats mt-2">
-            <span class="stat-item"> <i class="bi bi-heart"></i> {{ music.likes || 0 }} </span>
-            <span class="stat-item ms-3">
-              <i class="bi bi-play-circle"></i> {{ music.plays || 0 }}
-            </span>
+        <div class="music-item-info">
+          <div class="music-item-header">
+            <img
+              :src="artistProfileImage || 'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff'"
+              :alt="artistName || 'Artist'"
+              class="music-artist-avatar"
+            />
+            <div class="music-title-artist">
+              <h5 class="music-item-title">{{ music.title }}</h5>
+              <p class="music-item-artist">{{ artistName || 'Artist' }}</p>
+            </div>
           </div>
 
           <!-- Genres -->
-          <div v-if="music.genres && music.genres.length > 0" class="music-genres mt-2">
-            <span v-for="genre in music.genres.slice(0, 3)" :key="genre" class="genre-tag">
-              {{ genre }}
-            </span>
+          <div v-if="music.genres && music.genres.length > 0" class="music-item-genres">
+            <span class="genre-tag-small">{{ music.genres.slice(0, 2).join(', ') }}</span>
           </div>
         </div>
 
         <!-- Embedded Player -->
-        <div class="embed-container mt-3">
+        <div class="embed-container">
           <!-- Spotify Embed -->
-          <div v-if="music.platform === 'spotify'" class="spotify-embed-wrapper">
+          <div v-if="music.platform === 'spotify'" class="spotify-embed-wrapper" :class="{ 'is-album': music.type === 'album' }">
             <iframe
               :src="music.embedUrl"
               width="100%"
-              height="152"
+              height="232"
               frameborder="0"
               allowtransparency="true"
               allow="encrypted-media"
               loading="lazy"
+              style="height: 232px !important; min-height: 232px !important; max-height: 232px !important;"
             ></iframe>
           </div>
 
@@ -103,26 +83,23 @@
             <iframe
               :src="music.embedUrl"
               width="100%"
-              height="200"
+              height="232"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
               loading="lazy"
+              style="height: 232px !important; min-height: 232px !important; max-height: 232px !important;"
             ></iframe>
           </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="music-actions mt-3">
-          <button class="btn btn-sm btn-outline-primary" @click="editMusic(music)" title="Edit">
-            <i class="bi bi-pencil"></i>
+          <button class="btn-action-edit" @click="editMusic(music)" title="Edit">
+            <i class="bi bi-pencil"></i> Edit
           </button>
-          <button
-            class="btn btn-sm btn-outline-danger"
-            @click="confirmDelete(music)"
-            title="Delete"
-          >
-            <i class="bi bi-trash"></i>
+          <button class="btn-action-delete" @click="confirmDelete(music)" title="Delete">
+            <i class="bi bi-trash"></i> Delete
           </button>
         </div>
       </div>
@@ -130,7 +107,7 @@
 
     <!-- See More Music Button -->
     <div v-if="filteredMusicLinks.length > 6 && !showAllMusic" class="text-center mt-4">
-      <button class="btn btn-outline-primary btn-lg" @click="showAllMusic = true">
+      <button class="btn-see-more" @click="showAllMusic = true">
         <i class="bi bi-chevron-down"></i>
         See More Music ({{ filteredMusicLinks.length - 6 }} more)
       </button>
@@ -138,28 +115,20 @@
 
     <!-- Show Less Music Button -->
     <div v-if="showAllMusic && filteredMusicLinks.length > 6" class="text-center mt-4">
-      <button class="btn btn-outline-secondary" @click="showAllMusic = false">
+      <button class="btn-see-less" @click="showAllMusic = false">
         <i class="bi bi-chevron-up"></i>
         Show Less
       </button>
     </div>
 
-    <!-- Empty State -->
-    <div v-if="filteredMusicLinks.length === 0" class="empty-state text-center py-5">
-      <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
-      <h5 class="text-muted">
-        {{ filterType === 'all' ? 'No music added yet' : `No ${filterType}s found` }}
-      </h5>
-      <p class="text-muted">
-        {{
-          filterType === 'all'
-            ? 'Start building your music library by adding your first track!'
-            : `Add some ${filterType}s to your library`
-        }}
-      </p>
-      <button v-if="filterType === 'all'" class="btn btn-primary" @click="openAddModal">
-        <i class="bi bi-plus-circle"></i> Add Your First Music
-      </button>
+    <!-- No Music Message -->
+    <div v-if="musicLinks.length === 0" class="text-center py-5">
+      <i class="bi bi-music-note-list fs-1 text-white mb-3"></i>
+      <p class="text-white">This artist hasn't uploaded any music yet.</p>
+    </div>
+    <div v-else-if="filteredMusicLinks.length === 0" class="text-center py-5">
+      <i class="bi bi-music-note-list fs-1 text-white mb-3"></i>
+      <p class="text-white">No {{ filterType }}s found.</p>
     </div>
 
     <!-- Add/Edit Modal -->
@@ -168,28 +137,31 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
-              <i class="bi" :class="isEditMode ? 'bi-pencil' : 'bi-plus-circle'"></i>
-              {{ isEditMode ? 'Edit Music' : 'Add New Music' }}
+              {{ isEditMode ? 'EDIT MUSIC' : 'ADD NEW MUSIC' }}
             </h5>
-            <button type="button" class="btn-close" @click="closeModal"></button>
+            <button type="button" class="btn-close-modal" @click="closeModal">
+              <i class="bi bi-x-lg"></i>
+            </button>
           </div>
 
           <div class="modal-body">
             <!-- Error Alert -->
-            <div v-if="modalError" class="alert alert-danger alert-dismissible fade show">
+            <div v-if="modalError" class="modal-alert">
               <i class="bi bi-exclamation-triangle"></i>
               {{ modalError }}
-              <button type="button" class="btn-close" @click="modalError = ''"></button>
+              <button type="button" class="btn-close-alert" @click="modalError = ''">
+                <i class="bi bi-x"></i>
+              </button>
             </div>
 
             <form @submit.prevent="saveMusic">
               <!-- Title -->
-              <div class="mb-3">
-                <label class="form-label fw-bold"> <i class="bi bi-music-note"></i> Title * </label>
+              <div class="modal-field">
+                <label class="modal-label">TITLE *</label>
                 <input
                   type="text"
                   v-model="formData.title"
-                  class="form-control"
+                  class="modal-input"
                   placeholder="e.g., My Awesome Song"
                   required
                   maxlength="100"
@@ -197,8 +169,8 @@
               </div>
 
               <!-- Type -->
-              <div class="mb-3">
-                <label class="form-label fw-bold"> <i class="bi bi-tags"></i> Type * </label>
+              <div class="modal-field">
+                <label class="modal-label">TYPE *</label>
                 <div class="btn-group w-100" role="group">
                   <!-- Show Single/Album only for Spotify -->
                   <template v-if="formData.platform === 'spotify'">
@@ -209,8 +181,8 @@
                       v-model="formData.type"
                       value="single"
                     />
-                    <label class="btn btn-outline-primary" for="type-single">
-                      <i class="bi bi-music-note"></i> Single
+                    <label class="btn btn-outline-modal" for="type-single">
+                      SINGLE
                     </label>
 
                     <input
@@ -220,8 +192,8 @@
                       v-model="formData.type"
                       value="album"
                     />
-                    <label class="btn btn-outline-primary" for="type-album">
-                      <i class="bi bi-disc"></i> Album
+                    <label class="btn btn-outline-modal" for="type-album">
+                      ALBUM
                     </label>
                   </template>
 
@@ -235,25 +207,16 @@
                       value="video"
                       checked
                     />
-                    <label class="btn btn-outline-primary" for="type-video">
-                      <i class="bi bi-camera-video"></i> Video
+                    <label class="btn btn-outline-modal" for="type-video">
+                      VIDEO
                     </label>
                   </template>
                 </div>
-                <small class="text-muted d-block mt-1">
-                  {{
-                    formData.platform === 'spotify'
-                      ? 'Spotify supports singles and albums only'
-                      : 'YouTube supports videos only'
-                  }}
-                </small>
               </div>
 
               <!-- Platform -->
-              <div class="mb-3">
-                <label class="form-label fw-bold">
-                  <i class="bi bi-broadcast"></i> Platform *
-                </label>
+              <div class="modal-field">
+                <label class="modal-label">PLATFORM *</label>
                 <div class="btn-group w-100" role="group">
                   <input
                     type="radio"
@@ -262,8 +225,8 @@
                     v-model="formData.platform"
                     value="spotify"
                   />
-                  <label class="btn btn-outline-success" for="platform-spotify">
-                    <i class="bi bi-spotify"></i> Spotify
+                  <label class="btn btn-outline-modal" for="platform-spotify">
+                    SPOTIFY
                   </label>
 
                   <input
@@ -273,65 +236,51 @@
                     v-model="formData.platform"
                     value="youtube"
                   />
-                  <label class="btn btn-outline-danger" for="platform-youtube">
-                    <i class="bi bi-youtube"></i> YouTube
+                  <label class="btn btn-outline-modal" for="platform-youtube">
+                    YOUTUBE
                   </label>
                 </div>
               </div>
 
               <!-- URL -->
-              <div class="mb-3">
-                <label class="form-label fw-bold">
-                  <i class="bi bi-link-45deg"></i>
-                  {{ formData.platform === 'spotify' ? 'Spotify' : 'YouTube' }} URL *
+              <div class="modal-field">
+                <label class="modal-label">
+                  {{ formData.platform === 'spotify' ? 'SPOTIFY' : 'YOUTUBE' }} URL *
                 </label>
                 <input
                   type="url"
                   v-model="formData.url"
-                  class="form-control"
+                  class="modal-input"
                   :placeholder="getUrlPlaceholder()"
                   required
                 />
-                <div class="form-text">
-                  <small>
-                    <i class="bi bi-info-circle"></i>
-                    {{ getUrlHelp() }}
-                  </small>
-                </div>
               </div>
 
               <!-- Genres -->
-              <div class="mb-3">
-                <label class="form-label fw-bold">
-                  <i class="bi bi-music-note-list"></i> Genres (Optional)
-                </label>
+              <div class="modal-field">
+                <label class="modal-label">GENRES (OPTIONAL)</label>
                 <div class="genres-grid">
                   <div
                     v-for="genre in availableGenres"
                     :key="genre"
-                    class="genre-chip"
+                    class="genre-chip-modal"
                     :class="{ selected: formData.genres.includes(genre) }"
                     @click="toggleGenre(genre)"
                   >
-                    {{ genre }}
+                    {{ genre.toUpperCase() }}
                   </div>
                 </div>
-                <small class="text-muted">{{ formData.genres.length }}/5 genres selected</small>
+                <small class="genre-count">{{ formData.genres.length }}/5 genres selected</small>
               </div>
 
               <!-- Submit Buttons -->
-              <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary" :disabled="loading">
+              <div class="modal-actions">
+                <button type="submit" class="btn-modal-primary" :disabled="loading">
                   <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
-                  <i
-                    v-else
-                    class="bi"
-                    :class="isEditMode ? 'bi-check-circle' : 'bi-plus-circle'"
-                  ></i>
-                  {{ loading ? 'Saving...' : isEditMode ? 'Update Music' : 'Add Music' }}
+                  {{ loading ? 'SAVING...' : isEditMode ? 'UPDATE MUSIC' : 'ADD MUSIC' }}
                 </button>
-                <button type="button" class="btn btn-outline-secondary" @click="closeModal">
-                  Cancel
+                <button type="button" class="btn-modal-cancel" @click="closeModal">
+                  CANCEL
                 </button>
               </div>
             </form>
@@ -400,6 +349,8 @@ export default {
       loading: false,
       modalError: '',
       newMusicAdded: null, // Track new music for notifications
+      artistName: '',
+      artistProfileImage: '',
       formData: {
         title: '',
         type: 'single',
@@ -411,24 +362,26 @@ export default {
       musicToDelete: null,
       showAllMusic: false, // Track if showing all music or just first 6
       availableGenres: [
-        'Pop',
+        'Indie',
+        'Jazz',
+        'Electronic',
         'Rock',
+        'Pop',
         'Hip Hop',
         'R&B',
-        'Electronic',
-        'Jazz',
-        'Classical',
-        'Country',
-        'Indie',
         'Folk',
+        'Classical',
         'Metal',
+        'Alternative',
+        'Soul',
+        'Blues',
         'Punk',
         'Reggae',
-        'Blues',
-        'Alternative',
+        'Country',
         'K-Pop',
-        'Mandopop',
-        'Cantopop',
+        'EDM',
+        'Funk',
+        'Gospel',
       ],
     }
   },
@@ -475,6 +428,8 @@ export default {
         if (artistDoc.exists()) {
           const data = artistDoc.data()
           this.musicLinks = data.musicLinks || []
+          this.artistName = data.artistName || ''
+          this.artistProfileImage = data.profileImage || ''
 
           // Sort by newest first
           this.musicLinks.sort((a, b) => {
@@ -684,6 +639,10 @@ export default {
       return classes[type] || 'bg-secondary'
     },
 
+    capitalizeType(type) {
+      return type.charAt(0).toUpperCase() + type.slice(1)
+    },
+
     formatDate(timestamp) {
       if (!timestamp) return 'Unknown'
       const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp)
@@ -699,18 +658,71 @@ export default {
 
 <style scoped>
 .music-manager {
-  padding: 1rem 0;
+  padding: 0;
+}
+
+/* Music Library Section */
+.music-library-section {
+  margin-bottom: 40px;
+}
+
+.music-library-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-add-music {
+  background: #bb1814;
+  color: white;
+  border: none;
+  border-radius: 22px;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-add-music:hover {
+  background: #9d1310;
+  transform: translateY(-2px);
 }
 
 /* Filter Tabs */
-.nav-pills .nav-link {
-  color: #666;
-  font-weight: 500;
-  border-radius: 20px;
+.filter-tabs {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.nav-pills .nav-link.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.filter-tab {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.filter-tab:hover {
+  border-color: #bb1814;
+  color: #bb1814;
+}
+
+.filter-tab.active {
+  background: #bb1814;
+  border-color: #bb1814;
+  color: white;
 }
 
 /* Music Grid */
@@ -720,138 +732,267 @@ export default {
   gap: 1.5rem;
 }
 
-.music-card {
-  background: white;
+.music-item-card {
+  background: rgba(35, 35, 38, 0.8);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-.music-card:hover {
+.music-item-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-.platform-badge {
+.platform-badge-public {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
-.platform-badge.spotify {
+.platform-badge-public.spotify {
   background: #1db954;
 }
 
-.platform-badge.youtube {
+.platform-badge-public.youtube {
   background: #ff0000;
 }
 
-.music-info {
-  padding-right: 50px;
+.type-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: white;
+  margin-bottom: 0.5rem;
 }
 
-.music-title {
+.type-badge.bg-primary {
+  background: #0d6efd !important;
+}
+
+.type-badge.bg-success {
+  background: #198754 !important;
+}
+
+.type-badge.bg-danger {
+  background: #dc3545 !important;
+}
+
+.type-badge.bg-secondary {
+  background: #6c757d !important;
+}
+
+.music-item-info {
+  padding-right: 40px;
+  margin-top: 0.5rem;
+}
+
+.music-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.music-artist-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.music-title-artist {
+  flex: 1;
+  min-width: 0;
+}
+
+.music-item-title {
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
+  color: white;
+  margin-bottom: 0.25rem;
 }
 
-.music-meta {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.music-stats {
-  display: flex;
-  align-items: center;
-  color: #666;
+.music-item-artist {
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
+  margin: 0;
 }
 
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.music-genres {
+.music-item-genres {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.genre-tag {
-  background: #f0f0f0;
-  color: #666;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 500;
-}
-
-.music-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.music-actions .btn {
-  flex: 1;
+.genre-tag-small {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.85rem;
+  font-weight: normal;
+  margin-right: 0;
+  text-transform: none;
 }
 
 /* Embed Containers */
 .embed-container {
-  border-radius: 12px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
   overflow: hidden;
-  background: #f8f9fa;
+  margin-bottom: 0;
+  height: 232px !important;
+  min-height: 232px !important;
+  max-height: 232px !important;
+  position: relative;
+  /* Force container to exact size */
+  box-sizing: border-box;
+}
+
+.spotify-embed-wrapper,
+.youtube-embed-wrapper {
+  width: 100% !important;
+  height: 232px !important;
+  min-height: 232px !important;
+  max-height: 232px !important;
+  border-radius: 8px;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  /* Clip any overflow */
+  clip-path: inset(0 0 0 0);
+}
+
+.spotify-embed-wrapper iframe,
+.youtube-embed-wrapper iframe {
+  width: 100% !important;
+  height: 232px !important;
+  min-height: 232px !important;
+  max-height: 232px !important;
+  border-radius: 8px;
+  display: block !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  /* Force exact dimensions - no scaling */
+  box-sizing: border-box !important;
+  /* Clip overflow for albums */
+  overflow: hidden !important;
+}
+
+/* Additional enforcement for Spotify albums */
+.spotify-embed-wrapper {
+  /* Absolutely position and clip */
+  position: absolute !important;
+  overflow: hidden !important;
+}
+
+.spotify-embed-wrapper.is-album {
+  /* Extra clipping for albums that try to be taller */
+  clip: rect(0px, 100%, 232px, 0px) !important;
+  -webkit-clip-path: inset(0) !important;
+  clip-path: inset(0 0 0 0) !important;
 }
 
 .spotify-embed-wrapper iframe {
-  border-radius: 12px;
+  /* Prevent Spotify from overriding dimensions */
+  transform: scale(1) !important;
+  /* Ensure no internal scaling */
+  object-fit: fill !important;
+  /* Force exact height - override any Spotify defaults */
+  height: 232px !important;
+  min-height: 232px !important;
+  max-height: 232px !important;
 }
 
-.youtube-embed-wrapper {
-  position: relative;
-  width: 100%;
+/* Music Actions */
+.music-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 1rem;
 }
 
-.youtube-embed-wrapper iframe {
-  border-radius: 12px;
+.btn-action-edit,
+.btn-action-delete {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  border-radius: 16px;
 }
 
-/* Empty State */
-.empty-state {
-  background: white;
-  border-radius: 12px;
-  padding: 3rem;
+.btn-action-edit:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #bb1814;
+  transform: translateY(-1px);
+}
+
+.btn-action-delete:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #dc3545;
+  transform: translateY(-1px);
+}
+
+/* See More/Less Buttons */
+.btn-see-more,
+.btn-see-less {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 22px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-see-more:hover,
+.btn-see-less:hover {
+  border-color: #bb1814;
+  color: #bb1814;
+  transform: translateY(-2px);
 }
 
 /* Modal */
 .modal-overlay {
   position: fixed;
-  top: 1;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1050;
+  /* Remove backdrop-filter for better performance */
 }
 
 .modal-dialog {
@@ -864,30 +1005,204 @@ export default {
 .modal-content {
   border-radius: 16px;
   border: none;
-  background: white;
+  background: #1a1a1a;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  /* Use transform instead of box-shadow for better performance */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .modal-header {
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.5rem;
-  background: white;
+  background: #1a1a1a;
   flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.btn-close-modal:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #bb1814;
 }
 
 .modal-body {
   padding: 1.5rem;
-  background: white;
+  background: #1a1a1a;
   overflow-y: auto;
   flex: 1 1 auto;
 }
 
-.modal-footer {
-  background: white; /* FIX: Ensure footer has background */
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #f0f0f0;
+.modal-alert {
+  background: rgba(220, 53, 69, 0.2);
+  border: 1px solid rgba(220, 53, 69, 0.5);
+  color: #ff6b6b;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.btn-close-alert {
+  background: transparent;
+  border: none;
+  color: #ff6b6b;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-field {
+  margin-bottom: 1.5rem;
+}
+
+.modal-label {
+  display: block;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  color: #333;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.modal-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(187, 24, 20, 0.3);
+}
+
+/* Button Groups - Dark Theme Style */
+.btn-group {
+  display: flex;
+  gap: 0;
+  width: 100%;
+}
+
+.btn-check {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  pointer-events: none;
+}
+
+.btn-outline-modal {
+  flex: 1;
+  padding: 8px 20px;
+  background: transparent;
+  color: #bb1814;
+  border: 2px solid #bb1814;
+  border-radius: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  position: relative;
+  will-change: background-color, border-color, color;
+}
+
+/* First button - left side rounded */
+.btn-group .btn-outline-modal:first-of-type {
+  border-top-left-radius: 20px !important;
+  border-bottom-left-radius: 20px !important;
+  border-right: none;
+}
+
+/* Last button - right side rounded */
+.btn-group .btn-outline-modal:last-of-type {
+  border-top-right-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+}
+
+/* Middle buttons - no left border, no right border */
+.btn-group .btn-outline-modal:not(:first-of-type):not(:last-of-type) {
+  border-left: none;
+  border-right: none;
+}
+
+/* All buttons except first - no left border */
+.btn-group .btn-outline-modal:not(:first-of-type) {
+  border-left: none;
+}
+
+.btn-outline-modal:hover {
+  background: rgba(187, 24, 20, 0.15);
+  color: #bb1814;
+}
+
+.btn-check:checked + .btn-outline-modal {
+  background: #bb1814;
+  color: white;
+  border-color: #bb1814;
+  z-index: 1;
+}
+
+.btn-check:checked + .btn-outline-modal:hover {
+  background: #9d1310;
+  border-color: #9d1310;
+}
+
+/* Optimize button transitions for better performance */
+.btn-check:checked + .btn-outline-modal {
+  will-change: background-color, border-color, color;
+}
+
+/* Ensure checked button has proper borders */
+.btn-check:checked + .btn-outline-modal:not(:first-child) {
+  border-left: 2px solid #bb1814;
+}
+
+.btn-check:checked + .btn-outline-modal:not(:last-child) {
+  border-right: 2px solid #bb1814;
 }
 
 /* Genre Selection in Modal */
@@ -896,33 +1211,98 @@ export default {
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 0.5rem;
   margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.genre-chip {
+.genre-chip-modal {
   padding: 8px 12px;
-  background: #f8f9fa;
-  border: 2px solid #e9ecef;
+  background: transparent;
+  border: 2px solid #bb1814;
   border-radius: 20px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.85rem;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #bb1814;
+  text-transform: uppercase;
+  will-change: background-color, border-color, color;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
-.genre-chip:hover {
-  background: #e9ecef;
+.genre-chip-modal:hover {
+  background: rgba(187, 24, 20, 0.3);
+  border-color: #bb1814;
 }
 
-.genre-chip.selected {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.genre-chip-modal.selected {
+  background: #bb1814;
   color: white;
-  border-color: #667eea;
+  border-color: #bb1814;
 }
 
-/* Button Groups */
-.btn-group .btn-check:checked + .btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
+.genre-count {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* Modal Actions */
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-modal-primary {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: #bb1814;
+  color: white;
+  border: none;
+  border-radius: 22px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 0;
+}
+
+.btn-modal-primary:hover:not(:disabled) {
+  background: #9d1310;
+  /* Remove transform to reduce repaints */
+}
+
+.btn-modal-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-modal-cancel {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: #bb1814;
+  border: 2px solid #bb1814;
+  border-radius: 22px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 0;
+}
+
+.btn-modal-cancel:hover {
+  background: #bb1814;
+  border-color: #bb1814;
   color: white;
 }
 
@@ -930,6 +1310,20 @@ export default {
 @media (max-width: 768px) {
   .music-grid {
     grid-template-columns: 1fr;
+  }
+
+  .filter-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .filter-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .music-library-title {
+    font-size: 1.5rem;
   }
 
   .modal-dialog {
