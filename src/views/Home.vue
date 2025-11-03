@@ -770,6 +770,9 @@ export default {
           ...doc.data(),
         }))
 
+        // Filter out current user if they are an artist
+        this.allArtists = this.allArtists.filter((artist) => artist.id !== this.userId)
+
         // Get top 6 artists for discovery section
         this.recommendedArtists = this.getRecommendedArtists()
       } catch (error) {
