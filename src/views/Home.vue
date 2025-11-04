@@ -324,7 +324,7 @@
           </section>
 
           <!-- Discover Artists Section (One Row) -->
-          <section class="discover-artists-section mb-5">
+          <section id="discover-artists" class="discover-artists-section mb-5">
             <div class="section-header d-flex justify-content-between align-items-center mb-3">
               <div>
                 <h2 class="h4 mb-1">Artists to watch out for</h2>
@@ -734,6 +734,17 @@ export default {
     },
   },
 
+  watch: {
+    // Watch for route hash changes
+    '$route.hash'(newHash) {
+      if (newHash === '#discover-artists') {
+        this.$nextTick(() => {
+          this.scrollToDiscoverArtists()
+        })
+      }
+    },
+  },
+
   async mounted() {
     await this.loadUserData()
     await initializeUserInteractions() // Initialize interaction tracking
@@ -741,6 +752,13 @@ export default {
     await this.loadArtists()
     await this.loadEvents()
     this.isLoading = false
+    
+    // Scroll to discover-artists section if hash is present
+    this.$nextTick(() => {
+      if (this.$route.hash === '#discover-artists') {
+        this.scrollToDiscoverArtists()
+      }
+    })
   },
 
   methods: {
@@ -1189,6 +1207,23 @@ export default {
     navigateToArtist(artistId) {
       trackArtistClick(artistId) // Track the click
       this.$router.push(`/artist/${artistId}`)
+    },
+
+    scrollToDiscoverArtists() {
+      this.$nextTick(() => {
+        const element = document.getElementById('discover-artists')
+        if (element) {
+          // Account for fixed navigation bar offset
+          const offset = 80 // Adjust this value based on your nav bar height
+          const elementPosition = element.getBoundingClientRect().top
+          const offsetPosition = elementPosition + window.pageYOffset - offset
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          })
+        }
+      })
     },
   },
 }
