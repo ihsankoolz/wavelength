@@ -165,10 +165,22 @@ export default {
       },
       windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1200,
       currentEventPage: 0,
-      eventsPerPage: 4,
     }
   },
   computed: {
+    eventsPerPage() {
+      const width = this.windowWidth
+
+      if (width < 576) {
+        return 1 // Mobile: 1 card
+      } else if (width < 768) {
+        return 2 // Small tablets: 2 cards
+      } else if (width < 992) {
+        return 3 // Medium tablets: 3 cards
+      } else {
+        return 4 // Large desktop: 4 cards
+      }
+    },
     paginatedInterestedEvents() {
       const pages = []
       let startIndex = 0
@@ -186,7 +198,7 @@ export default {
     graphHeight() {
       // Responsive height based on window width (Bootstrap breakpoints)
       const width = this.windowWidth
-      
+
       // Extra small devices (portrait phones, less than 576px)
       if (width < 576) {
         return 400
@@ -212,7 +224,7 @@ export default {
   async mounted() {
     await this.loadUserInterests()
     await this.loadAllArtists()
-    
+
     // Add window resize listener for responsive height
     if (typeof window !== 'undefined') {
       this.handleResize = () => {
@@ -370,9 +382,20 @@ export default {
 
 <style scoped>
 .my-interests-page {
+  font-family: 'Poppins', sans-serif;
+  background: #191717;
   min-height: 100vh;
-  background: #19181c;
-  padding-top: 95px;
+  width: 100%;
+  color: white;
+  position: relative;
+  padding-top: 65px;
+}
+
+.content-wrapper {
+  padding-bottom: 40px;
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
 }
 
 .wave-svg {
@@ -409,22 +432,33 @@ export default {
   z-index: 0;
 }
 
-.content-wrapper {
-  padding-bottom: 40px;
-  position: relative;
-  z-index: 1;
-}
-
 /* Welcome Section (matching BrowseEvents.vue) */
 .welcome-section h1 {
   color: #fff;
   letter-spacing: 1px;
   font-size: 2.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding-top: 2rem;
 }
 
 .welcome-section p {
   color: #d4d5db;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .welcome-section h1 {
+    font-size: 2rem;
+    padding-top: 1rem; /* ADD this */
+  }
+  
+  .welcome-section p,
+  .header-subtitle {
+    font-size: 0.85rem; /* ADD */
+  }
 }
 
 /* Genre Heading */
@@ -439,115 +473,123 @@ export default {
 
 .header-subtitle {
   color: #b0b1ba;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 400;
-}
-
-.text-muted {
-  color: #b0b1ba !important;
-}
-
-.card {
-  border: none;
-  border-radius: 12px;
-  background: #2a2a2a;
-}
-
-.card-body {
-  color: #999;
-}
-
-.badge {
-  background-color: #b51414 !important;
-}
-
-.btn-primary {
-  background: #bb1814;
-  border: none;
-  border-radius: 25px;
-  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  transform: none;
 }
 
-.btn-primary:hover {
-  background: #960f0c;
+@media (max-width: 768px) {
+  .welcome-section h1 {
+    font-size: 2rem;
+    padding-top: 1rem;
+  }
 }
 
-.spinner-border {
-  color: #b51414 !important;
-}
+  .text-muted {
+    color: #b0b1ba !important;
+  }
 
-/* Carousel Container */
-.carousel-container {
-  position: relative;
-  padding: 0;
-}
+  .card {
+    border: none;
+    border-radius: 12px;
+    background: #2a2a2a;
+  }
 
-.carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: white;
-  border: none;
-  color: #000;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  pointer-events: none;
-}
+  .card-body {
+    color: #999;
+  }
 
-.carousel-container:hover .carousel-arrow {
-  opacity: 1;
-  pointer-events: auto;
-}
+  .badge {
+    background-color: #b51414 !important;
+  }
 
-.carousel-arrow:hover {
-  background: #bb1814;
-  color: white;
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
+  .btn-primary {
+    background: #bb1814;
+    border: none;
+    border-radius: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transform: none;
+  }
 
-.carousel-arrow.left {
-  left: -25px;
-}
+  .btn-primary:hover {
+    background: #960f0c;
+  }
 
-.carousel-arrow.right {
-  right: -25px;
-}
+  .spinner-border {
+    color: #b51414 !important;
+  }
 
-.carousel-arrow i {
-  font-size: 1.5rem;
-}
+  /* Carousel Container */
+  .carousel-container {
+    position: relative;
+    padding: 0;
+  }
 
-.artists-carousel {
-  overflow: hidden;
-  width: 100%;
-}
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: none;
+    color: #000;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    pointer-events: none;
+  }
 
-.artists-grid-carousel {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
+  .carousel-container:hover .carousel-arrow {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
-.carousel-page.artists-page {
-  min-width: 100%;
-  width: 100%;
-  flex-shrink: 0;
-}
+  .carousel-arrow:hover {
+    background: #bb1814;
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
 
-/* Network Graph Section */
-.network-graph-section {
-  width: 100%;
-}
-</style>
+  .carousel-arrow.left {
+    left: -25px;
+  }
+
+  .carousel-arrow.right {
+    right: -25px;
+  }
+
+  .carousel-arrow i {
+    font-size: 1.5rem;
+  }
+
+  .artists-carousel {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .artists-grid-carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .carousel-page.artists-page {
+    min-width: 100%;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  /* Network Graph Section */
+  .network-graph-section {
+    width: 100%;
+  }</style>

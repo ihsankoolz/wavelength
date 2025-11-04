@@ -656,8 +656,8 @@ export default {
 .content-wrapper {
   position: relative;
   z-index: 1;
-  margin-top: 70px;
-  padding-bottom: 60px;
+  margin-top: 65px;
+  padding-bottom: 40px;
 }
 
 /* Dynamic Wave Background */
@@ -703,10 +703,11 @@ export default {
   margin-bottom: 0.5rem;
   letter-spacing: 1px;
   text-transform: uppercase;
+  padding-top: 2rem;
 }
 
 .header-subtitle {
-  color: #d4d5db;
+  color: #b0b1ba;
   font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;

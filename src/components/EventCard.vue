@@ -10,11 +10,7 @@
     <div class="event-body">
       <!-- Artist Info & Details -->
       <div class="event-info" @click="viewDetails">
-        <img
-          :src="artist?.profileImage || defaultImage"
-          :alt="artist?.artistName"
-          class="event-artist-photo"
-        />
+        <img :src="artist?.profileImage || defaultImage" :alt="artist?.artistName" class="event-artist-photo" />
         <div class="event-info-text">
           <h5 class="event-artist-name">{{ event.artistName }}</h5>
           <p class="event-venue">{{ event.venue || event.location }}</p>
@@ -44,12 +40,8 @@
       </p>
 
       <!-- I'm Interested Button -->
-      <button
-        class="btn-interested"
-        :class="{ 'btn-interested-active': isInterested }"
-        @click.stop="toggleInterest"
-        :disabled="loading"
-      >
+      <button class="btn-interested" :class="{ 'btn-interested-active': isInterested }" @click.stop="toggleInterest"
+        :disabled="loading">
         <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
         <span v-else-if="isInterested" class="me-2">✓</span>
         {{ loading ? 'Updating...' : isInterested ? 'INTERESTED' : "I'M INTERESTED" }}
@@ -195,6 +187,7 @@ export default {
 </script>
 
 <style scoped>
+/* Event Card */
 .event-card {
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
   border-radius: 12px;
@@ -203,6 +196,9 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   font-family: 'Poppins', sans-serif;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .event-card:hover {
@@ -222,11 +218,17 @@ export default {
   text-align: center;
   letter-spacing: 0.5px;
   font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Event Body */
 .event-body {
   padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Event Info Section */
@@ -258,6 +260,9 @@ export default {
   color: #fff;
   margin-bottom: 0.3rem;
   font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .event-venue {
@@ -265,6 +270,9 @@ export default {
   color: #b0b1ba;
   margin: 0;
   font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Date Box on Right */
@@ -313,6 +321,16 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 1rem;
+  position: relative;
+}
+
+.event-map-preview :deep(iframe),
+.event-map-preview :deep(div) {
+  position: absolute;
+  top: -32px;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 80px);
 }
 
 /* Interested Count */
@@ -345,8 +363,8 @@ export default {
 }
 
 .btn-interested:hover {
-  background: #6E0B0B;
-  border: 2px solid #6E0B0B;
+  background: #6e0b0b;
+  border: 2px solid #6e0b0b;
   color: white;
   transform: none;
 }
@@ -371,14 +389,11 @@ export default {
   height: 1rem;
   border-width: 0.15em;
 }
+
+/* Responsive Styles - Remove all the responsive sizing */
+@media (max-width: 768px) {
+  .event-info {
+    gap: 0.75rem;
+  }
+}
 </style>
-``` --- ## 🎯 **What Changed:** ### ✅ **Kept Your Features:** - Google Maps small preview ✓ - All
-your styling ✓ - Event details display ✓ ### ⭐ **Added New Features:** 1. **Interest Status
-Checking** - Checks if user already interested on mount 2. **Toggle Interest** - Real button that
-saves to Firestore 3. **Loading State** - Shows spinner while saving 4. **Button Changes** - Changes
-from "Mark as Interested" to "Interested ✓" 5. **Color Changes** - Green when interested, blue
-outline when not 6. **Click Handling** - `@click.stop` prevents card click when clicking button/map
-7. **Real-time Count Update** - Updates interested count immediately --- ## 🎨 **Visual Behavior:**
-### **Before Interest:** ``` [ ⭐ Mark as Interested ] ← Blue outline button ``` ### **After
-Clicking:** ``` [ ⏳ Loading... ] ← Shows spinner ``` ### **After Interest:** ``` [ ⭐ Interested ✓
-] ← Green gradient button
