@@ -4,44 +4,84 @@
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
-          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+          <animate
+            attributeName="d"
+            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
-                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
+            dur="3s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+          <animate
+            attributeName="d"
+            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
-                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
+            dur="4s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
-          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+          <animate
+            attributeName="d"
+            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
-                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
+            dur="5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+          <animate
+            attributeName="d"
+            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
-                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
+            dur="2.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
-          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+          <animate
+            attributeName="d"
+            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
-                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
+            dur="3.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
-          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+          <animate
+            attributeName="d"
+            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
-                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
+            dur="4.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
-          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+          <animate
+            attributeName="d"
+            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
-                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
+            dur="6s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
-          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+          <animate
+            attributeName="d"
+            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
-                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
+            dur="2s"
+            repeatCount="indefinite"
+          />
         </path>
       </svg>
     </div>
@@ -61,8 +101,11 @@
               <!-- Profile Picture (Left) -->
               <div class="profile-image-container">
                 <div class="profile-img-wrapper" @click="selectImage">
-                  <img :src="previewImage || form.profileImage || defaultPfp" alt="Profile Picture"
-                    class="profile-img" />
+                  <img
+                    :src="previewImage || form.profileImage || defaultPfp"
+                    alt="Profile Picture"
+                    class="profile-img"
+                  />
                   <div class="profile-overlay">
                     <span class="overlay-text">Choose Photo</span>
                   </div>
@@ -70,7 +113,13 @@
                     <i class="bi bi-camera"></i>
                   </button>
                 </div>
-                <input type="file" ref="fileInput" accept="image/*" @change="onFileSelected" style="display: none" />
+                <input
+                  type="file"
+                  ref="fileInput"
+                  accept="image/*"
+                  @change="onFileSelected"
+                  style="display: none"
+                />
               </div>
 
               <!-- Display Name & Email (Right) -->
@@ -91,8 +140,13 @@
             <div class="genre-picks-section">
               <h2 class="genre-heading">YOUR GENRE PICKS</h2>
               <div class="genres-grid">
-                <div v-for="genre in availableGenres" :key="genre" class="genre-item"
-                  :class="{ selected: form.genres.includes(genre) }" @click="toggleGenre(genre)">
+                <div
+                  v-for="genre in availableGenres"
+                  :key="genre"
+                  class="genre-item"
+                  :class="{ selected: form.genres.includes(genre) }"
+                  @click="toggleGenre(genre)"
+                >
                   <div class="genre-image-wrapper">
                     <img :src="getGenreImage(genre)" :alt="genre" class="genre-image" />
                     <div v-if="form.genres.includes(genre)" class="genre-overlay"></div>
@@ -130,6 +184,7 @@ import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage
 import { db, storage } from '@/services/firebase'
 import NavigationBar from '@/components/NavigationBar.vue'
 import defaultPfp from '@/assets/defaultPfp.jpg'
+import { GENRE_LIST } from '@/constants/genres'
 
 export default {
   name: 'EditProfile',
@@ -144,28 +199,7 @@ export default {
         profileImage: '',
         genres: [], // ✅ Added genres
       },
-      availableGenres: [
-        'Indie',
-        'Jazz',
-        'Electronic',
-        'Rock',
-        'Pop',
-        'Hip Hop',
-        'R&B',
-        'Folk',
-        'Classical',
-        'Metal',
-        'Alternative',
-        'Soul',
-        'Blues',
-        'Punk',
-        'Reggae',
-        'Country',
-        'K-Pop',
-        'EDM',
-        'Funk',
-        'Gospel',
-      ],
+      availableGenres: GENRE_LIST,
       userId: null,
       previewImage: null,
       selectedFile: null, // ✅ Store actual file for upload
@@ -202,26 +236,25 @@ export default {
     getGenreImage(genre) {
       // Map genre names to image file names (handling variations)
       const genreImageMap = {
-        'Indie': 'Indie.png',
-        'Jazz': 'Jazz.png',
-        'Electronic': 'Electronic.png',
-        'Rock': 'Rock.png',
-        'Pop': 'Pop.png',
+        Indie: 'Indie.png',
+        Jazz: 'Jazz.png',
+        Electronic: 'Electronic.png',
+        Rock: 'Rock.png',
+        Pop: 'Pop.png',
         'Hip Hop': 'Hip Hop.png',
         'R&B': 'R&B.png',
-        'Folk': 'Folk.png',
-        'Classical': 'Classiscal.png', // Note: typo in filename
-        'Metal': 'Metal.png',
-        'Alternative': 'Alternative.png',
-        'Soul': 'Soul.png',
-        'Blues': 'Blues.png',
-        'Punk': 'Punk.png',
-        'Reggae': 'Raggae.png', // Note: typo in filename
-        'Country': 'Country.png',
-        'K-Pop': 'K-pop.png',
-        'EDM': 'EDM.png',
-        'Funk': 'Funk.png',
-        'Gospel': 'Gospel.png',
+        Folk: 'Folk.png',
+        Classical: 'Classiscal.png', // Note: typo in filename
+        Metal: 'Metal.png',
+        Alternative: 'Alternative.png',
+        Soul: 'Soul.png',
+        Blues: 'Blues.png',
+        Punk: 'Punk.png',
+        Reggae: 'Raggae.png', // Note: typo in filename
+        Country: 'Country.png',
+        EDM: 'EDM.png',
+        Funk: 'Funk.png',
+        Gospel: 'Gospel.png',
       }
       const imageName = genreImageMap[genre] || 'Indie.png'
       try {
@@ -673,7 +706,7 @@ export default {
 }
 
 .btn-save:hover:not(:disabled) {
-  background: #6E0B0B;
+  background: #6e0b0b;
   color: white;
 }
 
