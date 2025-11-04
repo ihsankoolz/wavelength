@@ -1,21 +1,21 @@
 import fetch from 'node-fetch'; // npm i node-fetch@2
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
-import queryList from './query.json' assert { type: 'json' };
+import fs from 'fs/promises';
+// import { initializeApp } from 'firebase/app';
+import { doc, setDoc } from 'firebase/firestore';
+// import queryList from './query.json' assert { type: 'json' };
+import { db } from '../services/firebase.js';  // Adjust path as necessary
 
-// Initialize Firebase
-const firebaseConfig = {
-  // Your Firebase config object
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 const API_KEY = '20b69f02d3mshff68b75c96225cap1800d8jsnee2f841b64a6';
 const RAPIDAPI_HOST = 'songstats.p.rapidapi.com';
 
-async function getSongstatsIdAndAvatarForArtist(name) {
-  const url = `https://${RAPIDAPI_HOST}/artist/search?name=${encodeURIComponent(name)}`;
+async function loadQueryList() {
+  const data = await fs.readFile('./query.json', 'utf8');
+  return JSON.parse(data);
+}
+
+async function getArtistInfoById(artistId) {
+  const url = `https://${RAPIDAPI_HOST}/artist/info?songstats_artist_id=${artistId}`;
   const options = {
     method: 'GET',
     headers: {
@@ -23,13 +23,11 @@ async function getSongstatsIdAndAvatarForArtist(name) {
       'x-rapidapi-key': API_KEY,
     },
   };
-  const res = await fetch(url, options);
-  if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-  const json = await res.json();
-  if (json.results && json.results.length) {
-    return json.results[0];
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new Error(`Error fetching artist info: ${response.status}`);
   }
-  return null;
+  return await response.json();
 }
 
 async function saveArtistToFirestore(artist) {
@@ -39,23 +37,28 @@ async function saveArtistToFirestore(artist) {
   console.log(`Saved artist ${artist.name} with ID ${artist.songstats_artist_id} to Firestore.`);
 }
 
-async function main() {
-  for (const entry of queryList) {
+async function fetchAndSaveArtists(artists) {
+  for (const artist of artists) {
     try {
-      const name = entry.artistLabel;
-      const artist = await getSongstatsIdAndAvatarForArtist(name);
-      if (artist) {
-        await saveArtistToFirestore(artist);
-      } else {
-        console.log(`No results for ${name}`);
-      }
-      // Delay between requests to avoid rate limits, adjust as needed
-      await new Promise(r => setTimeout(r, 1000));
-    } catch (err) {
-      console.error('Error processing artist:', entry.artistLabel, err);
+      const artistInfo = await getArtistInfoById(artist.songstats_artist_id);
+      await saveArtistToFirestore(artistInfo);
+      // Delay to respect API rate limits
+      await new Promise(r => setTimeout(r, 2000));
+    } catch (e) {
+      console.error(`Failed for artist ID ${artist.songstats_artist_id}`, e);
     }
   }
   console.log('All artists processed');
+}
+
+async function main() {
+  try {
+    const queryList = await loadQueryList();
+    await fetchAndSaveArtists(queryList);
+    console.log('All artists processed successfully.');
+  } catch (err) {
+    console.error('Error in main:', err);
+  }
 }
 
 main();
