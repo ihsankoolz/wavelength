@@ -2,99 +2,59 @@
   <div class="my-music-page">
     <NavigationBar />
 
-    <!-- Wave Background -->
+    <!-- Dynamic Wave Background -->
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
-          <animate
-            attributeName="d"
-            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
-                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
-            dur="3s"
-            repeatCount="indefinite"
-          />
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
-          <animate
-            attributeName="d"
-            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
-                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
-            dur="4s"
-            repeatCount="indefinite"
-          />
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
-          <animate
-            attributeName="d"
-            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
-                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
-            dur="5s"
-            repeatCount="indefinite"
-          />
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
-          <animate
-            attributeName="d"
-            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
-                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
-            dur="2.5s"
-            repeatCount="indefinite"
-          />
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
-          <animate
-            attributeName="d"
-            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
-                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
-            dur="3.5s"
-            repeatCount="indefinite"
-          />
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
-          <animate
-            attributeName="d"
-            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
-                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
-            dur="4.5s"
-            repeatCount="indefinite"
-          />
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
-          <animate
-            attributeName="d"
-            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
-                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
-            dur="6s"
-            repeatCount="indefinite"
-          />
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
-          <animate
-            attributeName="d"
-            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
-                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
-            dur="2s"
-            repeatCount="indefinite"
-          />
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
         </path>
       </svg>
     </div>
 
     <!-- Main Content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper mt-md-5 pt-5">
       <div class="container py-4">
         <!-- Header -->
         <div class="welcome-section mb-5">
-          <h1 class="display-5 fw-bold mb-2">MY MUSIC</h1>
-          <p class="text-muted">YOUR SAVED SONGS COLLECTION</p>
+          <h1 class="display-5 fw-bold mb-2 fs-1 fs-md-2">MY MUSIC</h1>
+          <p class="text-muted">Your saved songs collection</p>
         </div>
 
         <!-- Loading State -->
@@ -110,79 +70,51 @@
           <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
           <h2 class="h4 mb-3 text-white">No saved songs yet</h2>
           <p class="text-muted mb-4">Start exploring and heart songs you love!</p>
-          <router-link to="/home" class="btn btn-primary btn-lg">
-            <i class="bi bi-music-note me-2"></i>
+          <router-link to="/home" class="btn btn-primary">
             Discover Music
           </router-link>
         </div>
 
         <!-- Saved Songs Grid -->
-        <div v-else class="songs-grid">
-          <div v-for="song in savedSongs" :key="song.key" class="song-card">
+        <div v-else class="row g-4">
+          <div v-for="song in savedSongs" :key="song.key" class="col-12 col-md-6 col-lg-4">
+            <div class="song-card">
             <!-- Embedded Player at Top -->
             <div class="player-container">
               <!-- Spotify Embed -->
-              <iframe
-                v-if="song.platform === 'spotify'"
-                :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`"
-                width="100%"
-                height="232"
-                frameborder="0"
-                allowtransparency="true"
-                allow="encrypted-media"
-                loading="lazy"
-                style="min-height: 232px"
-              ></iframe>
+              <iframe v-if="song.platform === 'spotify'"
+                :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`" width="100%"
+                height="232" frameborder="0" allowtransparency="true" allow="encrypted-media" loading="lazy"
+                style="min-height: 232px"></iframe>
 
               <!-- SoundCloud Embed -->
-              <iframe
-                v-else-if="song.platform === 'soundcloud'"
-                width="100%"
-                height="232"
-                scrolling="no"
-                frameborder="no"
-                allow="autoplay"
+              <iframe v-else-if="song.platform === 'soundcloud'" width="100%" height="232" scrolling="no"
+                frameborder="no" allow="autoplay"
                 :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
                   song.url,
                 )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
-                loading="lazy"
-              ></iframe>
+                loading="lazy"></iframe>
 
               <!-- YouTube Embed -->
-              <iframe
-                v-else-if="song.platform === 'youtube'"
-                width="100%"
-                height="232"
-                :src="`https://www.youtube.com/embed/${song.youtubeId}`"
-                frameborder="0"
+              <iframe v-else-if="song.platform === 'youtube'" width="100%" height="232"
+                :src="`https://www.youtube.com/embed/${song.youtubeId}`" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
+                allowfullscreen loading="lazy"></iframe>
 
               <!-- Fallback Link -->
-              <a
-                v-else
-                :href="song.url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="song-link"
-              >
+              <a v-else :href="song.url" target="_blank" rel="noopener noreferrer" class="song-link">
                 🎵 Open {{ song.platform }} →
               </a>
             </div>
 
             <!-- Bottom Section: Artist Info, Genre Tags, and Stats -->
-            <div class="song-footer">
+            <div class="song-footer d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
               <!-- Left Side: Artist Info -->
-              <div class="song-footer-left">
-                <div class="song-artist-info">
-                  <img
-                    :src="song.artistPhoto || '/default-avatar.png'"
-                    :alt="song.artistName"
-                    class="artist-photo-bottom"
-                  />
-                  <div class="song-details">
+              <div class="song-footer-left flex-fill d-flex flex-column gap-2">
+                <div class="song-artist-info d-flex align-items-center gap-3">
+                  <img :src="song.artistPhoto || '/default-avatar.png'" :alt="song.artistName"
+                    class="artist-photo-bottom" />
+                  <div class="song-details flex-fill">
                     <div class="song-title-bottom">{{ song.title }}</div>
                     <router-link :to="`/artist/${song.artistId}`" class="artist-name-bottom">
                       {{ song.artistName }}
@@ -191,45 +123,34 @@
                 </div>
 
                 <!-- Added Date -->
-                <div class="added-info">
+                <div class="added-info order-3 order-md-0 text-center text-md-start">
                   <small class="added-date">Added {{ formatDate(song.savedAt) }}</small>
                 </div>
               </div>
 
               <!-- Right Side: Stats & Actions -->
-              <div class="song-stats">
-                <button
-                  @click="handleUnlike(song)"
-                  class="stat-button liked"
-                  :disabled="unlikingInProgress[song.key]"
-                  title="Remove from saved songs"
-                >
+              <div class="song-stats d-flex flex-row align-items-center gap-2 justify-content-between justify-content-md-start flex-shrink-0">
+                <button @click="handleUnlike(song)" class="stat-button liked" :disabled="unlikingInProgress[song.key]"
+                  title="Remove from saved songs">
                   <span class="icon">❤️</span>
                   <span class="count">{{ song.likes || 0 }}</span>
                 </button>
 
-                <button
-                  @click.stop="openSongDetail(song)"
-                  class="stat-button"
-                  title="View and post comments"
-                >
+                <button @click.stop="openSongDetail(song)" class="stat-button" title="View and post comments">
                   <span class="icon">💬</span>
                   <span class="count">{{ song.commentCount || 0 }}</span>
                 </button>
               </div>
             </div>
           </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Song Detail Modal (combines embed + comments) -->
-    <SongDetailModal
-      :show="showSongDetailModal"
-      :song="selectedSongForDetail"
-      @close="closeSongDetailModal"
-      @comment-posted="handleDetailCommentPosted"
-    />
+    <SongDetailModal :show="showSongDetailModal" :song="selectedSongForDetail" @close="closeSongDetailModal"
+      @comment-posted="handleDetailCommentPosted" />
   </div>
 </template>
 
@@ -494,7 +415,6 @@ export default {
 .content-wrapper {
   position: relative;
   z-index: 1;
-  margin-top: 70px;
   padding-bottom: 60px;
 }
 
@@ -536,7 +456,6 @@ export default {
 .welcome-section h1 {
   color: #fff;
   font-weight: 700;
-  font-size: 2.3rem;
   margin-bottom: 0.5rem;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -545,7 +464,6 @@ export default {
 .welcome-section p {
   color: #d4d5db;
   font-size: 0.95rem;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
@@ -554,27 +472,19 @@ export default {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #bb1814 0%, #8b1410 100%);
+  background: #bb1814;
   border: none;
   border-radius: 25px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  transition: all 0.3s ease;
+  transform: none;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #d41e1e 0%, #9f1612 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(187, 24, 20, 0.3);
+  background: #960f0c;
 }
 
-/* Songs Grid */
-.songs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
 
 .song-card {
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
@@ -644,25 +554,11 @@ export default {
 
 /* Song Footer Container */
 .song-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
   padding: 1rem;
-  gap: 1rem;
-}
-
-.song-footer-left {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  min-width: 0;
 }
 
 /* Artist Info at Bottom */
 .song-artist-info {
-  display: flex;
-  align-items: center;
   gap: 0.75rem;
 }
 
@@ -676,7 +572,6 @@ export default {
 }
 
 .song-details {
-  flex: 1;
   min-width: 0;
 }
 
@@ -707,10 +602,6 @@ export default {
   color: #bb1814;
 }
 
-/* Added Info */
-.added-info {
-  margin-top: 0.5rem;
-}
 
 .added-date {
   font-size: 0.8rem;
@@ -718,14 +609,6 @@ export default {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Song Stats - Bottom Right */
-.song-stats {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
 
 .stat-button {
   display: flex;
@@ -773,9 +656,11 @@ export default {
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.3);
   }
+
   100% {
     transform: scale(1);
   }
@@ -800,45 +685,4 @@ export default {
   font-size: 0.85rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .content-wrapper {
-    margin-top: 80px;
-  }
-
-  .welcome-section h1 {
-    font-size: 2rem;
-  }
-
-  .songs-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .song-footer {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-  }
-
-  .song-stats {
-    justify-content: space-between;
-  }
-
-  .added-info {
-    order: 3;
-    text-align: center;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .songs-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1025px) {
-  .songs-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
 </style>

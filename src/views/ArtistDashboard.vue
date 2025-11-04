@@ -29,9 +29,12 @@
     <div v-else>
       <!-- Artist Hero Section with Blurred Background -->
       <div class="artist-hero-section">
-        <div class="hero-background"
-          :style="{ backgroundImage: `url(${artistData.profileImage || 'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff'})` }">
-        </div>
+        <div
+          class="hero-background"
+          :style="{
+            backgroundImage: `url(${artistData.profileImage || 'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff'})`,
+          }"
+        ></div>
         <div class="hero-content">
           <div class="container py-5">
             <div class="row align-items-center">
@@ -39,8 +42,13 @@
               <div class="col-auto">
                 <div class="position-relative d-inline-block">
                   <img
-                    :src="artistData.profileImage || 'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff'"
-                    :alt="artistData.artistName" class="artist-avatar" />
+                    :src="
+                      artistData.profileImage ||
+                      'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff'
+                    "
+                    :alt="artistData.artistName"
+                    class="artist-avatar"
+                  />
                   <div v-if="artistData.verified" class="verified-badge-large">
                     <i class="bi bi-patch-check-fill"></i>
                   </div>
@@ -59,16 +67,28 @@
 
                 <!-- Social Links -->
                 <div v-if="hasSocialLinks" class="social-links">
-                  <a v-if="artistData.socialLinks?.spotify" :href="artistData.socialLinks.spotify" target="_blank"
-                    class="social-icon spotify">
+                  <a
+                    v-if="artistData.socialLinks?.spotify"
+                    :href="artistData.socialLinks.spotify"
+                    target="_blank"
+                    class="social-icon spotify"
+                  >
                     <i class="bi bi-spotify"></i>
                   </a>
-                  <a v-if="artistData.socialLinks?.youtube" :href="artistData.socialLinks.youtube" target="_blank"
-                    class="social-icon youtube">
+                  <a
+                    v-if="artistData.socialLinks?.youtube"
+                    :href="artistData.socialLinks.youtube"
+                    target="_blank"
+                    class="social-icon youtube"
+                  >
                     <i class="bi bi-youtube"></i>
                   </a>
-                  <a v-if="artistData.socialLinks?.instagram" :href="artistData.socialLinks.instagram" target="_blank"
-                    class="social-icon instagram">
+                  <a
+                    v-if="artistData.socialLinks?.instagram"
+                    :href="artistData.socialLinks.instagram"
+                    target="_blank"
+                    class="social-icon instagram"
+                  >
                     <i class="bi bi-instagram"></i>
                   </a>
                 </div>
@@ -79,18 +99,66 @@
       </div>
 
       <div class="content-wrapper">
-        <div class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+        <!-- Wave Animation Background for Content Area -->
+        <div class="content-wave-background">
+          <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.3">
+              <animate
+                attributeName="d"
+                values="M0,150 Q200,80 400,150 T800,150 T1200,150;
+                       M0,150 Q200,220 400,150 T800,150 T1200,150;
+                       M0,150 Q200,80 400,150 T800,150 T1200,150"
+                dur="6s"
+                repeatCount="indefinite"
+              />
+            </path>
+            <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.25">
+              <animate
+                attributeName="d"
+                values="M0,180 Q250,110 500,180 T1000,180 T1200,180;
+                       M0,180 Q250,250 500,180 T1000,180 T1200,180;
+                       M0,180 Q250,110 500,180 T1000,180 T1200,180"
+                dur="8s"
+                repeatCount="indefinite"
+              />
+            </path>
+            <path fill="none" stroke="#D95656" stroke-width="0.8" opacity="0.2">
+              <animate
+                attributeName="d"
+                values="M0,120 Q300,50 600,120 T1200,120;
+                       M0,120 Q300,190 600,120 T1200,120;
+                       M0,120 Q300,50 600,120 T1200,120"
+                dur="10s"
+                repeatCount="indefinite"
+              />
+            </path>
+          </svg>
+        </div>
+
+        <div class="container" style="padding-top: 2rem; padding-bottom: 2rem">
           <!-- Tabs Section -->
           <div class="row">
             <div class="col-12">
               <div class="custom-tab-bar mb-4">
-                <button class="tab-btn" :class="{ active: activeTab === 'music' }" @click="activeTab = 'music'">
+                <button
+                  class="tab-btn"
+                  :class="{ active: activeTab === 'music' }"
+                  @click="activeTab = 'music'"
+                >
                   MY MUSIC
                 </button>
-                <button class="tab-btn" :class="{ active: activeTab === 'events' }" @click="activeTab = 'events'">
+                <button
+                  class="tab-btn"
+                  :class="{ active: activeTab === 'events' }"
+                  @click="activeTab = 'events'"
+                >
                   MY EVENTS
                 </button>
-                <button class="tab-btn" :class="{ active: activeTab === 'about' }" @click="activeTab = 'about'">
+                <button
+                  class="tab-btn"
+                  :class="{ active: activeTab === 'about' }"
+                  @click="activeTab = 'about'"
+                >
                   ABOUT ME
                 </button>
               </div>
@@ -114,7 +182,11 @@
                 <!-- Music Tab - NEW MusicManager Component -->
                 <div v-if="activeTab === 'music'" class="tab-content-section">
                   <div class="music-tab-wrapper">
-                    <MusicManager v-if="artistData.uid" :artistId="artistData.uid" @music-updated="onMusicUpdated" />
+                    <MusicManager
+                      v-if="artistData.uid"
+                      :artistId="artistData.uid"
+                      @music-updated="onMusicUpdated"
+                    />
                   </div>
                 </div>
 
@@ -129,7 +201,10 @@
                   <!-- No Events -->
                   <div v-else-if="artistEvents.length === 0" class="text-center py-5">
                     <i class="bi bi-calendar-x fs-1 text-white mb-3"></i>
-                    <p class="text-white">No upcoming events scheduled.</p>
+                    <p class="text-white mb-4">No upcoming events scheduled.</p>
+                    <button class="btn-add-event" @click="addEvent">
+                      <i class="bi bi-plus-circle me-2"></i>CREATE YOUR FIRST EVENT
+                    </button>
                   </div>
 
                   <!-- Events List -->
@@ -138,60 +213,82 @@
                       <!-- Events Grid Header -->
                       <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2 class="events-library-title">MY EVENTS</h2>
-                        <button class="btn-add-event" @click="addEvent">
-                          + ADD EVENT
-                        </button>
+                        <button class="btn-add-event" @click="addEvent">+ ADD EVENT</button>
                       </div>
 
                       <div class="events-grid">
-                        <div v-for="event in displayedEvents" :key="event.id" class="event-item-card">
-                          <!-- Event Info -->
-                          <div class="event-item-info">
-                            <h5 class="event-item-title">{{ event.title || 'Untitled Event' }}</h5>
+                        <div v-for="event in displayedEvents" :key="event.id" class="event-card">
+                          <!-- Red Header with Event Title -->
+                          <div class="event-header">
+                            {{ event.title || 'Untitled Event' }}
+                          </div>
 
-                            <!-- Event Date & Time -->
-                            <div class="event-meta mb-2">
-                              <small class="event-meta-item">
-                                <i class="bi bi-calendar me-1"></i>
-                                {{ formatEventDate(event.date) }}
-                                <span v-if="formatEventTime(event.date)" class="ms-2">
-                                  <i class="bi bi-clock me-1"></i>
-                                  {{ formatEventTime(event.date) }}
-                                </span>
-                              </small>
+                          <!-- Event Body -->
+                          <div class="event-body">
+                            <!-- Venue and Date (No Artist Info on Profile Pages) -->
+                            <div class="event-venue-date">
+                              <div class="event-venue-text">
+                                <p class="event-venue">{{ event.venue || event.location }}</p>
+                                <p class="event-description-preview" v-if="event.description">
+                                  {{ event.description.split(' ').slice(0, 6).join(' ')
+                                  }}{{ event.description.split(' ').length > 6 ? '...' : '' }}
+                                </p>
+                              </div>
+                              <!-- Date Box on Right -->
+                              <div class="event-date-box">
+                                <div class="date-day">{{ formatEventDay(event.date) }}</div>
+                                <div class="date-month">{{ formatEventMonth(event.date) }}</div>
+                              </div>
                             </div>
 
-                            <!-- Event Location -->
-                            <div v-if="event.location" class="event-meta mb-2">
-                              <small class="event-meta-item">
-                                <i class="bi bi-geo-alt me-1"></i>
-                                {{ event.location }}
-                              </small>
-                            </div>
-
-                            <!-- Event Description -->
-                            <p v-if="event.description" class="event-description">
-                              {{
-                                event.description.length > 100
-                                  ? event.description.substring(0, 100) + '...'
-                                  : event.description
-                              }}
+                            <!-- Genres -->
+                            <p
+                              class="event-genres-text"
+                              v-if="event.genres && event.genres.length > 0"
+                            >
+                              {{ event.genres.join(', ') }}
                             </p>
-                          </div>
-                          <div v-if="songStatsData">
-                            <pre>{{ songStatsData }}</pre>
-                          </div>
-                          <!-- Action Buttons -->
-                          <div class="event-actions mt-3">
-                            <button class="btn-action-edit" @click="editEvent(event.id)" title="Edit">
-                              <i class="bi bi-pencil"></i> Edit
-                            </button>
-                            <button class="btn-action-view" @click="viewEvent(event.id)" title="View">
-                              <i class="bi bi-eye"></i> View
-                            </button>
-                            <button class="btn-action-delete" @click="deleteEvent(event.id)" title="Delete">
-                              <i class="bi bi-trash"></i> Delete
-                            </button>
+
+                            <!-- Map Preview -->
+                            <div class="event-map-preview" v-if="event.location">
+                              <EventMap
+                                :location="event.location"
+                                :title="event.venue || event.title"
+                                size="small"
+                              />
+                            </div>
+
+                            <!-- Interested Count -->
+                            <p class="interested-count">
+                              {{ event.interestedCount || 0 }}
+                              {{ (event.interestedCount || 0) === 1 ? 'Person' : 'People' }}
+                              Interested
+                            </p>
+
+                            <!-- Action Buttons (Owner Controls) -->
+                            <div class="event-owner-actions">
+                              <button
+                                class="btn-action-edit"
+                                @click="editEvent(event.id)"
+                                title="Edit Event"
+                              >
+                                <i class="bi bi-pencil"></i> Edit
+                              </button>
+                              <button
+                                class="btn-action-view"
+                                @click="viewEvent(event.id)"
+                                title="View Details"
+                              >
+                                <i class="bi bi-eye"></i> View
+                              </button>
+                              <button
+                                class="btn-action-delete"
+                                @click="deleteEvent(event.id)"
+                                title="Delete Event"
+                              >
+                                <i class="bi bi-trash"></i> Delete
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -235,14 +332,18 @@
                         <i class="bi bi-calendar3 fs-4"></i>
                         <div>
                           <div class="fw-bold">Genres</div>
-                          <div class="text-white-soft">{{ artistData.genres?.length || 0 }} genres</div>
+                          <div class="text-white-soft">
+                            {{ artistData.genres?.length || 0 }} genres
+                          </div>
                         </div>
                       </div>
                       <div class="stat-box">
                         <i class="bi bi-music-note-list fs-4"></i>
                         <div>
                           <div class="fw-bold">Music</div>
-                          <div class="text-white-soft">{{ artistData.musicLinks?.length || 0 }} tracks</div>
+                          <div class="text-white-soft">
+                            {{ artistData.musicLinks?.length || 0 }} tracks
+                          </div>
                         </div>
                       </div>
                       <div class="stat-box">
@@ -258,7 +359,9 @@
                     <section class="genre-picks-section mt-5">
                       <h2 class="genre-heading">FOLLOWING</h2>
                       <div class="header-subtitle mb-4">
-                        You are following <span>{{ followingArtists.length }}</span> artist{{ followingArtists.length !== 1 ? 's' : '' }}
+                        You are following <span>{{ followingArtists.length }}</span> artist{{
+                          followingArtists.length !== 1 ? 's' : ''
+                        }}
                       </div>
 
                       <!-- No Following Artists -->
@@ -275,7 +378,11 @@
                       <!-- Following Artists Grid -->
                       <div v-else class="horizontal-scroll">
                         <div class="d-flex gap-3">
-                          <div v-for="artist in followingArtists" :key="artist.id" class="flex-shrink-0 artist-card-container">
+                          <div
+                            v-for="artist in followingArtists"
+                            :key="artist.id"
+                            class="flex-shrink-0 artist-card-container"
+                          >
                             <ArtistCard :artist="artist" />
                           </div>
                         </div>
@@ -294,15 +401,25 @@
   <!-- End of dashboard-content -->
 
   <!-- Delete Confirmation Modal -->
-  <div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventModalLabel"
-    aria-hidden="true">
+  <div
+    class="modal fade"
+    id="deleteEventModal"
+    tabindex="-1"
+    aria-labelledby="deleteEventModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header bg-danger text-white">
           <h5 class="modal-title" id="deleteEventModalLabel">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>Confirm Delete
           </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
         <div class="modal-body">
           <p class="mb-0">Are you sure you want to delete this event?</p>
@@ -326,7 +443,12 @@
       <div class="toast-header bg-success text-white">
         <i class="bi bi-check-circle-fill me-2"></i>
         <strong class="me-auto">Success</strong>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="toast-body">
         {{ successMessage }}
@@ -340,7 +462,12 @@
       <div class="toast-header bg-danger text-white">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
         <strong class="me-auto">Error</strong>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="toast-body">
         {{ errorMessage }}
@@ -349,8 +476,14 @@
   </div>
 
   <!-- Event Modal -->
-  <EventModal :show="showEventModal" :event="eventToEdit" :artistId="artistData.uid" :artistName="artistData.artistName"
-    @close="closeEventModal" @event-saved="onEventSaved" />
+  <EventModal
+    :show="showEventModal"
+    :event="eventToEdit"
+    :artistId="artistData.uid"
+    :artistName="artistData.artistName"
+    @close="closeEventModal"
+    @event-saved="onEventSaved"
+  />
 </template>
 
 <script>
@@ -361,6 +494,7 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '@/services/firebase'
 import NavigationBar from '@/components/NavigationBar.vue'
 import EventCard from '@/components/EventCard.vue'
+import EventMap from '@/components/EventMap.vue'
 import MusicManager from '@/components/MusicManager.vue'
 import EventModal from '@/components/EventModal.vue'
 import ArtistCard from '@/components/ArtistCard.vue'
@@ -371,6 +505,7 @@ export default {
   components: {
     NavigationBar,
     EventCard,
+    EventMap,
     MusicManager,
     EventModal,
     ArtistCard,
@@ -567,6 +702,34 @@ export default {
       })
     }
 
+    // Format day for event date box
+    const formatEventDay = (timestamp) => {
+      if (!timestamp) return ''
+      let date
+      if (timestamp.toDate) {
+        date = timestamp.toDate()
+      } else if (timestamp instanceof Date) {
+        date = timestamp
+      } else {
+        date = new Date(timestamp)
+      }
+      return date.getDate()
+    }
+
+    // Format month for event date box
+    const formatEventMonth = (timestamp) => {
+      if (!timestamp) return ''
+      let date
+      if (timestamp.toDate) {
+        date = timestamp.toDate()
+      } else if (timestamp instanceof Date) {
+        date = timestamp
+      } else {
+        date = new Date(timestamp)
+      }
+      return date.toLocaleString('en-US', { month: 'short' }).toUpperCase()
+    }
+
     // Event management
     const editEvent = (eventId) => {
       const event = artistEvents.value.find((e) => e.id === eventId)
@@ -707,16 +870,16 @@ export default {
       try {
         // Get user document to find artists they're following
         const userDoc = await getDoc(doc(db, 'users', userId))
-        
+
         if (userDoc.exists()) {
           const userData = userDoc.data()
           const followedArtistIds = userData.followingArtists || userData.followedArtists || []
-          
+
           if (followedArtistIds.length === 0) {
             followingArtists.value = []
             return
           }
-          
+
           // Load artist data for each followed artist
           const artistsList = []
           for (const artistId of followedArtistIds) {
@@ -732,7 +895,7 @@ export default {
               console.error(`Error loading artist ${artistId}:`, err)
             }
           }
-          
+
           followingArtists.value = artistsList
         } else {
           // If no user document, try checking artist document
@@ -841,6 +1004,8 @@ export default {
       formatDate,
       formatEventDate,
       formatEventTime,
+      formatEventDay,
+      formatEventMonth,
       editEvent,
       viewEvent,
       deleteEvent,
@@ -881,6 +1046,26 @@ export default {
   padding-bottom: 40px;
   padding-top: 0;
   margin-top: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Wave Animation Background */
+.content-wave-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.content-wave-background svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Artist Hero Section */
@@ -966,8 +1151,8 @@ export default {
 }
 
 .btn-dashboard-action:hover {
-  border: 2px solid #6E0B0B;;
-  background: #6E0B0B;
+  border: 2px solid #6e0b0b;
+  background: #6e0b0b;
   color: white;
 }
 
@@ -1018,15 +1203,22 @@ export default {
 }
 
 .social-icon.spotify {
-  background: #1DB954;
+  background: #1db954;
 }
 
 .social-icon.youtube {
-  background: #FF0000;
+  background: #ff0000;
 }
 
 .social-icon.instagram {
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  background: linear-gradient(
+    45deg,
+    #f09433 0%,
+    #e6683c 25%,
+    #dc2743 50%,
+    #cc2366 75%,
+    #bc1888 100%
+  );
 }
 
 .social-icon:hover {
@@ -1096,7 +1288,7 @@ export default {
 }
 
 .custom-tab-bar::after {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   left: 0;
@@ -1118,7 +1310,7 @@ export default {
 }
 
 .nav-tabs::after {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   left: 0;
@@ -1493,6 +1685,173 @@ export default {
   margin-bottom: 0;
 }
 
+/* New Event Card Styles (matching EventCard.vue) */
+.event-card {
+  background: rgba(35, 35, 38, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(187, 24, 20, 0.3);
+}
+
+/* Event Header */
+.event-header {
+  background: linear-gradient(135deg, #bb1814 0%, #960f0c 100%);
+  padding: 1rem 1.25rem;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Event Body */
+.event-body {
+  padding: 1.25rem;
+}
+
+/* Venue and Date Section (No Artist Info on Profile Pages) */
+.event-venue-date {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.event-venue-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-venue {
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+}
+
+.event-description-preview {
+  font-size: 0.9rem;
+  color: #b0b1ba;
+  margin: 0;
+  line-height: 1.4;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Event Info Section */
+.event-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.event-artist-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #bb1814;
+  flex-shrink: 0;
+}
+
+.event-info-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-artist-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.3rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.event-venue {
+  font-size: 0.85rem;
+  color: #b0b1ba;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Date Box on Right */
+.event-date-box {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #bb1814 0%, #960f0c 100%);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 2px 8px rgba(187, 24, 20, 0.3);
+}
+
+.event-date-box .date-day {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+.event-date-box .date-month {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Event Genres as Plain Text */
+.event-genres-text {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #b0b1ba;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Map Preview */
+.event-map-preview {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+/* Interested Count */
+.interested-count {
+  font-size: 0.9rem;
+  color: #b0b1ba;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Event Owner Actions (for Artist Dashboard) */
+.event-owner-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
 /* Event Actions */
 .event-actions {
   display: flex;
@@ -1792,7 +2151,7 @@ small {
 }
 
 .horizontal-scroll::-webkit-scrollbar-thumb {
-  background-color: #B51414;
+  background-color: #b51414;
   border-radius: 4px;
 }
 

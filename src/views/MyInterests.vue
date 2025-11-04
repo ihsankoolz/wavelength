@@ -2,6 +2,8 @@
 <template>
   <div class="my-interests-page">
     <NavigationBar />
+
+    <!-- Dynamic Wave Background -->
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path id="wave1" fill="none" stroke="#B51414" stroke-width="2" opacity="0.6">
@@ -48,7 +50,6 @@
     </div>
     <div class="content-wrapper">
       <div class="container py-4">
-
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-5">
           <div class="spinner-border text-primary" role="status">
@@ -59,75 +60,78 @@
 
         <!-- Main Content -->
         <div v-else>
-
           <!-- Interested Events Section -->
           <section class="mb-5">
-            <div class="mb-2">
-              <div class="header">
-                <i class="bi bi-star-fill text-warning"></i>
-                Interested Events
-              </div>
-            </div>
-            <div class="header-subtitle mb-4">
-              You are interested in <span class="highlight-number">{{ interestedEvents.length }}</span> event{{ interestedEvents.length !== 1 ? 's' : '' }}
+            <div class="welcome-section mb-4">
+              <h1 class="display-5 fw-bold mb-2">INTERESTED EVENTS</h1>
+              <p class="text-muted">You are interested in
+                <span>{{ interestedEvents.length }}</span> event{{ interestedEvents.length !== 1 ? 's' : '' }}
+              </p>
             </div>
 
             <!-- No Interested Events -->
-            <div v-if="interestedEvents.length === 0" class="card shadow-sm">
-              <div class="card-body text-center py-5">
-                <i class="bi bi-calendar-x fs-1 text-muted mb-3"></i>
-                <p class="text-muted">You haven't marked any events as interested yet.</p>
-                <router-link to="/events" class="btn btn-primary">
-                  Browse Events
-                </router-link>
-              </div>
+            <div v-if="interestedEvents.length === 0" class="text-center py-5">
+              <i class="bi bi-calendar-x fs-1 text-muted mb-3"></i>
+              <h2 class="h4 mb-3 text-white">No interested events yet</h2>
+              <p class="text-muted mb-4">Start exploring and mark events you're interested in!</p>
+              <router-link to="/events" class="btn btn-primary">
+                Browse Events
+              </router-link>
             </div>
 
-            <!-- Events Grid -->
-            <div v-else class="horizontal-scroll">
-              <div class="d-flex gap-3">
-                <div v-for="event in interestedEvents" :key="event.id" class="flex-shrink-0 event-card-container">
-                  <EventCard :event="event" />
+            <!-- Events Carousel -->
+            <div v-else class="carousel-container">
+              <button v-if="currentEventPage > 0" @click="previousEventPage" class="carousel-arrow left"
+                aria-label="Previous events">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+
+              <div class="artists-carousel">
+                <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentEventPage * 100}%)` }">
+                  <div v-for="(page, pageIndex) in paginatedInterestedEvents" :key="`event-page-${pageIndex}`"
+                    class="carousel-page artists-page">
+                    <div class="row g-3 pt-3 pb-3">
+                      <div v-for="event in page" :key="event.id" class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <EventCard :event="event" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <button v-if="currentEventPage < totalEventPages - 1" @click="nextEventPage" class="carousel-arrow right"
+                aria-label="Next events">
+                <i class="bi bi-chevron-right"></i>
+              </button>
             </div>
           </section>
 
-          <!-- Following Artists Section -->
+          <!-- Artist Discovery Network Section -->
           <section>
-            <div class="mb-2">
-              <div class="header">
-                <i class="bi bi-people-fill text-primary"></i>
-                FOLLOWING
-              </div>
-            </div>
-            <div class="header-subtitle mb-4">
-              You are following <span class="highlight-number">{{ followingArtists.length }}</span> artist{{ followingArtists.length !== 1 ? 's' : '' }}
-            </div>
-
-            <!-- No Following Artists -->
-            <div v-if="followingArtists.length === 0" class="card shadow-sm">
-              <div class="card-body text-center py-5">
-                <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
-                <p class="text-muted">You're not following any artists yet.</p>
-                <router-link to="/home" class="btn btn-primary">
-                  Discover Artists
-                </router-link>
-              </div>
+            <h2 class="genre-heading mb-2">ARTIST DISCOVERY NETWORK</h2>
+            <div class="header-subtitle text-muted mb-4">
+              Explore artists similar to those you follow -
+              <span>{{ followingArtists.length }}</span> artist{{
+                followingArtists.length !== 1 ? 's' : ''
+              }}
+              in your network
             </div>
 
-            <!-- Artists Grid -->
-            <div v-else class="horizontal-scroll">
-              <div class="d-flex gap-3">
-                <div v-for="artist in followingArtists" :key="artist.id" class="flex-shrink-0 artist-card-container">
-                  <ArtistCard :artist="artist" />
+            <!-- Network Graph -->
+            <div class="network-graph-section overflow-x-auto mb-3 mb-sm-4 mb-md-5">
+              <ArtistNetworkGraph v-if="!loading && allArtists.length > 0" :userId="userId" :allArtists="allArtists"
+                :userPreferences="userPreferences" :height="graphHeight" />
+
+              <!-- Loading State -->
+              <div v-else-if="loading" class="text-center py-5">
+                <div class="spinner-border text-danger" role="status">
+                  <span class="visually-hidden">Loading...</span>
                 </div>
+                <p class="mt-3 text-white">Building your artist network...</p>
               </div>
             </div>
           </section>
-
         </div>
-
       </div>
     </div>
   </div>
@@ -138,24 +142,90 @@ import { auth, db } from '@/services/firebase'
 import { doc, getDoc, collection, getDocs, query, where } from 'firebase/firestore'
 import NavigationBar from '@/components/NavigationBar.vue'
 import EventCard from '@/components/EventCard.vue'
-import ArtistCard from '@/components/ArtistCard.vue'
+import ArtistNetworkGraph from '@/components/ArtistNetworkGraph.vue'
 
 export default {
   name: 'MyInterests',
   components: {
     NavigationBar,
     EventCard,
-    ArtistCard
+    ArtistNetworkGraph,
   },
   data() {
     return {
       loading: true,
+      userId: '',
       interestedEvents: [],
-      followingArtists: []
+      followingArtists: [],
+      allArtists: [],
+      userPreferences: {
+        followingArtists: [],
+        preferredGenres: [],
+        likedSongs: [],
+      },
+      windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1200,
+      currentEventPage: 0,
+      eventsPerPage: 4,
     }
+  },
+  computed: {
+    paginatedInterestedEvents() {
+      const pages = []
+      let startIndex = 0
+
+      while (startIndex < this.interestedEvents.length) {
+        const endIndex = Math.min(startIndex + this.eventsPerPage, this.interestedEvents.length)
+        pages.push(this.interestedEvents.slice(startIndex, endIndex))
+        startIndex = endIndex
+      }
+      return pages
+    },
+    totalEventPages() {
+      return this.paginatedInterestedEvents.length
+    },
+    graphHeight() {
+      // Responsive height based on window width (Bootstrap breakpoints)
+      const width = this.windowWidth
+      
+      // Extra small devices (portrait phones, less than 576px)
+      if (width < 576) {
+        return 400
+      }
+      // Small devices (landscape phones, 576px and up)
+      else if (width < 768) {
+        return 450
+      }
+      // Medium devices (tablets, 768px and up)
+      else if (width < 992) {
+        return 500
+      }
+      // Large devices (desktops, 992px and up)
+      else if (width < 1200) {
+        return 550
+      }
+      // Extra large devices (large desktops, 1200px and up)
+      else {
+        return 600
+      }
+    },
   },
   async mounted() {
     await this.loadUserInterests()
+    await this.loadAllArtists()
+    
+    // Add window resize listener for responsive height
+    if (typeof window !== 'undefined') {
+      this.handleResize = () => {
+        this.windowWidth = window.innerWidth
+      }
+      window.addEventListener('resize', this.handleResize)
+    }
+  },
+  beforeUnmount() {
+    // Remove resize listener
+    if (typeof window !== 'undefined' && this.handleResize) {
+      window.removeEventListener('resize', this.handleResize)
+    }
   },
   methods: {
     async loadUserInterests() {
@@ -166,6 +236,8 @@ export default {
           return
         }
 
+        this.userId = user.uid
+
         // Get user's interested events and following artists
         const userDoc = await getDoc(doc(db, 'users', user.uid))
 
@@ -173,6 +245,13 @@ export default {
           const userData = userDoc.data()
           const interestedEventIds = userData.interestedEvents || []
           const followingArtistIds = userData.followingArtists || []
+
+          // Set user preferences for network graph
+          this.userPreferences = {
+            followingArtists: followingArtistIds,
+            preferredGenres: userData.preferredGenres || [],
+            likedSongs: userData.likedSongs || [],
+          }
 
           // Load interested events
           if (interestedEventIds.length > 0) {
@@ -184,12 +263,23 @@ export default {
             await this.loadFollowingArtists(followingArtistIds)
           }
         }
-
       } catch (error) {
         console.error('Error loading user interests:', error)
         alert('Failed to load your interests')
       } finally {
         this.loading = false
+      }
+    },
+
+    async loadAllArtists() {
+      try {
+        const artistsSnapshot = await getDocs(collection(db, 'artists'))
+        this.allArtists = artistsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+      } catch (error) {
+        console.error('Error loading all artists:', error)
       }
     },
 
@@ -205,16 +295,13 @@ export default {
         }
 
         for (const batch of batches) {
-          const eventsQuery = query(
-            collection(db, 'events'),
-            where('__name__', 'in', batch)
-          )
+          const eventsQuery = query(collection(db, 'events'), where('__name__', 'in', batch))
 
           const eventsSnapshot = await getDocs(eventsQuery)
-          eventsSnapshot.docs.forEach(doc => {
+          eventsSnapshot.docs.forEach((doc) => {
             events.push({
               id: doc.id,
-              ...doc.data()
+              ...doc.data(),
             })
           })
         }
@@ -224,7 +311,7 @@ export default {
         now.setHours(0, 0, 0, 0)
 
         this.interestedEvents = events
-          .filter(event => {
+          .filter((event) => {
             const eventDate = event.date?.toDate ? event.date.toDate() : new Date(event.date)
             return eventDate >= now
           })
@@ -233,7 +320,6 @@ export default {
             const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date)
             return dateA - dateB
           })
-
       } catch (error) {
         console.error('Error loading interested events:', error)
       }
@@ -250,27 +336,35 @@ export default {
         }
 
         for (const batch of batches) {
-          const artistsQuery = query(
-            collection(db, 'artists'),
-            where('__name__', 'in', batch)
-          )
+          const artistsQuery = query(collection(db, 'artists'), where('__name__', 'in', batch))
 
           const artistsSnapshot = await getDocs(artistsQuery)
-          artistsSnapshot.docs.forEach(doc => {
+          artistsSnapshot.docs.forEach((doc) => {
             artists.push({
               id: doc.id,
-              ...doc.data()
+              ...doc.data(),
             })
           })
         }
 
         this.followingArtists = artists
-
       } catch (error) {
         console.error('Error loading following artists:', error)
       }
-    }
-  }
+    },
+
+    nextEventPage() {
+      if (this.currentEventPage < this.totalEventPages - 1) {
+        this.currentEventPage++
+      }
+    },
+
+    previousEventPage() {
+      if (this.currentEventPage > 0) {
+        this.currentEventPage--
+      }
+    },
+  },
 }
 </script>
 
@@ -278,7 +372,7 @@ export default {
 .my-interests-page {
   min-height: 100vh;
   background: #19181c;
-  padding-top: 100px;
+  padding-top: 95px;
 }
 
 .wave-svg {
@@ -321,12 +415,26 @@ export default {
   z-index: 1;
 }
 
-.header {
+/* Welcome Section (matching BrowseEvents.vue) */
+.welcome-section h1 {
   color: #fff;
   letter-spacing: 1px;
   font-size: 2.3rem;
-  font-weight: 700;
-  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.welcome-section p {
+  color: #d4d5db;
+  font-size: 1.1rem;
+}
+
+/* Genre Heading */
+.genre-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .header-subtitle {
@@ -335,15 +443,8 @@ export default {
   font-weight: 400;
 }
 
-.header-subtitle .highlight-number {
-  font-weight: 700;
-  font-size: 1.3rem;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 .text-muted {
-  color: #999 !important;
+  color: #b0b1ba !important;
 }
 
 .card {
@@ -357,59 +458,96 @@ export default {
 }
 
 .badge {
-  background-color: #B51414 !important;
+  background-color: #b51414 !important;
 }
 
 .btn-primary {
-  background: #B51414;
+  background: #bb1814;
   border: none;
+  border-radius: 25px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transform: none;
 }
 
 .btn-primary:hover {
-  background: #a01828;
+  background: #960f0c;
 }
 
 .spinner-border {
-  color: #B51414 !important;
+  color: #b51414 !important;
 }
 
-@media (max-width: 768px) {
-  .my-interests-page {
-    padding-top: 80px;
-  }
-
-  .header {
-    font-size: 1.8rem;
-  }
+/* Carousel Container */
+.carousel-container {
+  position: relative;
+  padding: 0;
 }
 
-.horizontal-scroll {
-  overflow-x: auto;
-  overflow-y: visible;
-  padding: 10px 0;
-  min-height: 350px;
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: none;
+  color: #000;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
 }
 
-.horizontal-scroll::-webkit-scrollbar {
-  height: 8px;
+.carousel-container:hover .carousel-arrow {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.horizontal-scroll::-webkit-scrollbar-thumb {
-  background-color: #B51414;
-  border-radius: 4px;
+.carousel-arrow:hover {
+  background: #bb1814;
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.horizontal-scroll::-webkit-scrollbar-track {
-  background: #2a2a2a;
+.carousel-arrow.left {
+  left: -25px;
 }
 
-/* Event cards - wider for content */
-.event-card-container {
-  width: 300px;
+.carousel-arrow.right {
+  right: -25px;
 }
 
-/* Artist cards - narrower, matching ArtistCard design */
-.artist-card-container {
-  width: 250px;
+.carousel-arrow i {
+  font-size: 1.5rem;
+}
+
+.artists-carousel {
+  overflow: hidden;
+  width: 100%;
+}
+
+.artists-grid-carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-page.artists-page {
+  min-width: 100%;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Network Graph Section */
+.network-graph-section {
+  width: 100%;
 }
 </style>

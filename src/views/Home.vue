@@ -321,22 +321,10 @@
                 <i class="bi bi-chevron-right"></i>
               </button>
             </div>
-
-            <!-- Carousel Indicators -->
-            <div v-if="totalSongPages > 1" class="carousel-indicators">
-              <button
-                v-for="(page, index) in totalSongPages"
-                :key="`indicator-${index}`"
-                @click="goToSongPage(index)"
-                class="indicator"
-                :class="{ active: currentSongPage === index }"
-                :aria-label="`Go to page ${index + 1}`"
-              ></button>
-            </div>
           </section>
 
           <!-- Discover Artists Section (One Row) -->
-          <section class="discover-artists-section mb-5">
+          <section id="discover-artists" class="discover-artists-section mb-5">
             <div class="section-header d-flex justify-content-between align-items-center mb-3">
               <div>
                 <h2 class="h4 mb-1">Artists to watch out for</h2>
@@ -381,18 +369,6 @@
                 <i class="bi bi-chevron-right"></i>
               </button>
             </div>
-
-            <!-- Carousel Indicators -->
-            <div v-if="totalArtistPages > 1" class="carousel-indicators">
-              <button
-                v-for="(page, index) in totalArtistPages"
-                :key="`artist-indicator-${index}`"
-                @click="goToArtistPage(index)"
-                class="indicator"
-                :class="{ active: currentArtistPage === index }"
-                :aria-label="`Go to artist page ${index + 1}`"
-              ></button>
-            </div>
           </section>
 
           <!-- Upcoming Events Section -->
@@ -414,67 +390,102 @@
               </div>
             </div>
 
-            <!-- Events Grid -->
-            <div v-else-if="upcomingEvents.length > 0" class="events-grid">
-              <div v-for="event in upcomingEvents.slice(0, 4)" :key="event.id" class="event-card">
-                <!-- Red Header with Event Title -->
-                <div class="event-header">
-                  {{ event.title }}
-                </div>
+            <!-- Events Carousel -->
+            <div v-else-if="upcomingEvents.length > 0" class="carousel-container">
+              <!-- Navigation Arrows -->
+              <button
+                v-if="currentEventPage > 0"
+                @click="previousEventPage"
+                class="carousel-arrow left"
+                aria-label="Previous events"
+              >
+                <i class="bi bi-chevron-left"></i>
+              </button>
 
-                <!-- Event Body -->
-                <div class="event-body">
-                  <!-- Artist Info & Details -->
-                  <div class="event-info" @click="$router.push(`/events/${event.id}`)">
-                    <img
-                      :src="event.artistImage || '/default-avatar.png'"
-                      :alt="event.artistName"
-                      class="event-artist-photo"
-                    />
-                    <div class="event-info-text">
-                      <h5 class="event-artist-name">{{ event.artistName || 'Artist' }}</h5>
-                      <p class="event-venue">{{ event.venue || event.location }}</p>
-                    </div>
-
-                    <!-- Date Box on Right -->
-                    <div class="event-date-box">
-                      <div class="date-day">{{ formatEventDay(event.date) }}</div>
-                      <div class="date-month">{{ formatEventMonth(event.date) }}</div>
-                    </div>
-                  </div>
-
-                  <!-- Genres as plain text -->
-                  <p class="event-genres-text" v-if="event.genres && event.genres.length > 0">
-                    {{ event.genres.join(', ') }}
-                  </p>
-
-                  <!-- Map Preview -->
-                  <div class="event-map-preview" @click.stop>
-                    <EventMap
-                      :location="event.location"
-                      :title="event.venue || event.title"
-                      size="small"
-                    />
-                  </div>
-
-                  <!-- Interested Count -->
-                  <p class="interested-count">
-                    {{ event.interestedCount || 0 }}
-                    {{ (event.interestedCount || 0) === 1 ? 'Other' : 'Others' }} Interested
-                  </p>
-
-                  <!-- I'm Interested Button -->
-                  <button
-                    class="btn-interested"
-                    :class="{ active: isEventInterested(event.id) }"
-                    @click.stop="toggleEventInterest(event)"
-                    :disabled="togglingInterest[event.id]"
+              <div class="events-carousel">
+                <div
+                  class="events-grid-carousel"
+                  :style="{ transform: `translateX(-${currentEventPage * 100}%)` }"
+                >
+                  <div
+                    v-for="(page, pageIndex) in paginatedEvents"
+                    :key="`event-page-${pageIndex}`"
+                    class="carousel-page events-page"
                   >
-                    <i v-if="isEventInterested(event.id)" class="bi bi-check-circle-fill me-2"></i>
-                    {{ isEventInterested(event.id) ? 'INTERESTED' : "I'M INTERESTED" }}
-                  </button>
+                    <div v-for="event in page" :key="event.id" class="event-card">
+                      <!-- Red Header with Event Title -->
+                      <div class="event-header">
+                        {{ event.title }}
+                      </div>
+
+                      <!-- Event Body -->
+                      <div class="event-body">
+                        <!-- Artist Info & Details -->
+                        <div class="event-info" @click="$router.push(`/events/${event.id}`)">
+                          <img
+                            :src="event.artistImage || '/default-avatar.png'"
+                            :alt="event.artistName"
+                            class="event-artist-photo"
+                          />
+                          <div class="event-info-text">
+                            <h5 class="event-artist-name">{{ event.artistName || 'Artist' }}</h5>
+                            <p class="event-venue">{{ event.venue || event.location }}</p>
+                          </div>
+
+                          <!-- Date Box on Right -->
+                          <div class="event-date-box">
+                            <div class="date-day">{{ formatEventDay(event.date) }}</div>
+                            <div class="date-month">{{ formatEventMonth(event.date) }}</div>
+                          </div>
+                        </div>
+
+                        <!-- Genres as plain text -->
+                        <p class="event-genres-text" v-if="event.genres && event.genres.length > 0">
+                          {{ event.genres.join(', ') }}
+                        </p>
+
+                        <!-- Map Preview -->
+                        <div class="event-map-preview" @click.stop>
+                          <EventMap
+                            :location="event.location"
+                            :title="event.venue || event.title"
+                            size="small"
+                          />
+                        </div>
+
+                        <!-- Interested Count -->
+                        <p class="interested-count">
+                          {{ event.interestedCount || 0 }}
+                          {{ (event.interestedCount || 0) === 1 ? 'Other' : 'Others' }} Interested
+                        </p>
+
+                        <!-- I'm Interested Button -->
+                        <button
+                          class="btn-interested"
+                          :class="{ active: isEventInterested(event.id) }"
+                          @click.stop="toggleEventInterest(event)"
+                          :disabled="togglingInterest[event.id]"
+                        >
+                          <i
+                            v-if="isEventInterested(event.id)"
+                            class="bi bi-check-circle-fill me-2"
+                          ></i>
+                          {{ isEventInterested(event.id) ? 'INTERESTED' : "I'M INTERESTED" }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <button
+                v-if="currentEventPage < totalEventPages - 1"
+                @click="nextEventPage"
+                class="carousel-arrow right"
+                aria-label="Next events"
+              >
+                <i class="bi bi-chevron-right"></i>
+              </button>
             </div>
 
             <!-- No Events -->
@@ -547,6 +558,10 @@ export default {
       // Events data
       upcomingEvents: [],
       loadingEvents: false,
+
+      // Carousel state for events
+      currentEventPage: 0,
+      eventsPerPage: 3, // 3 events per page
 
       // Filters & Sort
       selectedGenreFilter: '',
@@ -700,6 +715,34 @@ export default {
     totalArtistPages() {
       return this.paginatedArtists.length
     },
+
+    // Paginate events
+    paginatedEvents() {
+      const pages = []
+      let startIndex = 0
+
+      while (startIndex < this.upcomingEvents.length) {
+        const endIndex = Math.min(startIndex + this.eventsPerPage, this.upcomingEvents.length)
+        pages.push(this.upcomingEvents.slice(startIndex, endIndex))
+        startIndex = endIndex
+      }
+      return pages
+    },
+
+    totalEventPages() {
+      return this.paginatedEvents.length
+    },
+  },
+
+  watch: {
+    // Watch for route hash changes
+    '$route.hash'(newHash) {
+      if (newHash === '#discover-artists') {
+        this.$nextTick(() => {
+          this.scrollToDiscoverArtists()
+        })
+      }
+    },
   },
 
   async mounted() {
@@ -709,6 +752,13 @@ export default {
     await this.loadArtists()
     await this.loadEvents()
     this.isLoading = false
+    
+    // Scroll to discover-artists section if hash is present
+    this.$nextTick(() => {
+      if (this.$route.hash === '#discover-artists') {
+        this.scrollToDiscoverArtists()
+      }
+    })
   },
 
   methods: {
@@ -769,6 +819,9 @@ export default {
           id: doc.id,
           ...doc.data(),
         }))
+
+        // Filter out current user if they are an artist
+        this.allArtists = this.allArtists.filter((artist) => artist.id !== this.userId)
 
         // Get top 6 artists for discovery section
         this.recommendedArtists = this.getRecommendedArtists()
@@ -1115,6 +1168,23 @@ export default {
       this.currentArtistPage = pageIndex
     },
 
+    // Event Carousel Navigation
+    nextEventPage() {
+      if (this.currentEventPage < this.totalEventPages - 1) {
+        this.currentEventPage++
+      }
+    },
+
+    previousEventPage() {
+      if (this.currentEventPage > 0) {
+        this.currentEventPage--
+      }
+    },
+
+    goToEventPage(pageIndex) {
+      this.currentEventPage = pageIndex
+    },
+
     handlePlayerClick(song) {
       const songKey = `${song.artistId}_${song.id}`
 
@@ -1137,6 +1207,23 @@ export default {
     navigateToArtist(artistId) {
       trackArtistClick(artistId) // Track the click
       this.$router.push(`/artist/${artistId}`)
+    },
+
+    scrollToDiscoverArtists() {
+      this.$nextTick(() => {
+        const element = document.getElementById('discover-artists')
+        if (element) {
+          // Account for fixed navigation bar offset
+          const offset = 80 // Adjust this value based on your nav bar height
+          const elementPosition = element.getBoundingClientRect().top
+          const offsetPosition = elementPosition + window.pageYOffset - offset
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          })
+        }
+      })
     },
   },
 }
@@ -1390,6 +1477,8 @@ export default {
   justify-content: center;
   gap: 0.5rem;
   margin-top: 2rem;
+  padding: 0;
+  list-style: none;
 }
 
 .indicator {
@@ -1401,10 +1490,12 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
+  margin: 0;
 }
 
 .indicator:hover {
   background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
 }
 
 .indicator.active {
@@ -1430,6 +1521,25 @@ export default {
   grid-template-columns: repeat(5, 1fr); /* 5 columns for artists */
   grid-template-rows: 1fr;
   gap: 1.5rem;
+}
+
+.carousel-page.events-page {
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns for events */
+  grid-template-rows: 1fr;
+  gap: 1.5rem;
+}
+
+/* Events Carousel */
+.events-carousel {
+  overflow: hidden;
+  width: 100%;
+}
+
+.events-grid-carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
 }
 
 /* Songs Grid (fallback for non-carousel) */
@@ -1892,6 +2002,10 @@ export default {
     grid-template-columns: 1fr; /* 1 artist per page on mobile */
   }
 
+  .carousel-page.events-page {
+    grid-template-columns: 1fr; /* 1 event per page on mobile */
+  }
+
   .songs-grid {
     grid-template-columns: 1fr;
   }
@@ -1937,6 +2051,10 @@ export default {
     grid-template-columns: repeat(3, 1fr); /* 3 artists for tablets */
   }
 
+  .carousel-page.events-page {
+    grid-template-columns: repeat(2, 1fr); /* 2 events for tablets */
+  }
+
   .songs-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1950,6 +2068,10 @@ export default {
 
   .carousel-page.artists-page {
     grid-template-columns: repeat(5, 1fr); /* 5 artists for desktop */
+  }
+
+  .carousel-page.events-page {
+    grid-template-columns: repeat(3, 1fr); /* 3 events for desktop */
   }
 
   .songs-grid {

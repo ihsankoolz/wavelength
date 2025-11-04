@@ -91,6 +91,7 @@
                 <p class="artist-bio">{{ artist.bio || 'Whatever bio they have.' }}</p>
                 <div class="follower-count">{{ artist.followerCount || 500 }} Followers</div>
                 <button
+                  v-if="!isOwnProfile"
                   class="btn-follow"
                   :class="{ 'btn-unfollow': isFollowing }"
                   @click="toggleFollow"
@@ -546,6 +547,11 @@ export default {
     }
   },
   computed: {
+    isOwnProfile() {
+      // Check if the current user is viewing their own profile
+      const user = auth.currentUser
+      return user && this.artist && user.uid === this.artist.id
+    },
     hasSocialLinks() {
       const links = this.artist?.socialLinks || {}
       return links.spotify || links.youtube || links.instagram
@@ -715,6 +721,12 @@ export default {
       const user = auth.currentUser
       if (!user) {
         alert('Please log in to follow artists')
+        return
+      }
+
+      // Prevent self-following
+      if (user.uid === this.artist.id) {
+        alert('You cannot follow yourself')
         return
       }
 
@@ -1302,7 +1314,6 @@ export default {
   cursor: not-allowed;
 }
 
-
 .social-links {
   display: flex;
   gap: 1rem;
@@ -1669,13 +1680,14 @@ export default {
   background: transparent;
   border: none;
   color: white;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
   font-size: 0.9rem;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 0.4rem;
   cursor: pointer;
+  border-radius: 20px;
 }
 
 .action-btn:hover:not(:disabled) {

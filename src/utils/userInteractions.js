@@ -14,13 +14,13 @@ export async function markEventInterested(userId, eventId) {
 
     // Add event to user's interested list
     await updateDoc(userRef, {
-      interestedEvents: arrayUnion(eventId)
+      interestedEvents: arrayUnion(eventId),
     })
 
     // Increment event's interested count and add user
     await updateDoc(eventRef, {
       interestedCount: increment(1),
-      interestedUsers: arrayUnion(userId)
+      interestedUsers: arrayUnion(userId),
     })
 
     return { success: true }
@@ -40,13 +40,13 @@ export async function unmarkEventInterested(userId, eventId) {
 
     // Remove event from user's interested list
     await updateDoc(userRef, {
-      interestedEvents: arrayRemove(eventId)
+      interestedEvents: arrayRemove(eventId),
     })
 
     // Decrement event's interested count and remove user
     await updateDoc(eventRef, {
       interestedCount: increment(-1),
-      interestedUsers: arrayRemove(userId)
+      interestedUsers: arrayRemove(userId),
     })
 
     return { success: true }
@@ -61,18 +61,24 @@ export async function unmarkEventInterested(userId, eventId) {
  */
 export async function followArtist(userId, artistId) {
   try {
+    // Prevent self-following
+    if (userId === artistId) {
+      console.error('Cannot follow yourself')
+      return { success: false, error: 'Cannot follow yourself' }
+    }
+
     const userRef = doc(db, 'users', userId)
     const artistRef = doc(db, 'artists', artistId)
 
     // Add artist to user's following list
     await updateDoc(userRef, {
-      followingArtists: arrayUnion(artistId)
+      followingArtists: arrayUnion(artistId),
     })
 
     // Increment artist's follower count and add user
     await updateDoc(artistRef, {
       followerCount: increment(1),
-      followers: arrayUnion(userId)
+      followers: arrayUnion(userId),
     })
 
     return { success: true }
@@ -87,18 +93,24 @@ export async function followArtist(userId, artistId) {
  */
 export async function unfollowArtist(userId, artistId) {
   try {
+    // Prevent self-unfollowing (shouldn't happen but just in case)
+    if (userId === artistId) {
+      console.error('Cannot unfollow yourself')
+      return { success: false, error: 'Cannot unfollow yourself' }
+    }
+
     const userRef = doc(db, 'users', userId)
     const artistRef = doc(db, 'artists', artistId)
 
     // Remove artist from user's following list
     await updateDoc(userRef, {
-      followingArtists: arrayRemove(artistId)
+      followingArtists: arrayRemove(artistId),
     })
 
     // Decrement artist's follower count and remove user
     await updateDoc(artistRef, {
       followerCount: increment(-1),
-      followers: arrayRemove(userId)
+      followers: arrayRemove(userId),
     })
 
     return { success: true }
@@ -141,4 +153,3 @@ export async function isUserFollowingArtist(userId, artistId) {
     return false
   }
 }
-

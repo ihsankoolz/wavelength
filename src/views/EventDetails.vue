@@ -119,19 +119,18 @@
               :alt="event.artistName"
               class="artist-profile-header"
             />
-            <span class="artist-header-name ms-2 fw-bold">{{ event.artistName }}</span>
+            <router-link
+              :to="`/artist/${event.artistId}`"
+              class="artist-header-name ms-2 fw-bold"
+              v-if="event.artistId"
+            >
+              {{ event.artistName }}
+            </router-link>
+            <span v-else class="artist-header-name ms-2 fw-bold">{{ event.artistName }}</span>
           </div>
 
           <div class="event-desc">
             <p>{{ event.description }}</p>
-          </div>
-
-          <!-- Prominent Interest Count -->
-          <div class="interest-count-display">
-            <div class="interest-count-main">
-              <span class="interest-number">{{ event.interestedCount || 0 }}</span>
-              <span class="interest-label">people interested</span>
-            </div>
           </div>
 
           <div class="d-flex align-items-center justify-content-between mb-4 meta-action-bar">
@@ -141,13 +140,14 @@
             </div>
 
             <div class="text-center">
+              <div class="interest-count-text mb-2">{{ event.interestedCount || 0 }} People Interested</div>
               <button
                 class="btn btn-interest-header"
-                :class="{ active: isInterested }"
+                :class="{ 'btn-interested-active': isInterested }"
                 @click="markInterested"
                 :disabled="isProcessing"
               >
-                <i v-if="isInterested" class="bi bi-check-circle-fill me-2"></i>
+                <span v-if="isInterested" class="me-2">✓</span>
                 {{ isInterested ? 'INTERESTED' : "I'M INTERESTED" }}
               </button>
             </div>
@@ -193,7 +193,7 @@
                   v-if="event.ticket"
                   :href="event.ticket"
                   target="_blank"
-                  class="btn btn-ticket w-100 mb-3"
+                  class="btn btn-ticket w-100"
                 >
                   PURCHASE TICKETS
                 </a>
@@ -393,12 +393,14 @@ export default {
 <style scoped>
 .content-wrapper {
   margin-top: 65px;
+  padding-top: 2rem;
   padding-bottom: 40px;
 }
 .event-details-page {
   min-height: 100vh;
   background: #191717;
   position: relative;
+  font-family: 'Poppins', sans-serif;
 }
 
 .event-title-header {
@@ -407,6 +409,7 @@ export default {
   font-size: 2.1rem;
   margin-bottom: 0.6rem;
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .artist-profile-header {
@@ -414,15 +417,33 @@ export default {
   height: 42px;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid #fff;
   background: #fff;
   box-shadow: none;
   margin-right: 8px;
+  display: block;
 }
 
 .artist-header-name {
   color: #fff;
   font-size: 1.12rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.artist-header-name:hover {
+  color: #bb1814;
+}
+
+.artist-header-name:visited {
+  color: #fff;
+}
+
+.artist-header-name:visited:hover {
+  color: #bb1814;
+}
+
+a {
+  text-decoration: none;
 }
 
 .event-desc {
@@ -443,24 +464,35 @@ export default {
 .btn-interest-header {
   background: #bb1814;
   color: #fff;
-  font-weight: 700;
-  font-size: 0.95rem;
-  border-radius: 25px;
-  border: none;
-  padding: 12px 24px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  white-space: nowrap;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-radius: 22px;
+  border: 2px solid #bb1814;
+  padding: 8px 24px;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  box-sizing: border-box;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.btn-interest-header:hover:not(:disabled) {
-  background: #960f0c;
-  color: #fff;
-  transform: scale(1.02);
+.btn-interest-header:hover {
+  border: 2px solid #6E0B0B;
+  background: #6E0B0B;
+  color: white;
+  transform: none;
+}
+
+.btn-interest-header.btn-interested-active {
+  background: transparent;
+  border: 2px solid #bb1814;
+}
+
+.btn-interest-header.btn-interested-active:hover:not(:disabled) {
+  background: #bb1814;
+  color: white;
 }
 
 .btn-interest-header:disabled {
@@ -468,47 +500,15 @@ export default {
   cursor: not-allowed;
 }
 
-.btn-interest-header.active {
-  background: #4a4a4a;
-  color: #fff;
-}
 
-.btn-interest-header.active:hover:not(:disabled) {
-  background: #3a3a3a;
-}
-
-/* Prominent Interest Count Display */
-.interest-count-display {
-  text-align: center;
-  margin: 20px 0 30px 0;
-  padding: 20px;
-  background: rgba(187, 24, 20, 0.1);
-  border: 2px solid rgba(187, 24, 20, 0.3);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-}
-
-.interest-count-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.interest-number {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #bb1814;
-  line-height: 1;
-  text-shadow: 0 2px 8px rgba(187, 24, 20, 0.3);
-}
-
-.interest-label {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.interest-count-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  text-align: right;
+  margin-right: 10px;
 }
 
 .card {
@@ -527,16 +527,16 @@ export default {
   box-shadow: 0 8px 32px rgba(187, 24, 20, 0.1);
 }
 
-.event-map-card:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(187, 24, 20, 0.3);
-  box-shadow: 0 12px 40px rgba(187, 24, 20, 0.15);
-}
-
 .map-container {
   position: relative;
   overflow: hidden;
   border-radius: 16px 16px 0 0;
+  min-height: 400px;
+}
+
+.map-container :deep(.event-map) {
+  height: 400px !important;
+  min-height: 400px;
 }
 
 .map-container iframe {
@@ -593,74 +593,66 @@ export default {
 .btn-directions {
   background: #bb1814;
   color: #fff;
-  border-radius: 12px;
-  font-size: 1rem;
+  border-radius: 22px;
+  font-size: 1.1rem;
   font-weight: 600;
   border: none;
-  padding: 12px 24px;
-  letter-spacing: 0.5px;
+  padding: 8px 24px;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  box-sizing: border-box;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(187, 24, 20, 0.3);
 }
 
 .btn-directions:hover {
-  background: #a30c0e;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(187, 24, 20, 0.4);
+  background: #6E0B0B;
+  color: white;
+  transform: none;
 }
 
 .btn-ticket {
-  background: linear-gradient(135deg, #bb1814 0%, #a30c0e 100%);
+  background: #bb1814;
   color: #fff;
-  border-radius: 12px;
-  font-size: 1.05rem;
+  border-radius: 22px;
+  font-size: 1.1rem;
   font-weight: 600;
   border: none;
-  padding: 14px 0;
-  letter-spacing: 0.5px;
+  padding: 8px 24px;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  box-sizing: border-box;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(187, 24, 20, 0.3);
 }
 
 .btn-ticket:hover {
-  background: linear-gradient(135deg, #a30c0e 0%, #8b0a0c 100%);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(187, 24, 20, 0.4);
+  background: #6E0B0B;
+  color: white;
+  transform: none;
 }
 
 .btn-share {
-  background: linear-gradient(135deg, #bb1814 0%, #a30c0e 100%);
+  background: #bb1814;
   color: #fff;
-  border-radius: 12px;
-  font-size: 1.05rem;
+  border-radius: 22px;
+  font-size: 1.1rem;
   font-weight: 600;
   border: none;
-  padding: 14px 0;
-  letter-spacing: 0.5px;
+  padding: 8px 24px;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  box-sizing: border-box;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(187, 24, 20, 0.3);
 }
 
 .btn-share:hover {
-  background: linear-gradient(135deg, #a30c0e 0%, #8b0a0c 100%);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(187, 24, 20, 0.4);
-}
-
-.container {
-  max-width: 900px;
+  background: #6E0B0B;
+  color: white;
+  transform: none;
 }
 
 @media (max-width: 768px) {
   .event-title-header {
     font-size: 1.3rem;
-  }
-  .container {
-    max-width: 100%;
-    padding: 0 1.35rem;
   }
 
   .meta-action-bar {
@@ -672,14 +664,6 @@ export default {
   .btn-interest-header {
     align-self: stretch;
     width: 100%;
-  }
-
-  .interest-number {
-    font-size: 2rem;
-  }
-
-  .interest-label {
-    font-size: 1rem;
   }
 }
 
@@ -795,23 +779,24 @@ export default {
 }
 
 .btn-primary-custom {
-  background: linear-gradient(135deg, #bb1814 0%, #a30c0e 100%);
+  background: #bb1814;
   color: #fff;
   border: none;
-  border-radius: 12px;
-  padding: 12px 28px;
+  border-radius: 22px;
+  padding: 8px 24px;
+  font-size: 1.1rem;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(187, 24, 20, 0.3);
 }
 
 .btn-primary-custom:hover {
-  background: linear-gradient(135deg, #a30c0e 0%, #8b0a0c 100%);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(187, 24, 20, 0.4);
+  background: #6E0B0B;
+  color: white;
+  transform: none;
   text-decoration: none;
 }
 </style>

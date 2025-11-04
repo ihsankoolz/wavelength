@@ -4,103 +4,149 @@
       <!-- Music Grid Header -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="music-library-title">MUSIC LIBRARY</h2>
-        <button class="btn-add-music" @click="openAddModal">
-          + ADD MUSIC
-        </button>
+        <button class="btn-add-music" @click="openAddModal">+ ADD MUSIC</button>
       </div>
 
       <!-- Filter Tabs -->
       <div v-if="musicLinks.length > 0" class="filter-tabs mb-4">
-        <button class="filter-tab" :class="{ active: filterType === 'all' }" @click="filterType = 'all'">
+        <button
+          class="filter-tab"
+          :class="{ active: filterType === 'all' }"
+          @click="filterType = 'all'"
+        >
           ALL ({{ musicLinks.length }})
         </button>
-        <button class="filter-tab" :class="{ active: filterType === 'single' }"
-          @click="filterType = 'single'">
+        <button
+          class="filter-tab"
+          :class="{ active: filterType === 'single' }"
+          @click="filterType = 'single'"
+        >
           SINGLES ({{ getSongsByType('single').length }})
         </button>
-        <button class="filter-tab" :class="{ active: filterType === 'album' }"
-          @click="filterType = 'album'">
+        <button
+          class="filter-tab"
+          :class="{ active: filterType === 'album' }"
+          @click="filterType = 'album'"
+        >
           ALBUMS ({{ getSongsByType('album').length }})
         </button>
-        <button class="filter-tab" :class="{ active: filterType === 'video' }"
-          @click="filterType = 'video'">
+        <button
+          class="filter-tab"
+          :class="{ active: filterType === 'video' }"
+          @click="filterType = 'video'"
+        >
           VIDEOS ({{ getSongsByType('video').length }})
         </button>
       </div>
     </div>
 
     <!-- Music Grid -->
-    <div v-if="filteredMusicLinks.length > 0" class="music-grid">
-      <div v-for="music in displayedMusicLinks" :key="music.id" class="music-item-card">
-        <!-- Platform Badge -->
-        <div class="platform-badge-public" :class="music.platform">
-          <i class="bi" :class="music.platform === 'spotify' ? 'bi-spotify' : 'bi-youtube'"></i>
-        </div>
-
-        <!-- Music Type Badge -->
-        <span class="type-badge" :class="getTypeBadgeClass(music.type)">
-          {{ music.type }}
-        </span>
-
-        <!-- Music Info -->
-        <div class="music-item-info">
-          <div class="music-item-header">
-            <img
-              :src="artistProfileImage || 'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff'"
-              :alt="artistName || 'Artist'"
-              class="music-artist-avatar"
-            />
-            <div class="music-title-artist">
-              <h5 class="music-item-title">{{ music.title }}</h5>
-              <p class="music-item-artist">{{ artistName || 'Artist' }}</p>
-            </div>
+    <div v-if="filteredMusicLinks.length > 0" class="song-carousel">
+      <div v-for="music in displayedMusicLinks" :key="music.id" class="song-card">
+        <!-- Song Header - Just Title and Platform/Type Badges -->
+        <div class="song-header">
+          <div class="song-info">
+            <h6 class="song-title">{{ music.title }}</h6>
           </div>
 
-          <!-- Genres -->
-          <div v-if="music.genres && music.genres.length > 0" class="music-item-genres">
-            <span class="genre-tag-small">{{ music.genres.slice(0, 2).join(', ') }}</span>
+          <!-- Platform and Type Badges -->
+          <div class="badges-container">
+            <!-- Music Type Badge -->
+            <span v-if="music.type" class="type-badge" :class="getTypeBadgeClass(music.type)">
+              {{ music.type }}
+            </span>
+
+            <!-- Platform Badge -->
+            <div class="platform-badge-song" :class="music.platform">
+              <i
+                class="bi"
+                :class="
+                  music.platform === 'spotify'
+                    ? 'bi-spotify'
+                    : music.platform === 'youtube'
+                      ? 'bi-youtube'
+                      : music.platform === 'soundcloud'
+                        ? 'bi-soundwave'
+                        : 'bi-music-note'
+                "
+              ></i>
+            </div>
           </div>
         </div>
 
         <!-- Embedded Player -->
-        <div class="embed-container">
+        <div class="iframe-container">
           <!-- Spotify Embed -->
-          <div v-if="music.platform === 'spotify'" class="spotify-embed-wrapper" :class="{ 'is-album': music.type === 'album' }">
-            <iframe
-              :src="music.embedUrl"
-              width="100%"
-              height="232"
-              frameborder="0"
-              allowtransparency="true"
-              allow="encrypted-media"
-              loading="lazy"
-              style="height: 232px !important; min-height: 232px !important; max-height: 232px !important;"
-            ></iframe>
-          </div>
+          <iframe
+            v-if="music.platform === 'spotify'"
+            :src="music.embedUrl"
+            width="100%"
+            height="232"
+            frameborder="0"
+            allowtransparency="true"
+            allow="encrypted-media"
+            loading="lazy"
+            class="music-iframe"
+            style="
+              height: 232px !important;
+              min-height: 232px !important;
+              max-height: 232px !important;
+            "
+          ></iframe>
 
           <!-- YouTube Embed -->
-          <div v-if="music.platform === 'youtube'" class="youtube-embed-wrapper">
-            <iframe
-              :src="music.embedUrl"
-              width="100%"
-              height="232"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              loading="lazy"
-              style="height: 232px !important; min-height: 232px !important; max-height: 232px !important;"
-            ></iframe>
-          </div>
+          <iframe
+            v-else-if="music.platform === 'youtube'"
+            :src="music.embedUrl"
+            width="100%"
+            height="232"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+            class="music-iframe"
+            style="
+              height: 232px !important;
+              min-height: 232px !important;
+              max-height: 232px !important;
+            "
+          ></iframe>
+
+          <!-- SoundCloud Embed -->
+          <iframe
+            v-else-if="music.platform === 'soundcloud'"
+            :src="music.embedUrl"
+            width="100%"
+            height="232"
+            frameborder="0"
+            loading="lazy"
+            class="music-iframe"
+            style="
+              height: 232px !important;
+              min-height: 232px !important;
+              max-height: 232px !important;
+            "
+          ></iframe>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="music-actions mt-3">
-          <button class="btn-action-edit" @click="editMusic(music)" title="Edit">
-            <i class="bi bi-pencil"></i> Edit
-          </button>
-          <button class="btn-action-delete" @click="confirmDelete(music)" title="Delete">
-            <i class="bi bi-trash"></i> Delete
-          </button>
+        <!-- Bottom Row: Genre Tags Left, Action Buttons Right -->
+        <div class="song-bottom">
+          <!-- Genre Tags -->
+          <div v-if="music.genres && music.genres.length > 0" class="genres-container">
+            <span v-for="genre in music.genres.slice(0, 2)" :key="genre" class="genre-tag">
+              {{ genre }}
+            </span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="song-actions">
+            <button class="btn-action-edit" @click="editMusic(music)" title="Edit">
+              <i class="bi bi-pencil"></i> Edit
+            </button>
+            <button class="btn-action-delete" @click="confirmDelete(music)" title="Delete">
+              <i class="bi bi-trash"></i> Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -181,9 +227,7 @@
                       v-model="formData.type"
                       value="single"
                     />
-                    <label class="btn btn-outline-modal" for="type-single">
-                      SINGLE
-                    </label>
+                    <label class="btn btn-outline-modal" for="type-single"> SINGLE </label>
 
                     <input
                       type="radio"
@@ -192,9 +236,7 @@
                       v-model="formData.type"
                       value="album"
                     />
-                    <label class="btn btn-outline-modal" for="type-album">
-                      ALBUM
-                    </label>
+                    <label class="btn btn-outline-modal" for="type-album"> ALBUM </label>
                   </template>
 
                   <!-- Show Video only for YouTube -->
@@ -207,9 +249,7 @@
                       value="video"
                       checked
                     />
-                    <label class="btn btn-outline-modal" for="type-video">
-                      VIDEO
-                    </label>
+                    <label class="btn btn-outline-modal" for="type-video"> VIDEO </label>
                   </template>
                 </div>
               </div>
@@ -225,9 +265,7 @@
                     v-model="formData.platform"
                     value="spotify"
                   />
-                  <label class="btn btn-outline-modal" for="platform-spotify">
-                    SPOTIFY
-                  </label>
+                  <label class="btn btn-outline-modal" for="platform-spotify"> SPOTIFY </label>
 
                   <input
                     type="radio"
@@ -236,9 +274,7 @@
                     v-model="formData.platform"
                     value="youtube"
                   />
-                  <label class="btn btn-outline-modal" for="platform-youtube">
-                    YOUTUBE
-                  </label>
+                  <label class="btn btn-outline-modal" for="platform-youtube"> YOUTUBE </label>
                 </div>
               </div>
 
@@ -279,9 +315,7 @@
                   <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
                   {{ loading ? 'SAVING...' : isEditMode ? 'UPDATE MUSIC' : 'ADD MUSIC' }}
                 </button>
-                <button type="button" class="btn-modal-cancel" @click="closeModal">
-                  CANCEL
-                </button>
+                <button type="button" class="btn-modal-cancel" @click="closeModal">CANCEL</button>
               </div>
             </form>
           </div>
@@ -725,111 +759,147 @@ export default {
   color: white;
 }
 
-/* Music Grid */
-.music-grid {
+/* Song Carousel */
+.song-carousel {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
+  overflow-y: visible;
 }
 
-.music-item-card {
-  background: rgba(35, 35, 38, 0.8);
-  border-radius: 12px;
+/* Song Card Styles */
+.song-card {
+  background: rgba(35, 35, 38, 0.95);
+  border-radius: 16px;
   padding: 1.5rem;
-  position: relative;
   transition: all 0.3s ease;
   border: 2px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  backdrop-filter: blur(10px);
 }
 
-.music-item-card:hover {
-  transform: translateY(-4px);
+.song-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(187, 24, 20, 0.2);
+  border-color: rgba(187, 24, 20, 0.3);
 }
 
-.platform-badge-public {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
+/* Song Header */
+.song-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.song-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.song-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Badges Container */
+.badges-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Type Badge */
+.type-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+/* Platform Badge */
+.platform-badge-song {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
+  backdrop-filter: blur(10px);
 }
 
-.platform-badge-public.spotify {
-  background: #1db954;
+.platform-badge-song.spotify {
+  background: rgba(29, 185, 84, 0.9);
 }
 
-.platform-badge-public.youtube {
-  background: #ff0000;
+.platform-badge-song.youtube {
+  background: rgba(255, 0, 0, 0.9);
 }
 
-.type-badge {
-  display: inline-block;
-  padding: 4px 12px;
+.platform-badge-song.soundcloud {
+  background: rgba(255, 85, 0, 0.9);
+}
+
+/* Iframe Container */
+.iframe-container {
+  margin: 0.75rem 0;
   border-radius: 12px;
-  font-size: 0.75rem;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.music-iframe {
+  width: 100%;
+  height: 232px;
+  border: none;
+  border-radius: 12px;
+}
+
+/* Bottom Row Layout */
+.song-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Genres Container */
+.genres-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.genre-tag {
+  background: linear-gradient(135deg, #bb1814, #d32f2f);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
-  color: white;
-  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
 }
 
-.type-badge.bg-primary {
-  background: #0d6efd !important;
-}
-
-.type-badge.bg-success {
-  background: #198754 !important;
-}
-
-.type-badge.bg-danger {
-  background: #dc3545 !important;
-}
-
-.type-badge.bg-secondary {
-  background: #6c757d !important;
-}
-
-.music-item-info {
-  padding-right: 40px;
-  margin-top: 0.5rem;
-}
-
-.music-item-header {
+/* Song Actions */
+.song-actions {
   display: flex;
+  gap: 1rem;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-.music-artist-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.music-title-artist {
-  flex: 1;
-  min-width: 0;
-}
-
-.music-item-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 0.25rem;
-}
-
-.music-item-artist {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-  margin: 0;
 }
 
 .music-item-genres {
@@ -987,12 +1057,12 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1050;
-  /* Remove backdrop-filter for better performance */
 }
 
 .modal-dialog {
@@ -1003,26 +1073,26 @@ export default {
 }
 
 .modal-content {
-  border-radius: 16px;
-  border: none;
-  background: #1a1a1a;
+  border-radius: 20px;
+  border: 2px solid rgba(187, 24, 20, 0.3);
+  background: rgba(25, 23, 23, 0.95);
+  backdrop-filter: blur(20px);
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  /* Use transform instead of box-shadow for better performance */
-  transform: translateZ(0);
-  will-change: transform;
+  box-shadow: 0 20px 60px rgba(187, 24, 20, 0.2);
 }
 
 .modal-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(187, 24, 20, 0.2);
   padding: 1.5rem;
-  background: #1a1a1a;
+  background: rgba(35, 35, 38, 0.8);
+  backdrop-filter: blur(10px);
   flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-radius: 20px 20px 0 0;
 }
 
 .modal-title {
@@ -1037,7 +1107,7 @@ export default {
 .btn-close-modal {
   background: transparent;
   border: none;
-  color: white;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 1.5rem;
   cursor: pointer;
   padding: 0;
@@ -1051,34 +1121,37 @@ export default {
 }
 
 .btn-close-modal:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(187, 24, 20, 0.2);
   color: #bb1814;
+  transform: scale(1.1);
 }
 
 .modal-body {
   padding: 1.5rem;
-  background: #1a1a1a;
+  background: rgba(25, 23, 23, 0.95);
+  backdrop-filter: blur(10px);
   overflow-y: auto;
   flex: 1 1 auto;
 }
 
 .modal-alert {
-  background: rgba(220, 53, 69, 0.2);
-  border: 1px solid rgba(220, 53, 69, 0.5);
-  color: #ff6b6b;
+  background: rgba(187, 24, 20, 0.2);
+  border: 1px solid rgba(187, 24, 20, 0.5);
+  color: #ff9999;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   position: relative;
+  backdrop-filter: blur(10px);
 }
 
 .btn-close-alert {
   background: transparent;
   border: none;
-  color: #ff6b6b;
+  color: #ff9999;
   font-size: 1.25rem;
   cursor: pointer;
   padding: 0;
@@ -1088,6 +1161,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-close-alert:hover {
+  color: #bb1814;
+  transform: scale(1.1);
 }
 
 .modal-field {
@@ -1096,7 +1175,7 @@ export default {
 
 .modal-label {
   display: block;
-  color: white;
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 600;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -1107,17 +1186,24 @@ export default {
 .modal-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: white;
-  border: none;
-  border-radius: 8px;
-  color: #333;
+  background: rgba(35, 35, 38, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
   font-size: 1rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.modal-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .modal-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(187, 24, 20, 0.3);
+  border-color: #bb1814;
+  box-shadow: 0 0 0 3px rgba(187, 24, 20, 0.2);
+  background: rgba(35, 35, 38, 0.9);
 }
 
 /* Button Groups - Dark Theme Style */
@@ -1136,18 +1222,18 @@ export default {
 .btn-outline-modal {
   flex: 1;
   padding: 8px 20px;
-  background: transparent;
-  color: #bb1814;
-  border: 2px solid #bb1814;
+  background: rgba(35, 35, 38, 0.6);
+  color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(187, 24, 20, 0.4);
   border-radius: 0;
   font-weight: 600;
   font-size: 0.9rem;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: all 0.3s ease;
   white-space: nowrap;
   position: relative;
-  will-change: background-color, border-color, color;
+  backdrop-filter: blur(10px);
 }
 
 /* First button - left side rounded */
@@ -1175,19 +1261,22 @@ export default {
 }
 
 .btn-outline-modal:hover {
-  background: rgba(187, 24, 20, 0.15);
-  color: #bb1814;
+  background: rgba(187, 24, 20, 0.2);
+  color: white;
+  border-color: #bb1814;
+  transform: translateY(-1px);
 }
 
 .btn-check:checked + .btn-outline-modal {
-  background: #bb1814;
+  background: linear-gradient(135deg, #bb1814, #9d1310);
   color: white;
   border-color: #bb1814;
   z-index: 1;
+  box-shadow: 0 4px 15px rgba(187, 24, 20, 0.3);
 }
 
 .btn-check:checked + .btn-outline-modal:hover {
-  background: #9d1310;
+  background: linear-gradient(135deg, #9d1310, #7a0f0d);
   border-color: #9d1310;
 }
 
@@ -1221,7 +1310,10 @@ export default {
   border-radius: 20px;
   text-align: center;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
   font-size: 0.75rem;
   font-weight: 600;
   color: #bb1814;
@@ -1261,7 +1353,7 @@ export default {
 .btn-modal-primary {
   flex: 1;
   padding: 0.75rem 1.5rem;
-  background: #bb1814;
+  background: linear-gradient(135deg, #bb1814, #9d1310);
   color: white;
   border: none;
   border-radius: 22px;
@@ -1272,24 +1364,28 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 0;
+  box-shadow: 0 4px 15px rgba(187, 24, 20, 0.3);
 }
 
 .btn-modal-primary:hover:not(:disabled) {
-  background: #9d1310;
-  /* Remove transform to reduce repaints */
+  background: linear-gradient(135deg, #9d1310, #7a0f0d);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(187, 24, 20, 0.4);
 }
 
 .btn-modal-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-modal-cancel {
   flex: 1;
   padding: 0.75rem 1.5rem;
-  background: transparent;
-  color: #bb1814;
-  border: 2px solid #bb1814;
+  background: rgba(35, 35, 38, 0.6);
+  color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(187, 24, 20, 0.4);
   border-radius: 22px;
   font-weight: 600;
   font-size: 0.95rem;
@@ -1298,17 +1394,19 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 0;
+  backdrop-filter: blur(10px);
 }
 
 .btn-modal-cancel:hover {
-  background: #bb1814;
+  background: rgba(187, 24, 20, 0.2);
   border-color: #bb1814;
   color: white;
+  transform: translateY(-2px);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .music-grid {
+  .song-carousel {
     grid-template-columns: 1fr;
   }
 
@@ -1325,15 +1423,11 @@ export default {
   .music-library-title {
     font-size: 1.5rem;
   }
-
-  .modal-dialog {
-    width: 95%;
-  }
 }
 
 /* Tablet responsive - 2 columns for medium screens */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .music-grid {
+  .song-carousel {
     grid-template-columns: repeat(2, 1fr);
   }
 }
