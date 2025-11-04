@@ -492,15 +492,21 @@ export default {
 
 .welcome-section h1 {
   color: #fff;
-  letter-spacing: 1px;
+  font-weight: 700;
   font-size: 2.3rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   padding-top: 2rem;
 }
 
 .welcome-section p {
   color: #d4d5db;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
+
 
 .card {
   border: none;
@@ -600,11 +606,16 @@ input::placeholder {
 
 @media (max-width: 768px) {
   .content-wrapper {
-    margin-top: 70px;
+    margin-top: 80px;
   }
 
   .welcome-section h1 {
-    font-size: 1.5rem;
+    font-size: 2rem;
+    padding-top: 1rem;
+  }
+
+  .welcome-section p {
+    font-size: 0.85rem;
   }
 }
 

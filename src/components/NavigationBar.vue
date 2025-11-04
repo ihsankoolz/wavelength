@@ -1078,7 +1078,7 @@ export default {
 }
 
 /* Responsive Styles */
-@media (max-width: 992px) {
+@media (max-width: 991.98px) {
   .navbar-custom {
     padding: 1rem;
   }
