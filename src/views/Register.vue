@@ -536,6 +536,7 @@ export default {
 }
 .auth-wrapper {
   min-height: 100vh;
+  
   background: #191717;
   position: relative;
   font-family: 'Poppins', sans-serif;
@@ -681,6 +682,7 @@ export default {
   background: #b71c1c;
   min-width: 330px;
   border-radius: 24px 0 0 24px;
+  
 }
 
 .form-card {
@@ -699,6 +701,7 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   transition: all 0.4s ease;
+  
 }
 
 .glass-card:hover {
@@ -1165,32 +1168,35 @@ export default {
   font-size: 1.1rem;
   margin-bottom: 24px;
 }
-
-@media (min-width: 992px) {
-  .rounded-start-lg-5 {
-    border-top-left-radius: 1rem !important;
-    border-bottom-left-radius: 1rem !important;
-  }
-}
-/* Fix mobile background to match desktop animated background */
- @media (max-width: 991.98px) {
+@media (max-width: 991.98px) {
   .auth-right {
     background: transparent;
     border-radius: 0;
+    padding: 0;  /* Remove padding */
   }
   
   .form-card {
-    background: rgba(183, 28, 28, 0.95);
+    background: rgba(183, 28, 28, 0.95) !important;
     backdrop-filter: blur(10px);
     border-radius: 16px;
-    padding: 2rem 1.5rem;
-    /* margin: 1rem; */
+    padding: 2rem 1.5rem !important;
+    margin: auto !important;  /* Force no margin */
+    width: 60% !important;  /* Full width */
+    max-width: none !important;  /* Remove max-width constraint */
+    margin-top: 40px !important;  
+    justify-content: center ;
+     min-width: 250px !important;  
+     align-items: center !important;
+   } 
+  
+  .auth-wrapper {
+    background: #191717;
+  }
+  
+  .auth-logo {
+    width: 100px;
   }
 }
-  /* Make sure the dark animated background extends fully */
-   /* .auth-wrapper {
-    background: #191717;
-  } */
 
 
 </style>
