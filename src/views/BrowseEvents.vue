@@ -588,13 +588,6 @@ export default {
   box-shadow: 0 2px 8px 0 rgba(187, 24, 20, 0.12);
 }
 
-/* Grid cards */
-.row .card {
-  background: #232326;
-  color: #fff;
-  border-radius: 15px;
-}
-
 .text-muted {
   color: #b0b1ba !important;
 }
