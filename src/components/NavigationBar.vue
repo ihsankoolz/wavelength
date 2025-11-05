@@ -2,7 +2,9 @@
   <nav class="navbar-custom navbar navbar-expand-xl fixed-top">
     <div class="container-fluid px-2 px-md-3 px-lg-4">
       <!-- Logo and Search Bar -->
-      <div class="d-flex align-items-center logo-search-container flex-wrap flex-xl-nowrap gap-2 gap-md-3 gap-lg-4 gap-xl-4">
+      <div
+        class="d-flex align-items-center logo-search-container flex-wrap flex-xl-nowrap gap-2 gap-md-3 gap-lg-4 gap-xl-4"
+      >
         <router-link to="/home" class="logo-container">
           <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo" />
         </router-link>
@@ -12,7 +14,7 @@
             ref="searchInput"
             type="text"
             class="form-control"
-            placeholder="Search artists, events..."
+            placeholder="Search artists, events, songs..."
             v-model="searchQuery"
             @input="handleSearch"
             @focus="handleFocus"
@@ -82,6 +84,27 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Songs Section -->
+              <div v-if="searchResults.songs.length > 0" class="search-section">
+                <div class="search-section-header"><i class="bi bi-music-note me-2"></i>Songs</div>
+                <div
+                  v-for="song in searchResults.songs"
+                  :key="song.id"
+                  class="search-result-item"
+                  @click="openSongModal(song)"
+                >
+                  <div class="result-icon">
+                    <i class="bi bi-play-circle-fill"></i>
+                  </div>
+                  <div class="result-info">
+                    <div class="result-title">{{ song.title }}</div>
+                    <div class="result-subtitle">
+                      {{ song.artistName }} • {{ song.genres?.slice(0, 2).join(', ') || 'Song' }}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- No Results -->
@@ -100,7 +123,7 @@
         </div>
       </div>
 
-        <!-- Navigation Links and Icons -->
+      <!-- Navigation Links and Icons -->
       <div class="d-flex align-items-center gap-2 gap-md-3 gap-lg-4 gap-xl-4">
         <ul class="nav-links d-none d-xl-flex mb-0 gap-2 gap-xl-4">
           <li>
@@ -151,7 +174,9 @@
           </li>
         </ul>
 
-        <div class="nav-icons d-none d-xl-flex ms-2 ms-md-3 ms-lg-4 ms-xl-4 gap-2 gap-md-3 gap-lg-4 gap-xl-4">
+        <div
+          class="nav-icons d-none d-xl-flex ms-2 ms-md-3 ms-lg-4 ms-xl-4 gap-2 gap-md-3 gap-lg-4 gap-xl-4"
+        >
           <!-- Notification Bell -->
           <NotificationBell />
 
@@ -215,7 +240,11 @@
       </button>
 
       <!-- Mobile Menu (shown below xl breakpoint when hamburger is clicked) -->
-      <div class="collapse navbar-collapse d-xl-none" :class="{ show: mobileMenuOpen }" id="mobileNavbar">
+      <div
+        class="collapse navbar-collapse d-xl-none"
+        :class="{ show: mobileMenuOpen }"
+        id="mobileNavbar"
+      >
         <div class="mobile-search-bar mb-3 px-2 px-md-3">
           <div class="search-bar position-relative w-100">
             <i class="bi bi-search search-icon"></i>
@@ -223,7 +252,7 @@
               ref="searchInputMobile"
               type="text"
               class="form-control"
-              placeholder="Search artists, events..."
+              placeholder="Search artists, events, songs..."
               v-model="searchQuery"
               @input="handleSearch"
               @focus="handleFocus"
@@ -288,6 +317,29 @@
                       <div class="result-title">{{ event.title }}</div>
                       <div class="result-subtitle">
                         {{ event.venue }} • {{ formatDate(event.date) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Songs Section -->
+                <div v-if="searchResults.songs.length > 0" class="search-section">
+                  <div class="search-section-header">
+                    <i class="bi bi-music-note me-2"></i>Songs
+                  </div>
+                  <div
+                    v-for="song in searchResults.songs"
+                    :key="song.id"
+                    class="search-result-item"
+                    @click="openSongModal(song)"
+                  >
+                    <div class="result-icon">
+                      <i class="bi bi-play-circle-fill"></i>
+                    </div>
+                    <div class="result-info">
+                      <div class="result-title">{{ song.title }}</div>
+                      <div class="result-subtitle">
+                        {{ song.artistName }} • {{ song.genres?.slice(0, 2).join(', ') || 'Song' }}
                       </div>
                     </div>
                   </div>
@@ -361,7 +413,9 @@
             </router-link>
           </li>
         </ul>
-        <div class="mobile-nav-icons d-flex align-items-center justify-content-between mt-3 px-2 px-md-3 gap-3">
+        <div
+          class="mobile-nav-icons d-flex align-items-center justify-content-between mt-3 px-2 px-md-3 gap-3"
+        >
           <NotificationBell />
           <div class="dropdown">
             <button
@@ -407,6 +461,9 @@
         </div>
       </div>
     </div>
+
+    <!-- Song Detail Modal -->
+    <SongDetailModal :show="showSongModal" :song="selectedSong" @close="closeSongModal" />
   </nav>
 </template>
 
@@ -415,11 +472,13 @@ import { auth, db } from '@/services/firebase'
 import { signOut } from 'firebase/auth'
 import { doc, getDoc, collection, query, where, getDocs, limit, orderBy } from 'firebase/firestore'
 import NotificationBell from './NotificationBell.vue'
+import SongDetailModal from './SongDetailModal.vue'
 
 export default {
   name: 'NavigationBar',
   components: {
     NotificationBell,
+    SongDetailModal,
   },
   data() {
     return {
@@ -436,9 +495,13 @@ export default {
       searchResults: {
         artists: [],
         events: [],
+        songs: [],
       },
       searchTimeout: null,
       blurTimeout: null,
+      // Song modal state
+      showSongModal: false,
+      selectedSong: null,
     }
   },
   computed: {
@@ -454,7 +517,11 @@ export default {
       return result
     },
     hasResults() {
-      return this.searchResults.artists.length > 0 || this.searchResults.events.length > 0
+      return (
+        this.searchResults.artists.length > 0 ||
+        this.searchResults.events.length > 0 ||
+        this.searchResults.songs.length > 0
+      )
     },
   },
   async mounted() {
@@ -538,7 +605,7 @@ export default {
       console.log('performSearch called, query:', query)
 
       if (query.length === 0) {
-        this.searchResults = { artists: [], events: [] }
+        this.searchResults = { artists: [], events: [], songs: [] }
         return
       }
 
@@ -613,11 +680,60 @@ export default {
           })
           .slice(0, 5) // Limit to 5 results
 
-        this.searchResults = { artists, events }
-        console.log('Search complete. Artists:', artists.length, 'Events:', events.length)
+        // Search songs from all artists' musicLinks
+        const allSongs = []
+        artistsSnapshot.docs.forEach((doc) => {
+          const artistData = doc.data()
+          const musicLinks = artistData.musicLinks || []
+
+          musicLinks.forEach((song) => {
+            allSongs.push({
+              ...song,
+              artistId: doc.id,
+              artistName: artistData.artistName,
+              artistPhoto: artistData.profileImage,
+            })
+          })
+        })
+
+        const songs = allSongs
+          .filter((song) => {
+            const title = song.title?.toLowerCase() || ''
+            const artistName = song.artistName?.toLowerCase() || ''
+            const genres = song.genres?.map((g) => g.toLowerCase()).join(' ') || ''
+            return title.includes(query) || artistName.includes(query) || genres.includes(query)
+          })
+          .sort((a, b) => {
+            const aTitle = a.title?.toLowerCase() || ''
+            const bTitle = b.title?.toLowerCase() || ''
+
+            // Prioritize exact matches first
+            if (aTitle === query && bTitle !== query) return -1
+            if (bTitle === query && aTitle !== query) return 1
+
+            // Then prioritize titles that start with the query
+            const aStarts = aTitle.startsWith(query)
+            const bStarts = bTitle.startsWith(query)
+            if (aStarts && !bStarts) return -1
+            if (bStarts && !aStarts) return 1
+
+            // Finally, sort alphabetically
+            return aTitle.localeCompare(bTitle)
+          })
+          .slice(0, 5) // Limit to 5 results
+
+        this.searchResults = { artists, events, songs }
+        console.log(
+          'Search complete. Artists:',
+          artists.length,
+          'Events:',
+          events.length,
+          'Songs:',
+          songs.length,
+        )
       } catch (error) {
         console.error('Search error:', error)
-        this.searchResults = { artists: [], events: [] }
+        this.searchResults = { artists: [], events: [], songs: [] }
       } finally {
         this.searchLoading = false
       }
@@ -725,6 +841,47 @@ export default {
       this.mobileMenuOpen = false
     },
 
+    openSongModal(song) {
+      console.log('Opening song modal:', song.title)
+
+      // CRITICAL: Force blur the search inputs to ensure clean state
+      if (this.$refs.searchInput) {
+        this.$refs.searchInput.blur()
+      }
+      if (this.$refs.searchInputMobile) {
+        this.$refs.searchInputMobile.blur()
+      }
+
+      // CRITICAL: Clear blur timeout to prevent it from running after modal opens
+      if (this.blurTimeout) {
+        console.log('Clearing blur timeout before opening modal')
+        clearTimeout(this.blurTimeout)
+        this.blurTimeout = null
+      }
+
+      // Reset search state
+      this.searchQuery = ''
+      this.searchResults = { artists: [], events: [], songs: [] }
+      this.searchFocused = false
+      this.searchLoading = false
+
+      // Clear any pending search timeout
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout)
+        this.searchTimeout = null
+      }
+
+      // Open song modal
+      this.selectedSong = song
+      this.showSongModal = true
+      this.mobileMenuOpen = false
+    },
+
+    closeSongModal() {
+      this.showSongModal = false
+      this.selectedSong = null
+    },
+
     formatDate(date) {
       if (!date) return ''
       const dateObj = date.toDate ? date.toDate() : new Date(date)
@@ -734,7 +891,7 @@ export default {
         year: 'numeric',
       })
     },
-    
+
     handleResize() {
       // Close mobile menu when window is resized to xl screens (>= 1200px)
       if (window.innerWidth >= 1200 && this.mobileMenuOpen) {
@@ -760,7 +917,7 @@ export default {
 
       // Reset search state when route changes
       this.searchQuery = ''
-      this.searchResults = { artists: [], events: [] }
+      this.searchResults = { artists: [], events: [], songs: [] }
       this.searchFocused = false
       this.searchLoading = false
 
@@ -815,7 +972,6 @@ export default {
   align-items: center;
   width: 100%;
 }
-
 
 .logo-container {
   display: flex;
@@ -1191,7 +1347,7 @@ export default {
   .navbar-collapse.d-xl-none {
     display: none !important;
   }
-  
+
   .navbar-collapse.d-xl-none.show {
     display: none !important;
   }
@@ -1248,5 +1404,4 @@ export default {
 .mobile-nav-icons :deep(.notification-bell i) {
   color: inherit;
 }
-
 </style>
