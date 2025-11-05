@@ -161,6 +161,7 @@
         </div>
       </div>
     </div>
+  
 
     <!-- Song Detail Modal (combines embed + comments) -->
     <SongDetailModal :show="showSongDetailModal" :song="selectedSongForDetail" @close="closeSongDetailModal"
@@ -359,6 +360,18 @@ export default {
       }
     },
 
+    nextSongPage() {
+      if (this.currentSongPage < this.totalSongPages - 1) {
+        this.currentSongPage++
+      }
+    },
+
+    previousSongPage() {
+      if (this.currentSongPage > 0) {
+        this.currentSongPage--
+      }
+    },
+
     async handleUnlike(song) {
       if (this.unlikingInProgress[song.key]) return
 
@@ -462,6 +475,15 @@ export default {
     },
     previousSongPage() {
       if (this.currentSongPage > 0) this.currentSongPage--
+    },
+  },
+
+  watch: {
+    // Clamp current page when the number of pages changes (e.g., resize or data updates)
+    totalSongPages(newPages) {
+      if (this.currentSongPage > newPages - 1) {
+        this.currentSongPage = Math.max(0, newPages - 1)
+      }
     },
   },
 }
