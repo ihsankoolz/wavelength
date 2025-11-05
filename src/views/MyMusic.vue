@@ -75,10 +75,23 @@
           </router-link>
         </div>
 
-        <!-- Saved Songs Grid -->
-        <div v-else class="row g-4">
-          <div v-for="song in savedSongs" :key="song.key" class="col-12 col-md-6 col-lg-4">
-            <div class="song-card">
+        <!-- Saved Songs Carousel -->
+        <div v-else class="carousel-container px-2 px-sm-0">
+          <button
+            :disabled="currentSongPage === 0"
+            @click="previousSongPage"
+            class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow ms-2 ms-md-0"
+            style="z-index: 1050;"
+            aria-label="Previous songs">
+            <i class="bi bi-chevron-left fs-5"></i>
+          </button>
+
+          <div class="artists-carousel">
+            <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentSongPage * 100}%)` }">
+              <div v-for="(page, pageIndex) in paginatedSavedSongs" :key="`song-page-${pageIndex}`" class="carousel-page artists-page">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2 g-sm-3 g-lg-4 pt-2 pt-sm-3 pb-2 pb-sm-3">
+                  <div v-for="song in page" :key="song.key" class="col">
+                    <div class="song-card">
               <!-- Embedded Player at Top -->
               <div class="player-container">
                 <!-- Spotify Embed -->
@@ -143,11 +156,29 @@
                   </button>
                 </div>
               </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+
+          <button
+            :disabled="currentSongPage >= totalSongPages - 1"
+            @click="nextSongPage"
+            class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow me-2 me-md-0"
+            style="z-index: 1050;"
+            aria-label="Next songs">
+            <i class="bi bi-chevron-right fs-5"></i>
+          </button>
+
+          <div class="position-absolute bottom-0 start-50 translate-middle-x mb-2 bg-dark bg-opacity-50 text-white px-2 py-1 rounded small" style="z-index: 1050;">
+            {{ Math.min(currentSongPage + 1, totalSongPages) }} / {{ totalSongPages || 1 }}
           </div>
         </div>
       </div>
     </div>
+  
 
     <!-- Song Detail Modal (combines embed + comments) -->
     <SongDetailModal :show="showSongDetailModal" :song="selectedSongForDetail" @close="closeSongDetailModal"
@@ -180,11 +211,63 @@ export default {
       selectedSongForDetail: null,
 
       auth,
+      windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1200,
+      currentSongPage: 0,
     }
   },
 
   async mounted() {
     await this.loadSavedSongs()
+    if (typeof window !== 'undefined') {
+      this._resizeTimeout = null
+      this.handleResize = () => {
+        if (this._resizeTimeout) {
+          clearTimeout(this._resizeTimeout)
+        }
+        this._resizeTimeout = setTimeout(() => {
+          this.windowWidth = window.innerWidth
+        }, 150)
+      }
+      window.addEventListener('resize', this.handleResize)
+    }
+  },
+
+  beforeUnmount() {
+    if (typeof window !== 'undefined' && this.handleResize) {
+      window.removeEventListener('resize', this.handleResize)
+    }
+    if (this._resizeTimeout) {
+      clearTimeout(this._resizeTimeout)
+    }
+  },
+
+  computed: {
+    songsPerPage() {
+      const width = this.windowWidth
+      // Mobile: 1 row x 1 col = 1 per page
+      if (width < 768) {
+        return 1
+      }
+      // Tablet: 2 rows x 2 cols = 4 per page
+      if (width < 992) {
+        return 4
+      }
+      // Desktop: 2 rows x 3 cols = 6 per page
+      return 6
+    },
+    paginatedSavedSongs() {
+      const pages = []
+      let startIndex = 0
+      while (startIndex < this.savedSongs.length) {
+        const endIndex = Math.min(startIndex + this.songsPerPage, this.savedSongs.length)
+        pages.push(this.savedSongs.slice(startIndex, endIndex))
+        startIndex = endIndex
+      }
+      return pages
+    },
+    totalSongPages() {
+      return this.paginatedSavedSongs.length
+    },
   },
 
   methods: {
@@ -302,6 +385,18 @@ export default {
       }
     },
 
+    nextSongPage() {
+      if (this.currentSongPage < this.totalSongPages - 1) {
+        this.currentSongPage++
+      }
+    },
+
+    previousSongPage() {
+      if (this.currentSongPage > 0) {
+        this.currentSongPage--
+      }
+    },
+
     async handleUnlike(song) {
       if (this.unlikingInProgress[song.key]) return
 
@@ -400,6 +495,15 @@ export default {
       }
     },
   },
+
+  watch: {
+    // Clamp current page when the number of pages changes (e.g., resize or data updates)
+    totalSongPages(newPages) {
+      if (this.currentSongPage > newPages - 1) {
+        this.currentSongPage = Math.max(0, newPages - 1)
+      }
+    },
+  },
 }
 </script>
 
@@ -418,6 +522,27 @@ export default {
   z-index: 1;
   margin-top: 65px;
   padding-bottom: 40px;
+}
+/* Carousel structure (minimal) */
+.carousel-container {
+  position: relative;
+}
+
+.artists-carousel {
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+}
+
+.artists-grid-carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-page.artists-page {
+  min-width: 100%;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 /* Dynamic Wave Background */
