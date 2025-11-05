@@ -553,6 +553,23 @@ export default {
             const genres = artist.genres?.map((g) => g.toLowerCase()).join(' ') || ''
             return name.includes(query) || genres.includes(query)
           })
+          .sort((a, b) => {
+            const aName = a.artistName?.toLowerCase() || ''
+            const bName = b.artistName?.toLowerCase() || ''
+
+            // Prioritize exact matches first
+            if (aName === query && bName !== query) return -1
+            if (bName === query && aName !== query) return 1
+
+            // Then prioritize names that start with the query
+            const aStarts = aName.startsWith(query)
+            const bStarts = bName.startsWith(query)
+            if (aStarts && !bStarts) return -1
+            if (bStarts && !aStarts) return 1
+
+            // Finally, sort alphabetically
+            return aName.localeCompare(bName)
+          })
           .slice(0, 5) // Limit to 5 results
 
         // Search events
@@ -572,6 +589,23 @@ export default {
               location.includes(query) ||
               genres.includes(query)
             )
+          })
+          .sort((a, b) => {
+            const aTitle = a.title?.toLowerCase() || ''
+            const bTitle = b.title?.toLowerCase() || ''
+
+            // Prioritize exact matches first
+            if (aTitle === query && bTitle !== query) return -1
+            if (bTitle === query && aTitle !== query) return 1
+
+            // Then prioritize titles that start with the query
+            const aStarts = aTitle.startsWith(query)
+            const bStarts = bTitle.startsWith(query)
+            if (aStarts && !bStarts) return -1
+            if (bStarts && !aStarts) return 1
+
+            // Finally, sort alphabetically
+            return aTitle.localeCompare(bTitle)
           })
           .slice(0, 5) // Limit to 5 results
 
