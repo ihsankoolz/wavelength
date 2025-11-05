@@ -291,11 +291,10 @@
                   <div v-if="upcomingEvents.length === 0" class="text-center py-4">
                     <i class="bi bi-calendar-x fs-1 mb-3"></i>
                     <p>No upcoming events to display.</p>
-                    <router-link to="/events/create" class="btn btn-primary">
+                    <button @click="openEventModal" class="btn btn-primary">
                       Create Your First Event
-                    </router-link>
+                    </button>
                   </div>
-
                   <div v-else class="table-responsive">
                     <table class="table table-hover">
                       <thead>
@@ -419,6 +418,15 @@
       </div>
     </div>
   </div>
+
+  <!-- Event Modal -->
+  <EventModal
+    :show="showEventModal"
+    :artistId="artistData.uid"
+    :artistName="artistData.artistName"
+    @close="closeEventModal"
+    @event-saved="onEventSaved"
+  />
 </template>
 
 <script>
@@ -427,17 +435,20 @@ import { useRouter } from 'vue-router'
 import { auth, db } from '@/services/firebase'
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import NavigationBar from '@/components/NavigationBar.vue'
+import EventModal from '@/components/EventModal.vue'
 
 export default {
   name: 'ArtistAnalytics',
   components: {
     NavigationBar,
+    EventModal,
   },
   setup() {
     const router = useRouter()
     const loading = ref(true)
 
     const artistData = reactive({
+      uid: '',
       artistName: '',
       genres: [],
       followerCount: 0,
@@ -446,6 +457,7 @@ export default {
 
     const upcomingEvents = ref([])
     const allEvents = ref([])
+    const showEventModal = ref(false)
 
     // Pagination for music
     const currentPage = ref(1)
@@ -540,6 +552,7 @@ export default {
         if (artistDoc.exists()) {
           const data = artistDoc.data()
           Object.assign(artistData, {
+            uid: user.uid,
             artistName: data.artistName || '',
             genres: data.genres || [],
             followerCount: data.followerCount || 0,
@@ -606,6 +619,19 @@ export default {
       return 'rank-default'
     }
 
+    const openEventModal = () => {
+      showEventModal.value = true
+    }
+
+    const closeEventModal = () => {
+      showEventModal.value = false
+    }
+
+    const onEventSaved = () => {
+      closeEventModal()
+      loadAnalytics() // Refresh the analytics data including events
+    }
+
     onMounted(() => {
       loadAnalytics()
     })
@@ -638,6 +664,11 @@ export default {
       getGenrePercentage,
       getProgressBarClass,
       getRankClass,
+      // Event modal
+      showEventModal,
+      openEventModal,
+      closeEventModal,
+      onEventSaved,
     }
   },
 }
@@ -656,8 +687,8 @@ export default {
 .content-wrapper {
   position: relative;
   z-index: 1;
-  margin-top: 70px;
-  padding-bottom: 60px;
+  margin-top: 65px;
+  padding-bottom: 40px;
 }
 
 /* Dynamic Wave Background */
@@ -703,10 +734,11 @@ export default {
   margin-bottom: 0.5rem;
   letter-spacing: 1px;
   text-transform: uppercase;
+  padding-top: 2rem;
 }
 
 .header-subtitle {
-  color: #d4d5db;
+  color: #b0b1ba;
   font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
