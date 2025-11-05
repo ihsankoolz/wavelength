@@ -51,7 +51,7 @@
 
     <!-- Main Content -->
     <div class="content-wrapper mt-5 mt-md-4">
-      <div class="container py-3 py-md-5">
+      <div class="container py-3 py-md-3">
         <!-- Header -->
         <div class="welcome-section mb-4 mb-md-5 pt-3 pt-md-4 pt-lg-5">
           <h1 class="display-5 fw-bold mb-2">UPCOMING EVENTS</h1>
@@ -491,7 +491,33 @@ export default {
   padding-bottom: 40px;
 }
 
+.welcome-section h1 {
+  color: #fff;
+  font-weight: 700;
+  font-size: 2.3rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding-top: 2rem;
+}
 
+.welcome-section p {
+  color: #d4d5db;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .welcome-section h1 {
+    font-size: 2rem;
+    padding-top: 1rem;
+  }
+  
+  .welcome-section p {
+    font-size: 0.85rem;
+  }
+}
 
 .card {
   border: none;
