@@ -84,11 +84,8 @@
                 <!-- Genre Filter -->
                 <div class="filter-group">
                   <label class="small text-muted me-2">Filter by Genre:</label>
-                  <select
-                    v-model="selectedGenreFilter"
-                    class="form-select form-select-sm"
-                    style="width: auto; display: inline-block"
-                  >
+                  <select v-model="selectedGenreFilter" class="form-select form-select-sm"
+                    style="width: auto; display: inline-block">
                     <option value="">All Genres</option>
                     <option v-for="genre in allGenres" :key="genre" :value="genre">
                       {{ genre }}
@@ -99,11 +96,8 @@
                 <!-- Sort Options -->
                 <div class="sort-group">
                   <label class="small text-muted me-2">Sort by:</label>
-                  <select
-                    v-model="selectedSort"
-                    class="form-select form-select-sm"
-                    style="width: auto; display: inline-block"
-                  >
+                  <select v-model="selectedSort" class="form-select form-select-sm"
+                    style="width: auto; display: inline-block">
                     <option value="recommended">Recommended</option>
                     <option value="popular">Most Popular</option>
                     <option value="recent">Recently Added</option>
@@ -129,22 +123,12 @@
               </button>
 
               <div class="songs-carousel">
-                <div
-                  class="songs-grid-carousel"
-                  :key="songCarouselKey"
-                  :style="{ transform: `translateX(-${currentSongPage * 100}%)` }"
-                >
-                  <div
-                    v-for="(page, pageIndex) in paginatedSongs"
-                    :key="`page-${pageIndex}-${songCarouselKey}`"
-                    class="carousel-page"
-                  >
-                    <div
-                      v-for="song in page"
-                      :key="`${song.artistId}_${song.id}`"
-                      class="song-card"
-                      @click="openSongDetail(song)"
-                    >
+                <div class="songs-grid-carousel" :key="songCarouselKey"
+                  :style="{ transform: `translateX(-${currentSongPage * 100}%)` }">
+                  <div v-for="(page, pageIndex) in paginatedSongs" :key="`page-${pageIndex}-${songCarouselKey}`"
+                    class="carousel-page">
+                    <div v-for="song in page" :key="`${song.artistId}_${song.id}`" class="song-card"
+                      @click="openSongDetail(song)">
                       <!-- Embedded Player at Top -->
                       <div class="player-container" @click.stop="handlePlayerClick(song)">
                         <!-- Spotify Embed -->
@@ -202,8 +186,8 @@
                           <button @click.stop="toggleLike(song)" class="stat-button"
                             :class="{ liked: isSongLiked(song) }"
                             :disabled="likingInProgress[`${song.artistId}_${song.id}`]" :title="isSongLiked(song)
-                                ? 'Unlike and remove from saved songs'
-                                : 'Like this song and save it to My Music'
+                              ? 'Unlike and remove from saved songs'
+                              : 'Like this song and save it to My Music'
                               ">
                             <span class="icon">❤️</span>
                             <span class="count">{{ song.likes || 0 }}</span>
@@ -292,53 +276,8 @@
                 <div class="events-grid-carousel" :style="{ transform: `translateX(-${currentEventPage * 100}%)` }">
                   <div v-for="(page, pageIndex) in paginatedEvents" :key="`event-page-${pageIndex}`"
                     class="carousel-page events-page">
-                    <div v-for="event in page" :key="event.id" class="event-card">
-                      <!-- Red Header with Event Title -->
-                      <div class="event-header">
-                        {{ event.title }}
-                      </div>
-
-                      <!-- Event Body -->
-                      <div class="event-body">
-                        <!-- Artist Info & Details -->
-                        <div class="event-info" @click="$router.push(`/events/${event.id}`)">
-                          <img :src="event.artistImage || '/default-avatar.png'" :alt="event.artistName"
-                            class="event-artist-photo" />
-                          <div class="event-info-text">
-                            <h5 class="event-artist-name">{{ event.artistName || 'Artist' }}</h5>
-                            <p class="event-venue">{{ event.venue || event.location }}</p>
-                          </div>
-
-                          <!-- Date Box on Right -->
-                          <div class="event-date-box">
-                            <div class="date-day">{{ formatEventDay(event.date) }}</div>
-                            <div class="date-month">{{ formatEventMonth(event.date) }}</div>
-                          </div>
-                        </div>
-
-                        <!-- Genres as plain text -->
-                        <p class="event-genres-text" v-if="event.genres && event.genres.length > 0">
-                          {{ event.genres.join(', ') }}
-                        </p>
-
-                        <!-- Map Preview -->
-                        <div class="event-map-preview" @click.stop>
-                          <EventMap :location="event.location" :title="event.venue || event.title" size="small" />
-                        </div>
-
-                        <!-- Interested Count -->
-                        <p class="interested-count">
-                          {{ event.interestedCount || 0 }}
-                          {{ (event.interestedCount || 0) === 1 ? 'Other' : 'Others' }} Interested
-                        </p>
-
-                        <!-- I'm Interested Button -->
-                        <button class="btn-interested" :class="{ active: isEventInterested(event.id) }"
-                          @click.stop="toggleEventInterest(event)" :disabled="togglingInterest[event.id]">
-                          <i v-if="isEventInterested(event.id)" class="bi bi-check-circle-fill me-2"></i>
-                          {{ isEventInterested(event.id) ? 'INTERESTED' : "I'M INTERESTED" }}
-                        </button>
-                      </div>
+                    <div v-for="event in page" :key="event.id">
+                      <EventCard :event="event" @interest-changed="handleEventInterestChange" />
                     </div>
                   </div>
                 </div>
@@ -371,6 +310,7 @@ import { auth, db } from '@/services/firebase'
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore'
 import NavigationBar from '@/components/NavigationBar.vue'
 import ArtistCard from '@/components/ArtistCard.vue'
+import EventCard from '@/components/EventCard.vue'
 import EventMap from '@/components/EventMap.vue'
 import SongDetailModal from '@/components/SongDetailModal.vue'
 import {
@@ -392,6 +332,7 @@ export default {
   components: {
     ArtistCard,
     NavigationBar,
+    EventCard,
     EventMap,
     SongDetailModal,
   },
@@ -1215,7 +1156,7 @@ export default {
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23bb1814' viewBox='0 0 16 16'%3e%3cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23bb1814' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 16px 12px;
@@ -1637,181 +1578,6 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
-}
-
-.event-card {
-  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.3s;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.event-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 24px rgba(187, 24, 20, 0.3);
-  border-color: #bb1814;
-}
-
-/* Red Header */
-.event-header {
-  background: #bb1814;
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 1rem 1.25rem;
-  text-align: center;
-  letter-spacing: 0.5px;
-}
-
-/* Event Body */
-.event-body {
-  padding: 1.25rem;
-}
-
-/* Event Info Section */
-.event-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
-.event-artist-photo {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #bb1814;
-  flex-shrink: 0;
-}
-
-.event-info-text {
-  flex: 1;
-  min-width: 0;
-}
-
-.event-artist-name {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 0.3rem;
-}
-
-.event-venue {
-  font-size: 0.85rem;
-  color: #b0b1ba;
-  margin: 0;
-}
-
-/* Date Box on Right */
-.event-date-box {
-  flex-shrink: 0;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #bb1814 0%, #960f0c 100%);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  box-shadow: 0 2px 8px rgba(187, 24, 20, 0.3);
-}
-
-.event-date-box .date-day {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.event-date-box .date-month {
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-top: 0.25rem;
-  text-transform: uppercase;
-}
-
-/* Event Genres as Plain Text */
-.event-genres-text {
-  font-size: 0.9rem;
-  font-weight: 400;
-  color: #b0b1ba;
-  margin-bottom: 1rem;
-  font-family: 'Poppins', sans-serif;
-}
-
-/* Map Preview */
-.event-map-preview {
-  width: 100%;
-  height: 150px;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 1rem;
-}
-
-/* Interested Count */
-.interested-count {
-  font-size: 0.9rem;
-  color: #b0b1ba;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-/* I'm Interested Button */
-.btn-interested {
-  width: 100%;
-  background: #bb1814;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  padding: 0.85rem 1.5rem;
-  font-size: 0.95rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-interested:hover:not(:disabled) {
-  background: #960f0c;
-  transform: scale(1.02);
-}
-
-.btn-interested:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.btn-interested.active {
-  background: #4a4a4a;
-  color: #fff;
-}
-
-.btn-interested.active:hover:not(:disabled) {
-  background: #3a3a3a;
-}
-
-/* Button Overrides */
-.btn-outline-primary {
-  border-color: #bb1814;
-  color: #bb1814;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.btn-outline-primary:hover {
-  background-color: #bb1814;
-  border-color: #bb1814;
-  color: white;
 }
 
 /* Responsive */
