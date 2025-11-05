@@ -87,12 +87,40 @@
       </svg>
     </div>
 
-    <div class="content-wrapper">
-      <img src="/assets/logo1.png" alt="Wavelength" class="onboarding-logo" />
-      <div class="profile-container">
-        <!-- Headings -->
-        <h2 class="profile-title">COMPLETE YOUR PROFILE</h2>
-        <div class="subtitle">LET'S BUILD YOUR STAGE ON WAVELENGTH</div>
+    <div class="content-wrapper py-3">
+      <!-- Logo -->
+      <!-- Mobile Logo (< 768px) -->
+      <img
+        src="/assets/logo1.png"
+        alt="Wavelength"
+        class="onboarding-logo d-block d-md-none"
+        style="width: 90px; top: 22px; left: 60px"
+      />
+
+      <!-- Desktop Logo (≥ 768px) -->
+      <img
+        src="/assets/logo1.png"
+        alt="Wavelength"
+        class="onboarding-logo d-none d-md-block"
+        style="width: 120px; top: 22px; left: 60px"
+      />
+
+      <div class="profile-container px-5">
+        <!-- Mobile Headings (< 768px) -->
+        <h2 class="profile-title d-block d-md-none" style="font-size: 1.8rem">
+          COMPLETE YOUR PROFILE
+        </h2>
+        <div class="subtitle d-block d-md-none" style="font-size: 0.95rem">
+          LET'S BUILD YOUR STAGE ON WAVELENGTH
+        </div>
+
+        <!-- Desktop Headings (≥ 768px) -->
+        <h2 class="profile-title d-none d-md-block" style="font-size: 3rem">
+          COMPLETE YOUR PROFILE
+        </h2>
+        <div class="subtitle d-none d-md-block" style="font-size: 1.12rem">
+          LET'S BUILD YOUR STAGE ON WAVELENGTH
+        </div>
         <form @submit.prevent="submitProfile" class="profile-form">
           <!-- Display Name -->
           <div class="form-group">
@@ -190,7 +218,21 @@
               autocomplete="off"
             />
           </div>
-          <button class="main-btn" :disabled="loading || !canSubmit">
+          <!-- Mobile Button (< 768px) -->
+          <button
+            class="main-btn d-block d-md-none"
+            style="padding: 0.9em 0; font-size: 1rem"
+            :disabled="loading || !canSubmit"
+          >
+            {{ loading ? 'Saving...' : 'COMPLETE SETUP' }}
+          </button>
+
+          <!-- Desktop Button (≥ 768px) -->
+          <button
+            class="main-btn d-none d-md-block"
+            style="padding: 1.13em 0; font-size: 1.13rem"
+            :disabled="loading || !canSubmit"
+          >
             {{ loading ? 'Saving...' : 'COMPLETE SETUP' }}
           </button>
         </form>
@@ -342,7 +384,6 @@ export default {
   color: #fff;
 }
 .onboarding-logo {
-  width: 120px;
   position: absolute;
   top: 22px;
   left: 60px;
@@ -350,7 +391,6 @@ export default {
   z-index: 3;
 }
 .profile-title {
-  font-size: 3rem;
   font-weight: 800;
   text-align: center;
   margin-bottom: 0.4em;
@@ -358,7 +398,6 @@ export default {
 }
 .subtitle {
   text-align: center;
-  font-size: 1.12rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   margin-bottom: 36px;
@@ -429,8 +468,6 @@ export default {
 }
 .genre-avatar .genre-img-wrap {
   position: relative;
-  width: 110px;
-  height: 110px;
   border-radius: 50%;
   overflow: hidden;
   background: #191919;
@@ -487,10 +524,8 @@ export default {
   background: #b51414;
   color: #fff;
   font-weight: 900;
-  font-size: 1.13rem;
   border: none;
   border-radius: 32px;
-  padding: 1.13em 0;
   margin-top: 22px;
   margin-bottom: 60px;
   box-shadow: 0 9px 28px 0 rgba(180, 21, 20, 0.12);
@@ -500,6 +535,14 @@ export default {
   background: #6b2c2c !important;
   color: #fff !important;
 }
+
+/* Desktop Genre Grid */
+.genres-grid .genre-avatar .genre-img-wrap {
+  width: 110px;
+  height: 110px;
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 800px) {
   .profile-container {
     max-width: 99vw;
@@ -510,7 +553,7 @@ export default {
     grid-template-columns: repeat(auto-fit, minmax(74px, 1fr));
     gap: 11px 7px;
   }
-  .genre-img-wrap {
+  .genres-grid .genre-avatar .genre-img-wrap {
     width: 59px;
     height: 59px;
   }
