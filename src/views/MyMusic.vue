@@ -49,11 +49,11 @@
     </div>
 
     <!-- Main Content -->
-    <div class="content-wrapper mt-md-5 pt-5">
+    <div class="content-wrapper">
       <div class="container py-4">
         <!-- Header -->
         <div class="welcome-section mb-5">
-          <h1 class="display-5 fw-bold mb-2 fs-1 fs-md-2">MY MUSIC</h1>
+          <h1 class="display-5 fw-bold mb-2">MY MUSIC</h1>
           <p class="text-muted">Your saved songs collection</p>
         </div>
 
@@ -79,70 +79,71 @@
         <div v-else class="row g-4">
           <div v-for="song in savedSongs" :key="song.key" class="col-12 col-md-6 col-lg-4">
             <div class="song-card">
-            <!-- Embedded Player at Top -->
-            <div class="player-container">
-              <!-- Spotify Embed -->
-              <iframe v-if="song.platform === 'spotify'"
-                :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`" width="100%"
-                height="232" frameborder="0" allowtransparency="true" allow="encrypted-media" loading="lazy"
-                style="min-height: 232px"></iframe>
+              <!-- Embedded Player at Top -->
+              <div class="player-container">
+                <!-- Spotify Embed -->
+                <iframe v-if="song.platform === 'spotify'"
+                  :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`" width="100%"
+                  height="232" frameborder="0" allowtransparency="true" allow="encrypted-media" loading="lazy"
+                  style="min-height: 232px"></iframe>
 
-              <!-- SoundCloud Embed -->
-              <iframe v-else-if="song.platform === 'soundcloud'" width="100%" height="232" scrolling="no"
-                frameborder="no" allow="autoplay"
-                :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
-                  song.url,
-                )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
-                loading="lazy"></iframe>
+                <!-- SoundCloud Embed -->
+                <iframe v-else-if="song.platform === 'soundcloud'" width="100%" height="232" scrolling="no"
+                  frameborder="no" allow="autoplay"
+                  :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
+                    song.url,
+                  )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
+                  loading="lazy"></iframe>
 
-              <!-- YouTube Embed -->
-              <iframe v-else-if="song.platform === 'youtube'" width="100%" height="232"
-                :src="`https://www.youtube.com/embed/${song.youtubeId}`" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen loading="lazy"></iframe>
+                <!-- YouTube Embed -->
+                <iframe v-else-if="song.platform === 'youtube'" width="100%" height="232"
+                  :src="`https://www.youtube.com/embed/${song.youtubeId}`" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen loading="lazy"></iframe>
 
-              <!-- Fallback Link -->
-              <a v-else :href="song.url" target="_blank" rel="noopener noreferrer" class="song-link">
-                🎵 Open {{ song.platform }} →
-              </a>
-            </div>
+                <!-- Fallback Link -->
+                <a v-else :href="song.url" target="_blank" rel="noopener noreferrer" class="song-link">
+                  🎵 Open {{ song.platform }} →
+                </a>
+              </div>
 
-            <!-- Bottom Section: Artist Info, Genre Tags, and Stats -->
-            <div class="song-footer d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
-              <!-- Left Side: Artist Info -->
-              <div class="song-footer-left flex-fill d-flex flex-column gap-2">
-                <div class="song-artist-info d-flex align-items-center gap-3">
-                  <img :src="song.artistPhoto || '/default-avatar.png'" :alt="song.artistName"
-                    class="artist-photo-bottom" />
-                  <div class="song-details flex-fill">
-                    <div class="song-title-bottom">{{ song.title }}</div>
-                    <router-link :to="`/artist/${song.artistId}`" class="artist-name-bottom">
-                      {{ song.artistName }}
-                    </router-link>
+              <!-- Bottom Section: Artist Info, Genre Tags, and Stats -->
+              <div class="song-footer d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
+                <!-- Left Side: Artist Info -->
+                <div class="song-footer-left flex-fill d-flex flex-column gap-2">
+                  <div class="song-artist-info d-flex align-items-center gap-3">
+                    <img :src="song.artistPhoto || '/default-avatar.png'" :alt="song.artistName"
+                      class="artist-photo-bottom" />
+                    <div class="song-details flex-fill">
+                      <div class="song-title-bottom">{{ song.title }}</div>
+                      <router-link :to="`/artist/${song.artistId}`" class="artist-name-bottom">
+                        {{ song.artistName }}
+                      </router-link>
+                    </div>
+                  </div>
+
+                  <!-- Added Date -->
+                  <div class="added-info order-3 order-md-0 text-center text-md-start">
+                    <small class="added-date">Added {{ formatDate(song.savedAt) }}</small>
                   </div>
                 </div>
 
-                <!-- Added Date -->
-                <div class="added-info order-3 order-md-0 text-center text-md-start">
-                  <small class="added-date">Added {{ formatDate(song.savedAt) }}</small>
+                <!-- Right Side: Stats & Actions -->
+                <div
+                  class="song-stats d-flex flex-row align-items-center gap-2 justify-content-between justify-content-md-start flex-shrink-0">
+                  <button @click="handleUnlike(song)" class="stat-button liked" :disabled="unlikingInProgress[song.key]"
+                    title="Remove from saved songs">
+                    <span class="icon">❤️</span>
+                    <span class="count">{{ song.likes || 0 }}</span>
+                  </button>
+
+                  <button @click.stop="openSongDetail(song)" class="stat-button" title="View and post comments">
+                    <span class="icon">💬</span>
+                    <span class="count">{{ song.commentCount || 0 }}</span>
+                  </button>
                 </div>
               </div>
-
-              <!-- Right Side: Stats & Actions -->
-              <div class="song-stats d-flex flex-row align-items-center gap-2 justify-content-between justify-content-md-start flex-shrink-0">
-                <button @click="handleUnlike(song)" class="stat-button liked" :disabled="unlikingInProgress[song.key]"
-                  title="Remove from saved songs">
-                  <span class="icon">❤️</span>
-                  <span class="count">{{ song.likes || 0 }}</span>
-                </button>
-
-                <button @click.stop="openSongDetail(song)" class="stat-button" title="View and post comments">
-                  <span class="icon">💬</span>
-                  <span class="count">{{ song.commentCount || 0 }}</span>
-                </button>
-              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -415,7 +416,8 @@ export default {
 .content-wrapper {
   position: relative;
   z-index: 1;
-  padding-bottom: 60px;
+  margin-top: 65px;
+  padding-bottom: 40px;
 }
 
 /* Dynamic Wave Background */
@@ -456,15 +458,26 @@ export default {
 .welcome-section h1 {
   color: #fff;
   font-weight: 700;
+  font-size: 2.3rem;
   margin-bottom: 0.5rem;
   letter-spacing: 1px;
   text-transform: uppercase;
+  padding-top: 2rem;
 }
 
 .welcome-section p {
   color: #d4d5db;
   font-size: 0.95rem;
+  text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.header-subtitle {
+  color: #b0b1ba;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
 }
 
 .text-muted {
@@ -685,4 +698,14 @@ export default {
   font-size: 0.85rem;
 }
 
+@media (max-width: 768px) {
+  .welcome-section h1 {
+    font-size: 2rem;
+    padding-top: 1rem;
+  }
+
+  .welcome-section p {
+    font-size: 0.85rem;
+  }
+}
 </style>
