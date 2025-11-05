@@ -9,12 +9,13 @@
         <div class="search-bar d-none d-lg-flex position-relative">
           <i class="bi bi-search search-icon"></i>
           <input
+            ref="searchInput"
             type="text"
             class="form-control"
             placeholder="Search artists, events..."
             v-model="searchQuery"
             @input="handleSearch"
-            @focus="searchFocused = true"
+            @focus="handleFocus"
             @blur="handleBlur"
           />
 
@@ -217,12 +218,13 @@
           <div class="search-bar position-relative">
             <i class="bi bi-search search-icon"></i>
             <input
+              ref="searchInputMobile"
               type="text"
               class="form-control"
               placeholder="Search artists, events..."
               v-model="searchQuery"
               @input="handleSearch"
-              @focus="searchFocused = true"
+              @focus="handleFocus"
               @blur="handleBlur"
             />
             <!-- Mobile Search Results Dropdown -->
@@ -434,11 +436,20 @@ export default {
         events: [],
       },
       searchTimeout: null,
+      blurTimeout: null,
     }
   },
   computed: {
     showSearchResults() {
-      return this.searchFocused && (this.searchQuery.trim().length > 0 || this.searchLoading)
+      const result =
+        this.searchFocused && (this.searchQuery.trim().length > 0 || this.searchLoading)
+      console.log('showSearchResults computed:', {
+        searchFocused: this.searchFocused,
+        queryLength: this.searchQuery.trim().length,
+        searchLoading: this.searchLoading,
+        result: result,
+      })
+      return result
     },
     hasResults() {
       return this.searchResults.artists.length > 0 || this.searchResults.events.length > 0
@@ -505,6 +516,8 @@ export default {
 
     // Search functionality
     handleSearch() {
+      console.log('handleSearch called, query:', this.searchQuery)
+
       // Clear previous timeout
       if (this.searchTimeout) {
         clearTimeout(this.searchTimeout)
@@ -518,6 +531,7 @@ export default {
 
     async performSearch() {
       const query = this.searchQuery.trim().toLowerCase()
+      console.log('performSearch called, query:', query)
 
       if (query.length === 0) {
         this.searchResults = { artists: [], events: [] }
@@ -525,6 +539,7 @@ export default {
       }
 
       this.searchLoading = true
+      console.log('Starting search...')
 
       try {
         // Search artists
@@ -537,6 +552,23 @@ export default {
             const name = artist.artistName?.toLowerCase() || ''
             const genres = artist.genres?.map((g) => g.toLowerCase()).join(' ') || ''
             return name.includes(query) || genres.includes(query)
+          })
+          .sort((a, b) => {
+            const aName = a.artistName?.toLowerCase() || ''
+            const bName = b.artistName?.toLowerCase() || ''
+
+            // Prioritize exact matches first
+            if (aName === query && bName !== query) return -1
+            if (bName === query && aName !== query) return 1
+
+            // Then prioritize names that start with the query
+            const aStarts = aName.startsWith(query)
+            const bStarts = bName.startsWith(query)
+            if (aStarts && !bStarts) return -1
+            if (bStarts && !aStarts) return 1
+
+            // Finally, sort alphabetically
+            return aName.localeCompare(bName)
           })
           .slice(0, 5) // Limit to 5 results
 
@@ -558,9 +590,27 @@ export default {
               genres.includes(query)
             )
           })
+          .sort((a, b) => {
+            const aTitle = a.title?.toLowerCase() || ''
+            const bTitle = b.title?.toLowerCase() || ''
+
+            // Prioritize exact matches first
+            if (aTitle === query && bTitle !== query) return -1
+            if (bTitle === query && aTitle !== query) return 1
+
+            // Then prioritize titles that start with the query
+            const aStarts = aTitle.startsWith(query)
+            const bStarts = bTitle.startsWith(query)
+            if (aStarts && !bStarts) return -1
+            if (bStarts && !aStarts) return 1
+
+            // Finally, sort alphabetically
+            return aTitle.localeCompare(bTitle)
+          })
           .slice(0, 5) // Limit to 5 results
 
         this.searchResults = { artists, events }
+        console.log('Search complete. Artists:', artists.length, 'Events:', events.length)
       } catch (error) {
         console.error('Search error:', error)
         this.searchResults = { artists: [], events: [] }
@@ -570,26 +620,105 @@ export default {
     },
 
     handleBlur() {
+      console.log('Search input blurred - setting timeout')
+      // Clear any existing blur timeout
+      if (this.blurTimeout) {
+        clearTimeout(this.blurTimeout)
+      }
       // Delay hiding results to allow click events to fire
-      setTimeout(() => {
+      this.blurTimeout = setTimeout(() => {
+        console.log('Blur timeout executed - setting searchFocused to false')
         this.searchFocused = false
-      }, 300)
+        this.blurTimeout = null
+      }, 200)
+    },
+
+    handleFocus() {
+      console.log('Search input focused')
+
+      // CRITICAL: Cancel any pending blur timeout when focusing
+      if (this.blurTimeout) {
+        console.log('Canceling blur timeout because input was refocused')
+        clearTimeout(this.blurTimeout)
+        this.blurTimeout = null
+      }
+
+      this.searchFocused = true
+      console.log('searchFocused set to true')
+
+      // If there's already text and results, show them
+      if (this.searchQuery.trim().length > 0) {
+        console.log('Re-performing search for existing query')
+        this.performSearch()
+      }
     },
 
     navigateToArtist(artistId) {
       console.log('Navigating to artist:', artistId)
-      this.searchFocused = false
+
+      // CRITICAL: Force blur the search inputs to ensure clean state
+      if (this.$refs.searchInput) {
+        this.$refs.searchInput.blur()
+      }
+      if (this.$refs.searchInputMobile) {
+        this.$refs.searchInputMobile.blur()
+      }
+
+      // CRITICAL: Clear blur timeout to prevent it from running after navigation
+      if (this.blurTimeout) {
+        console.log('Clearing blur timeout before navigation')
+        clearTimeout(this.blurTimeout)
+        this.blurTimeout = null
+      }
+
+      // Reset search state
       this.searchQuery = ''
       this.searchResults = { artists: [], events: [] }
+      this.searchFocused = false
+      this.searchLoading = false
+
+      // Clear any pending search timeout
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout)
+        this.searchTimeout = null
+      }
+
       this.$router.push(`/artist/${artistId}`)
+      this.mobileMenuOpen = false
     },
 
     navigateToEvent(eventId) {
       console.log('Navigating to event:', eventId)
-      this.searchFocused = false
+
+      // CRITICAL: Force blur the search inputs to ensure clean state
+      if (this.$refs.searchInput) {
+        this.$refs.searchInput.blur()
+      }
+      if (this.$refs.searchInputMobile) {
+        this.$refs.searchInputMobile.blur()
+      }
+
+      // CRITICAL: Clear blur timeout to prevent it from running after navigation
+      if (this.blurTimeout) {
+        console.log('Clearing blur timeout before navigation')
+        clearTimeout(this.blurTimeout)
+        this.blurTimeout = null
+      }
+
+      // Reset search state
       this.searchQuery = ''
       this.searchResults = { artists: [], events: [] }
+      this.searchFocused = false
+      this.searchLoading = false
+
+      // Clear any pending search timeout
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout)
+        this.searchTimeout = null
+      }
+
       this.$router.push(`/events/${eventId}`)
+      this.mobileMenuOpen = false
     },
 
     formatDate(date) {
@@ -602,10 +731,36 @@ export default {
       })
     },
   },
+  beforeUnmount() {
+    // Clean up timeouts when component is destroyed
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout)
+    }
+    if (this.blurTimeout) {
+      clearTimeout(this.blurTimeout)
+    }
+  },
   watch: {
     // Close mobile menu when route changes
     $route(to, from) {
       this.mobileMenuOpen = false
+
+      // Reset search state when route changes
+      this.searchQuery = ''
+      this.searchResults = { artists: [], events: [] }
+      this.searchFocused = false
+      this.searchLoading = false
+
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout)
+        this.searchTimeout = null
+      }
+
+      if (this.blurTimeout) {
+        clearTimeout(this.blurTimeout)
+        this.blurTimeout = null
+      }
+
       // Reload user data when coming from edit profile pages
       if (
         from &&

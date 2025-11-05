@@ -959,6 +959,7 @@ export default {
       getSpotifyEmbedUrl,
       getYouTubeEmbedUrl,
       onMusicUpdated,
+      followingArtists,
     }
   },
 }
