@@ -6,73 +6,111 @@
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
-          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+          <animate
+            attributeName="d"
+            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
-                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
+            dur="3s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+          <animate
+            attributeName="d"
+            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
-                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
+            dur="4s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
-          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+          <animate
+            attributeName="d"
+            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
-                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
+            dur="5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+          <animate
+            attributeName="d"
+            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
-                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
+            dur="2.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
-          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+          <animate
+            attributeName="d"
+            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
-                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
+            dur="3.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
-          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+          <animate
+            attributeName="d"
+            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
-                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
+            dur="4.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
-          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+          <animate
+            attributeName="d"
+            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
-                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
+            dur="6s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
-          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+          <animate
+            attributeName="d"
+            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
-                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
+            dur="2s"
+            repeatCount="indefinite"
+          />
         </path>
       </svg>
     </div>
 
     <!-- Main Content -->
     <div class="content-wrapper">
-        <div class="container py-4">
+      <div class="container py-4">
         <!-- Header -->
-            <div class="welcome-section mb-5">
-                <h1 class="display-5 fw-bold mb-2">MY MUSIC</h1>
-                <p class="text-muted">Your saved songs collection</p>
-            </div>
+        <div class="welcome-section mb-5">
+          <h1 class="display-5 fw-bold mb-2">MY MUSIC</h1>
+          <p class="text-muted">Your saved songs collection</p>
+        </div>
 
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="mt-3 text-muted">Loading your music...</p>
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3 text-muted">Loading your music...</p>
         </div>
 
         <!-- Empty State -->
         <div v-else-if="savedSongs.length === 0" class="text-center py-5">
-            <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
-            <h2 class="h4 mb-3 text-white">No saved songs yet</h2>
-            <p class="text-muted mb-4">Start exploring and heart songs you love!</p>
-          <router-link to="/home" class="btn btn-primary">
-            Discover Music
-          </router-link>
+          <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
+          <h2 class="h4 mb-3 text-white">No saved songs yet</h2>
+          <p class="text-muted mb-4">Start exploring and heart songs you love!</p>
+          <router-link to="/home" class="btn btn-primary"> Discover Music </router-link>
         </div>
 
         <!-- Saved Songs Carousel -->
@@ -81,69 +119,119 @@
             v-if="currentSongPage > 0"
             @click="previousSongPage"
             class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
-            aria-label="Previous songs">
+            aria-label="Previous songs"
+          >
             <i class="bi bi-chevron-left fs-5"></i>
           </button>
 
           <div class="artists-carousel">
-            <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentSongPage * 100}%)` }">
-              <div v-for="(page, pageIndex) in paginatedSavedSongs" :key="`song-page-${pageIndex}`" class="carousel-page artists-page">
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2 g-sm-3 g-lg-4 pt-2 pt-sm-3 pb-2 pb-sm-3">
+            <div
+              class="artists-grid-carousel"
+              :style="{ transform: `translateX(-${currentSongPage * 100}%)` }"
+            >
+              <div
+                v-for="(page, pageIndex) in paginatedSavedSongs"
+                :key="`song-page-${pageIndex}`"
+                class="carousel-page artists-page"
+              >
+                <div
+                  class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2 g-sm-3 g-lg-4 pt-2 pt-sm-3 pb-2 pb-sm-3"
+                >
                   <div v-for="song in page" :key="song.key" class="col">
                     <div class="song-card">
-              <!-- Embedded Player at Top -->
-              <div class="player-container">
-                <!-- Spotify Embed -->
-                <iframe v-if="song.platform === 'spotify'"
-                  :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`" width="100%"
-                  height="232" frameborder="0" allowtransparency="true" allow="encrypted-media" loading="lazy"
-                  style="min-height: 232px"></iframe>
+                      <!-- Embedded Player at Top -->
+                      <div class="player-container">
+                        <!-- Spotify Embed -->
+                        <iframe
+                          v-if="song.platform === 'spotify'"
+                          :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`"
+                          width="100%"
+                          height="232"
+                          frameborder="0"
+                          allowtransparency="true"
+                          allow="encrypted-media"
+                          loading="lazy"
+                          style="min-height: 232px"
+                        ></iframe>
 
-                <!-- SoundCloud Embed -->
-                <iframe v-else-if="song.platform === 'soundcloud'" width="100%" height="232" scrolling="no"
-                  frameborder="no" allow="autoplay"
-                  :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
-                    song.url,
-                  )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
-                  loading="lazy"></iframe>
+                        <!-- SoundCloud Embed -->
+                        <iframe
+                          v-else-if="song.platform === 'soundcloud'"
+                          width="100%"
+                          height="232"
+                          scrolling="no"
+                          frameborder="no"
+                          allow="autoplay"
+                          :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
+                            song.url,
+                          )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
+                          loading="lazy"
+                        ></iframe>
 
-                <!-- YouTube Embed -->
-                <iframe v-else-if="song.platform === 'youtube'" width="100%" height="232"
-                  :src="`https://www.youtube.com/embed/${song.youtubeId}`" frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen loading="lazy"></iframe>
+                        <!-- YouTube Embed -->
+                        <iframe
+                          v-else-if="song.platform === 'youtube'"
+                          width="100%"
+                          height="232"
+                          :src="`https://www.youtube.com/embed/${song.youtubeId}`"
+                          frameborder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowfullscreen
+                          loading="lazy"
+                        ></iframe>
 
-                <!-- Fallback Link -->
-                <a v-else :href="song.url" target="_blank" rel="noopener noreferrer" class="song-link">
-                  🎵 Open {{ song.platform }} →
-                </a>
-              </div>
+                        <!-- Fallback Link -->
+                        <a
+                          v-else
+                          :href="song.url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="song-link"
+                        >
+                          🎵 Open {{ song.platform }} →
+                        </a>
+                      </div>
 
-              <!-- Bottom Section: Artist Info, Genre Tags, and Stats -->
-              <div class="song-footer d-flex justify-content-between align-items-center gap-2 w-100">
-                <!-- Left: image, details (with ellipsis!) -->
-                <div class="d-flex align-items-center gap-3 flex-grow-1 min-width-0">
-                  <img :src="song.artistPhoto || '/default-avatar.png'" :alt="song.artistName" class="artist-photo-bottom" />
-                  <div class="song-details min-width-0 overflow-hidden">
-                    <div class="song-title-bottom text-truncate">{{ song.title }}</div>
-                    <router-link :to="`/artist/${song.artistId}`" class="artist-name-bottom text-truncate">
-                      {{ song.artistName }}
-                    </router-link>
-                    <small class="added-date">{{ formatDate(song.savedAt) }}</small>
-                  </div>
-                </div>
-                <!-- Right: Like/Comment buttons -->
-                <div class="song-stats d-flex flex-row align-items-center gap-2 flex-shrink-0 ms-2">
-                  <button @click="handleUnlike(song)" class="stat-button liked" :disabled="unlikingInProgress[song.key]">
-                    <span class="icon">❤️</span>
-                    <span class="count">{{ song.likes || 0 }}</span>
-                  </button>
-                  <button @click.stop="openSongDetail(song)" class="stat-button">
-                    <span class="icon">💬</span>
-                    <span class="count">{{ song.commentCount || 0 }}</span>
-                  </button>
-                </div>
-              </div>
+                      <!-- Bottom Section: Artist Info, Genre Tags, and Stats -->
+                      <div
+                        class="song-footer d-flex justify-content-between align-items-center gap-2 w-100"
+                      >
+                        <!-- Left: image, details (with ellipsis!) -->
+                        <div class="d-flex align-items-center gap-3 flex-grow-1 min-width-0">
+                          <img
+                            :src="song.artistPhoto || '/default-avatar.png'"
+                            :alt="song.artistName"
+                            class="artist-photo-bottom"
+                          />
+                          <div class="song-details min-width-0 overflow-hidden">
+                            <div class="song-title-bottom text-truncate">{{ song.title }}</div>
+                            <router-link
+                              :to="`/artist/${song.artistId}`"
+                              class="artist-name-bottom text-truncate"
+                            >
+                              {{ song.artistName }}
+                            </router-link>
+                            <small class="added-date">Added {{ formatDate(song.savedAt) }}</small>
+                          </div>
+                        </div>
+                        <!-- Right: Like/Comment buttons -->
+                        <div
+                          class="song-stats d-flex flex-row align-items-center gap-2 flex-shrink-0 ms-2"
+                        >
+                          <button
+                            @click="handleUnlike(song)"
+                            class="stat-button liked"
+                            :disabled="unlikingInProgress[song.key]"
+                          >
+                            <span class="icon">❤️</span>
+                            <span class="count">{{ song.likes || 0 }}</span>
+                          </button>
+                          <button @click.stop="openSongDetail(song)" class="stat-button">
+                            <span class="icon">💬</span>
+                            <span class="count">{{ song.commentCount || 0 }}</span>
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -155,17 +243,21 @@
             v-if="currentSongPage < totalSongPages - 1"
             @click="nextSongPage"
             class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
-            aria-label="Next songs">
+            aria-label="Next songs"
+          >
             <i class="bi bi-chevron-right fs-5"></i>
           </button>
         </div>
       </div>
     </div>
-  
 
     <!-- Song Detail Modal (combines embed + comments) -->
-    <SongDetailModal :show="showSongDetailModal" :song="selectedSongForDetail" @close="closeSongDetailModal"
-      @comment-posted="handleDetailCommentPosted" />
+    <SongDetailModal
+      :show="showSongDetailModal"
+      :song="selectedSongForDetail"
+      @close="closeSongDetailModal"
+      @comment-posted="handleDetailCommentPosted"
+    />
   </div>
 </template>
 
@@ -291,8 +383,17 @@ export default {
           const artistId = songKey.substring(0, firstUnderscoreIndex)
           const songId = songKey.substring(firstUnderscoreIndex + 1)
 
+          // Extract timestamp from songId (format: music_timestamp_random)
+          // Example: music_1699123456789_abc123
+          const songIdParts = songId.split('_')
+          let savedTimestamp = Date.now() // fallback to now
+          if (songIdParts.length >= 2 && !isNaN(songIdParts[1])) {
+            savedTimestamp = parseInt(songIdParts[1])
+          }
+
           console.log('  📌 Artist ID:', artistId)
           console.log('  🎵 Song ID:', songId)
+          console.log('  ⏰ Saved timestamp:', savedTimestamp, new Date(savedTimestamp))
 
           // Get artist document
           const artistDoc = await getDoc(doc(db, 'artists', artistId))
@@ -347,7 +448,7 @@ export default {
             artistName: artistData.artistName || 'Unknown Artist',
             artistGenre: artistData.genre || '',
             artistPhoto: artistData.profileImage || '',
-            savedAt: Date.now(), // We'll use current time for now
+            savedAt: savedTimestamp, // Use extracted timestamp from songId
           })
         }
 
@@ -438,7 +539,7 @@ export default {
         title: song.title,
         url: song.url,
         platform: song.platform,
-        embedUrl: embedUrl, 
+        embedUrl: embedUrl,
         spotifyId: song.spotifyId,
         soundcloudUrl: song.soundcloudUrl,
         youtubeId: song.youtubeId,
@@ -507,10 +608,23 @@ export default {
 }
 
 /* Carousel structure (match interests) */
-.carousel-container { position: relative; }
-.artists-carousel { overflow-x: hidden; overflow-y: visible; width: 100%; }
-.artists-grid-carousel { display: flex; transition: transform 0.5s ease-in-out; }
-.carousel-page.artists-page { min-width: 100%; width: 100%; flex-shrink: 0; }
+.carousel-container {
+  position: relative;
+}
+.artists-carousel {
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+}
+.artists-grid-carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+.carousel-page.artists-page {
+  min-width: 100%;
+  width: 100%;
+  flex-shrink: 0;
+}
 
 /* Dynamic Wave Background */
 .wave-svg {
@@ -589,7 +703,6 @@ export default {
 .btn-primary:hover {
   background: #960f0c;
 }
-
 
 .song-card {
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
@@ -712,7 +825,7 @@ export default {
 }
 
 .min-width-0 {
-  min-width: 0 ;
+  min-width: 0;
 }
 
 .artist-name-bottom:hover {
