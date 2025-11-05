@@ -1,12 +1,12 @@
 <template>
-  <nav class="navbar-custom navbar navbar-expand-lg fixed-top">
+  <nav class="navbar-custom navbar navbar-expand-xl fixed-top">
     <div class="container-fluid px-2 px-md-3 px-lg-4">
       <!-- Logo and Search Bar -->
-      <div class="d-flex align-items-center logo-search-container flex-wrap flex-lg-nowrap gap-2 gap-md-3 gap-lg-4">
+      <div class="d-flex align-items-center logo-search-container flex-wrap flex-xl-nowrap gap-2 gap-md-3 gap-lg-4 gap-xl-4">
         <router-link to="/home" class="logo-container">
           <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo" />
         </router-link>
-        <div class="search-bar d-none d-lg-flex position-relative w-100 w-lg-auto">
+        <div class="search-bar d-none d-xl-flex position-relative w-100 w-xl-auto">
           <i class="bi bi-search search-icon"></i>
           <input
             ref="searchInput"
@@ -101,8 +101,8 @@
       </div>
 
         <!-- Navigation Links and Icons -->
-      <div class="d-flex align-items-center gap-2 gap-md-3 gap-lg-4">
-        <ul class="nav-links d-none d-lg-flex mb-0 gap-2 gap-lg-4">
+      <div class="d-flex align-items-center gap-2 gap-md-3 gap-lg-4 gap-xl-4">
+        <ul class="nav-links d-none d-xl-flex mb-0 gap-2 gap-xl-4">
           <li>
             <router-link
               to="/home"
@@ -151,7 +151,7 @@
           </li>
         </ul>
 
-        <div class="nav-icons d-none d-lg-flex ms-2 ms-md-3 ms-lg-4 gap-2 gap-md-3 gap-lg-4">
+        <div class="nav-icons d-none d-xl-flex ms-2 ms-md-3 ms-lg-4 ms-xl-4 gap-2 gap-md-3 gap-lg-4 gap-xl-4">
           <!-- Notification Bell -->
           <NotificationBell />
 
@@ -202,9 +202,9 @@
         </div>
       </div>
 
-      <!-- Hamburger Toggle Button (shown below lg breakpoint) -->
+      <!-- Hamburger Toggle Button (shown below xl breakpoint) -->
       <button
-        class="navbar-toggler d-lg-none ms-2"
+        class="navbar-toggler d-xl-none ms-2"
         type="button"
         @click="mobileMenuOpen = !mobileMenuOpen"
         aria-label="Toggle navigation"
@@ -214,8 +214,8 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Mobile Menu (shown below lg breakpoint when hamburger is clicked) -->
-      <div class="collapse navbar-collapse d-lg-none" :class="{ show: mobileMenuOpen }" id="mobileNavbar">
+      <!-- Mobile Menu (shown below xl breakpoint when hamburger is clicked) -->
+      <div class="collapse navbar-collapse d-xl-none" :class="{ show: mobileMenuOpen }" id="mobileNavbar">
         <div class="mobile-search-bar mb-3 px-2 px-md-3">
           <div class="search-bar position-relative w-100">
             <i class="bi bi-search search-icon"></i>
@@ -736,8 +736,8 @@ export default {
     },
     
     handleResize() {
-      // Close mobile menu when window is resized to large screens (>= 992px)
-      if (window.innerWidth >= 992 && this.mobileMenuOpen) {
+      // Close mobile menu when window is resized to xl screens (>= 1200px)
+      if (window.innerWidth >= 1200 && this.mobileMenuOpen) {
         this.mobileMenuOpen = false
       }
     },
@@ -1186,13 +1186,13 @@ export default {
   transition: all 0.3s ease-in-out;
 }
 
-/* Ensure mobile menu is hidden on large screens */
-@media (min-width: 992px) {
-  .navbar-collapse.d-lg-none {
+/* Ensure mobile menu is hidden on xl screens and above */
+@media (min-width: 1200px) {
+  .navbar-collapse.d-xl-none {
     display: none !important;
   }
   
-  .navbar-collapse.d-lg-none.show {
+  .navbar-collapse.d-xl-none.show {
     display: none !important;
   }
 }

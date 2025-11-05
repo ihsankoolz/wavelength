@@ -4,7 +4,7 @@
     <NavigationBar />
 
     <!-- Dynamic Wave Background -->
-    <div class="wave-svg">
+    <div class="wave-svg d-none d-md-block">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path id="wave1" fill="none" stroke="#B51414" stroke-width="2" opacity="0.6">
           <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
@@ -49,7 +49,7 @@
       </svg>
     </div>
     <div class="content-wrapper">
-      <div class="container py-4">
+      <div class="container py-3 py-md-4">
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-5">
           <div class="spinner-border text-primary" role="status">
@@ -61,8 +61,8 @@
         <!-- Main Content -->
         <div v-else>
           <!-- Interested Events Section -->
-          <section class="mb-5">
-            <div class="welcome-section mb-4">
+          <section class="mb-4 mb-md-5">
+            <div class="welcome-section mb-3 mb-md-4">
               <h1 class="display-5 fw-bold mb-2">INTERESTED EVENTS</h1>
               <p class="text-muted">You are interested in
                 <span>{{ interestedEvents.length }}</span> event{{ interestedEvents.length !== 1 ? 's' : '' }}
@@ -70,28 +70,31 @@
             </div>
 
             <!-- No Interested Events -->
-            <div v-if="interestedEvents.length === 0" class="text-center py-5">
+            <div v-if="interestedEvents.length === 0" class="text-center py-4 py-md-5">
               <i class="bi bi-calendar-x fs-1 text-muted mb-3"></i>
-              <h2 class="h4 mb-3 text-white">No interested events yet</h2>
-              <p class="text-muted mb-4">Start exploring and mark events you're interested in!</p>
+              <h2 class="h4 mb-2 mb-md-3 text-white">No interested events yet</h2>
+              <p class="text-muted mb-3 mb-md-4">Start exploring and mark events you're interested in!</p>
               <router-link to="/events" class="btn btn-primary">
                 Browse Events
               </router-link>
             </div>
 
             <!-- Events Carousel -->
-            <div v-else class="carousel-container">
-              <button v-if="currentEventPage > 0" @click="previousEventPage" class="carousel-arrow left"
+            <div v-else class="carousel-container px-2 px-sm-0">
+              <button
+                v-if="currentEventPage > 0"
+                @click="previousEventPage"
+                class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
                 aria-label="Previous events">
-                <i class="bi bi-chevron-left"></i>
+                <i class="bi bi-chevron-left fs-5"></i>
               </button>
 
               <div class="artists-carousel">
                 <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentEventPage * 100}%)` }">
                   <div v-for="(page, pageIndex) in paginatedInterestedEvents" :key="`event-page-${pageIndex}`"
                     class="carousel-page artists-page">
-                    <div class="row g-3 pt-3 pb-3">
-                      <div v-for="event in page" :key="event.id" class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="row g-2 g-sm-3 pt-2 pt-sm-3 pb-2 pb-sm-3">
+                      <div v-for="event in page" :key="event.id" class="col-12 col-sm-6 col-md-4 col-lg-3">
                         <EventCard :event="event" />
                       </div>
                     </div>
@@ -99,9 +102,12 @@
                 </div>
               </div>
 
-              <button v-if="currentEventPage < totalEventPages - 1" @click="nextEventPage" class="carousel-arrow right"
+              <button
+                v-if="currentEventPage < totalEventPages - 1"
+                @click="nextEventPage"
+                class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
                 aria-label="Next events">
-                <i class="bi bi-chevron-right"></i>
+                <i class="bi bi-chevron-right fs-5"></i>
               </button>
             </div>
           </section>
@@ -118,12 +124,18 @@
             </div>
 
             <!-- Network Graph -->
-            <div class="network-graph-section overflow-x-auto mb-3 mb-sm-4 mb-md-5">
-              <ArtistNetworkGraph v-if="!loading && allArtists.length > 0" :userId="userId" :allArtists="allArtists"
-                :userPreferences="userPreferences" :height="graphHeight" />
+            <div class="network-graph-section overflow-x-auto mb-3 mb-sm-4 mb-md-5 px-2 px-sm-0">
+              <ArtistNetworkGraph
+                v-if="!loading && allArtists.length > 0"
+                :key="graphKey"
+                :userId="userId"
+                :allArtists="allArtists"
+                :userPreferences="userPreferences"
+                :height="graphHeight"
+              />
 
               <!-- Loading State -->
-              <div v-else-if="loading" class="text-center py-5">
+              <div v-else-if="loading" class="text-center py-4 py-md-5">
                 <div class="spinner-border text-danger" role="status">
                   <span class="visually-hidden">Loading...</span>
                 </div>
@@ -168,17 +180,20 @@ export default {
     }
   },
   computed: {
+    graphKey() {
+      // Remount graph when width or dataset size changes
+      return `${this.windowWidth}-${this.allArtists.length}`
+    },
     eventsPerPage() {
       const width = this.windowWidth
-
       if (width < 576) {
-        return 1 // Mobile: 1 card
+        return 1
       } else if (width < 768) {
-        return 2 // Small tablets: 2 cards
+        return 2
       } else if (width < 992) {
-        return 3 // Medium tablets: 3 cards
+        return 3
       } else {
-        return 4 // Large desktop: 4 cards
+        return 4
       }
     },
     paginatedInterestedEvents() {
@@ -227,8 +242,14 @@ export default {
 
     // Add window resize listener for responsive height
     if (typeof window !== 'undefined') {
+      this._resizeTimeout = null
       this.handleResize = () => {
-        this.windowWidth = window.innerWidth
+        if (this._resizeTimeout) {
+          clearTimeout(this._resizeTimeout)
+        }
+        this._resizeTimeout = setTimeout(() => {
+          this.windowWidth = window.innerWidth
+        }, 150)
       }
       window.addEventListener('resize', this.handleResize)
     }
@@ -237,6 +258,9 @@ export default {
     // Remove resize listener
     if (typeof window !== 'undefined' && this.handleResize) {
       window.removeEventListener('resize', this.handleResize)
+    }
+    if (this._resizeTimeout) {
+      clearTimeout(this._resizeTimeout)
     }
   },
   methods: {
@@ -528,50 +552,7 @@ export default {
     padding: 0;
   }
 
-  .carousel-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: white;
-    border: none;
-    color: #000;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .carousel-container:hover .carousel-arrow {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .carousel-arrow:hover {
-    background: #bb1814;
-    color: white;
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  }
-
-  .carousel-arrow.left {
-    left: -25px;
-  }
-
-  .carousel-arrow.right {
-    right: -25px;
-  }
-
-  .carousel-arrow i {
-    font-size: 1.5rem;
-  }
+  /* Arrows now use Bootstrap utilities; custom arrow CSS removed */
 
   .artists-carousel {
     overflow: hidden;
@@ -592,4 +573,24 @@ export default {
   /* Network Graph Section */
   .network-graph-section {
     width: 100%;
-  }</style>
+    min-height: 300px;
+  }
+
+  /* Wave: reduce height and opacity on md and below (hidden < md via class) */
+  @media (max-width: 991.98px) {
+    .wave-svg {
+      height: 220px;
+      opacity: 0.35;
+    }
+  }
+
+  /* Extra small typography adjustments */
+  @media (max-width: 575.98px) {
+    .genre-heading {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+  }
+
+  /* Removed responsive arrow CSS in favor of Bootstrap utility classes */
+  </style>
