@@ -76,7 +76,12 @@ export default {
           },
         })
 
-        this.infoWindow = new google.maps.InfoWindow()
+        this.infoWindow = new google.maps.InfoWindow({
+          disableAutoPan: false,
+          maxWidth: 350,
+          pixelOffset: new google.maps.Size(0, 0),
+        })
+
         this.loading = false
 
         this.updateMarkers()
@@ -109,6 +114,9 @@ export default {
             icon: {
               url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
             },
+            clickable: true,
+            optimized: false,
+            zIndex: google.maps.Marker.MAX_ZINDEX + 1,
           })
 
           // Info window content - Simplified HTML structure
@@ -192,32 +200,6 @@ export default {
 
 <style>
 /* CRITICAL: Global styles for Google Maps Info Window - Must be aggressive to override Google's styles */
-
-/* Hide the white tip/pointer triangle */
-.gm-style-iw-t,
-.gm-style-iw-tc {
-  display: none !important;
-}
-
-/* Main info window container */
-.gm-style .gm-style-iw-c {
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 12px !important;
-  padding: 0 !important;
-  max-width: 340px !important;
-  min-width: 300px !important;
-  overflow: visible !important;
-}
-
-/* Content wrapper */
-.gm-style .gm-style-iw-d {
-  overflow: visible !important;
-  border-radius: 12px !important;
-  max-height: none !important;
-  box-sizing: border-box !important;
-  padding: 0 !important;
-}
 
 /* Event info window custom container */
 .event-info-window {
@@ -336,14 +318,18 @@ export default {
   width: 36px !important;
   height: 36px !important;
   border-radius: 50% !important;
-  top: -12px !important;
-  right: -12px !important;
+  top: 12px !important;
+  right: 12px !important;
   border: 3px solid #2a2a2a !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
   padding: 0 !important;
   margin: 0 !important;
   position: absolute !important;
   z-index: 1000 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .gm-style-iw-c > button:hover,
@@ -365,13 +351,11 @@ export default {
 .gm-style-iw-chr > button::before {
   content: '×' !important;
   color: white !important;
-  font-size: 28px !important;
-  font-weight: 400 !important;
-  line-height: 1 !important;
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  display: block !important;
+  font-size: 32px !important;
+  font-weight: 300 !important;
+  line-height: 30px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 </style>
