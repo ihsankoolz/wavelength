@@ -302,7 +302,7 @@
                             title="View and post comments"
                           >
                             <span class="icon">💬</span>
-                            <span class="count">{{ song.commentCount || 0 }}</span>
+                            <span class="count">{{ song.comments?.length || 0 }}</span>
                           </button>
                         </div>
                       </div>
@@ -514,7 +514,12 @@ import NavigationBar from '@/components/NavigationBar.vue'
 import ArtistCard from '@/components/ArtistCard.vue'
 import EventMap from '@/components/EventMap.vue'
 import SongDetailModal from '@/components/SongDetailModal.vue'
-import { getRecommendedSongs, filterSongsByGenre, sortSongs } from '@/utils/recommendationEngine'
+import {
+  getRecommendedSongs,
+  filterSongsByGenre,
+  sortSongs,
+  getUserProfile,
+} from '@/utils/recommendationEngine'
 import { toggleSongLike, getUserLikedSongs } from '@/utils/musicInteractions'
 import { toggleFollowArtist, getUserFollowedArtists } from '@/utils/artistInteractions'
 import {
@@ -536,6 +541,7 @@ export default {
       userName: '',
       userId: '',
       userGenres: [],
+      userProfile: null, // Store user profile for recommendation scoring
 
       // Songs data
       recommendedSongs: [],
@@ -625,8 +631,8 @@ export default {
         ? filterSongsByGenre(this.recommendedSongs, this.selectedGenreFilter)
         : [...this.recommendedSongs]
 
-      // Apply sort - always return a new array
-      const sorted = sortSongs(filtered, this.selectedSort)
+      // Apply sort - pass userProfile for recommendation scoring
+      const sorted = sortSongs(filtered, this.selectedSort, this.userProfile)
 
       // Log for debugging with first 3 songs
       console.log('🔍 Filters applied:', {
@@ -777,6 +783,15 @@ export default {
           // Load user's interested events
           const interestedEvents = userData.interestedEvents || []
           this.interestedEventsSet = new Set(interestedEvents)
+
+          // Load user profile for recommendation scoring
+          this.userProfile = await getUserProfile(user.uid)
+          console.log('🎯 User profile loaded for recommendations:', {
+            isNewUser: this.userProfile.isNewUser,
+            hasPreferences: this.userProfile.hasPreferences,
+            genres: this.userProfile.preferredGenres.length,
+            followedArtists: this.userProfile.followedArtists.length,
+          })
 
           console.log('👤 User genres:', this.userGenres)
           console.log('❤️ Liked songs:', this.likedSongsSet.size)
@@ -1094,15 +1109,9 @@ export default {
     },
 
     handleDetailCommentPosted() {
-      // Reload song data to get updated comment count
-      const song = this.recommendedSongs.find(
-        (s) =>
-          s.artistId === this.selectedSongForDetail.artistId &&
-          s.id === this.selectedSongForDetail.id,
-      )
-      if (song) {
-        song.commentCount = (song.commentCount || 0) + 1
-      }
+      // Comment count now reads directly from comments array
+      // The modal updates the Firestore data, and we'll reload recommendations
+      this.loadRecommendations()
     },
 
     // Song Carousel Navigation

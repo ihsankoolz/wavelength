@@ -12,6 +12,7 @@ import {
   where,
   getDocs,
   setDoc,
+  Timestamp,
 } from 'firebase/firestore'
 import { notifyOnComment, notifyOnReply } from './notifications'
 
@@ -270,8 +271,9 @@ export async function postSongComment(artistId, songId, commentText) {
       userId: userId,
       userName: userName,
       text: commentText.trim(),
-      createdAt: new Date(),
+      createdAt: Timestamp.now(), // Use Firestore Timestamp
       likes: 0,
+      likedBy: [], // Initialize likedBy array
     }
 
     // Update artist document - add comment to the specific song
@@ -516,7 +518,7 @@ export async function postCommentReply(artistId, songId, commentId, replyText) {
       userId: userId,
       userName: userName,
       text: replyText.trim(),
-      createdAt: new Date(),
+      createdAt: Timestamp.now(), // Use Firestore Timestamp
       likes: 0,
       likedBy: [],
     }

@@ -920,7 +920,8 @@ export default {
 
     getCommentCount(songId) {
       const music = this.musicLinks.find((m) => m.id === songId)
-      return music?.commentCount || 0
+      // Count actual comments array length instead of relying on commentCount field
+      return music?.comments?.length || 0
     },
 
     formatCommentDate(timestamp) {
@@ -1531,6 +1532,7 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   overflow-y: visible;
+  align-items: stretch; /* Ensure all cards stretch to same height */
 }
 
 /* Events Grid Styles */
@@ -1550,6 +1552,9 @@ export default {
   position: relative;
   cursor: pointer;
   backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Fill grid cell height */
 }
 
 .song-card:hover {
@@ -1578,7 +1583,12 @@ export default {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  line-clamp: 2; /* Standard property */
+  line-height: 1.4;
+  min-height: 2.8rem; /* 2 lines minimum height */
 }
 
 /* Badges Container */
@@ -1632,6 +1642,7 @@ export default {
   border-radius: 12px;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.3);
+  flex-shrink: 0; /* Prevent iframe from shrinking */
 }
 
 .music-iframe {
@@ -1639,6 +1650,7 @@ export default {
   height: 232px;
   border: none;
   border-radius: 12px;
+  display: block; /* Remove any inline spacing */
 }
 
 /* Bottom Row Layout */
@@ -1646,9 +1658,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: auto; /* Push to bottom of card */
   padding-top: 0.75rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 44px; /* Ensure consistent height even without genres */
 }
 
 /* Genres Container */
@@ -1656,6 +1669,8 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
+  flex: 1;
+  min-height: 28px; /* Reserve space for genres */
 }
 
 .genre-tag {
