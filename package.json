@@ -15,7 +15,10 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "d3": "^7.9.0",
-    "firebase": "^12.3.0",
+    "dotenv": "^17.2.3",
+    "firebase": "^12.5.0",
+    "firebase-admin": "^13.5.0",
+    "node-fetch": "^2.7.0",
     "pinia": "^3.0.3",
     "vue": "^3.5.22",
     "vue-router": "^4.5.1"
@@ -25,5 +28,18 @@
     "prettier": "3.6.2",
     "vite": "^7.1.9",
     "vite-plugin-vue-devtools": "^8.0.2"
-  }
+  },
+  "description": "A modern music platform connecting fans with artists through personalized recommendations, live events, and social interactions.",
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ihsankoolz/wavelength.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ihsankoolz/wavelength/issues"
+  },
+  "homepage": "https://github.com/ihsankoolz/wavelength#readme"
 }

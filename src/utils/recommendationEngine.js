@@ -55,7 +55,7 @@ export async function getRecommendedSongs(userId, options = {}) {
  * @param {string} userId - User ID
  * @returns {Promise<Object>} - User profile object
  */
-async function getUserProfile(userId) {
+export async function getUserProfile(userId) {
   const userDoc = await getDoc(doc(db, 'users', userId))
 
   if (!userDoc.exists()) {
@@ -193,7 +193,7 @@ async function getAllSongs() {
  * @param {Object} userProfile - User profile object
  * @returns {number} - Score (0-100)
  */
-function calculateSongScore(song, userProfile) {
+export function calculateSongScore(song, userProfile) {
   const {
     isNewUser,
     hasPreferences,
@@ -338,13 +338,15 @@ export function filterSongsByGenre(songs, genre) {
  * Sort songs by different criteria
  * @param {Array} songs - Array of songs
  * @param {string} sortBy - Sort criteria
+ * @param {Object} userProfile - User profile for recommendation scoring (optional)
  * @returns {Array} - Sorted songs
  */
-export function sortSongs(songs, sortBy) {
+export function sortSongs(songs, sortBy, userProfile = null) {
   const sorted = [...songs]
 
   switch (sortBy) {
     case 'popular':
+      console.log('📊 Sorting by POPULAR (Likes + Comments × 2)')
       return sorted.sort((a, b) => {
         const aPopularity = (a.likes || 0) + (a.comments || []).length * 2
         const bPopularity = (b.likes || 0) + (b.comments || []).length * 2
@@ -352,6 +354,7 @@ export function sortSongs(songs, sortBy) {
       })
 
     case 'recent':
+      console.log('🆕 Sorting by RECENT (Newest first)')
       return sorted.sort((a, b) => {
         const aTime = a.addedAt?.toMillis() || 0
         const bTime = b.addedAt?.toMillis() || 0
@@ -359,6 +362,7 @@ export function sortSongs(songs, sortBy) {
       })
 
     case 'trending':
+      console.log('🔥 Sorting by TRENDING (60% Popularity + 40% Recency)')
       return sorted.sort((a, b) => {
         const aScore = calculateTrendingScore(a)
         const bScore = calculateTrendingScore(b)
@@ -366,8 +370,28 @@ export function sortSongs(songs, sortBy) {
       })
 
     case 'recommended':
+      // Recalculate recommendation scores based on user profile
+      if (userProfile) {
+        const { isNewUser, hasPreferences } = userProfile
+        let algorithm = 'Active User (Multi-factor)'
+        if (isNewUser && !hasPreferences) {
+          algorithm = 'New User - No Preferences (Trending)'
+        } else if (isNewUser && hasPreferences) {
+          algorithm = 'New User - With Preferences (Genre Match)'
+        }
+        console.log(`⭐ Sorting by RECOMMENDED - Algorithm: ${algorithm}`)
+
+        const scoredSongs = sorted.map((song) => ({
+          ...song,
+          _tempScore: calculateSongScore(song, userProfile),
+        }))
+        return scoredSongs.sort((a, b) => b._tempScore - a._tempScore)
+      }
+      // Fallback to existing order if no user profile
+      console.log('⭐ Sorting by RECOMMENDED (using existing order - no user profile)')
+      return sorted
+
     default:
-      // Already sorted by recommendation score
       return sorted
   }
 }

@@ -84,8 +84,11 @@
                 <!-- Genre Filter -->
                 <div class="filter-group">
                   <label class="small text-muted me-2">Filter by Genre:</label>
-                  <select v-model="selectedGenreFilter" @change="applyFiltersAndSort" class="form-select form-select-sm"
-                    style="width: auto; display: inline-block">
+                  <select
+                    v-model="selectedGenreFilter"
+                    class="form-select form-select-sm"
+                    style="width: auto; display: inline-block"
+                  >
                     <option value="">All Genres</option>
                     <option v-for="genre in allGenres" :key="genre" :value="genre">
                       {{ genre }}
@@ -96,8 +99,11 @@
                 <!-- Sort Options -->
                 <div class="sort-group">
                   <label class="small text-muted me-2">Sort by:</label>
-                  <select v-model="selectedSort" @change="applyFiltersAndSort" class="form-select form-select-sm"
-                    style="width: auto; display: inline-block">
+                  <select
+                    v-model="selectedSort"
+                    class="form-select form-select-sm"
+                    style="width: auto; display: inline-block"
+                  >
                     <option value="recommended">Recommended</option>
                     <option value="popular">Most Popular</option>
                     <option value="recent">Recently Added</option>
@@ -123,10 +129,22 @@
               </button>
 
               <div class="songs-carousel">
-                <div class="songs-grid-carousel" :style="{ transform: `translateX(-${currentSongPage * 100}%)` }">
-                  <div v-for="(page, pageIndex) in paginatedSongs" :key="`page-${pageIndex}`" class="carousel-page">
-                    <div v-for="song in page" :key="`${song.artistId}_${song.id}`" class="song-card"
-                      @click="openSongDetail(song)">
+                <div
+                  class="songs-grid-carousel"
+                  :key="songCarouselKey"
+                  :style="{ transform: `translateX(-${currentSongPage * 100}%)` }"
+                >
+                  <div
+                    v-for="(page, pageIndex) in paginatedSongs"
+                    :key="`page-${pageIndex}-${songCarouselKey}`"
+                    class="carousel-page"
+                  >
+                    <div
+                      v-for="song in page"
+                      :key="`${song.artistId}_${song.id}`"
+                      class="song-card"
+                      @click="openSongDetail(song)"
+                    >
                       <!-- Embedded Player at Top -->
                       <div class="player-container" @click.stop="handlePlayerClick(song)">
                         <!-- Spotify Embed -->
@@ -193,7 +211,7 @@
 
                           <button @click.stop="openSongDetail(song)" class="stat-button" title="View and post comments">
                             <span class="icon">💬</span>
-                            <span class="count">{{ song.commentCount || 0 }}</span>
+                            <span class="count">{{ song.comments?.length || 0 }}</span>
                           </button>
                         </div>
                       </div>
@@ -355,7 +373,12 @@ import NavigationBar from '@/components/NavigationBar.vue'
 import ArtistCard from '@/components/ArtistCard.vue'
 import EventMap from '@/components/EventMap.vue'
 import SongDetailModal from '@/components/SongDetailModal.vue'
-import { getRecommendedSongs, filterSongsByGenre, sortSongs } from '@/utils/recommendationEngine'
+import {
+  getRecommendedSongs,
+  filterSongsByGenre,
+  sortSongs,
+  getUserProfile,
+} from '@/utils/recommendationEngine'
 import { toggleSongLike, getUserLikedSongs } from '@/utils/musicInteractions'
 import { toggleFollowArtist, getUserFollowedArtists } from '@/utils/artistInteractions'
 import {
@@ -377,11 +400,10 @@ export default {
       userName: '',
       userId: '',
       userGenres: [],
+      userProfile: null, // Store user profile for recommendation scoring
 
       // Songs data
       recommendedSongs: [],
-      filteredSongs: [],
-      displayedSongs: [],
 
       // Carousel state for songs
       currentSongPage: 0,
@@ -461,76 +483,60 @@ export default {
       return `Based on your interests: ${this.userGenres.slice(0, 3).join(', ')}`
     },
 
+    // Computed property for filtered and sorted songs
+    displayedSongs() {
+      // Apply genre filter first
+      let filtered = this.selectedGenreFilter
+        ? filterSongsByGenre(this.recommendedSongs, this.selectedGenreFilter)
+        : [...this.recommendedSongs]
+
+      // Apply sort - pass userProfile for recommendation scoring
+      const sorted = sortSongs(filtered, this.selectedSort, this.userProfile)
+
+      // Log for debugging with first 3 songs
+      console.log('🔍 Filters applied:', {
+        genre: this.selectedGenreFilter || 'All',
+        sort: this.selectedSort,
+        resultCount: sorted.length,
+        first3Songs: sorted.slice(0, 3).map((s) => ({
+          title: s.title,
+          likes: s.likes || 0,
+          addedAt: s.addedAt?.toDate?.() || s.addedAt,
+        })),
+      })
+
+      return sorted
+    },
+
     // Paginate songs with specific overlap logic - songs 3&6 become 1&4 in next page
     paginatedSongs() {
       const pages = []
       let songIndex = 0
 
+      // Simple pagination: each page shows 6 completely new songs
       while (songIndex < this.displayedSongs.length) {
-        if (pages.length === 0) {
-          // First page: normal sequential order (1,2,3,4,5,6)
-          const page = []
-          for (let i = 0; i < this.songsPerPage && songIndex < this.displayedSongs.length; i++) {
-            page.push(this.displayedSongs[songIndex])
-            songIndex++
-          }
+        const page = []
+        for (let i = 0; i < this.songsPerPage && songIndex < this.displayedSongs.length; i++) {
+          page.push(this.displayedSongs[songIndex])
+          songIndex++
+        }
+        if (page.length > 0) {
           pages.push(page)
-        } else {
-          // Subsequent pages: songs 3&6 from previous page become 1&4, fill with new songs
-          const prevPage = pages[pages.length - 1]
-          const page = []
-
-          // Position 1: Previous song 3 (index 2)
-          if (prevPage[2]) {
-            page[0] = prevPage[2]
-          }
-
-          // Position 2: New song
-          if (songIndex < this.displayedSongs.length) {
-            page[1] = this.displayedSongs[songIndex]
-            songIndex++
-          }
-
-          // Position 3: New song
-          if (songIndex < this.displayedSongs.length) {
-            page[2] = this.displayedSongs[songIndex]
-            songIndex++
-          }
-
-          // Position 4: Previous song 6 (index 5)
-          if (prevPage[5]) {
-            page[3] = prevPage[5]
-          }
-
-          // Position 5: New song
-          if (songIndex < this.displayedSongs.length) {
-            page[4] = this.displayedSongs[songIndex]
-            songIndex++
-          }
-
-          // Position 6: New song
-          if (songIndex < this.displayedSongs.length) {
-            page[5] = this.displayedSongs[songIndex]
-            songIndex++
-          }
-
-          // Only add page if it has content
-          if (page.some((song) => song)) {
-            pages.push(page.filter((song) => song))
-          }
-
-          // Break if no more new songs
-          if (songIndex >= this.displayedSongs.length && !page.some((song) => song)) {
-            break
-          }
         }
       }
+
+      console.log('📄 Paginated into', pages.length, 'pages')
 
       return pages
     },
 
     totalSongPages() {
       return this.paginatedSongs.length
+    },
+
+    // Unique key for song carousel that changes when filters change
+    songCarouselKey() {
+      return `songs-${this.selectedGenreFilter}-${this.selectedSort}`
     },
 
     // Paginate artists with overlap logic
@@ -583,6 +589,17 @@ export default {
         })
       }
     },
+
+    // Watch for filter/sort changes to reset pagination
+    selectedGenreFilter() {
+      this.currentSongPage = 0
+      console.log('🎯 Genre filter changed to:', this.selectedGenreFilter || 'All')
+    },
+
+    selectedSort(newSort) {
+      this.currentSongPage = 0
+      console.log('🔄 Sort changed to:', newSort)
+    },
   },
 
   async mounted() {
@@ -626,6 +643,15 @@ export default {
           const interestedEvents = userData.interestedEvents || []
           this.interestedEventsSet = new Set(interestedEvents)
 
+          // Load user profile for recommendation scoring
+          this.userProfile = await getUserProfile(user.uid)
+          console.log('🎯 User profile loaded for recommendations:', {
+            isNewUser: this.userProfile.isNewUser,
+            hasPreferences: this.userProfile.hasPreferences,
+            genres: this.userProfile.preferredGenres.length,
+            followedArtists: this.userProfile.followedArtists.length,
+          })
+
           console.log('👤 User genres:', this.userGenres)
           console.log('❤️ Liked songs:', this.likedSongsSet.size)
           console.log('👥 Following:', this.followedArtistsSet.size)
@@ -642,9 +668,6 @@ export default {
         this.recommendedSongs = await getRecommendedSongs(this.userId, {
           limit: 50,
         })
-
-        // Apply initial filters and sort
-        this.applyFiltersAndSort()
 
         console.log('🎵 Loaded', this.recommendedSongs.length, 'recommended songs')
       } catch (error) {
@@ -847,24 +870,6 @@ export default {
       }
     },
 
-    applyFiltersAndSort() {
-      // Apply genre filter
-      let filtered = this.selectedGenreFilter
-        ? filterSongsByGenre(this.recommendedSongs, this.selectedGenreFilter)
-        : [...this.recommendedSongs]
-
-      // Apply sort
-      this.filteredSongs = sortSongs(filtered, this.selectedSort)
-
-      // Show ALL songs for carousel (not limited)
-      this.displayedSongs = this.filteredSongs
-
-      // Reset to first page
-      this.currentSongPage = 0
-
-      console.log('🔍 Filtered:', this.filteredSongs.length, 'songs')
-    },
-
     async toggleLike(song) {
       console.log('🔥 toggleLike called!', song.title)
       const songKey = `${song.artistId}_${song.id}`
@@ -963,15 +968,9 @@ export default {
     },
 
     handleDetailCommentPosted() {
-      // Reload song data to get updated comment count
-      const song = this.recommendedSongs.find(
-        (s) =>
-          s.artistId === this.selectedSongForDetail.artistId &&
-          s.id === this.selectedSongForDetail.id,
-      )
-      if (song) {
-        song.commentCount = (song.commentCount || 0) + 1
-      }
+      // Comment count now reads directly from comments array
+      // The modal updates the Firestore data, and we'll reload recommendations
+      this.loadRecommendations()
     },
 
     // Song Carousel Navigation
@@ -1060,7 +1059,7 @@ export default {
 
           window.scrollTo({
             top: offsetPosition,
-            behavior: 'smooth'
+            behavior: 'smooth',
           })
         }
       })

@@ -165,6 +165,16 @@
             </div>
           </div>
 
+          <!-- api data  -->
+          <div v-if="songstatsLoading">Loading Songstats batch...</div>
+            <ul v-else>
+              <li v-for="item in songstatsResults" :key="item.name">
+                {{ item.name }} | {{ item.songstats_artist_id }} | 
+                <img v-if="item.avatar" :src="item.avatar" width="48" />
+              </li>
+            </ul>
+
+
           <!-- Tab Content -->
           <div class="row">
             <div class="col-12">
@@ -300,12 +310,6 @@
                       </button>
                     </div>
                   </div>
-
-                  <!-- <div style="background: #007bff; color: white; padding: 40px; text-align: center; border-radius: 10px;">
-            <h4>🎪 EVENTS TAB IS WORKING!</h4>
-            <p>No events scheduled at the moment</p>
-            <button @click="addEvent" class="btn btn-light">📅 Add Event</button>
-            </div> -->
                 </div>
 
                 <!-- About Tab -->
@@ -494,6 +498,7 @@ import EventMap from '@/components/EventMap.vue'
 import MusicManager from '@/components/MusicManager.vue'
 import EventModal from '@/components/EventModal.vue'
 import ArtistCard from '@/components/ArtistCard.vue'
+import queryList from '../data/query.json'; 
 
 export default {
   name: 'ArtistDashboard',
@@ -526,6 +531,10 @@ export default {
     const successMessage = ref('')
     const errorMessage = ref('')
 
+    //songstat data
+    const songstatsResults = ref([]);
+    const songstatsLoading = ref(false);
+
     // Following artists state
     const followingArtists = ref([])
 
@@ -548,6 +557,7 @@ export default {
       verified: false,
       createdAt: null,
       profileSetupCompleted: false,
+      
     })
 
     // DECLARE ALL FUNCTIONS AND COMPUTED PROPERTIES FIRST
@@ -575,14 +585,13 @@ export default {
       try {
         eventsLoading.value = true
 
-        console.log('Looking for events with artistId:', artistId)
+        // console.log('Looking for events with artistId:', artistId)
 
         // Query events where artistId matches the current artist
         const eventsQuery = query(collection(db, 'events'), where('artistId', '==', artistId))
-
         const eventsSnapshot = await getDocs(eventsQuery)
 
-        console.log('Found events:', eventsSnapshot.docs.length)
+        // console.log('Found events:', eventsSnapshot.docs.length)
 
         artistEvents.value = eventsSnapshot.docs.map((doc) => {
           const data = doc.data()
@@ -607,6 +616,51 @@ export default {
         eventsLoading.value = false
       }
     }
+
+    async function getSongstatsIdAndAvatarForArtists(artists) {
+      const results = [];
+      for (const entry of artists) {
+        const name = entry.artistLabel;
+        try {
+          const url = `https://songstats.p.rapidapi.com/artist/search?name=${encodeURIComponent(name)}`
+          const options = {
+            method: 'GET',
+            headers: {
+              'x-rapidapi-host': 'songstats.p.rapidapi.com',
+              'x-rapidapi-key': '20b69f02d3mshff68b75c96225cap1800d8jsnee2f841b64a6'
+            }
+          }
+          const res = await fetch(url, options);
+          console.log(res)
+          const json = await res.json();
+          console.log(json)
+          if (json.results && json.results.length) {
+            results.push({
+              name, // from your query.json
+              songstats_artist_id: json.results[0].songstats_artist_id,
+              avatar: json.results[0].avatar
+            })
+          } else {
+            results.push({
+              name,
+              songstats_artist_id: null,
+              avatar: null
+            })
+          }
+        } catch (e) {
+          results.push({
+            name,
+            songstats_artist_id: null,
+            avatar: null
+          })
+        }
+        // Optional: await delay to avoid rate limits
+        await new Promise(r => setTimeout(r, 1000)); // 350ms delay
+      }
+      return results;
+  }
+    
+
 
     // Format date for events
     const formatEventDate = (timestamp) => {
@@ -917,7 +971,7 @@ export default {
     }
 
     // Initialize component
-    onMounted(() => {
+    onMounted(async () => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
           currentUser.value = user
@@ -927,6 +981,9 @@ export default {
           loading.value = false
         }
       })
+      songstatsLoading.value = true;
+      songstatsResults.value = await getSongstatsIdAndAvatarForArtists(queryList);
+      songstatsLoading.value = false;
 
       return () => unsubscribe()
     })
@@ -966,7 +1023,8 @@ export default {
       getSpotifyEmbedUrl,
       getYouTubeEmbedUrl,
       onMusicUpdated,
-      followingArtists,
+      songstatsLoading,
+      songstatsResults,
     }
   },
 }

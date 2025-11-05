@@ -202,6 +202,7 @@
 <script>
 import { doc, updateDoc, getDoc, setDoc } from 'firebase/firestore'
 import { auth, db } from '@/services/firebase'
+import { getGenresWithImages } from '@/constants/genres'
 
 export default {
   name: 'ArtistSetup',
@@ -216,28 +217,7 @@ export default {
         genres: [],
         socials: { spotify: '', youtube: '', instagram: '' },
       },
-      genres: [
-        { name: 'Indie', img: '/src/assets/Genres/indie.png' },
-        { name: 'Jazz', img: '/src/assets/Genres/Jazz.png' },
-        { name: 'Electronic', img: '/src/assets/Genres/Electronic.png' },
-        { name: 'Rock', img: '/src/assets/Genres/rock.png' },
-        { name: 'Pop', img: '/src/assets/Genres/pop.png' },
-        { name: 'Hip Hop', img: '/src/assets/Genres/hip hop.png' },
-        { name: 'R&B', img: '/src/assets/Genres/r&b.png' },
-        { name: 'Folk', img: '/src/assets/Genres/folk.png' },
-        { name: 'Classical', img: '/src/assets/Genres/classiscal.png' },
-        { name: 'Metal', img: '/src/assets/Genres/metal.png' },
-        { name: 'Alternative', img: '/src/assets/Genres/alternative.png' },
-        { name: 'Soul', img: '/src/assets/Genres/soul.png' },
-        { name: 'Blues', img: '/src/assets/Genres/Blues.png' },
-        { name: 'Punk', img: '/src/assets/Genres/Punk.png' },
-        { name: 'Reggae', img: '/src/assets/Genres/Raggae.png' },
-        { name: 'Country', img: '/src/assets/Genres/Country.png' },
-        { name: 'K-Pop', img: '/src/assets/Genres/K-pop.png' },
-        { name: 'EDM', img: '/src/assets/Genres/EDM.png' },
-        { name: 'Funk', img: '/src/assets/Genres/Funk.png' },
-        { name: 'Gospel', img: '/src/assets/Genres/Gospel.png' },
-      ],
+      genres: getGenresWithImages(),
     }
   },
   computed: {
