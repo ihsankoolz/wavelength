@@ -78,10 +78,9 @@
         <!-- Saved Songs Carousel -->
         <div v-else class="carousel-container px-2 px-sm-0">
           <button
-            :disabled="currentSongPage === 0"
+            v-if="currentSongPage > 0"
             @click="previousSongPage"
-            class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow ms-2 ms-md-0"
-            style="z-index: 1050;"
+            class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
             aria-label="Previous songs">
             <i class="bi bi-chevron-left fs-5"></i>
           </button>
@@ -164,17 +163,12 @@
           </div>
 
           <button
-            :disabled="currentSongPage >= totalSongPages - 1"
+            v-if="currentSongPage < totalSongPages - 1"
             @click="nextSongPage"
-            class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow me-2 me-md-0"
-            style="z-index: 1050;"
+            class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
             aria-label="Next songs">
             <i class="bi bi-chevron-right fs-5"></i>
           </button>
-
-          <div class="position-absolute bottom-0 start-50 translate-middle-x mb-2 bg-dark bg-opacity-50 text-white px-2 py-1 rounded small" style="z-index: 1050;">
-            {{ Math.min(currentSongPage + 1, totalSongPages) }} / {{ totalSongPages || 1 }}
-          </div>
         </div>
       </div>
     </div>
