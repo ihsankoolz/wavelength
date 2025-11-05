@@ -415,13 +415,8 @@
                     <!-- Add row class and set width to 100% -->
                     <div class="row w-100">
                       <!-- Update the column classes -->
-                      <div
-                        v-for="event in page"
-                        :key="event.id"
-                        class="col-12 col-md-6 col-lg-4 px-3"
-                      >
-                        <div class="h-100">
-                          <!-- Add wrapper div -->
+                      <div v-for="event in page" :key="event.id" class="col-sm-6 col-md-6 col-lg-4 px-3">
+                        <div class="h-100"> <!-- Add wrapper div -->
                           <EventCard :event="event" @interest-changed="handleEventInterestChange" />
                         </div>
                       </div>
@@ -819,11 +814,11 @@ export default {
     updateEventsPerPage() {
       const width = window.innerWidth
       if (width >= 992) {
-        this.eventsPerPage = 3 // lg: 6 artists (col-lg-2 = 16.66% width)
-      } else if (width >= 768) {
-        this.eventsPerPage = 2 // md: 4 artists (col-md-3 = 25% width)
+        this.eventsPerPage = 3 // lg: 6 events (col-lg-4 = 16.66% width)
+      } else if (width >= 576) {
+        this.eventsPerPage = 2 // md: 2 event (col-md-6 = 25% width)
       } else {
-        this.eventsPerPage = 1 // sm/xs: 2 artists (col-6 = 50% width)
+        this.eventsPerPage = 1 // sm/xs: 1 event (col-12 = 50% width)
       }
       this.currentEventPage = 0
     },
