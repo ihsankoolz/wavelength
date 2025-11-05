@@ -93,14 +93,18 @@
       <div class="container py-4">
         <!-- Header -->
         <div class="welcome-section mb-5">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
+          <div class="row align-items-start align-items-md-center mb-3 g-3">
+            <div class="col-12 col-md-8 col-lg-9">
               <h1 class="display-5 fw-bold mb-2">MY ANALYTICS</h1>
-              <p class="header-subtitle">TRACK YOUR PERFORMANCE AND AUDIENCE ENGAGEMENT</p>
+              <p class="header-subtitle d-none d-sm-block">TRACK YOUR PERFORMANCE AND AUDIENCE ENGAGEMENT</p>
+              <p class="header-subtitle d-block d-sm-none">TRACK YOUR PERFORMANCE</p>
             </div>
-            <router-link to="/artist/dashboard" class="btn-back-dashboard">
-              <i class="bi bi-arrow-left"></i> Back to Dashboard
-            </router-link>
+            <div class="col-12 col-md-4 col-lg-3">
+              <router-link to="/artist/dashboard" class="btn btn-primary btn-sm w-100 w-md-auto d-flex align-items-center justify-content-center position-relative">
+                <i class="bi bi-arrow-left position-absolute start-0 ms-3"></i>
+                <span>Back to Dashboard</span>
+              </router-link>
+            </div>
           </div>
         </div>
 
@@ -115,9 +119,9 @@
         <!-- Analytics Content -->
         <div v-else>
           <!-- Overview Stats Cards -->
-          <div class="row g-4 mb-5">
+          <div class="row g-3 g-md-4 mb-4 mb-md-5">
             <!-- Total Followers -->
-            <div class="col-12 col-md-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
               <div class="stat-card h-100">
                 <div class="stat-card-body">
                   <div class="stat-icon-small">
@@ -130,7 +134,7 @@
             </div>
 
             <!-- Total Songs -->
-            <div class="col-12 col-md-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
               <div class="stat-card h-100">
                 <div class="stat-card-body">
                   <div class="stat-icon-small">
@@ -143,7 +147,7 @@
             </div>
 
             <!-- Total Plays -->
-            <div class="col-12 col-md-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
               <div class="stat-card h-100">
                 <div class="stat-card-body">
                   <div class="stat-icon-small">
@@ -156,7 +160,7 @@
             </div>
 
             <!-- Total Engagement -->
-            <div class="col-12 col-md-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
               <div class="stat-card h-100">
                 <div class="stat-card-body">
                   <div class="stat-icon-small">
@@ -192,12 +196,14 @@
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          <th>Song</th>
-                          <th>Type</th>
-                          <th>Platform</th>
-                          <th class="text-center"><i class="bi bi-play-circle"></i> Plays</th>
-                          <th class="text-center"><i class="bi bi-heart"></i> Likes</th>
-                          <th class="text-center"><i class="bi bi-chat"></i> Comments</th>
+                          <th class="d-none d-md-table-cell">Song</th>
+                          <th class="d-table-cell d-md-none">Song Details</th>
+                          <th class="d-none d-lg-table-cell">Type</th>
+                          <th class="d-none d-md-table-cell">Platform</th>
+                          <th class="text-center d-none d-sm-table-cell"><i class="bi bi-play-circle"></i> Plays</th>
+                          <th class="text-center d-none d-sm-table-cell"><i class="bi bi-heart"></i> Likes</th>
+                          <th class="text-center d-none d-sm-table-cell"><i class="bi bi-chat"></i> Comments</th>
+                          <th class="text-center d-table-cell d-sm-none">Stats</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -206,16 +212,29 @@
                             <div class="d-flex align-items-center">
                               <div>
                                 <strong class="d-block">{{ song.title }}</strong>
-                                <small>
+                                <small class="d-block d-md-none">
+                                  <span class="badge bg-secondary me-1">{{ song.type }}</span>
+                                  <span
+                                    class="badge"
+                                    :class="{
+                                      'bg-success': song.platform === 'spotify',
+                                      'bg-danger': song.platform === 'youtube',
+                                      'bg-warning text-dark': song.platform === 'soundcloud',
+                                    }"
+                                  >
+                                    {{ song.platform }}
+                                  </span>
+                                </small>
+                                <small class="d-none d-md-block">
                                   {{ song.genres?.slice(0, 2).join(', ') }}
                                 </small>
                               </div>
                             </div>
                           </td>
-                          <td>
+                          <td class="d-none d-lg-table-cell">
                             <span class="badge bg-secondary">{{ song.type }}</span>
                           </td>
-                          <td>
+                          <td class="d-none d-md-table-cell">
                             <span
                               class="badge"
                               :class="{
@@ -227,14 +246,21 @@
                               {{ song.platform }}
                             </span>
                           </td>
-                          <td class="text-center">
+                          <td class="text-center d-none d-sm-table-cell">
                             <strong>{{ song.playCount || 0 }}</strong>
                           </td>
-                          <td class="text-center">
+                          <td class="text-center d-none d-sm-table-cell">
                             <strong>{{ song.likes || 0 }}</strong>
                           </td>
-                          <td class="text-center">
+                          <td class="text-center d-none d-sm-table-cell">
                             <strong>{{ song.commentCount || 0 }}</strong>
+                          </td>
+                          <td class="text-center d-table-cell d-sm-none">
+                            <div class="d-flex flex-column gap-1">
+                              <small><i class="bi bi-play-circle"></i> {{ song.playCount || 0 }}</small>
+                              <small><i class="bi bi-heart"></i> {{ song.likes || 0 }}</small>
+                              <small><i class="bi bi-chat"></i> {{ song.commentCount || 0 }}</small>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -243,33 +269,46 @@
                     <!-- Pagination Controls -->
                     <div
                       v-if="totalPages > 1"
-                      class="pagination-container d-flex justify-content-center align-items-center mt-4"
+                      class="pagination-container row justify-content-center align-items-center mt-3 mt-md-4 g-2"
                     >
-                      <button
-                        class="btn-pagination"
-                        :disabled="currentPage === 1"
-                        @click="changePage(currentPage - 1)"
-                      >
-                        <i class="bi bi-chevron-left"></i>
-                      </button>
+                      <div class="col-auto">
+                        <button
+                          class="btn-pagination"
+                          :disabled="currentPage === 1"
+                          @click="changePage(currentPage - 1)"
+                        >
+                          <i class="bi bi-chevron-left"></i>
+                        </button>
+                      </div>
 
-                      <button
-                        v-for="page in totalPages"
-                        :key="page"
-                        class="btn-pagination"
-                        :class="{ active: currentPage === page }"
-                        @click="changePage(page)"
-                      >
-                        {{ page }}
-                      </button>
+                      <div class="col-auto d-none d-sm-block">
+                        <div class="d-flex gap-2">
+                          <button
+                            v-for="page in totalPages"
+                            :key="page"
+                            class="btn-pagination"
+                            :class="{ active: currentPage === page }"
+                            @click="changePage(page)"
+                          >
+                            {{ page }}
+                          </button>
+                        </div>
+                      </div>
+                      <div v-if="totalPages <= 5" class="col-auto d-flex d-sm-none">
+                        <span class="text-white px-2">
+                          Page {{ currentPage }} of {{ totalPages }}
+                        </span>
+                      </div>
 
-                      <button
-                        class="btn-pagination"
-                        :disabled="currentPage === totalPages"
-                        @click="changePage(currentPage + 1)"
-                      >
-                        <i class="bi bi-chevron-right"></i>
-                      </button>
+                      <div class="col-auto">
+                        <button
+                          class="btn-pagination"
+                          :disabled="currentPage === totalPages"
+                          @click="changePage(currentPage + 1)"
+                        >
+                          <i class="bi bi-chevron-right"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -300,27 +339,35 @@
                       <thead>
                         <tr>
                           <th>Event</th>
-                          <th>Date</th>
-                          <th>Venue</th>
-                          <th class="text-center">Interest</th>
+                          <th class="d-none d-md-table-cell">Date</th>
+                          <th class="d-none d-lg-table-cell">Venue</th>
+                          <th class="text-center d-none d-sm-table-cell">Interest</th>
                           <th class="text-center">Status</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr v-for="event in upcomingEvents" :key="event.id">
                           <td>
-                            <strong>{{ event.title }}</strong>
+                            <strong class="d-block">{{ event.title }}</strong>
+                            <small class="d-block d-md-none text-muted">{{ formatDate(event.date) }}</small>
+                            <small class="d-block d-lg-none text-muted">{{ event.venue }}</small>
                           </td>
-                          <td>{{ formatDate(event.date) }}</td>
-                          <td>{{ event.venue }}</td>
-                          <td class="text-center">
+                          <td class="d-none d-md-table-cell">{{ formatDate(event.date) }}</td>
+                          <td class="d-none d-lg-table-cell">{{ event.venue }}</td>
+                          <td class="text-center d-none d-sm-table-cell">
                             <span class="badge bg-warning">
                               <i class="bi bi-star-fill"></i>
                               {{ event.interestedCount || 0 }}
                             </span>
                           </td>
                           <td class="text-center">
-                            <span class="badge bg-success">Upcoming</span>
+                            <div class="d-flex flex-column flex-sm-row gap-1 justify-content-center align-items-center">
+                              <span class="badge bg-warning d-sm-none">
+                                <i class="bi bi-star-fill"></i>
+                                {{ event.interestedCount || 0 }}
+                              </span>
+                              <span class="badge bg-success">Upcoming</span>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -387,22 +434,22 @@
                     <div
                       v-for="(event, index) in topEvents"
                       :key="event.id"
-                      class="col-12 col-md-6 col-lg-4"
+                      class="col-12 col-sm-12 col-md-6 col-lg-4"
                     >
                       <div class="top-event-card card h-100">
                         <div class="card-body">
-                          <div class="d-flex align-items-start gap-3">
-                            <div class="rank-badge" :class="getRankClass(index)">
-                              #{{ index + 1 }}
+                          <div class="row align-items-start g-2 g-md-3">
+                            <div class="col-auto">
+                              <div class="rank-badge" :class="getRankClass(index)">
+                                #{{ index + 1 }}
+                              </div>
                             </div>
-                            <div class="flex-grow-1">
-                              <h6 class="mb-1 fw-bold">{{ event.title }}</h6>
-                              <small class="text-muted d-block mb-2">{{ event.venue }}</small>
+                            <div class="col">
+                              <h6 class="mb-1 fw-bold text-truncate">{{ event.title }}</h6>
+                              <small class="text-muted d-block mb-2 text-truncate">{{ event.venue }}</small>
                               <div class="d-flex align-items-center gap-2">
                                 <i class="bi bi-star-fill text-warning"></i>
-                                <span class="fw-bold"
-                                  >{{ event.interestedCount || 0 }} interested</span
-                                >
+                                <span class="fw-bold small">{{ event.interestedCount || 0 }} interested</span>
                               </div>
                             </div>
                           </div>
@@ -730,19 +777,45 @@ export default {
 .welcome-section h1 {
   color: #fff;
   font-weight: 700;
-  font-size: 2.3rem;
+  font-size: 1.75rem;
   margin-bottom: 0.5rem;
   letter-spacing: 1px;
   text-transform: uppercase;
-  padding-top: 2rem;
+  padding-top: 1rem;
+}
+
+@media (min-width: 576px) {
+  .welcome-section h1 {
+    font-size: 2rem;
+    padding-top: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .welcome-section h1 {
+    font-size: 2.3rem;
+    padding-top: 2rem;
+  }
 }
 
 .header-subtitle {
   color: #b0b1ba;
-  font-size: 0.95rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0;
+}
+
+@media (min-width: 576px) {
+  .header-subtitle {
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-subtitle {
+    font-size: 0.95rem;
+  }
 }
 
 .btn-back-dashboard {
@@ -768,9 +841,23 @@ export default {
 .stat-card {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
+  border-radius: 12px;
   transition: all 0.3s ease;
-  padding: 1.5rem;
+  padding: 1rem;
+}
+
+@media (min-width: 576px) {
+  .stat-card {
+    border-radius: 14px;
+    padding: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .stat-card {
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
 }
 
 .stat-card:hover {
@@ -786,13 +873,29 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #bb1814;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
+}
+
+@media (min-width: 576px) {
+  .stat-icon-small {
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .stat-icon-small {
+    width: 32px;
+    height: 32px;
+    font-size: 1.3rem;
+  }
 }
 
 .stat-label {
@@ -806,9 +909,28 @@ export default {
 
 .stat-value {
   color: white;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
+  line-height: 1.2;
+}
+
+@media (min-width: 576px) {
+  .stat-value {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .stat-value {
+    font-size: 2.2rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .stat-value {
+    font-size: 2.5rem;
+  }
 }
 
 /* Cards */
@@ -864,10 +986,24 @@ small {
   color: white;
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   letter-spacing: 0.5px;
   border-bottom: 2px solid rgba(187, 24, 20, 0.3);
-  padding: 1rem;
+  padding: 0.5rem;
+}
+
+@media (min-width: 576px) {
+  .table thead th {
+    font-size: 0.8rem;
+    padding: 0.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .table thead th {
+    font-size: 0.85rem;
+    padding: 1rem;
+  }
 }
 
 .table tbody tr {
@@ -882,10 +1018,22 @@ small {
 }
 
 .table tbody td {
-  padding: 1rem;
+  padding: 0.5rem;
   vertical-align: middle;
   color: white;
   background: transparent;
+}
+
+@media (min-width: 576px) {
+  .table tbody td {
+    padding: 0.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .table tbody td {
+    padding: 1rem;
+  }
 }
 
 .table tbody td strong {
@@ -1011,14 +1159,31 @@ small {
 }
 
 .rank-badge {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 0.85rem;
+}
+
+@media (min-width: 576px) {
+  .rank-badge {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .rank-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
 }
 
 .rank-gold {
@@ -1043,7 +1208,7 @@ small {
 
 /* Buttons */
 .btn-primary {
-  background: linear-gradient(135deg, #bb1814 0%, #8b1410 100%);
+  background: #bb1814;
   border: none;
   border-radius: 25px;
   font-weight: 700;
@@ -1054,9 +1219,8 @@ small {
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #d41e1e 0%, #9f1612 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(187, 24, 20, 0.3);
+  background: #6E0B0B;
+  transform: none;
 }
 
 /* Empty States */
@@ -1098,16 +1262,33 @@ small {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+}
+
+@media (min-width: 576px) {
+  .btn-pagination {
+    width: 38px;
+    height: 38px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .btn-pagination {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
 }
 
 .btn-pagination:hover:not(:disabled) {
@@ -1131,53 +1312,60 @@ small {
   font-size: 0.9rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive Utilities */
+@media (max-width: 575.98px) {
   .content-wrapper {
-    margin-top: 80px;
+    margin-top: 70px;
   }
 
-  .welcome-section h1 {
-    font-size: 2rem;
+  .card-body {
+    padding: 1rem;
   }
 
-  .header-subtitle {
-    font-size: 0.85rem;
+  .card-header {
+    padding: 0.75rem 1rem;
   }
 
-  .stat-value {
-    font-size: 2rem;
+  .card-header h5 {
+    font-size: 0.95rem;
   }
 
-  .btn-back-dashboard {
-    font-size: 0.85rem;
-    padding: 8px 16px;
+  .top-event-card .card-body {
+    padding: 1rem;
   }
 
-  .table {
-    font-size: 0.85rem;
-  }
-
-  .table thead th,
-  .table tbody td {
-    padding: 0.75rem 0.5rem;
+  .top-event-card h6 {
+    font-size: 0.9rem;
   }
 }
 
-@media (max-width: 576px) {
-  .welcome-section .d-flex {
-    flex-direction: column;
-    align-items: flex-start !important;
-    gap: 1rem;
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .content-wrapper {
+    margin-top: 75px;
+  }
+}
+
+@media (min-width: 768px) {
+  .content-wrapper {
+    margin-top: 65px;
+  }
+}
+
+/* Additional responsive table adjustments */
+@media (max-width: 991.98px) {
+  .table {
+    font-size: 0.875rem;
+  }
+}
+
+/* Ensure proper spacing on mobile */
+@media (max-width: 575.98px) {
+  .welcome-section {
+    margin-bottom: 2rem !important;
   }
 
-  .btn-back-dashboard {
-    width: 100%;
-    text-align: center;
-  }
-
-  .stat-value {
-    font-size: 1.8rem;
+  .mb-5 {
+    margin-bottom: 2.5rem !important;
   }
 }
 </style>
