@@ -262,7 +262,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'
 import NavigationBar from '@/components/NavigationBar.vue'
 import defaultPfp from '@/assets/defaultPfp.jpg'
-import { GENRE_LIST } from '@/constants/genres'
+import { GENRE_LIST, GENRE_IMAGES } from '@/constants/genres'
 
 export default {
   name: 'EditArtistProfile',
@@ -298,36 +298,8 @@ export default {
   },
   methods: {
     getGenreImage(genre) {
-      // Map genre names to image file names (handling variations)
-      const genreImageMap = {
-        Indie: 'Indie.png',
-        Jazz: 'Jazz.png',
-        Electronic: 'Electronic.png',
-        Rock: 'Rock.png',
-        Pop: 'Pop.png',
-        'Hip Hop': 'Hip Hop.png',
-        'R&B': 'R&B.png',
-        Folk: 'Folk.png',
-        Classical: 'Classiscal.png', // Note: typo in filename
-        Metal: 'Metal.png',
-        Alternative: 'Alternative.png',
-        Soul: 'Soul.png',
-        Blues: 'Blues.png',
-        Punk: 'Punk.png',
-        Reggae: 'Raggae.png', // Note: typo in filename
-        Country: 'Country.png',
-        EDM: 'EDM.png',
-        Funk: 'Funk.png',
-        Gospel: 'Gospel.png',
-      }
-      const imageName = genreImageMap[genre] || 'Indie.png'
-      try {
-        // Use dynamic import for Vite
-        return new URL(`../assets/Genres/${imageName}`, import.meta.url).href
-      } catch {
-        // Fallback to static path
-        return `/src/assets/Genres/${imageName}`
-      }
+      // Use the centralized GENRE_IMAGES mapping
+      return GENRE_IMAGES[genre] || GENRE_IMAGES['Indie']
     },
     async loadArtistProfile() {
       try {
