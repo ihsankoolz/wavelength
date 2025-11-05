@@ -113,6 +113,12 @@ export default {
         mapTypeControl: false,
         streetViewControl: this.size !== 'small',
         fullscreenControl: this.size === 'large',
+        // Disable interactions for small maps (preview cards)
+        draggable: this.size !== 'small',
+        zoomControl: this.size !== 'small',
+        scrollwheel: this.size !== 'small',
+        disableDoubleClickZoom: this.size === 'small',
+        gestureHandling: this.size === 'small' ? 'none' : 'auto',
         restriction: {
           latLngBounds: singaporeBounds,
           strictBounds: false,
@@ -124,25 +130,29 @@ export default {
         position: location,
         title: this.title || this.location,
         animation: google.maps.Animation.DROP,
+        clickable: this.size !== 'small', // Disable clicking for small maps
       })
 
-      const infoWindow = new google.maps.InfoWindow({
-        content: `
-          <div style="padding: 8px;">
-            <strong>${this.title || 'Event Location'}</strong><br>
-            <small>${this.location}</small><br>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=${location.lat()},${location.lng()}" 
-               target="_blank" 
-               style="color: #667eea; text-decoration: none;">
-              Get Directions →
-            </a>
-          </div>
-        `,
-      })
+      // Only add click listener for non-small maps
+      if (this.size !== 'small') {
+        const infoWindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding: 8px;">
+              <strong>${this.title || 'Event Location'}</strong><br>
+              <small>${this.location}</small><br>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=${location.lat()},${location.lng()}" 
+                 target="_blank" 
+                 style="color: #667eea; text-decoration: none;">
+                Get Directions →
+              </a>
+            </div>
+          `,
+        })
 
-      this.marker.addListener('click', () => {
-        infoWindow.open(this.map, this.marker)
-      })
+        this.marker.addListener('click', () => {
+          infoWindow.open(this.map, this.marker)
+        })
+      }
     },
   },
 }
@@ -154,7 +164,8 @@ export default {
   border: none !important;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.05);
-  height: 300px;
+  height: 100%;
+  min-height: 150px;
   overflow: hidden;
   box-shadow: none !important;
 }
