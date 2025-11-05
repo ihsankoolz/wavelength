@@ -1,4 +1,3 @@
-<!-- register.vue -->
 <template>
   <div class="auth-wrapper" @mousemove="handleMouseMove">
     <!-- Cursor Trail Effect -->
@@ -10,7 +9,7 @@
         {{ getMusicSymbol(n) }}
       </div>
     </div>
-
+ 
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
@@ -96,9 +95,9 @@
       </svg>
     </div>
 
-    <div class="content-wrapper auth-split">
-      <!-- LEFT / Brand Section -->
-      <div class="auth-left d-flex flex-column justify-content-between align-items-start">
+    <div class="content-wrapper auth-split d-flex flex-column flex-lg-row">
+      <!-- LEFT / Brand Section (Mobile: hidden, Desktop: visible) -->
+      <div class="auth-left d-none d-lg-flex flex-column justify-content-between align-items-start">
         <div>
           <router-link to="/">
             <img src="/assets/logo1.png" alt="Wavelength" class="auth-logo logo-3d" />
@@ -118,25 +117,35 @@
       </div>
 
       <!-- RIGHT / Form Section -->
-      <div class="auth-right d-flex flex-column justify-content-center">
-        <div class="form-card glass-card py-4" :class="{ shake: showError }">
+      <div class="auth-right d-flex flex-column justify-content-center rounded-start-0 rounded-start-lg-5">
+        <!-- Logo for Mobile Only -->
+        <div class="d-flex d-lg-none justify-content-center mb-3 mt-4">
+          <router-link to="/">
+            <img src="/assets/logo1.png" alt="Wavelength" class="auth-logo logo-3d" />
+          </router-link>
+        </div>
+
+        <div class="form-card glass-card py-4 px-3 px-md-5">
           <h2 class="text-white font-weight-bold mb-4 text-center signup-title">SIGN UP</h2>
+
           <!-- Type toggle -->
-          <div class="toggle-row mb-5 d-flex justify-content-center">
+          <div class="toggle-row mb-5 d-flex justify-content-center" style="gap: 16px">
             <button
               class="toggle-btn toggle-enhanced"
               :class="userType === 'fan' ? 'selected' : 'outline'"
               type="button"
               @click="userType = 'fan'"
+              style="min-width: 100px; font-size: 1rem; margin-right: 0.6rem"
             >
               <span class="toggle-icon">🎵</span>
               MUSIC FAN
             </button>
             <button
-              class="toggle-btn toggle-enhanced ml-3"
+              class="toggle-btn toggle-enhanced"
               :class="userType === 'artist' ? 'selected' : 'outline'"
               type="button"
               @click="userType = 'artist'"
+              style="min-width: 100px; font-size: 1rem"
             >
               <span class="toggle-icon">🎤</span>
               ARTIST
@@ -286,7 +295,7 @@
             </button>
           </form>
 
-          <div class="text-center mt-3 login-row">
+          <div class="text-center mt-3 login-row" style="font-size: 1rem">
             ALREADY HAVE AN ACCOUNT?
             <router-link to="/login" class="login-link">LOG IN</router-link>
           </div>
@@ -568,28 +577,27 @@ export default {
 
 .auth-split {
   min-height: 100vh;
-  display: flex;
-  flex-direction: row;
+  width: 100%;
 }
+
+/* Mobile: Stacked vertically */
+/* Desktop: Side by side */
 .auth-left {
-  flex: 1 1 50%;
+  flex: 0 0 50%;
   min-width: 330px;
   background: transparent;
   color: #fff;
-  padding: 42px 0 42px 68px;
+  padding: 42px 68px 42px 68px;
   position: relative;
   overflow: hidden;
   z-index: 2;
 }
+
 .auth-logo {
   width: 136px;
   margin-top: 18px;
   margin-bottom: 48px;
   transition: transform 0.4s ease;
-}
-
-.logo-3d {
-  transition: transform 0.5s ease;
 }
 
 .logo-3d:hover {
@@ -627,7 +635,6 @@ export default {
   }
 }
 
-/* Mini Stats */
 .stats-mini {
   display: flex;
   gap: 40px;
@@ -669,15 +676,13 @@ export default {
 }
 
 .auth-right {
-  flex: 1 1 50%;
+  flex: 0 0 50%;
   padding: 0;
   background: #b71c1c;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   min-width: 330px;
   border-radius: 24px 0 0 24px;
 }
+
 .form-card {
   background: transparent;
   width: 100%;
@@ -685,7 +690,6 @@ export default {
   color: #fff;
   border: none;
   border-radius: 0;
-  padding: 10px 6rem;
 }
 
 /* Glassmorphism Card */
@@ -728,20 +732,16 @@ export default {
 }
 
 .signup-title {
-  font-size: 3rem;
   font-weight: 900;
   letter-spacing: 2px;
   text-align: center;
-  margin-bottom: 2rem;
 }
+
 .toggle-row {
-  gap: 16px;
   justify-content: center !important;
-  margin-bottom: 3rem;
 }
+
 .toggle-btn {
-  min-width: 150px;
-  font-size: 1rem;
   font-weight: bold;
   border-radius: 2rem;
   padding: 0.8rem 2rem;
@@ -750,7 +750,6 @@ export default {
   color: #fff;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   outline: none;
-  margin-right: 1.2rem;
   position: relative;
   overflow: hidden;
 }
@@ -801,6 +800,7 @@ export default {
   background: transparent;
   color: #fff;
 }
+
 .toggle-btn:last-child {
   margin-right: 0;
 }
@@ -1085,18 +1085,22 @@ export default {
     box-shadow 0.2s,
     border-color 0.2s;
 }
+
 .input-lg.form-control::placeholder {
   color: rgba(255, 255, 255, 0.9);
   font-weight: normal;
 }
+
 .input-lg.form-control:focus {
   background: transparent;
   box-shadow: none;
   border-bottom: 3px solid #fff;
 }
+
 .input-lg.form-control:disabled {
   color: #ccc;
 }
+
 .main-btn {
   background: #fff;
   color: #b71c1c;
@@ -1110,17 +1114,19 @@ export default {
     background 0.2s,
     color 0.2s;
 }
+
 .main-btn:disabled {
   background: #f4f4f4 !important;
   color: #c9a8a8 !important;
 }
+
 .login-row {
   color: #fff;
   font-weight: normal;
-  font-size: 1rem;
   margin-top: 2rem;
   letter-spacing: 0.1px;
 }
+
 .login-link {
   color: #fff;
   font-weight: bold;
@@ -1159,35 +1165,32 @@ export default {
   font-size: 1.1rem;
   margin-bottom: 24px;
 }
-@media (max-width: 991px) {
-  .auth-split {
-    flex-direction: column;
+
+@media (min-width: 992px) {
+  .rounded-start-lg-5 {
+    border-top-left-radius: 1rem !important;
+    border-bottom-left-radius: 1rem !important;
   }
-  .auth-left,
+}
+/* Fix mobile background to match desktop animated background */
+ @media (max-width: 991.98px) {
   .auth-right {
-    min-width: unset;
-    border-radius: 0 !important;
-  }
-  .auth-right {
+    background: transparent;
     border-radius: 0;
   }
+  
   .form-card {
-    padding: 2rem 3rem;
+    background: rgba(183, 28, 28, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    /* margin: 1rem; */
   }
 }
-@media (max-width: 600px) {
-  .signup-title {
-    font-size: 2rem;
-  }
-  .auth-logo {
-    width: 110px;
-  }
-  .tagline-split {
-    font-size: 1.1rem;
-  }
-  .toggle-btn {
-    min-width: 100px;
-    font-size: 1rem;
-  }
-}
+  /* Make sure the dark animated background extends fully */
+   /* .auth-wrapper {
+    background: #191717;
+  } */
+
+
 </style>

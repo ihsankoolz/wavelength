@@ -3,14 +3,15 @@
     <!-- Cursor Spotlight Effect -->
     <div class="cursor-spotlight" :style="spotlightStyle"></div>
 
-    <!-- Header -->
-    <nav class="header-nav d-flex align-items-center justify-content-between px-5 py-3">
+    <!-- Header --> 
+    <nav
+      class="header-nav d-flex flex-column flex-sm-row align-items-center justify-content-between px-3 px-sm-5 py-3"
+    >
       <!-- Logo (SVG or Image) -->
-      <div class="d-flex align-items-center">
-        <!-- Replace this with your SVG or logo image -->
-        <img src="/assets/logo1.png" alt="Wavelength Logo" class="logo-img mr-2" />
+      <div class="d-flex align-items-center mb-3 mb-sm-0 ms-0 ms-lg-5">
+        <img src="/assets/logo1.png" alt="Wavelength Logo" class="logo-img" />
       </div>
-      <div>
+      <div class="d-flex flex-row align-items-center gap-2 gap-sm-3 me-0 me-lg-5">
         <router-link to="/register" class="btn btn-link text-white font-weight-bold sign-up-btn"
           >SIGN UP</router-link
         >
@@ -19,6 +20,7 @@
         >
       </div>
     </nav>
+
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path id="wave1" fill="none" stroke="#B51414" stroke-width="2" opacity="0.6">
@@ -109,48 +111,126 @@
       <div class="container"></div>
       <!-- Hero Section -->
       <section class="hero-section d-flex align-items-center">
-        <div class="hero-content px-4">
-          <h1 class="hero-title mb-3 magnetic-text" ref="heroTitle">
-            <span v-for="(word, index) in heroWords" :key="index" class="word-wrapper">
-              <span
-                v-for="(letter, i) in word"
-                :key="i"
-                class="letter"
-                :style="{ animationDelay: `${(index * word.length + i) * 0.05}s` }"
-                >{{ letter }}</span
-              ><span v-if="index < heroWords.length - 1" class="letter-space"> </span>
-            </span>
-          </h1>
-          <h2 class="hero-subtitle mb-5 fade-in-up" style="animation-delay: 0.6s">
+        <div class="hero-content px-5 mt-3 mt-md-4 ms-0 ms-md-3 ms-lg-5">
+          <!-- Mobile Title (< 768px) -->
+          <h1
+            class="hero-title mb-2 mb-md-3 magnetic-text d-block d-md-none"
+            style="font-size: 3rem"
+            ref="heroTitle"
+          >
             WHERE LOCAL MUSIC CONNECTS
-          </h2>
-          <div class="hero-actions d-flex fade-in-up" style="animation-delay: 0.9s">
-            <router-link to="/register" class="btn btn-danger btn-lg mr-4 get-started-btn"
-              >GET STARTED</router-link
+          </h1>
+
+          <!-- Tablet/Desktop Title (≥ 768px) -->
+          <h1
+            class="hero-title mb-2 mb-md-3 magnetic-text d-none d-md-block d-lg-none"
+            style="font-size: 5rem"
+            ref="heroTitle"
+          >
+            WHERE LOCAL MUSIC CONNECTS
+          </h1>
+
+          <!-- Desktop Title (≥ 992px) -->
+          <h1
+            class="hero-title mb-2 mb-md-3 magnetic-text d-none d-lg-block"
+            style="font-size: 6rem"
+            ref="heroTitle"
+          >
+            WHERE LOCAL MUSIC CONNECTS
+          </h1>
+
+          <div
+            class="hero-actions d-flex flex-column flex-sm-row gap-2 gap-sm-3 fade-in-up"
+            style="animation-delay: 0.9s"
+          >
+            <!-- Mobile Buttons (< 768px) -->
+            <router-link
+              to="/register"
+              class="btn btn-danger get-started-btn w-100 w-sm-auto me-0 me-sm-2 d-block d-md-none"
+              style="font-size: 1.1rem; padding: 0.85rem 2rem; border-radius: 2.5rem"
             >
-            <a href="#Feature" class="btn btn-outline-light btn-lg learn-more-btn">LEARN MORE</a>
+              GET STARTED
+            </router-link>
+
+            <!-- Desktop Buttons (≥ 768px) -->
+            <router-link
+              to="/register"
+              class="btn btn-danger get-started-btn w-100 w-sm-auto me-0 me-sm-2 d-none d-md-block"
+              style="font-size: 1.4rem; padding: 1rem 2.5rem; border-radius: 3rem"
+            >
+              GET STARTED
+            </router-link>
+
+            <!-- Mobile Learn More (< 768px) -->
+            <a
+              href="#Feature"
+              class="btn btn-outline-light learn-more-btn w-100 w-sm-auto d-block d-md-none"
+              style="font-size: 1.1rem; padding: 0.85rem 2rem; border-radius: 2.5rem"
+            >
+              LEARN MORE
+            </a>
+
+            <!-- Desktop Learn More (≥ 768px) -->
+            <a
+              href="#Feature"
+              class="btn btn-outline-light learn-more-btn w-100 w-sm-auto d-none d-md-block"
+              style="font-size: 1.4rem; padding: 1rem 2.5rem; border-radius: 3rem"
+            >
+              LEARN MORE
+            </a>
           </div>
         </div>
       </section>
+
       <!-- Stats Section -->
       <section class="stats-section d-flex flex-column align-items-center py-5">
         <div class="gradient-mesh"></div>
-        <div class="stats-heading text-white text-center mb-5 scroll-reveal" ref="statsHeading">
-          <h2 class="font-weight-bold">
+
+        <!-- Mobile Heading (< 768px) -->
+        <div
+          class="stats-heading text-white text-center mb-4 mb-md-5 scroll-reveal d-block d-md-none px-3"
+          ref="statsHeading"
+        >
+          <h2 class="font-weight-bold" style="font-size: 1.3rem; line-height: 1.3">
             CONNECT WITH TALENTED LOCAL ARTISTS, DISCOVER UPCOMING EVENTS,<br />
             AND SUPPORT SINGAPORE'S VIBRANT MUSIC COMMUNITY
           </h2>
         </div>
+
+        <!-- Tablet Heading (768px - 991px) -->
+        <div
+          class="stats-heading text-white text-center mb-4 mb-md-5 scroll-reveal d-none d-md-block d-lg-none"
+          ref="statsHeading"
+        >
+          <h2 class="font-weight-bold" style="font-size: 1.4rem; line-height: 1.3">
+            CONNECT WITH TALENTED LOCAL ARTISTS, DISCOVER UPCOMING EVENTS,<br />
+            AND SUPPORT SINGAPORE'S VIBRANT MUSIC COMMUNITY
+          </h2>
+        </div>
+
+        <!-- Desktop Heading (≥ 992px) -->
+        <div
+          class="stats-heading text-white text-center mb-4 mb-md-5 scroll-reveal d-none d-lg-block"
+          ref="statsHeading"
+        >
+          <h2 class="font-weight-bold" style="font-size: 1.5rem; line-height: 1.3">
+            CONNECT WITH TALENTED LOCAL ARTISTS, DISCOVER UPCOMING EVENTS,<br />
+            AND SUPPORT SINGAPORE'S VIBRANT MUSIC COMMUNITY
+          </h2>
+        </div>
+
         <div class="container">
           <div class="row justify-content-center">
             <div
               v-for="stat in stats"
               :key="stat.label"
-              class="col-12 col-md-4 d-flex justify-content-center mb-4 scroll-reveal"
+              class="col-12 col-md-4 col-lg-4 d-flex justify-content-center mb-4 scroll-reveal"
               :ref="'stat-' + stat.label"
             >
+              <!-- Mobile Stat Card (< 768px) -->
               <div
-                class="stat-card bg-white d-flex flex-column justify-content-center align-items-center p-4"
+                class="stat-card bg-white d-flex flex-column justify-content-center align-items-center d-block d-md-none"
+                style="padding: 1.5rem 1rem; font-size: 1rem; min-width: 80vw"
                 @mouseenter="hoverStat = stat.label"
                 @mouseleave="hoverStat = null"
               >
@@ -200,27 +280,210 @@
                   {{ stat.label.toUpperCase() }}
                 </div>
               </div>
+
+              <!-- Tablet Stat Card (768px - 991px) -->
+              <div
+                class="stat-card bg-white d-none d-md-flex d-lg-none flex-column justify-content-center align-items-center"
+                style="padding: 1.2rem 1rem; min-width: 220px; max-width: 260px"
+                @mouseenter="hoverStat = stat.label"
+                @mouseleave="hoverStat = null"
+              >
+                <!-- Circular Progress Ring (Smaller) -->
+                <div class="stat-ring-container mb-2" style="width: 90px; height: 90px">
+                  <svg class="stat-ring" width="90" height="90" viewBox="0 0 120 120">
+                    <circle
+                      class="ring-background"
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill="none"
+                      stroke="#f0f0f0"
+                      stroke-width="8"
+                    />
+                    <circle
+                      class="ring-progress"
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill="none"
+                      stroke="url(#gradient-tablet)"
+                      stroke-width="8"
+                      stroke-linecap="round"
+                      :style="{
+                        strokeDasharray: '314',
+                        strokeDashoffset: getStrokeDashoffset(stat),
+                      }"
+                    />
+                    <defs>
+                      <linearGradient id="gradient-tablet" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color: #d52222; stop-opacity: 1" />
+                        <stop offset="100%" style="stop-color: #bb1814; stop-opacity: 1" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <!-- Icon in Center (Smaller) -->
+                  <div class="stat-icon" style="font-size: 2rem">
+                    <component :is="'span'" v-html="getStatIcon(stat.label)"></component>
+                  </div>
+                </div>
+
+                <div class="stat-value text-dark mb-2" style="font-size: 2rem; font-weight: 800">
+                  {{ stat.animatedValue }}{{ stat.suffix }}
+                </div>
+                <div class="stat-label text-muted" style="font-size: 0.85rem; font-weight: 600">
+                  {{ stat.label.toUpperCase() }}
+                </div>
+              </div>
+
+              <!-- Desktop Stat Card (≥ 992px) -->
+              <div
+                class="stat-card bg-white d-none d-lg-flex flex-column justify-content-center align-items-center p-4"
+                @mouseenter="hoverStat = stat.label"
+                @mouseleave="hoverStat = null"
+              >
+                <!-- Circular Progress Ring -->
+                <div class="stat-ring-container mb-3">
+                  <svg class="stat-ring" width="120" height="120" viewBox="0 0 120 120">
+                    <circle
+                      class="ring-background"
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill="none"
+                      stroke="#f0f0f0"
+                      stroke-width="8"
+                    />
+                    <circle
+                      class="ring-progress"
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill="none"
+                      stroke="url(#gradient-desktop)"
+                      stroke-width="8"
+                      stroke-linecap="round"
+                      :style="{
+                        strokeDasharray: '314',
+                        strokeDashoffset: getStrokeDashoffset(stat),
+                      }"
+                    />
+                    <defs>
+                      <linearGradient id="gradient-desktop" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color: #d52222; stop-opacity: 1" />
+                        <stop offset="100%" style="stop-color: #bb1814; stop-opacity: 1" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <!-- Icon in Center -->
+                  <div class="stat-icon">
+                    <component :is="'span'" v-html="getStatIcon(stat.label)"></component>
+                  </div>
+                </div>
+
+                <div class="stat-value text-dark mb-2" style="font-size: 2.5rem; font-weight: 800">
+                  {{ stat.animatedValue }}{{ stat.suffix }}
+                </div>
+                <div class="stat-label text-muted" style="font-size: 0.95rem; font-weight: 600">
+                  {{ stat.label.toUpperCase() }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
+
       <!-- Why Wavelength -->
       <section id="Feature" class="why-section py-5 d-flex flex-column align-items-center">
-        <div class="text-center mb-4 scroll-reveal" ref="whyHeading">
-          <h2 class="why-title font-weight-bold mb-2">WHY WAVELENGTH</h2>
-          <div class="why-subtitle font-weight-bold">
+        <!-- Mobile Heading (< 768px) -->
+        <div class="text-center mb-3 mb-md-4 scroll-reveal d-block d-md-none" ref="whyHeading">
+          <h2
+            class="why-title font-weight-bold mb-2"
+            style="font-size: 2rem; color: #fff; font-weight: 800; letter-spacing: 2px"
+          >
+            WHY WAVELENGTH
+          </h2>
+          <div
+            class="why-subtitle font-weight-bold"
+            style="color: #fff; font-size: 0.95rem; margin-bottom: 2rem"
+          >
             EVERYTHING YOU NEED TO DISCOVER AND SUPPORT LOCAL MUSIC
           </div>
         </div>
+
+        <!-- Tablet Heading (768px - 991px) -->
+        <div
+          class="text-center mb-3 mb-md-4 scroll-reveal d-none d-md-block d-lg-none"
+          ref="whyHeading"
+        >
+          <h2
+            class="why-title font-weight-bold mb-2"
+            style="font-size: 2.5rem; color: #fff; font-weight: 800; letter-spacing: 2px"
+          >
+            WHY WAVELENGTH
+          </h2>
+          <div
+            class="why-subtitle font-weight-bold"
+            style="color: #fff; font-size: 1rem; margin-bottom: 2rem"
+          >
+            EVERYTHING YOU NEED TO DISCOVER AND SUPPORT LOCAL MUSIC
+          </div>
+        </div>
+
+        <!-- Desktop Heading (≥ 992px) -->
+        <div class="text-center mb-4 scroll-reveal d-none d-lg-block" ref="whyHeading">
+          <h2
+            class="why-title font-weight-bold mb-2"
+            style="font-size: 3.5rem; color: #fff; font-weight: 800; letter-spacing: 2px"
+          >
+            WHY WAVELENGTH
+          </h2>
+          <div
+            class="why-subtitle font-weight-bold"
+            style="color: #fff; font-size: 1.2rem; margin-bottom: 2rem"
+          >
+            EVERYTHING YOU NEED TO DISCOVER AND SUPPORT LOCAL MUSIC
+          </div>
+        </div>
+
         <div class="container">
           <div class="row justify-content-center">
+            <!-- Feature 1 -->
             <div
               class="col-12 col-md-4 text-center mb-5 mb-md-0 scroll-reveal feature-card-3d"
+              style="display: flex; flex-direction: column"
               ref="feature1"
             >
-              <div class="feature-card-glass p-5">
+              <!-- Mobile Feature Card (< 768px) -->
+              <div class="feature-card-glass d-block d-md-none p-3" style="padding: 1.2rem">
                 <div class="feature-icon mx-auto mb-3">
-                  <!-- Magnifying glass SVG icon -->
+                  <svg height="50" width="50" viewBox="0 0 32 32" class="pulsing-icon">
+                    <circle cx="15" cy="15" r="10" stroke="#c62828" stroke-width="3" fill="none" />
+                    <line
+                      x1="23"
+                      y1="23"
+                      x2="29"
+                      y2="29"
+                      stroke="#c62828"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+                <div
+                  class="feature-title text-danger font-weight-bold mb-2"
+                  style="font-size: 1.1rem"
+                >
+                  DISCOVER ARTISTS
+                </div>
+                <div class="feature-desc text-white" style="font-size: 0.97rem; line-height: 1.6">
+                  Find local artists based on your music taste. From indie to jazz, discover hidden
+                  gems in Singapore's music scene.
+                </div>
+              </div>
+
+              <!-- Desktop Feature Card (≥ 768px) -->
+              <div class="feature-card-glass d-none d-md-block p-5">
+                <div class="feature-icon mx-auto mb-3">
                   <svg height="60" width="60" viewBox="0 0 32 32" class="pulsing-icon">
                     <circle cx="15" cy="15" r="10" stroke="#c62828" stroke-width="3" fill="none" />
                     <line
@@ -240,19 +503,52 @@
                 >
                   DISCOVER ARTISTS
                 </div>
-                <div class="feature-desc text-white">
+                <div class="feature-desc text-white" style="font-size: 1.1rem; line-height: 1.6">
                   Find local artists based on your music taste. From indie to jazz, discover hidden
                   gems in Singapore's music scene.
                 </div>
               </div>
             </div>
+
+            <!-- Feature 2 -->
             <div
               class="col-12 col-md-4 text-center mb-5 mb-md-0 scroll-reveal feature-card-3d"
               ref="feature2"
             >
-              <div class="feature-card-glass p-5">
+              <!-- Mobile Feature Card (< 768px) -->
+              <div class="feature-card-glass d-block d-md-none p-3" style="padding: 1.2rem">
                 <div class="feature-icon mx-auto mb-3">
-                  <!-- Calendar SVG icon -->
+                  <svg height="50" width="50" viewBox="0 0 32 32" class="flipping-icon">
+                    <rect
+                      x="6"
+                      y="10"
+                      width="20"
+                      height="16"
+                      rx="3"
+                      fill="none"
+                      stroke="#c62828"
+                      stroke-width="3"
+                    />
+                    <rect x="6" y="6" width="20" height="6" fill="none" />
+                    <line x1="10" y1="10" x2="10" y2="6" stroke="#c62828" stroke-width="3" />
+                    <line x1="22" y1="10" x2="22" y2="6" stroke="#c62828" stroke-width="3" />
+                  </svg>
+                </div>
+                <div
+                  class="feature-title text-danger font-weight-bold mb-2"
+                  style="font-size: 1.1rem"
+                >
+                  FIND EVENTS
+                </div>
+                <div class="feature-desc text-white" style="font-size: 0.97rem; line-height: 1.6">
+                  Never miss a show. Browse upcoming gigs, concerts, and performances happening
+                  around Singapore.
+                </div>
+              </div>
+
+              <!-- Desktop Feature Card (≥ 768px) -->
+              <div class="feature-card-glass d-none d-md-block p-5">
+                <div class="feature-icon mx-auto mb-3">
                   <svg height="60" width="60" viewBox="0 0 32 32" class="flipping-icon">
                     <rect
                       x="6"
@@ -275,16 +571,45 @@
                 >
                   FIND EVENTS
                 </div>
-                <div class="feature-desc text-white">
+                <div class="feature-desc text-white" style="font-size: 1.1rem; line-height: 1.6">
                   Never miss a show. Browse upcoming gigs, concerts, and performances happening
                   around Singapore.
                 </div>
               </div>
             </div>
+
+            <!-- Feature 3 -->
             <div class="col-12 col-md-4 text-center scroll-reveal feature-card-3d" ref="feature3">
-              <div class="feature-card-glass p-5">
+              <!-- Mobile Feature Card (< 768px) -->
+              <div
+                class="feature-card-glass d-block d-md-none p-3"
+                style="padding: 1.2rem; margin-bottom: 0"
+              >
                 <div class="feature-icon mx-auto mb-3">
-                  <!-- Heart SVG icon -->
+                  <svg height="50" width="50" viewBox="0 0 32 32" class="beating-heart">
+                    <path
+                      d="M16 28s-9.5-7.25-9.5-13.5A6.5 6.5 0 0116 8a6.5 6.5 0 019.5 6.5C25.5 20.75 16 28 16 28z"
+                      fill="none"
+                      stroke="#c62828"
+                      stroke-width="3"
+                    />
+                  </svg>
+                </div>
+                <div
+                  class="feature-title text-danger font-weight-bold mb-2"
+                  style="font-size: 1.1rem"
+                >
+                  SUPPORT LOCAL
+                </div>
+                <div class="feature-desc text-white" style="font-size: 0.97rem; line-height: 1.6">
+                  Follow your favorite artists, share their music, and help grow Singapore's local
+                  music community.
+                </div>
+              </div>
+
+              <!-- Desktop Feature Card (≥ 768px) -->
+              <div class="feature-card-glass d-none d-md-block p-5">
+                <div class="feature-icon mx-auto mb-3">
                   <svg height="60" width="60" viewBox="0 0 32 32" class="beating-heart">
                     <path
                       d="M16 28s-9.5-7.25-9.5-13.5A6.5 6.5 0 0116 8a6.5 6.5 0 019.5 6.5C25.5 20.75 16 28 16 28z"
@@ -300,7 +625,7 @@
                 >
                   SUPPORT LOCAL
                 </div>
-                <div class="feature-desc text-white">
+                <div class="feature-desc text-white" style="font-size: 1.1rem; line-height: 1.6">
                   Follow your favorite artists, share their music, and help grow Singapore's local
                   music community.
                 </div>
@@ -309,6 +634,7 @@
           </div>
         </div>
       </section>
+
       <!-- Artist CTA -->
       <section class="artist-cta-section py-5">
         <!-- Flying Music Symbols -->
@@ -326,8 +652,17 @@
         <!-- Animated Background Gradient -->
         <div class="dynamic-gradient"></div>
 
-        <div class="container px-5 scroll-reveal cta-content" ref="ctaSection">
-          <h2 class="cta-title mb-3 split-text" ref="ctaTitle">
+        <!-- Mobile CTA Content (< 768px) -->
+        <div
+          class="container scroll-reveal cta-content d-block d-md-none px-3"
+          ref="ctaSection"
+          style="padding-left: 1rem; padding-right: 1rem"
+        >
+          <h2
+            class="cta-title mb-2 split-text"
+            ref="ctaTitle"
+            style="font-size: 2.5rem; gap: 0.8rem"
+          >
             <span
               v-for="(word, index) in ctaWords"
               :key="index"
@@ -337,7 +672,55 @@
               {{ word }}
             </span>
           </h2>
-          <div class="cta-sub mb-5 dramatic-fade">
+          <div class="cta-sub mb-4 dramatic-fade" style="font-size: 1.1rem; max-width: 100%">
+            <span class="cta-line" style="animation-delay: 0.5s"
+              >REACH NEW FANS AND GROW YOUR AUDIENCE ON WAVELENGTH.</span
+            ><br />
+            <span class="cta-line" style="animation-delay: 0.7s"
+              >CREATE YOUR PROFILE, SHARE YOUR SOUND, AND PROMOTE YOUR GIGS — ALL IN ONE
+              PLACE.</span
+            >
+          </div>
+          <ul class="cta-list mb-3">
+            <li class="list-item-slide" style="animation-delay: 0.9s; font-size: 1.2rem">
+              <span class="cta-icon">&#10003;</span>
+              Free artist profile with bio and links
+            </li>
+            <li class="list-item-slide" style="animation-delay: 1.1s; font-size: 1.2rem">
+              <span class="cta-icon">&#10003;</span>
+              Embed your music from Spotify &amp; YouTube
+            </li>
+            <li class="list-item-slide" style="animation-delay: 1.3s; font-size: 1.2rem">
+              <span class="cta-icon">&#10003;</span>
+              Post and promote your events
+            </li>
+            <li class="list-item-slide" style="animation-delay: 1.5s; font-size: 1.2rem">
+              <span class="cta-icon">&#10003;</span>
+              Connect with fans who love your genre
+            </li>
+          </ul>
+          <router-link
+            to="/register"
+            class="btn btn-danger btn-lg cta-btn dramatic-button"
+            style="font-size: 1.2rem; padding: 1rem 2rem; border-radius: 2rem"
+          >
+            SIGN UP NOW
+          </router-link>
+        </div>
+
+        <!-- Desktop CTA Content (≥ 768px) -->
+        <div class="container scroll-reveal cta-content d-none d-md-block px-5" ref="ctaSection">
+          <h2 class="cta-title mb-3 split-text" ref="ctaTitle" style="font-size: 5rem; gap: 1.5rem">
+            <span
+              v-for="(word, index) in ctaWords"
+              :key="index"
+              class="word-animate"
+              :style="{ animationDelay: `${index * 0.1}s` }"
+            >
+              {{ word }}
+            </span>
+          </h2>
+          <div class="cta-sub mb-5 dramatic-fade" style="font-size: 1.3rem; max-width: 900px">
             <span class="cta-line" style="animation-delay: 0.5s"
               >REACH NEW FANS AND GROW YOUR AUDIENCE ON WAVELENGTH.</span
             ><br />
@@ -347,41 +730,98 @@
             >
           </div>
           <ul class="cta-list mb-4">
-            <li class="list-item-slide" style="animation-delay: 0.9s">
+            <li class="list-item-slide" style="animation-delay: 0.9s; font-size: 1.5rem">
               <span class="cta-icon">&#10003;</span>
               Free artist profile with bio and links
             </li>
-            <li class="list-item-slide" style="animation-delay: 1.1s">
+            <li class="list-item-slide" style="animation-delay: 1.1s; font-size: 1.5rem">
               <span class="cta-icon">&#10003;</span>
               Embed your music from Spotify &amp; YouTube
             </li>
-            <li class="list-item-slide" style="animation-delay: 1.3s">
+            <li class="list-item-slide" style="animation-delay: 1.3s; font-size: 1.5rem">
               <span class="cta-icon">&#10003;</span>
               Post and promote your events
             </li>
-            <li class="list-item-slide" style="animation-delay: 1.5s">
+            <li class="list-item-slide" style="animation-delay: 1.5s; font-size: 1.5rem">
               <span class="cta-icon">&#10003;</span>
               Connect with fans who love your genre
             </li>
           </ul>
-          <router-link to="/register" class="btn btn-danger btn-lg cta-btn dramatic-button"
-            >SIGN UP NOW</router-link
+          <router-link
+            to="/register"
+            class="btn btn-danger btn-lg cta-btn dramatic-button"
+            style="font-size: 1.5rem; padding: 1.2rem 3rem; border-radius: 2rem; margin-top: 1.5rem"
           >
+            SIGN UP NOW
+          </router-link>
         </div>
       </section>
+
       <!-- Footer -->
       <footer class="footer-section">
         <div
           class="footer-main d-flex flex-column justify-content-center align-items-center text-center scroll-reveal"
           ref="footer"
         >
-          <h2 class="footer-title mb-4">STAY ON WAVELENGTH</h2>
-          <div class="footer-sub mb-5">
+          <!-- Mobile Title (< 768px) -->
+          <h2
+            class="footer-title mb-3 d-block d-md-none"
+            style="
+              font-size: 2rem;
+              font-weight: 800;
+              letter-spacing: 2px;
+              margin-top: 60px;
+              background: linear-gradient(135deg, #fff 0%, #d95656 50%, #fff 100%);
+              background-size: 200% auto;
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+              animation: gradientShift 5s ease infinite;
+            "
+          >
+            STAY ON WAVELENGTH
+          </h2>
+
+          <!-- Desktop Title (≥ 768px) -->
+          <h2
+            class="footer-title mb-4 d-none d-md-block"
+            style="
+              font-size: 4rem;
+              font-weight: 800;
+              letter-spacing: 2px;
+              margin-top: 100px;
+              background: linear-gradient(135deg, #fff 0%, #d95656 50%, #fff 100%);
+              background-size: 200% auto;
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+              animation: gradientShift 5s ease infinite;
+            "
+          >
+            STAY ON WAVELENGTH
+          </h2>
+
+          <!-- Mobile Subtitle (< 768px) -->
+          <div
+            class="footer-sub mb-4 d-block d-md-none"
+            style="font-size: 1rem; font-weight: 700; letter-spacing: 1px"
+          >
+            JOIN THOUSANDS OF MUSIC LOVERS SUPPORTING SINGAPORE'S LOCAL ARTISTS
+          </div>
+
+          <!-- Desktop Subtitle (≥ 768px) -->
+          <div
+            class="footer-sub mb-5 d-none d-md-block"
+            style="font-size: 1.2rem; font-weight: 700; letter-spacing: 1px"
+          >
             JOIN THOUSANDS OF MUSIC LOVERS SUPPORTING SINGAPORE'S LOCAL ARTISTS
           </div>
 
           <!-- Social Links -->
-          <div class="social-links mb-5">
+          <div
+            class="social-links mb-4 mb-md-5"
+            style="display: flex; gap: 2rem; justify-content: center; align-items: center"
+          >
             <a href="#" class="social-icon" aria-label="Instagram">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
                 <path
@@ -412,20 +852,111 @@
           </div>
 
           <!-- Quick Links -->
-          <div class="footer-links mb-4">
-            <a href="#" class="footer-link">About</a>
-            <span class="link-divider">•</span>
-            <a href="#Feature" class="footer-link">Features</a>
-            <span class="link-divider">•</span>
-            <a href="#" class="footer-link">Artists</a>
-            <span class="link-divider">•</span>
-            <a href="#" class="footer-link">Events</a>
-            <span class="link-divider">•</span>
-            <a href="#" class="footer-link">Contact</a>
+          <div
+            class="footer-links mb-3 mb-md-4"
+            style="
+              display: flex;
+              gap: 1rem;
+              align-items: center;
+              flex-wrap: wrap;
+              justify-content: center;
+            "
+          >
+            <a
+              href="#"
+              class="footer-link"
+              style="
+                color: rgba(255, 255, 255, 0.7);
+                text-decoration: none;
+                font-size: 1rem;
+                font-weight: 600;
+                position: relative;
+                transition: all 0.3s ease;
+              "
+              >About</a
+            >
+            <span class="link-divider" style="color: rgba(255, 255, 255, 0.3)">•</span>
+            <a
+              href="#Feature"
+              class="footer-link"
+              style="
+                color: rgba(255, 255, 255, 0.7);
+                text-decoration: none;
+                font-size: 1rem;
+                font-weight: 600;
+                position: relative;
+                transition: all 0.3s ease;
+              "
+              >Features</a
+            >
+            <span class="link-divider" style="color: rgba(255, 255, 255, 0.3)">•</span>
+            <a
+              href="#"
+              class="footer-link"
+              style="
+                color: rgba(255, 255, 255, 0.7);
+                text-decoration: none;
+                font-size: 1rem;
+                font-weight: 600;
+                position: relative;
+                transition: all 0.3s ease;
+              "
+              >Artists</a
+            >
+            <span class="link-divider" style="color: rgba(255, 255, 255, 0.3)">•</span>
+            <a
+              href="#"
+              class="footer-link"
+              style="
+                color: rgba(255, 255, 255, 0.7);
+                text-decoration: none;
+                font-size: 1rem;
+                font-weight: 600;
+                position: relative;
+                transition: all 0.3s ease;
+              "
+              >Events</a
+            >
+            <span class="link-divider" style="color: rgba(255, 255, 255, 0.3)">•</span>
+            <a
+              href="#"
+              class="footer-link"
+              style="
+                color: rgba(255, 255, 255, 0.7);
+                text-decoration: none;
+                font-size: 1rem;
+                font-weight: 600;
+                position: relative;
+                transition: all 0.3s ease;
+              "
+              >Contact</a
+            >
           </div>
         </div>
-        <div class="footer-bar">
-          <span class="footer-copy"> © 2025 WAVELENGTH. DISCOVER SINGAPORE'S LOCAL MUSIC. </span>
+
+        <!-- Footer Bar -->
+        <div
+          class="footer-bar"
+          style="
+            background: linear-gradient(90deg, #b71c1c 0%, #d52222 50%, #b71c1c 100%);
+            color: #fff;
+            text-align: center;
+            padding: 1.2rem 0 1.1rem 0;
+            font-weight: 500;
+            margin-top: 80px;
+            position: relative;
+            z-index: 1;
+          "
+        >
+          <!-- Mobile Footer Copy (< 768px) -->
+          <span class="footer-copy d-block d-md-none" style="font-size: 1rem">
+            © 2025 WAVELENGTH. DISCOVER SINGAPORE'S LOCAL MUSIC.
+          </span>
+
+          <!-- Desktop Footer Copy (≥ 768px) -->
+          <span class="footer-copy d-none d-md-block" style="font-size: 1.1rem">
+            © 2025 WAVELENGTH. DISCOVER SINGAPORE'S LOCAL MUSIC.
+          </span>
         </div>
       </footer>
     </div>
@@ -442,7 +973,6 @@ export default {
         { label: 'Music Fans', value: 1000, animatedValue: 0, suffix: '+' },
         { label: 'Events Per Month', value: 50, animatedValue: 0, suffix: '+' },
       ],
-      heroWords: ['WAVELENGTH'],
       ctaWords: ['ARE', 'YOU', 'AN', 'ARTIST?'],
       mouseX: 0,
       mouseY: 0,
@@ -458,7 +988,6 @@ export default {
     },
   },
   mounted() {
-    this.heroWords = 'WAVELENGTH'.split('')
     this.setupScrollAnimations()
     this.setupFeatureCard3D()
   },
@@ -659,6 +1188,8 @@ export default {
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
+  min-height: 100%;
+  height: 100%;
 }
 
 .feature-card-glass::before {
@@ -878,22 +1409,22 @@ export default {
   background: #171717;
   min-height: 80px;
 }
+
 .logo-img {
   height: 80px;
-  margin-left: 50px;
   transition: transform 0.3s ease;
 }
 
 .logo-img:hover {
   transform: scale(1.05);
 }
+
 .sign-up-btn {
   text-decoration: none;
   outline: none;
   border: none;
   font-size: 1.1rem;
   font-weight: 700;
-  margin-right: 2rem;
   position: relative;
   transition: all 0.3s ease;
   letter-spacing: 1px;
@@ -935,7 +1466,6 @@ export default {
   position: relative;
   overflow: hidden;
   transition: all 0.4s ease;
-  margin-right: 50px;
   box-shadow:
     0 4px 15px rgba(213, 34, 34, 0.2),
     inset 0 0 20px rgba(213, 34, 34, 0.1);
@@ -976,37 +1506,22 @@ export default {
 .log-in-btn:active {
   transform: translateY(-1px) scale(1.02);
 }
-@media (max-width: 575.98px) {
-  .header-nav {
-    flex-direction: column;
-    text-align: center;
-  }
-  .logo-img {
-    margin-bottom: 10px;
-    margin-left: auto;
-  }
-  .log-in-btn {
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 10px;
-  }
-}
+
 .hero-section {
   position: relative;
-  min-height: 90vh;
+  min-height: calc(100vh - 80px);
   overflow: hidden;
   display: flex;
   align-items: center;
 }
+
 .hero-content {
   z-index: 2;
   position: relative;
   max-width: 800px;
-  margin-top: 40px;
-  margin-left: 50px;
 }
+
 .hero-title {
-  font-size: 6rem;
   font-weight: 800;
   background: linear-gradient(135deg, #fff 0%, #d95656 50%, #fff 100%);
   background-size: 200% auto;
@@ -1026,20 +1541,9 @@ export default {
     background-position: 100% center;
   }
 }
-.hero-subtitle {
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: 2px;
-  text-shadow:
-    0 0 20px rgba(217, 86, 86, 0.4),
-    0 4px 15px rgba(0, 0, 0, 0.5);
-}
+
 .hero-actions .btn {
-  border-radius: 3rem;
-  font-size: 1.4rem;
   font-weight: 800;
-  padding: 1rem 2.5rem;
   letter-spacing: 1.5px;
   position: relative;
   overflow: hidden;
@@ -1049,7 +1553,6 @@ export default {
 .get-started-btn {
   background: linear-gradient(135deg, #d52222 0%, #bb1814 100%);
   border: 3px solid transparent;
-  margin-right: 2rem;
   box-shadow:
     0 6px 20px rgba(213, 34, 34, 0.4),
     0 0 30px rgba(217, 86, 86, 0.2);
@@ -1150,47 +1653,12 @@ export default {
   transform: translateY(-2px) scale(1.02);
 }
 
-.hero-wave-bg {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  /* Use an actual wavy SVG for best results: */
-  background: url('/src/assets/wavelength_bg.png') center center/cover no-repeat;
-  opacity: 0.7;
-  pointer-events: none;
-}
-@media (max-width: 767.98px) {
-  .hero-title {
-    font-size: 2.4rem;
-  }
-  .hero-subtitle {
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-  }
-  .hero-section {
-    min-height: 40vh;
-  }
-  .hero-actions .btn {
-    border-radius: 2.5rem;
-    font-size: 1.1rem;
-    font-weight: 800;
-    padding: 0.85rem 2rem;
-  }
-}
 .stats-section {
   background: #b51414; /* Deep red */
   min-height: 300px;
   width: 100%;
 }
-.stats-heading h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.3;
-  text-align: center;
-}
+
 .stat-card {
   border-radius: 30px;
   min-width: 340px;
@@ -1266,30 +1734,22 @@ export default {
     transform: translate(-50%, -50%) scale(1.1);
   }
 }
-@media (max-width: 767.98px) {
-  .stat-card {
-    min-width: 80vw;
-    font-size: 1rem;
-    padding: 1.5rem 1rem;
-  }
-  .stats-heading h2 {
-    font-size: 1.3rem;
-  }
-}
+
 .why-section {
   width: 100%;
 }
+
 .why-title {
   color: #fff;
-  font-size: 3.5rem;
   font-weight: 800;
   letter-spacing: 2px;
 }
+
 .why-subtitle {
   color: #fff;
-  font-size: 1.2rem;
   margin-bottom: 2rem;
 }
+
 .feature-icon {
   width: 60px;
   height: 60px;
@@ -1300,30 +1760,20 @@ export default {
 }
 
 .feature-title {
-  font-size: 1.6rem;
   font-weight: 800;
   letter-spacing: 1.5px;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .feature-desc {
-  font-size: 1.1rem;
   font-weight: 400;
   margin-top: 0.6rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.9);
 }
-@media (max-width: 767.98px) {
-  .why-title {
-    font-size: 2rem;
-  }
-  .feature-title {
-    font-size: 1.1rem;
-  }
-  .feature-desc {
-    font-size: 0.97rem;
-  }
-}
+
+/* NO @media queries! */
+
 .artist-cta-section {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
   color: #fff;
@@ -1414,7 +1864,6 @@ export default {
 }
 
 .cta-title {
-  font-size: 5rem;
   font-weight: 900;
   letter-spacing: 3px;
   color: #fff;
@@ -1426,7 +1875,6 @@ export default {
 
 .split-text {
   display: flex;
-  gap: 1.5rem;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
@@ -1452,8 +1900,6 @@ export default {
 
 .cta-sub {
   font-weight: 600;
-  font-size: 1.3rem;
-  max-width: 900px;
   color: #e0e0e0;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
@@ -1483,7 +1929,6 @@ export default {
 .cta-list li {
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
   margin-bottom: 1.1rem;
   color: #fff;
   opacity: 0;
@@ -1533,12 +1978,9 @@ export default {
     transform: scale(1) rotate(0);
   }
 }
+
 .cta-btn {
-  border-radius: 2rem;
-  font-size: 1.5rem;
-  padding: 1.2rem 3rem;
   font-weight: 800;
-  margin-top: 1.5rem;
   position: relative;
   overflow: hidden;
   transition: all 0.4s ease;
@@ -1606,31 +2048,6 @@ export default {
   transform: translateY(-2px) scale(1.02);
 }
 
-@media (max-width: 767.98px) {
-  .cta-title {
-    font-size: 2.5rem;
-  }
-
-  .split-text {
-    gap: 0.8rem;
-  }
-
-  .cta-sub {
-    font-size: 1.1rem;
-  }
-  .cta-list li {
-    font-size: 1.2rem;
-  }
-
-  .cta-btn {
-    font-size: 1.2rem;
-    padding: 1rem 2rem;
-  }
-
-  .container {
-    padding: 0 1rem !important;
-  }
-}
 .footer-section {
   color: #fff;
   width: 100%;
@@ -1659,32 +2076,14 @@ export default {
 }
 
 .footer-title {
-  font-size: 4rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  margin-top: 100px;
-  background: linear-gradient(135deg, #fff 0%, #d95656 50%, #fff 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   animation: gradientShift 5s ease infinite;
 }
 
 .footer-sub {
-  font-size: 1.2rem;
-  font-weight: 700;
   letter-spacing: 1px;
 }
 
 /* Social Links */
-.social-links {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  align-items: center;
-}
-
 .social-icon {
   width: 50px;
   height: 50px;
@@ -1729,23 +2128,6 @@ export default {
 }
 
 /* Footer Links */
-.footer-links {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.footer-link {
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 600;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
 .footer-link::after {
   content: '';
   position: absolute;
@@ -1766,30 +2148,13 @@ export default {
   width: 100%;
 }
 
-.link-divider {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.footer-bar {
-  background: linear-gradient(90deg, #b71c1c 0%, #d52222 50%, #b71c1c 100%);
-  color: #fff;
-  text-align: center;
-  padding: 1.2rem 0 1.1rem 0;
-  font-weight: 500;
-  font-size: 1.1rem;
-  margin-top: 80px;
-  position: relative;
-  z-index: 1;
-}
-@media (max-width: 767.98px) {
-  .footer-title {
-    font-size: 2rem;
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% center;
   }
-  .footer-sub {
-    font-size: 1rem;
-  }
-  .footer-bar {
-    font-size: 1rem;
+  50% {
+    background-position: 100% center;
   }
 }
 </style>

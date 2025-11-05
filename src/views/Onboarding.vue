@@ -1,4 +1,3 @@
-<!-- EventDetails.vue -->
 <template>
   <div class="onboarding-wrapper">
     <!-- Wave SVG Background -->
@@ -11,7 +10,7 @@
                     M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
                     M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
             dur="3s"
-            repeatCount="indefinite"
+            repeatCount="indefinite" 
           />
         </path>
         <path id="wave2" fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
@@ -89,7 +88,7 @@
 
     <!-- Landing content -->
     <div class="content-wrapper">
-      <div class="onboarding-bg px-5">
+      <div class="onboarding-bg px-5 px-md-5">
         <!-- Mobile Logo (< 768px) -->
         <img
           src="/assets/logo1.png"
@@ -106,7 +105,7 @@
           style="width: 120px; top: 22px; left: 60px"
         />
 
-        <div class="onboarding-content">
+        <div class="onboarding-content px-2 px-md-0">
           <!-- Mobile Title (< 768px) -->
           <h2 class="genre-title d-block d-md-none" style="font-size: 1.5rem">YOUR GENRE PICKS</h2>
 
@@ -115,104 +114,35 @@
 
           <div class="subtitle mb-5">CHOOSE SOME OF YOUR FAVOURITE GENRES</div>
 
-          <!-- Mobile Grid (< 600px) -->
-          <div
-            class="genres-grid d-grid d-sm-none"
-            style="grid-template-columns: repeat(auto-fit, minmax(102px, 1fr)); gap: 21px 12px"
-          >
-            <div
-              v-for="genre in genres"
-              :key="genre.name"
-              class="genre-avatar"
-              :class="{ selected: selectedGenres.includes(genre.name) }"
-              @click="toggleGenre(genre.name)"
-            >
-              <div class="genre-img-wrap">
-                <img :src="genre.img" :alt="genre.name" class="genre-img" />
-                <span v-if="selectedGenres.includes(genre.name)" class="genre-check">
-                  <!-- Large white check SVG for clarity -->
-                  <svg width="100%" height="100%" viewBox="0 0 55 55">
-                    <circle cx="27.5" cy="27.5" r="27.5" fill="black" fill-opacity="0.55" />
-                    <polyline
-                      points="16,30 25,39 40,21"
-                      fill="none"
-                      stroke="#fff"
-                      stroke-width="2"
-                      stroke-linecap="square"
-                      stroke-linejoin="square"
-                    />
-                  </svg>
-                </span>
-              </div>
-              <div class="genre-label">{{ genre.name.toUpperCase() }}</div>
-            </div>
-          </div>
+          <!-- Single Responsive Grid -->
+<div class="genres-grid">
+  <div
+    v-for="genre in genres"
+    :key="genre.name"
+    class="genre-avatar"
+    :class="{ selected: selectedGenres.includes(genre.name) }"
+    @click="toggleGenre(genre.name)"
+  >
+    <div class="genre-img-wrap">
+      <img :src="genre.img" :alt="genre.name" class="genre-img" />
+      <span v-if="selectedGenres.includes(genre.name)" class="genre-check">
+        <svg width="100%" height="100%" viewBox="0 0 55 55">
+          <circle cx="27.5" cy="27.5" r="27.5" fill="black" fill-opacity="0.55" />
+          <polyline
+            points="16,30 25,39 40,21"
+            fill="none"
+            stroke="#fff"
+            stroke-width="2"
+            stroke-linecap="square"
+            stroke-linejoin="square"
+          />
+        </svg>
+      </span>
+    </div>
+    <div class="genre-label">{{ genre.name.toUpperCase() }}</div>
+  </div>
+</div>
 
-          <!-- Tablet Grid (600-850px) -->
-          <div
-            class="genres-grid d-none d-sm-grid d-lg-none"
-            style="grid-template-columns: repeat(auto-fit, minmax(102px, 1fr)); gap: 21px 12px"
-          >
-            <div
-              v-for="genre in genres"
-              :key="genre.name"
-              class="genre-avatar"
-              :class="{ selected: selectedGenres.includes(genre.name) }"
-              @click="toggleGenre(genre.name)"
-            >
-              <div class="genre-img-wrap">
-                <img :src="genre.img" :alt="genre.name" class="genre-img" />
-                <span v-if="selectedGenres.includes(genre.name)" class="genre-check">
-                  <!-- Large white check SVG for clarity -->
-                  <svg width="100%" height="100%" viewBox="0 0 55 55">
-                    <circle cx="27.5" cy="27.5" r="27.5" fill="black" fill-opacity="0.55" />
-                    <polyline
-                      points="16,30 25,39 40,21"
-                      fill="none"
-                      stroke="#fff"
-                      stroke-width="2"
-                      stroke-linecap="square"
-                      stroke-linejoin="square"
-                    />
-                  </svg>
-                </span>
-              </div>
-              <div class="genre-label">{{ genre.name.toUpperCase() }}</div>
-            </div>
-          </div>
-
-          <!-- Desktop Grid (≥ 850px) -->
-          <div
-            class="genres-grid d-none d-lg-grid"
-            style="grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: 34px 28px"
-          >
-            <div
-              v-for="genre in genres"
-              :key="genre.name"
-              class="genre-avatar"
-              :class="{ selected: selectedGenres.includes(genre.name) }"
-              @click="toggleGenre(genre.name)"
-            >
-              <div class="genre-img-wrap">
-                <img :src="genre.img" :alt="genre.name" class="genre-img" />
-                <span v-if="selectedGenres.includes(genre.name)" class="genre-check">
-                  <!-- Large white check SVG for clarity -->
-                  <svg width="100%" height="100%" viewBox="0 0 55 55">
-                    <circle cx="27.5" cy="27.5" r="27.5" fill="black" fill-opacity="0.55" />
-                    <polyline
-                      points="16,30 25,39 40,21"
-                      fill="none"
-                      stroke="#fff"
-                      stroke-width="2"
-                      stroke-linecap="square"
-                      stroke-linejoin="square"
-                    />
-                  </svg>
-                </span>
-              </div>
-              <div class="genre-label">{{ genre.name.toUpperCase() }}</div>
-            </div>
-          </div>
           <div class="genre-count text-center mt-4">
             <span
               >{{ selectedGenres.length }} GENRE{{
@@ -221,6 +151,7 @@
               SELECTED</span
             >
           </div>
+
           <!-- Mobile Button (< 768px) -->
           <button
             class="main-btn mt-4 mb-2 d-block d-md-none"
@@ -234,11 +165,13 @@
           <!-- Desktop Button (≥ 768px) -->
           <button
             class="main-btn mt-4 mb-2 d-none d-md-block"
+            style="padding: 1.09em 0; font-size: 1.15rem"
             :disabled="isLoading || selectedGenres.length === 0"
             @click="savePreferences"
           >
             CONTINUE TO WAVELENGTH
           </button>
+
           <div class="mt-2 mb-3 text-center skip-text">
             <button
               type="button"
@@ -249,9 +182,12 @@
               Skip for Now
             </button>
           </div>
+
           <div v-if="errorMessage" class="alert alert-danger my-2">
             {{ errorMessage }}
           </div>
+
+          <!-- Rest of content... -->
         </div>
       </div>
     </div>
@@ -358,6 +294,7 @@ export default {
   pointer-events: none;
   z-index: 0;
 }
+
 .onboarding-bg {
   min-height: 100vh;
   width: 100vw;
@@ -374,6 +311,7 @@ export default {
   margin: 0;
   z-index: 3;
 }
+
 .onboarding-content {
   background: none;
   color: #fff;
@@ -384,12 +322,14 @@ export default {
   flex-direction: column;
   align-items: center;
 }
+
 .genre-title {
   font-weight: 800;
   letter-spacing: 1.1px;
   text-align: center;
   margin-bottom: 0.25rem;
 }
+
 .subtitle {
   font-size: 1.07rem;
   font-weight: 700;
@@ -399,70 +339,7 @@ export default {
   margin-bottom: 20px;
   text-align: center;
 }
-.genres-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
-  gap: 34px 28px;
-  justify-items: center;
-  width: 100%;
-  max-width: 790px;
-  margin: 0 auto;
-}
-.genre-avatar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  position: relative;
-}
-.genre-avatar .genre-img-wrap {
-  position: relative;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #191919;
-  transition:
-    border 0.2s,
-    box-shadow 0.2s;
-  margin-bottom: 7px;
-}
-.genre-avatar .genre-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  transition: filter 0.2s;
-}
-.genre-avatar.selected .genre-img {
-  filter: brightness(0.75);
-}
-.genre-avatar .genre-check {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-.genre-label {
-  color: #fff;
-  font-size: 1.05rem;
-  text-align: center;
-  font-weight: 700;
-  letter-spacing: 0.02rem;
-  margin-top: 2px;
-  margin-bottom: 0;
-  text-shadow: 0px 1.5px 8px rgba(16, 16, 16, 0.21);
-}
-.genre-avatar.selected .genre-label {
-  color: #fff;
-  opacity: 1;
-}
+
 .genre-count {
   font-size: 1.08rem;
   letter-spacing: 0.8px;
@@ -471,14 +348,13 @@ export default {
   margin-top: 24px;
   margin-bottom: 4px;
 }
+
 .main-btn {
   width: 340px;
   max-width: 95vw;
-  padding: 1.09em 0;
   background: #be1c1b;
   color: #fff;
   font-weight: 800;
-  font-size: 1.15rem;
   border: none;
   border-radius: 40px;
   letter-spacing: 0.06rem;
@@ -486,10 +362,12 @@ export default {
   box-shadow: 0 6px 36px 0 rgba(168, 39, 25, 0.14);
   transition: background 0.2s;
 }
+
 .main-btn:disabled {
   background: #be1c1b77 !important;
   color: #ffffffbb !important;
 }
+
 .skip-text .btn-link {
   color: #fff;
   text-decoration: underline;
@@ -498,11 +376,13 @@ export default {
   opacity: 0.9;
   padding: 0;
 }
+
 .skip-text .btn-link:focus,
 .skip-text .btn-link:hover {
   color: #be1c1b;
   opacity: 1;
 }
+
 .alert-danger {
   background: #a12121;
   color: #fff;
@@ -516,16 +396,150 @@ export default {
   font-size: 1rem;
 }
 
-/* Mobile Grid Sizing */
-.d-sm-none .genre-avatar .genre-img-wrap,
-.d-sm-grid .genre-avatar .genre-img-wrap {
-  width: 86px;
-  height: 86px;
+
+/* Base: Mobile (< 576px) - 3 columns */
+.genres-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px 10px;
+  justify-items: center;
+  width: 100%;
+  max-width: 790px;
+  margin: 0 auto;
 }
 
-/* Desktop Grid Sizing */
-.d-lg-grid .genre-avatar .genre-img-wrap {
-  width: 110px;
-  height: 110px;
+.genre-img-wrap {
+  position: relative;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #191919;
+  transition: border 0.2s, box-shadow 0.2s;
+  margin-bottom: 6px;
 }
+
+.genre-label {
+  color: #fff;
+  font-size: 0.85rem;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.02rem;
+  margin-top: 6px;
+  margin-bottom: 0;
+  background: none;
+  padding: 0;
+}
+
+/* Small (≥ 576px) - 4 columns */
+@media (min-width: 576px) {
+  .genres-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px 12px;
+     justify-content: center;
+  }
+  
+  .genre-img-wrap {
+    width: 86px;
+    height: 86px;
+  }
+  
+  .genre-label {
+    font-size: 0.9rem;
+    margin-top: 7px;
+  }
+}
+
+/* Medium (≥ 768px) - 5 columns */
+@media (min-width: 768px) {
+  .genres-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px 16px;
+     justify-content: center;
+  }
+  
+  .genre-img-wrap {
+    width: 95px;
+    height: 95px;
+  }
+  
+  .genre-label {
+    font-size: 0.95rem;
+    margin-top: 8px;
+  }
+}
+
+/* Large (≥ 992px) - 6 columns */
+@media (min-width: 992px) {
+  .genres-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 28px 20px;
+     justify-content: center;
+  }
+  
+  .genre-img-wrap {
+    width: 105px;
+    height: 105px;
+  }
+  
+  .genre-label {
+    font-size: 1rem;
+  }
+}
+
+/* Extra Large (≥ 1200px) - 7 columns */
+@media (min-width: 1200px) {
+  .genres-grid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 34px 24px;
+    justify-content: center;
+  }
+  
+  .genre-img-wrap {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 8px;
+  }
+  
+  .genre-label {
+    font-size: 1.05rem;
+    letter-spacing: 0.03rem;
+  }
+}
+
+/* Keep other styles */
+.genre-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  background: none;
+}
+
+.genre-avatar .genre-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: filter 0.2s;
+}
+
+.genre-avatar.selected .genre-img {
+  filter: brightness(0.75);
+}
+
+.genre-avatar .genre-check {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
 </style>
