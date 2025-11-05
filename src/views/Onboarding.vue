@@ -89,12 +89,103 @@
 
     <!-- Landing content -->
     <div class="content-wrapper">
-      <div class="onboarding-bg">
-        <img src="/assets/logo1.png" alt="Wavelength" class="onboarding-logo" />
+      <div class="onboarding-bg px-5">
+        <!-- Mobile Logo (< 768px) -->
+        <img
+          src="/assets/logo1.png"
+          alt="Wavelength"
+          class="onboarding-logo d-block d-md-none"
+          style="width: 90px; top: 22px; left: 60px"
+        />
+
+        <!-- Desktop Logo (≥ 768px) -->
+        <img
+          src="/assets/logo1.png"
+          alt="Wavelength"
+          class="onboarding-logo d-none d-md-block"
+          style="width: 120px; top: 22px; left: 60px"
+        />
+
         <div class="onboarding-content">
-          <h2 class="genre-title">YOUR GENRE PICKS</h2>
+          <!-- Mobile Title (< 768px) -->
+          <h2 class="genre-title d-block d-md-none" style="font-size: 1.5rem">YOUR GENRE PICKS</h2>
+
+          <!-- Desktop Title (≥ 768px) -->
+          <h2 class="genre-title d-none d-md-block" style="font-size: 2.8rem">YOUR GENRE PICKS</h2>
+
           <div class="subtitle mb-5">CHOOSE SOME OF YOUR FAVOURITE GENRES</div>
-          <div class="genres-grid">
+
+          <!-- Mobile Grid (< 600px) -->
+          <div
+            class="genres-grid d-grid d-sm-none"
+            style="grid-template-columns: repeat(auto-fit, minmax(102px, 1fr)); gap: 21px 12px"
+          >
+            <div
+              v-for="genre in genres"
+              :key="genre.name"
+              class="genre-avatar"
+              :class="{ selected: selectedGenres.includes(genre.name) }"
+              @click="toggleGenre(genre.name)"
+            >
+              <div class="genre-img-wrap">
+                <img :src="genre.img" :alt="genre.name" class="genre-img" />
+                <span v-if="selectedGenres.includes(genre.name)" class="genre-check">
+                  <!-- Large white check SVG for clarity -->
+                  <svg width="100%" height="100%" viewBox="0 0 55 55">
+                    <circle cx="27.5" cy="27.5" r="27.5" fill="black" fill-opacity="0.55" />
+                    <polyline
+                      points="16,30 25,39 40,21"
+                      fill="none"
+                      stroke="#fff"
+                      stroke-width="2"
+                      stroke-linecap="square"
+                      stroke-linejoin="square"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div class="genre-label">{{ genre.name.toUpperCase() }}</div>
+            </div>
+          </div>
+
+          <!-- Tablet Grid (600-850px) -->
+          <div
+            class="genres-grid d-none d-sm-grid d-lg-none"
+            style="grid-template-columns: repeat(auto-fit, minmax(102px, 1fr)); gap: 21px 12px"
+          >
+            <div
+              v-for="genre in genres"
+              :key="genre.name"
+              class="genre-avatar"
+              :class="{ selected: selectedGenres.includes(genre.name) }"
+              @click="toggleGenre(genre.name)"
+            >
+              <div class="genre-img-wrap">
+                <img :src="genre.img" :alt="genre.name" class="genre-img" />
+                <span v-if="selectedGenres.includes(genre.name)" class="genre-check">
+                  <!-- Large white check SVG for clarity -->
+                  <svg width="100%" height="100%" viewBox="0 0 55 55">
+                    <circle cx="27.5" cy="27.5" r="27.5" fill="black" fill-opacity="0.55" />
+                    <polyline
+                      points="16,30 25,39 40,21"
+                      fill="none"
+                      stroke="#fff"
+                      stroke-width="2"
+                      stroke-linecap="square"
+                      stroke-linejoin="square"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div class="genre-label">{{ genre.name.toUpperCase() }}</div>
+            </div>
+          </div>
+
+          <!-- Desktop Grid (≥ 850px) -->
+          <div
+            class="genres-grid d-none d-lg-grid"
+            style="grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: 34px 28px"
+          >
             <div
               v-for="genre in genres"
               :key="genre.name"
@@ -130,8 +221,19 @@
               SELECTED</span
             >
           </div>
+          <!-- Mobile Button (< 768px) -->
           <button
-            class="main-btn mt-4 mb-2"
+            class="main-btn mt-4 mb-2 d-block d-md-none"
+            style="padding: 0.8em 0; font-size: 1rem"
+            :disabled="isLoading || selectedGenres.length === 0"
+            @click="savePreferences"
+          >
+            CONTINUE TO WAVELENGTH
+          </button>
+
+          <!-- Desktop Button (≥ 768px) -->
+          <button
+            class="main-btn mt-4 mb-2 d-none d-md-block"
             :disabled="isLoading || selectedGenres.length === 0"
             @click="savePreferences"
           >
@@ -264,13 +366,11 @@ export default {
   flex-direction: column;
   align-items: center;
   padding-top: 34px;
-  position: relative; /* allow absolutely positioned logo inside */
+  position: relative;
 }
+
 .onboarding-logo {
-  width: 120px;
   position: absolute;
-  top: 22px;
-  left: 60px;
   margin: 0;
   z-index: 3;
 }
@@ -285,7 +385,6 @@ export default {
   align-items: center;
 }
 .genre-title {
-  font-size: 2.8rem;
   font-weight: 800;
   letter-spacing: 1.1px;
   text-align: center;
@@ -321,8 +420,6 @@ export default {
 }
 .genre-avatar .genre-img-wrap {
   position: relative;
-  width: 110px;
-  height: 110px;
   border-radius: 50%;
   overflow: hidden;
   background: #191919;
@@ -418,30 +515,17 @@ export default {
   margin: 0 auto;
   font-size: 1rem;
 }
-@media (max-width: 850px) {
-  .genres-grid {
-    grid-template-columns: repeat(auto-fit, minmax(102px, 1fr));
-    gap: 21px 12px;
-  }
-  .genre-avatar .genre-img-wrap {
-    width: 86px;
-    height: 86px;
-  }
+
+/* Mobile Grid Sizing */
+.d-sm-none .genre-avatar .genre-img-wrap,
+.d-sm-grid .genre-avatar .genre-img-wrap {
+  width: 86px;
+  height: 86px;
 }
-@media (max-width: 600px) {
-  .onboarding-logo {
-    width: 46px;
-    margin-bottom: 17px;
-  }
-  .onboarding-bg {
-    padding-top: 20px;
-  }
-  .genre-title {
-    font-size: 1.5rem;
-  }
-  .main-btn {
-    padding: 0.8em 0;
-    font-size: 1rem;
-  }
+
+/* Desktop Grid Sizing */
+.d-lg-grid .genre-avatar .genre-img-wrap {
+  width: 110px;
+  height: 110px;
 }
 </style>
