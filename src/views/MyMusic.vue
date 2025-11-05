@@ -50,35 +50,47 @@
 
     <!-- Main Content -->
     <div class="content-wrapper">
-      <div class="container py-4">
+        <div class="container py-4">
         <!-- Header -->
-        <div class="welcome-section mb-5">
-          <h1 class="display-5 fw-bold mb-2">MY MUSIC</h1>
-          <p class="text-muted">Your saved songs collection</p>
-        </div>
+            <div class="welcome-section mb-5">
+                <h1 class="display-5 fw-bold mb-2">MY MUSIC</h1>
+                <p class="text-muted">Your saved songs collection</p>
+            </div>
 
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-5">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <p class="mt-3 text-muted">Loading your music...</p>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">Loading your music...</p>
         </div>
 
         <!-- Empty State -->
         <div v-else-if="savedSongs.length === 0" class="text-center py-5">
-          <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
-          <h2 class="h4 mb-3 text-white">No saved songs yet</h2>
-          <p class="text-muted mb-4">Start exploring and heart songs you love!</p>
+            <i class="bi bi-music-note-list fs-1 text-muted mb-3"></i>
+            <h2 class="h4 mb-3 text-white">No saved songs yet</h2>
+            <p class="text-muted mb-4">Start exploring and heart songs you love!</p>
           <router-link to="/home" class="btn btn-primary">
             Discover Music
           </router-link>
         </div>
 
-        <!-- Saved Songs Grid -->
-        <div v-else class="row g-4">
-          <div v-for="song in savedSongs" :key="song.key" class="col-12 col-md-6 col-lg-4">
-            <div class="song-card">
+        <!-- Saved Songs Carousel -->
+        <div v-else class="carousel-container px-2 px-sm-0">
+          <button
+            v-if="currentSongPage > 0"
+            @click="previousSongPage"
+            class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
+            aria-label="Previous songs">
+            <i class="bi bi-chevron-left fs-5"></i>
+          </button>
+
+          <div class="artists-carousel">
+            <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentSongPage * 100}%)` }">
+              <div v-for="(page, pageIndex) in paginatedSavedSongs" :key="`song-page-${pageIndex}`" class="carousel-page artists-page">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2 g-sm-3 g-lg-4 pt-2 pt-sm-3 pb-2 pb-sm-3">
+                  <div v-for="song in page" :key="song.key" class="col">
+                    <div class="song-card">
               <!-- Embedded Player at Top -->
               <div class="player-container">
                 <!-- Spotify Embed -->
@@ -108,46 +120,48 @@
               </div>
 
               <!-- Bottom Section: Artist Info, Genre Tags, and Stats -->
-              <div class="song-footer d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
-                <!-- Left Side: Artist Info -->
-                <div class="song-footer-left flex-fill d-flex flex-column gap-2">
-                  <div class="song-artist-info d-flex align-items-center gap-3">
-                    <img :src="song.artistPhoto || '/default-avatar.png'" :alt="song.artistName"
-                      class="artist-photo-bottom" />
-                    <div class="song-details flex-fill">
-                      <div class="song-title-bottom">{{ song.title }}</div>
-                      <router-link :to="`/artist/${song.artistId}`" class="artist-name-bottom">
-                        {{ song.artistName }}
-                      </router-link>
-                    </div>
-                  </div>
-
-                  <!-- Added Date -->
-                  <div class="added-info order-3 order-md-0 text-center text-md-start">
-                    <small class="added-date">Added {{ formatDate(song.savedAt) }}</small>
+              <div class="song-footer d-flex justify-content-between align-items-center gap-2 w-100">
+                <!-- Left: image, details (with ellipsis!) -->
+                <div class="d-flex align-items-center gap-3 flex-grow-1 min-width-0">
+                  <img :src="song.artistPhoto || '/default-avatar.png'" :alt="song.artistName" class="artist-photo-bottom" />
+                  <div class="song-details min-width-0 overflow-hidden">
+                    <div class="song-title-bottom text-truncate">{{ song.title }}</div>
+                    <router-link :to="`/artist/${song.artistId}`" class="artist-name-bottom text-truncate">
+                      {{ song.artistName }}
+                    </router-link>
+                    <small class="added-date">{{ formatDate(song.savedAt) }}</small>
                   </div>
                 </div>
-
-                <!-- Right Side: Stats & Actions -->
-                <div
-                  class="song-stats d-flex flex-row align-items-center gap-2 justify-content-between justify-content-md-start flex-shrink-0">
-                  <button @click="handleUnlike(song)" class="stat-button liked" :disabled="unlikingInProgress[song.key]"
-                    title="Remove from saved songs">
+                <!-- Right: Like/Comment buttons -->
+                <div class="song-stats d-flex flex-row align-items-center gap-2 flex-shrink-0 ms-2">
+                  <button @click="handleUnlike(song)" class="stat-button liked" :disabled="unlikingInProgress[song.key]">
                     <span class="icon">❤️</span>
                     <span class="count">{{ song.likes || 0 }}</span>
                   </button>
-
-                  <button @click.stop="openSongDetail(song)" class="stat-button" title="View and post comments">
+                  <button @click.stop="openSongDetail(song)" class="stat-button">
                     <span class="icon">💬</span>
                     <span class="count">{{ song.commentCount || 0 }}</span>
                   </button>
                 </div>
               </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
+          <button
+            v-if="currentSongPage < totalSongPages - 1"
+            @click="nextSongPage"
+            class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
+            aria-label="Next songs">
+            <i class="bi bi-chevron-right fs-5"></i>
+          </button>
         </div>
       </div>
     </div>
+  
 
     <!-- Song Detail Modal (combines embed + comments) -->
     <SongDetailModal :show="showSongDetailModal" :song="selectedSongForDetail" @close="closeSongDetailModal"
@@ -180,11 +194,55 @@ export default {
       selectedSongForDetail: null,
 
       auth,
+      windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1200,
+      currentSongPage: 0,
     }
   },
 
   async mounted() {
     await this.loadSavedSongs()
+    if (typeof window !== 'undefined') {
+      this._resizeTimeout = null
+      this.handleResize = () => {
+        if (this._resizeTimeout) clearTimeout(this._resizeTimeout)
+        this._resizeTimeout = setTimeout(() => {
+          this.windowWidth = window.innerWidth
+        }, 150)
+      }
+      window.addEventListener('resize', this.handleResize)
+    }
+  },
+
+  beforeUnmount() {
+    if (typeof window !== 'undefined' && this.handleResize) {
+      window.removeEventListener('resize', this.handleResize)
+    }
+    if (this._resizeTimeout) clearTimeout(this._resizeTimeout)
+  },
+
+  computed: {
+    columnsPerRow() {
+      const w = this.windowWidth
+      if (w < 768) return 1
+      if (w < 992) return 2
+      return 3
+    },
+    songsPerPage() {
+      return this.columnsPerRow * 2 // 2 rows consistently
+    },
+    paginatedSavedSongs() {
+      const pages = []
+      let start = 0
+      while (start < this.savedSongs.length) {
+        const end = Math.min(start + this.songsPerPage, this.savedSongs.length)
+        pages.push(this.savedSongs.slice(start, end))
+        start = end
+      }
+      return pages
+    },
+    totalSongPages() {
+      return this.paginatedSavedSongs.length
+    },
   },
 
   methods: {
@@ -302,6 +360,18 @@ export default {
       }
     },
 
+    nextSongPage() {
+      if (this.currentSongPage < this.totalSongPages - 1) {
+        this.currentSongPage++
+      }
+    },
+
+    previousSongPage() {
+      if (this.currentSongPage > 0) {
+        this.currentSongPage--
+      }
+    },
+
     async handleUnlike(song) {
       if (this.unlikingInProgress[song.key]) return
 
@@ -368,7 +438,7 @@ export default {
         title: song.title,
         url: song.url,
         platform: song.platform,
-        embedUrl: embedUrl, // Add the embedUrl for SongDetailModal
+        embedUrl: embedUrl, 
         spotifyId: song.spotifyId,
         soundcloudUrl: song.soundcloudUrl,
         youtubeId: song.youtubeId,
@@ -399,6 +469,22 @@ export default {
         this.selectedSongForDetail.commentCount = song.commentCount
       }
     },
+
+    nextSongPage() {
+      if (this.currentSongPage < this.totalSongPages - 1) this.currentSongPage++
+    },
+    previousSongPage() {
+      if (this.currentSongPage > 0) this.currentSongPage--
+    },
+  },
+
+  watch: {
+    // Clamp current page when the number of pages changes (e.g., resize or data updates)
+    totalSongPages(newPages) {
+      if (this.currentSongPage > newPages - 1) {
+        this.currentSongPage = Math.max(0, newPages - 1)
+      }
+    },
   },
 }
 </script>
@@ -419,6 +505,12 @@ export default {
   margin-top: 65px;
   padding-bottom: 40px;
 }
+
+/* Carousel structure (match interests) */
+.carousel-container { position: relative; }
+.artists-carousel { overflow-x: hidden; overflow-y: visible; width: 100%; }
+.artists-grid-carousel { display: flex; transition: transform 0.5s ease-in-out; }
+.carousel-page.artists-page { min-width: 100%; width: 100%; flex-shrink: 0; }
 
 /* Dynamic Wave Background */
 .wave-svg {
@@ -568,6 +660,11 @@ export default {
 /* Song Footer Container */
 .song-footer {
   padding: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 /* Artist Info at Bottom */
@@ -586,6 +683,7 @@ export default {
 
 .song-details {
   min-width: 0;
+  overflow: hidden;
 }
 
 .song-title-bottom {
@@ -597,6 +695,7 @@ export default {
   text-overflow: ellipsis;
   margin-bottom: 0.25rem;
   font-family: 'Poppins', sans-serif;
+  display: block;
 }
 
 .artist-name-bottom {
@@ -609,19 +708,22 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: 'Poppins', sans-serif;
+  display: block;
+}
+
+.min-width-0 {
+  min-width: 0 ;
 }
 
 .artist-name-bottom:hover {
   color: #bb1814;
 }
 
-
 .added-date {
   font-size: 0.8rem;
   color: #888;
   font-family: 'Poppins', sans-serif;
 }
-
 
 .stat-button {
   display: flex;
