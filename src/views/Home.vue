@@ -117,8 +117,7 @@
             <!-- Song Cards Carousel -->
             <div v-else class="carousel-container">
               <!-- Navigation Arrows -->
-              <button v-if="currentSongPage > 0" @click="previousSongPage" class="carousel-arrow left"
-                aria-label="Previous songs">
+              <button v-if="currentSongPage > 0" @click="previousSongPage" class="carousel-arrow left">
                 <i class="bi bi-chevron-left"></i>
               </button>
 
@@ -127,76 +126,81 @@
                   :style="{ transform: `translateX(-${currentSongPage * 100}%)` }">
                   <div v-for="(page, pageIndex) in paginatedSongs" :key="`page-${pageIndex}-${songCarouselKey}`"
                     class="carousel-page">
-                    <div v-for="song in page" :key="`${song.artistId}_${song.id}`" class="song-card"
-                      @click="openSongDetail(song)">
-                      <!-- Embedded Player at Top -->
-                      <div class="player-container" @click.stop="handlePlayerClick(song)">
-                        <!-- Spotify Embed -->
-                        <iframe v-if="song.platform === 'spotify'"
-                          :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`"
-                          width="100%" height="232" frameborder="0" allowtransparency="true" allow="encrypted-media"
-                          loading="lazy" style="min-height: 232px"></iframe>
+                    <div class="row g-4">
+                      <div v-for="song in page" :key="`${song.artistId}_${song.id}`" class="col-12 col-md-6 col-lg-4">
+                        <div class="song-card">
+                          <!-- Player Container - Fixed height -->
+                          <div class="player-container">
+                            <!-- Spotify Embed -->
+                            <iframe v-if="song.platform === 'spotify'"
+                              :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`"
+                              width="100%" height="232" frameborder="0" allowtransparency="true" allow="encrypted-media"
+                              loading="lazy" style="min-height: 232px"></iframe>
 
-                        <!-- SoundCloud Embed -->
-                        <iframe v-else-if="song.platform === 'soundcloud'" width="100%" height="232" scrolling="no"
-                          frameborder="no" allow="autoplay"
-                          :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
-                            song.url,
-                          )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
-                          loading="lazy"></iframe>
+                            <!-- SoundCloud Embed -->
+                            <iframe v-else-if="song.platform === 'soundcloud'" width="100%" height="232" scrolling="no"
+                              frameborder="no" allow="autoplay"
+                              :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
+                                song.url,
+                              )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
+                              loading="lazy"></iframe>
 
-                        <!-- YouTube Embed -->
-                        <iframe v-else-if="song.platform === 'youtube'" width="100%" height="232"
-                          :src="`https://www.youtube.com/embed/${song.youtubeId}`" frameborder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowfullscreen loading="lazy"></iframe>
+                            <!-- YouTube Embed -->
+                            <iframe v-else-if="song.platform === 'youtube'" width="100%" height="232"
+                              :src="`https://www.youtube.com/embed/${song.youtubeId}`" frameborder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowfullscreen loading="lazy"></iframe>
 
-                        <!-- Fallback Link -->
-                        <a v-else :href="song.url" target="_blank" rel="noopener noreferrer" class="song-link">
-                          🎵 Open {{ song.platform }} →
-                        </a>
-                      </div>
+                            <!-- Fallback Link -->
+                            <a v-else :href="song.url" target="_blank" rel="noopener noreferrer" class="song-link">
+                              🎵 Open {{ song.platform }} →
+                            </a>
+                          </div>
 
-                      <!-- Bottom Section: Artist Info, Genre Tags, and Stats -->
-                      <div class="song-footer">
-                        <!-- Left Side: Artist Info & Genre Tags -->
-                        <div class="song-footer-left">
-                          <div class="song-artist-info" @click.stop>
-                            <img :src="song.artistPhoto || '/default-avatar.png'" :alt="song.artistName"
-                              class="artist-photo-bottom" @click="navigateToArtist(song.artistId)"
-                              style="cursor: pointer" />
-                            <div class="song-details">
-                              <div class="song-title-bottom">{{ song.title }}</div>
-                              <router-link :to="`/artist/${song.artistId}`" class="artist-name-bottom">
-                                {{ song.artistName }}
-                              </router-link>
+                          <!-- Footer Section - Fixed height -->
+                          <div class="song-footer">
+                            <!-- Artist Info & Genre Tags Container - Fixed height -->
+                            <div class="song-footer-left">
+                              <!-- Artist Info - Fixed height -->
+                              <div class="song-artist-info" @click.stop>
+                                <img :src="song.artistPhoto || '/default-avatar.png'" :alt="song.artistName"
+                                  class="artist-photo-bottom" @click="navigateToArtist(song.artistId)"
+                                  style="cursor: pointer" />
+                                <div class="song-details">
+                                  <div class="song-title-bottom">{{ song.title }}</div>
+                                  <router-link :to="`/artist/${song.artistId}`" class="artist-name-bottom">
+                                    {{ song.artistName }}
+                                  </router-link>
+                                </div>
+                              </div>
+
+                              <!-- Genre Tags Container - Fixed height -->
+                              <div class="genre-tags" v-if="song.genres && song.genres.length > 0">
+                                <span v-for="genre in song.genres" :key="genre" class="genre-tag">
+                                  {{ genre }}
+                                </span>
+                              </div>
+                            </div>
+
+                            <!-- Stats Section -->
+                            <div class="song-stats">
+                              <button @click.stop="toggleLike(song)" class="stat-button"
+                                :class="{ liked: isSongLiked(song) }"
+                                :disabled="likingInProgress[`${song.artistId}_${song.id}`]" :title="isSongLiked(song)
+                                  ? 'Unlike and remove from saved songs'
+                                  : 'Like this song and save it to My Music'
+                                  ">
+                                <span class="icon">❤️</span>
+                                <span class="count">{{ song.likes || 0 }}</span>
+                              </button>
+
+                              <button @click.stop="openSongDetail(song)" class="stat-button"
+                                title="View and post comments">
+                                <span class="icon">💬</span>
+                                <span class="count">{{ song.comments?.length || 0 }}</span>
+                              </button>
                             </div>
                           </div>
-
-                          <!-- Genre Tags Below Artist Info -->
-                          <div class="genre-tags" v-if="song.genres && song.genres.length > 0">
-                            <span v-for="genre in song.genres.slice(0, 3)" :key="genre" class="genre-tag">
-                              {{ genre }}
-                            </span>
-                          </div>
-                        </div>
-
-                        <!-- Right Side: Stats & Actions -->
-                        <div class="song-stats">
-                          <button @click.stop="toggleLike(song)" class="stat-button"
-                            :class="{ liked: isSongLiked(song) }"
-                            :disabled="likingInProgress[`${song.artistId}_${song.id}`]" :title="isSongLiked(song)
-                              ? 'Unlike and remove from saved songs'
-                              : 'Like this song and save it to My Music'
-                              ">
-                            <span class="icon">❤️</span>
-                            <span class="count">{{ song.likes || 0 }}</span>
-                          </button>
-
-                          <button @click.stop="openSongDetail(song)" class="stat-button" title="View and post comments">
-                            <span class="icon">💬</span>
-                            <span class="count">{{ song.comments?.length || 0 }}</span>
-                          </button>
                         </div>
                       </div>
                     </div>
@@ -204,8 +208,7 @@
                 </div>
               </div>
 
-              <button v-if="currentSongPage < totalSongPages - 1" @click="nextSongPage" class="carousel-arrow right"
-                aria-label="Next songs">
+              <button v-if="currentSongPage < totalSongPages - 1" @click="nextSongPage" class="carousel-arrow right">
                 <i class="bi bi-chevron-right"></i>
               </button>
             </div>
@@ -1275,63 +1278,42 @@ export default {
   padding: 1rem;
 }
 
-/* Add this new style for the songs grid layout */
-.carousel-page {
-  display: grid;
-  gap: 2rem;
-}
-
-/* Add media queries for responsive grid layout */
-@media (max-width: 767.98px) {
-  .carousel-page {
-    grid-template-columns: 1fr;  /* 1 column for small screens */
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991.98px) {
-  .carousel-page {
-    grid-template-columns: repeat(2, 1fr);  /* 2 columns for medium screens */
-    grid-template-rows: repeat(2, 1fr);     /* 2 rows for medium screens */
-  }
-}
-
-@media (min-width: 992px) {
-  .carousel-page {
-    grid-template-columns: repeat(3, 1fr);  /* 3 columns for large screens */
-    grid-template-rows: repeat(2, 1fr);     /* 2 rows for large screens */
-  }
-}
-
-.carousel-indicators {
+/* Add/update these styles */
+.song-card {
   display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-  padding: 0;
-  list-style: none;
+  flex-direction: column;
+  height: 100%;
 }
 
-.indicator {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
-  margin: 0;
+.player-container {
+  height: 232px;
+  flex-shrink: 0;
 }
 
-.indicator:hover {
-  background: rgba(255, 255, 255, 0.5);
-  transform: scale(1.1);
+.song-footer {
+  padding: 1.5rem 1rem 1rem;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.indicator.active {
-  background: #bb1814;
-  width: 30px;
-  border-radius: 5px;
+.song-artist-info {
+  height: 55px;
+}
+
+.song-title-bottom {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artist-name-bottom {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Artists Carousel */
@@ -1443,11 +1425,16 @@ export default {
 
 /* Song Footer Container */
 .song-footer {
+  padding: 2rem 1rem 1rem;
+  /* Increase top padding */
+  height: auto;
+  /* Remove fixed height */
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 1rem;
-  gap: 1rem;
+  gap: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  /* Add separator line */
 }
 
 .song-footer-left {
@@ -1480,7 +1467,7 @@ export default {
 }
 
 .song-title-bottom {
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: #fff;
   white-space: nowrap;
@@ -1504,18 +1491,13 @@ export default {
   color: #bb1814;
 }
 
-/* Genre Tags */
-.genre-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
+
 
 .genre-tag {
   font-size: 0.7rem;
   background: #bb1814;
   color: white;
-  padding: 0.3rem 0.7rem;
+  padding: 0.4rem 0.7rem;
   border-radius: 15px;
   font-weight: 600;
   text-transform: uppercase;
@@ -1648,5 +1630,42 @@ export default {
 
 .btn-outline-primary:focus {
   box-shadow: 0 0 0 3px rgba(187, 24, 20, 0.3);
+}
+
+/* Update the song footer styles */
+.song-footer {
+  padding: 1.5rem 1rem 1rem;
+  /* Increase top padding */
+  height: auto;
+  /* Remove fixed height */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  /* Add separator line */
+}
+
+/* Update genre tags container */
+.genre-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  min-height: 32px;
+  overflow: visible; /* Allow tags to be visible */
+  height: auto; /* Allow container to grow */
+}
+
+/* Update song detail modal genre tags */
+.genre-tag.genre-count {
+  display: none;
+  /* This is hiding your count tag */
+}
+
+/* Add to show all genres in modal */
+:deep(.song-detail-modal .genre-tags .genre-tag) {
+  display: inline-flex !important;
+  /* Force display all tags in modal */
 }
 </style>

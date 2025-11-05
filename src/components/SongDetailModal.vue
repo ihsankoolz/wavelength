@@ -23,7 +23,7 @@
               </div>
               <!-- Genre Tags moved to the right -->
               <div class="genre-tags" v-if="song?.genres && song.genres.length > 0">
-                <span v-for="genre in song.genres.slice(0, 2)" :key="genre" class="genre-tag">
+                <span v-for="genre in song.genres" :key="genre" class="genre-tag">
                   {{ genre }}
                 </span>
               </div>
