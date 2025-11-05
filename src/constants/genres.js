@@ -43,46 +43,51 @@ export const GENRE_LIST = [
   'Bedroom Pop',
   'Acoustic',
   'Experimental',
-] // Genre images mapping (with existing images from assets)
-export const GENRE_IMAGES = {
-  Indie: '/src/assets/Genres/indie.png',
-  Jazz: '/src/assets/Genres/Jazz.png',
-  Electronic: '/src/assets/Genres/Electronic.png',
-  Rock: '/src/assets/Genres/rock.png',
-  Pop: '/src/assets/Genres/pop.png',
-  'Hip Hop': '/src/assets/Genres/hip hop.png',
-  'R&B': '/src/assets/Genres/r&b.png',
-  Folk: '/src/assets/Genres/folk.png',
-  Classical: '/src/assets/Genres/classiscal.png',
-  Metal: '/src/assets/Genres/metal.png',
-  Alternative: '/src/assets/Genres/alternative.png',
-  Soul: '/src/assets/Genres/soul.png',
-  Blues: '/src/assets/Genres/Blues.png',
-  Punk: '/src/assets/Genres/Punk.png',
-  Reggae: '/src/assets/Genres/Raggae.png',
-  Country: '/src/assets/Genres/Country.png',
-  EDM: '/src/assets/Genres/EDM.png',
-  Funk: '/src/assets/Genres/Funk.png',
-  Gospel: '/src/assets/Genres/Gospel.png',
-  Mandopop: '/src/assets/Genres/pop.png', // Reuse Pop image
+]
 
-  // New genres use a default/placeholder image
-  'Indie Pop': '/src/assets/Genres/indie.png', // Reuse Indie image
-  'Alternative Pop': '/src/assets/Genres/alternative.png', // Reuse Alternative image
-  'Singer-Songwriter': '/src/assets/Genres/folk.png', // Reuse Folk image
-  'Dream Pop': '/src/assets/Genres/pop.png', // Reuse Pop image
-  Electropop: '/src/assets/Genres/Electronic.png', // Reuse Electronic image
-  'Folk Pop': '/src/assets/Genres/folk.png', // Reuse Folk image
-  'Alternative R&B': '/src/assets/Genres/r&b.png', // Reuse R&B image
-  'Bedroom Pop': '/src/assets/Genres/indie.png', // Reuse Indie image
-  Acoustic: '/src/assets/Genres/folk.png', // Reuse Folk image
-  Experimental: '/src/assets/Genres/Electronic.png', // Reuse Electronic image
+// Helper function to get the correct image path for Vite
+function getGenreImagePath(filename) {
+  return new URL(`../assets/Genres/${filename}`, import.meta.url).href
+}
+
+// Genre images mapping (updated with new images)
+export const GENRE_IMAGES = {
+  Indie: getGenreImagePath('Indie.png'),
+  Jazz: getGenreImagePath('Jazz.png'),
+  Electronic: getGenreImagePath('Electronic.png'),
+  Rock: getGenreImagePath('Rock.png'),
+  Pop: getGenreImagePath('Pop.png'),
+  'Hip Hop': getGenreImagePath('Hip Hop.png'),
+  'R&B': getGenreImagePath('R&B.png'),
+  Folk: getGenreImagePath('Folk.png'),
+  Classical: getGenreImagePath('Classiscal.png'), // Note: typo in filename
+  Metal: getGenreImagePath('Metal.png'),
+  Alternative: getGenreImagePath('Alternative.png'),
+  Soul: getGenreImagePath('Soul.png'),
+  Blues: getGenreImagePath('Blues.png'),
+  Punk: getGenreImagePath('Punk.png'),
+  Reggae: getGenreImagePath('Raggae.png'), // Note: typo in filename
+  Country: getGenreImagePath('Country.png'),
+  EDM: getGenreImagePath('EDM.png'),
+  Funk: getGenreImagePath('Funk.png'),
+  Gospel: getGenreImagePath('Gospel.png'),
+  Mandopop: getGenreImagePath('Mando pop.png'),
+  'Indie Pop': getGenreImagePath('Indie Pop.png'),
+  'Alternative Pop': getGenreImagePath('Alternative Pop.png'),
+  'Singer-Songwriter': getGenreImagePath('Singer Songwriter.png'),
+  'Dream Pop': getGenreImagePath('Dream Pop.png'),
+  Electropop: getGenreImagePath('Electronic Pop.png'),
+  'Folk Pop': getGenreImagePath('Folk Pop.png'),
+  'Alternative R&B': getGenreImagePath('Alternative R&B.png'),
+  'Bedroom Pop': getGenreImagePath('Bedroom Pop.png'),
+  Acoustic: getGenreImagePath('Acoustic.png'),
+  Experimental: getGenreImagePath('Experimental.png'),
 }
 
 // Helper function to get genre data for components
 export function getGenresWithImages() {
   return GENRE_LIST.map((name) => ({
     name,
-    img: GENRE_IMAGES[name] || '/src/assets/Genres/indie.png', // Fallback image
+    img: GENRE_IMAGES[name] || getGenreImagePath('Indie.png'), // Fallback image
   }))
 }

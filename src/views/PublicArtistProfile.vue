@@ -1104,6 +1104,7 @@ export default {
         ...song,
         artistId: this.artist.id,
         artistName: this.artist.artistName,
+        artistPhoto: this.artist.profileImage,
       }
       this.showSongModal = true
       console.log('🎵 Modal state:', this.showSongModal, 'Selected song:', this.selectedSong?.title)
