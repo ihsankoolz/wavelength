@@ -3,20 +3,11 @@
   <div class="artist-card" @click="viewProfile">
     <!-- Artist Image -->
     <div class="artist-image-wrapper">
-      <img
-        :src="artist.profileImage || defaultImage"
-        :alt="artist.artistName"
-        class="artist-image"
-      />
+      <img :src="artist.profileImage || defaultImage" :alt="artist.artistName" class="artist-image" />
 
       <!-- Follow Button (appears on hover) -->
-      <button
-        class="follow-button"
-        :class="{ following: isFollowing }"
-        @click.stop="toggleFollow"
-        :disabled="loading"
-        :title="isFollowing ? 'Unfollow' : 'Follow'"
-      >
+      <button class="follow-button" :class="{ following: isFollowing }" @click.stop="toggleFollow" :disabled="loading"
+        :title="isFollowing ? 'Unfollow' : 'Follow'">
         <i v-if="loading" class="bi bi-arrow-repeat spin"></i>
         <i v-else-if="isFollowing" class="bi bi-check"></i>
         <i v-else class="bi bi-plus"></i>
@@ -110,7 +101,17 @@ export default {
 
     formatGenres(genres) {
       if (!genres || genres.length === 0) return 'No genres listed'
-      return genres.join(', ')
+
+      // Limit to first 2 genres
+      const limitedGenres = genres.slice(0, 2)
+      const genreText = limitedGenres.join(', ')
+
+      // Add "..." if there are more genres
+      if (genres.length > 2) {
+        return `${genreText}...`
+      }
+
+      return genreText
     },
 
     viewProfile() {
@@ -129,6 +130,8 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 1rem;
+  width: 100%;
+  /* Ensure card takes full width of grid cell */
 }
 
 .artist-card:hover {
@@ -144,6 +147,10 @@ export default {
 .artist-image-wrapper {
   position: relative;
   margin-bottom: 1rem;
+  width: 100%;
+  /* Take full width of container */
+  max-width: 200px;
+  /* But don't exceed 200px */
 }
 
 .artist-card:hover .follow-button {
@@ -152,8 +159,10 @@ export default {
 }
 
 .artist-image {
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  /* Responsive to container */
+  aspect-ratio: 1;
+  /* Maintain square shape */
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid rgba(255, 255, 255, 0.2);
@@ -180,6 +189,20 @@ export default {
   pointer-events: none;
   font-size: 1.5rem;
   z-index: 10;
+}
+
+/* Smaller follow button on mobile */
+@media (max-width: 767px) {
+  .follow-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .artist-image-wrapper {
+    max-width: 150px;
+    /* Smaller on mobile */
+  }
 }
 
 .follow-button:hover {
@@ -210,6 +233,7 @@ export default {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -221,6 +245,19 @@ export default {
   color: #fff;
   margin-bottom: 0.5rem;
   font-family: 'Poppins', sans-serif;
+  word-wrap: break-word;
+  width: 100%;
+}
+
+/* Smaller text on mobile */
+@media (max-width: 767px) {
+  .artist-name {
+    font-size: 1.1rem;
+  }
+
+  .artist-genres {
+    font-size: 0.8rem;
+  }
 }
 
 .artist-genres {
@@ -229,5 +266,17 @@ export default {
   color: #b0b1ba;
   margin: 0;
   font-family: 'Poppins', sans-serif;
+  width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .artist-name {
+    font-size: 1.1rem;
+  }
+
+  .artist-genres {
+    font-size: 0.8rem;
+  }
 }
 </style>

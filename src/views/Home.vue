@@ -231,7 +231,7 @@
                 <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentArtistPage * 100}%)` }">
                   <div v-for="(page, pageIndex) in paginatedArtists" :key="`artist-page-${pageIndex}`"
                     class="carousel-page artists-page">
-                    <div v-for="artist in page" :key="artist.id" class="artist-card-wrapper">
+                    <div v-for="artist in page" :key="artist.id">
                       <ArtistCard :artist="artist" />
                     </div>
                   </div>
@@ -356,7 +356,7 @@ export default {
 
       // Carousel state for artists
       currentArtistPage: 0,
-      artistsPerPage: 5, // 5 artists per page
+      artistsPerPage: 4, // 4 artists per page
 
       // Events data
       upcomingEvents: [],
@@ -557,6 +557,13 @@ export default {
         this.scrollToDiscoverArtists()
       }
     })
+    this.updateArtistsPerPage()
+    window.addEventListener('resize', this.updateArtistsPerPage)
+  },
+
+  beforeUnmount() {
+    // Add cleanup for resize listener
+    window.removeEventListener('resize', this.updateArtistsPerPage)
   },
 
   methods: {
@@ -665,6 +672,17 @@ export default {
         .slice(0, 6)
     },
 
+    updateArtistsPerPage() {
+      const width = window.innerWidth
+      if (width >= 1200) {
+        this.artistsPerPage = 4 // lg: 4 artists (col-lg-3 = 25% width)
+      } else if (width >= 768) {
+        this.artistsPerPage = 3 // md: 3 artists (col-md-4 = 33.33% width)
+      } else {
+        this.artistsPerPage = 2 // sm/xs: 2 artists (col-6 = 50% width)
+      }
+      this.currentArtistPage = 0
+    },
     async loadEvents() {
       try {
         this.loadingEvents = true
@@ -1300,10 +1318,15 @@ export default {
 .carousel-page.artists-page {
   min-width: 100%;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  /* 5 columns for artists */
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 1fr;
   gap: 1.5rem;
+  padding: 0;
+}
+
+.carousel-page.artists-page>div {
+  width: 100%;
+  max-width: 100%;
 }
 
 .carousel-page.events-page {
@@ -1570,7 +1593,8 @@ export default {
 }
 
 .artist-card-wrapper {
-  min-width: 200px;
+  width: 100%;
+  height: 100%;
 }
 
 /* Events Grid */
@@ -1580,123 +1604,15 @@ export default {
   gap: 1.5rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .content-wrapper {
-    margin-top: 80px;
-  }
-
-  .welcome-section h1 {
-    font-size: 2rem;
-  }
-
-  /* Carousel adjustments for mobile */
-  .carousel-container {
-    padding: 0 2.5rem;
-  }
-
-  .carousel-arrow {
-    width: 40px;
-    height: 40px;
-  }
-
-  .carousel-arrow i {
-    font-size: 1.2rem;
-  }
-
-  .carousel-page {
-    grid-template-columns: 1fr;
-    /* 1 column on mobile */
-    grid-template-rows: auto;
-  }
-
+@media (max-width: 1199px) {
   .carousel-page.artists-page {
-    grid-template-columns: 1fr;
-    /* 1 artist per page on mobile */
-  }
-
-  .carousel-page.events-page {
-    grid-template-columns: 1fr;
-    /* 1 event per page on mobile */
-  }
-
-  .songs-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .events-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .controls-bar {
-    flex-direction: column;
-    align-items: stretch !important;
-    gap: 1.5rem !important;
-  }
-
-  .filter-header {
-    margin-right: 0;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-
-  .filter-controls {
-    justify-content: center;
-    gap: 1rem !important;
-  }
-
-  .filter-group,
-  .sort-group {
-    width: 100%;
-  }
-
-  .filter-group select,
-  .sort-group select {
-    width: 100% !important;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
-  .carousel-page {
-    grid-template-columns: repeat(2, 1fr);
-    /* 2 columns for tablets */
-  }
-
+@media (max-width: 767px) {
   .carousel-page.artists-page {
-    grid-template-columns: repeat(3, 1fr);
-    /* 3 artists for tablets */
-  }
-
-  .carousel-page.events-page {
     grid-template-columns: repeat(2, 1fr);
-    /* 2 events for tablets */
-  }
-
-  .songs-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1025px) {
-  .carousel-page {
-    grid-template-columns: repeat(3, 1fr);
-    /* 3 columns for desktop */
-    grid-template-rows: repeat(2, 1fr);
-    /* 2 rows for desktop */
-  }
-
-  .carousel-page.artists-page {
-    grid-template-columns: repeat(5, 1fr);
-    /* 5 artists for desktop */
-  }
-
-  .carousel-page.events-page {
-    grid-template-columns: repeat(3, 1fr);
-    /* 3 events for desktop */
-  }
-
-  .songs-grid {
-    grid-template-columns: repeat(4, 1fr);
   }
 }
 </style>
