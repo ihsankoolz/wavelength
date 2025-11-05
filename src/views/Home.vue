@@ -188,7 +188,7 @@
                       <div
                         v-for="song in page"
                         :key="`${song.artistId}_${song.id}`"
-                        class="col-12 col-md-6 col-lg-4"
+                        class="col-sm-6 col-md-6 col-lg-4 px-3"
                       >
                         <div class="song-card" @click="openSongDetail(song)">
                           <!-- Player Container - Fixed height -->
@@ -415,8 +415,13 @@
                     <!-- Add row class and set width to 100% -->
                     <div class="row w-100">
                       <!-- Update the column classes -->
-                      <div v-for="event in page" :key="event.id" class="col-sm-6 col-md-6 col-lg-4 px-3">
-                        <div class="h-100"> <!-- Add wrapper div -->
+                      <div
+                        v-for="event in page"
+                        :key="event.id"
+                        class="col-sm-6 col-md-6 col-lg-4 px-3"
+                      >
+                        <div class="h-100">
+                          <!-- Add wrapper div -->
                           <EventCard :event="event" @interest-changed="handleEventInterestChange" />
                         </div>
                       </div>
