@@ -29,26 +29,18 @@
     <div v-else>
       <!-- Artist Hero Section with Blurred Background -->
       <div class="artist-hero-section">
-        <div
-          class="hero-background"
-          :style="{
-            backgroundImage: `url(${artistData.profileImage || 'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff'})`,
-          }"
-        ></div>
+        <div class="hero-background" :style="{
+          backgroundImage: `url(${artistData.profileImage || 'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff'})`,
+        }"></div>
         <div class="hero-content">
-          <div class="container py-5">
+          <div class="container py-4 py-md-5">
             <div class="row align-items-center">
               <!-- Profile Picture -->
-              <div class="col-auto">
+              <div class="col-auto mb-3 mb-md-0">
                 <div class="position-relative d-inline-block">
-                  <img
-                    :src="
-                      artistData.profileImage ||
-                      'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff'
-                    "
-                    :alt="artistData.artistName"
-                    class="artist-avatar"
-                  />
+                  <img :src="artistData.profileImage ||
+                    'https://ui-avatars.com/api/?name=Artist&size=300&background=667eea&color=fff'
+                    " :alt="artistData.artistName" class="artist-avatar rounded-circle" />
                   <div v-if="artistData.verified" class="verified-badge-large">
                     <i class="bi bi-patch-check-fill"></i>
                   </div>
@@ -56,39 +48,27 @@
               </div>
 
               <!-- Artist Info -->
-              <div class="col">
-                <h1 class="artist-name">{{ artistData.artistName || 'Artist Name' }}</h1>
+              <div class="col text-center text-md-start">
+                <h1 class="artist-name display-4">{{ artistData.artistName || 'Artist Name' }}</h1>
                 <p class="artist-bio">{{ artistData.bio || 'No bio available' }}</p>
                 <div class="follower-count">{{ artistData.followerCount || 0 }} Followers</div>
-                <div class="dashboard-actions">
+                <div class="dashboard-actions d-flex flex-column flex-md-row gap-2">
                   <button @click="editProfile" class="btn-dashboard-action">EDIT PROFILE</button>
                   <button @click="viewAnalytics" class="btn-dashboard-action">ANALYTICS</button>
                 </div>
 
                 <!-- Social Links -->
                 <div v-if="hasSocialLinks" class="social-links">
-                  <a
-                    v-if="artistData.socialLinks?.spotify"
-                    :href="artistData.socialLinks.spotify"
-                    target="_blank"
-                    class="social-icon spotify"
-                  >
+                  <a v-if="artistData.socialLinks?.spotify" :href="artistData.socialLinks.spotify" target="_blank"
+                    class="social-icon spotify">
                     <i class="bi bi-spotify"></i>
                   </a>
-                  <a
-                    v-if="artistData.socialLinks?.youtube"
-                    :href="artistData.socialLinks.youtube"
-                    target="_blank"
-                    class="social-icon youtube"
-                  >
+                  <a v-if="artistData.socialLinks?.youtube" :href="artistData.socialLinks.youtube" target="_blank"
+                    class="social-icon youtube">
                     <i class="bi bi-youtube"></i>
                   </a>
-                  <a
-                    v-if="artistData.socialLinks?.instagram"
-                    :href="artistData.socialLinks.instagram"
-                    target="_blank"
-                    class="social-icon instagram"
-                  >
+                  <a v-if="artistData.socialLinks?.instagram" :href="artistData.socialLinks.instagram" target="_blank"
+                    class="social-icon instagram">
                     <i class="bi bi-instagram"></i>
                   </a>
                 </div>
@@ -103,34 +83,19 @@
         <div class="content-wave-background">
           <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.3">
-              <animate
-                attributeName="d"
-                values="M0,150 Q200,80 400,150 T800,150 T1200,150;
+              <animate attributeName="d" values="M0,150 Q200,80 400,150 T800,150 T1200,150;
                        M0,150 Q200,220 400,150 T800,150 T1200,150;
-                       M0,150 Q200,80 400,150 T800,150 T1200,150"
-                dur="6s"
-                repeatCount="indefinite"
-              />
+                       M0,150 Q200,80 400,150 T800,150 T1200,150" dur="6s" repeatCount="indefinite" />
             </path>
             <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.25">
-              <animate
-                attributeName="d"
-                values="M0,180 Q250,110 500,180 T1000,180 T1200,180;
+              <animate attributeName="d" values="M0,180 Q250,110 500,180 T1000,180 T1200,180;
                        M0,180 Q250,250 500,180 T1000,180 T1200,180;
-                       M0,180 Q250,110 500,180 T1000,180 T1200,180"
-                dur="8s"
-                repeatCount="indefinite"
-              />
+                       M0,180 Q250,110 500,180 T1000,180 T1200,180" dur="8s" repeatCount="indefinite" />
             </path>
             <path fill="none" stroke="#D95656" stroke-width="0.8" opacity="0.2">
-              <animate
-                attributeName="d"
-                values="M0,120 Q300,50 600,120 T1200,120;
+              <animate attributeName="d" values="M0,120 Q300,50 600,120 T1200,120;
                        M0,120 Q300,190 600,120 T1200,120;
-                       M0,120 Q300,50 600,120 T1200,120"
-                dur="10s"
-                repeatCount="indefinite"
-              />
+                       M0,120 Q300,50 600,120 T1200,120" dur="10s" repeatCount="indefinite" />
             </path>
           </svg>
         </div>
@@ -140,25 +105,13 @@
           <div class="row">
             <div class="col-12">
               <div class="custom-tab-bar mb-4">
-                <button
-                  class="tab-btn"
-                  :class="{ active: activeTab === 'music' }"
-                  @click="activeTab = 'music'"
-                >
+                <button class="tab-btn" :class="{ active: activeTab === 'music' }" @click="activeTab = 'music'">
                   MY MUSIC
                 </button>
-                <button
-                  class="tab-btn"
-                  :class="{ active: activeTab === 'events' }"
-                  @click="activeTab = 'events'"
-                >
+                <button class="tab-btn" :class="{ active: activeTab === 'events' }" @click="activeTab = 'events'">
                   MY EVENTS
                 </button>
-                <button
-                  class="tab-btn"
-                  :class="{ active: activeTab === 'about' }"
-                  @click="activeTab = 'about'"
-                >
+                <button class="tab-btn" :class="{ active: activeTab === 'about' }" @click="activeTab = 'about'">
                   ABOUT ME
                 </button>
               </div>
@@ -172,11 +125,7 @@
                 <!-- Music Tab - NEW MusicManager Component -->
                 <div v-if="activeTab === 'music'" class="tab-content-section">
                   <div class="music-tab-wrapper">
-                    <MusicManager
-                      v-if="artistData.uid"
-                      :artistId="artistData.uid"
-                      @music-updated="onMusicUpdated"
-                    />
+                    <MusicManager v-if="artistData.uid" :artistId="artistData.uid" @music-updated="onMusicUpdated" />
                   </div>
                 </div>
 
@@ -201,83 +150,67 @@
                   <div v-else>
                     <div class="events-section">
                       <!-- Events Grid Header -->
-                      <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 class="events-library-title">MY EVENTS</h2>
+                      <div
+                        class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-2">
+                        <h2 class="events-library-title h2 mb-0">MY EVENTS</h2>
                         <button class="btn-add-event" @click="addEvent">+ ADD EVENT</button>
                       </div>
 
-                      <div class="events-grid">
-                        <div v-for="event in displayedEvents" :key="event.id" class="event-card">
-                          <!-- Red Header with Event Title -->
-                          <div class="event-header">
-                            {{ event.title || 'Untitled Event' }}
-                          </div>
-
-                          <!-- Event Body -->
-                          <div class="event-body">
-                            <!-- Venue and Date (No Artist Info on Profile Pages) -->
-                            <div class="event-venue-date">
-                              <div class="event-venue-text">
-                                <p class="event-venue">{{ event.venue || event.location }}</p>
-                                <p class="event-description-preview" v-if="event.description">
-                                  {{ event.description.split(' ').slice(0, 6).join(' ')
-                                  }}{{ event.description.split(' ').length > 6 ? '...' : '' }}
-                                </p>
-                              </div>
-                              <!-- Date Box on Right -->
-                              <div class="event-date-box">
-                                <div class="date-day">{{ formatEventDay(event.date) }}</div>
-                                <div class="date-month">{{ formatEventMonth(event.date) }}</div>
-                              </div>
+                      <div class="row g-3">
+                        <div v-for="event in displayedEvents" :key="event.id" class="col-12 col-sm-6 col-md-6 col-lg-4">
+                          <div class="event-card">
+                            <!-- Red Header with Event Title -->
+                            <div class="event-header">
+                              {{ event.title || 'Untitled Event' }}
                             </div>
 
-                            <!-- Genres -->
-                            <p
-                              class="event-genres-text"
-                              v-if="event.genres && event.genres.length > 0"
-                            >
-                              {{ event.genres.join(', ') }}
-                            </p>
+                            <!-- Event Body -->
+                            <div class="event-body">
+                              <!-- Venue and Date (No Artist Info on Profile Pages) -->
+                              <div class="event-venue-date">
+                                <div class="event-venue-text">
+                                  <p class="event-venue">{{ event.venue || event.location }}</p>
+                                  <p class="event-description-preview" v-if="event.description">
+                                    {{ event.description.split(' ').slice(0, 6).join(' ')
+                                    }}{{ event.description.split(' ').length > 6 ? '...' : '' }}
+                                  </p>
+                                </div>
+                                <!-- Date Box on Right -->
+                                <div class="event-date-box">
+                                  <div class="date-day">{{ formatEventDay(event.date) }}</div>
+                                  <div class="date-month">{{ formatEventMonth(event.date) }}</div>
+                                </div>
+                              </div>
 
-                            <!-- Map Preview -->
-                            <div class="event-map-preview" v-if="event.location">
-                              <EventMap
-                                :location="event.location"
-                                :title="event.venue || event.title"
-                                size="small"
-                              />
-                            </div>
+                              <!-- Genres -->
+                              <p class="event-genres-text" v-if="event.genres && event.genres.length > 0">
+                                {{ event.genres.join(', ') }}
+                              </p>
 
-                            <!-- Interested Count -->
-                            <p class="interested-count">
-                              {{ event.interestedCount || 0 }}
-                              {{ (event.interestedCount || 0) === 1 ? 'Person' : 'People' }}
-                              Interested
-                            </p>
+                              <!-- Map Preview -->
+                              <div class="event-map-preview" v-if="event.location">
+                                <EventMap :location="event.location" :title="event.venue || event.title" size="small" />
+                              </div>
 
-                            <!-- Action Buttons (Owner Controls) -->
-                            <div class="event-owner-actions">
-                              <button
-                                class="btn-action-edit"
-                                @click="editEvent(event.id)"
-                                title="Edit Event"
-                              >
-                                <i class="bi bi-pencil"></i> Edit
-                              </button>
-                              <button
-                                class="btn-action-view"
-                                @click="viewEvent(event.id)"
-                                title="View Details"
-                              >
-                                <i class="bi bi-eye"></i> View
-                              </button>
-                              <button
-                                class="btn-action-delete"
-                                @click="deleteEvent(event.id)"
-                                title="Delete Event"
-                              >
-                                <i class="bi bi-trash"></i> Delete
-                              </button>
+                              <!-- Interested Count -->
+                              <p class="interested-count">
+                                {{ event.interestedCount || 0 }}
+                                {{ (event.interestedCount || 0) === 1 ? 'Person' : 'People' }}
+                                Interested
+                              </p>
+
+                              <!-- Action Buttons (Owner Controls) -->
+                              <div class="event-owner-actions">
+                                <button class="btn-action-edit" @click="editEvent(event.id)" title="Edit Event">
+                                  <i class="bi bi-pencil"></i> Edit
+                                </button>
+                                <button class="btn-action-view" @click="viewEvent(event.id)" title="View Details">
+                                  <i class="bi bi-eye"></i> View
+                                </button>
+                                <button class="btn-action-delete" @click="deleteEvent(event.id)" title="Delete Event">
+                                  <i class="bi bi-trash"></i> Delete
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -317,65 +250,87 @@
                     </div>
 
                     <!-- Artist Stats -->
-                    <div class="stats-grid mt-4">
-                      <div class="stat-box">
-                        <i class="bi bi-calendar3 fs-4"></i>
-                        <div>
-                          <div class="fw-bold">Genres</div>
-                          <div class="text-white-soft">
-                            {{ artistData.genres?.length || 0 }} genres
+                    <div class="row g-3 mt-4">
+                      <div class="col-12 col-md-4">
+                        <div class="stat-box">
+                          <i class="bi bi-calendar3 fs-4"></i>
+                          <div>
+                            <div class="fw-bold">Genres</div>
+                            <div class="text-white-soft">
+                              {{ artistData.genres?.length || 0 }} genres
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="stat-box">
-                        <i class="bi bi-music-note-list fs-4"></i>
-                        <div>
-                          <div class="fw-bold">Music</div>
-                          <div class="text-white-soft">
-                            {{ artistData.musicLinks?.length || 0 }} tracks
+                      <div class="col-12 col-md-4">
+                        <div class="stat-box">
+                          <i class="bi bi-music-note-list fs-4"></i>
+                          <div>
+                            <div class="fw-bold">Music</div>
+                            <div class="text-white-soft">
+                              {{ artistData.musicLinks?.length || 0 }} tracks
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="stat-box">
-                        <i class="bi bi-calendar-event fs-4"></i>
-                        <div>
-                          <div class="fw-bold">Upcoming Events</div>
-                          <div class="text-white-soft">{{ artistEvents.length }} events</div>
+                      <div class="col-12 col-md-4">
+                        <div class="stat-box">
+                          <i class="bi bi-calendar-event fs-4"></i>
+                          <div>
+                            <div class="fw-bold">Upcoming Events</div>
+                            <div class="text-white-soft">{{ artistEvents.length }} events</div>
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     <!-- Following Section -->
-                    <section class="genre-picks-section mt-5">
-                      <h2 class="genre-heading">FOLLOWING</h2>
-                      <div class="header-subtitle mb-4">
-                        You are following <span>{{ followingArtists.length }}</span> artist{{
-                          followingArtists.length !== 1 ? 's' : ''
-                        }}
+                    <section class="discover-artists-section mb-5">
+                      <div class="section-header d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                          <h2 class="h4 mb-1">FOLLOWING</h2>
+                          <p class="text-muted mb-0 small">You are following <span class="highlight-number">{{
+                            followingArtists.length }}</span> artist{{ followingArtists.length !== 1 ? 's' : '' }}</p>
+                        </div>
                       </div>
 
                       <!-- No Following Artists -->
-                      <div v-if="followingArtists.length === 0" class="card shadow-sm">
-                        <div class="card-body text-center py-5">
-                          <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
-                          <p class="text-muted">You're not following any artists yet.</p>
-                          <router-link to="/home" class="btn btn-primary">
-                            Discover Artists
-                          </router-link>
-                        </div>
+                      <div v-if="followingArtists.length === 0" class="text-center py-5">
+                        <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
+                        <h2 class="h4 mb-3 text-white">No following artists yet</h2>
+                        <p class="text-muted mb-4">Start exploring and follow artists you love!</p>
+                        <router-link to="/home#discover-artists" class="btn btn-primary">
+                          Discover Artists
+                        </router-link>
                       </div>
 
-                      <!-- Following Artists Grid -->
-                      <div v-else class="horizontal-scroll">
-                        <div class="d-flex gap-3">
-                          <div
-                            v-for="artist in followingArtists"
-                            :key="artist.id"
-                            class="flex-shrink-0 artist-card-container"
-                          >
-                            <ArtistCard :artist="artist" />
+                      <!-- Artists Carousel -->
+                      <div v-else class="carousel-container">
+                        <button v-if="currentArtistPage > 0" @click="previousArtistPage"
+                          class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
+                          aria-label="Previous artists">
+                          <i class="bi bi-chevron-left fs-5"></i>
+                        </button>
+
+                        <div class="artists-carousel">
+                          <div class="artists-grid-carousel"
+                            :style="{ transform: `translateX(-${currentArtistPage * 100}%)` }">
+                            <div v-for="(page, pageIndex) in paginatedFollowingArtists"
+                              :key="`artist-page-${pageIndex}`" class="carousel-page artists-page">
+                              <div class="row g-3 w-100">
+                                <div v-for="artist in page" :key="artist.id" class="col-6 col-md-3 col-lg-2">
+                                  <ArtistCard :artist="artist" />
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
+
+                        <button v-if="currentArtistPage < totalArtistPages - 1" @click="nextArtistPage"
+                          class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
+                          aria-label="Next artists">
+                          <i class="bi bi-chevron-right fs-5"></i>
+                        </button>
                       </div>
                     </section>
                   </div>
@@ -391,25 +346,15 @@
   <!-- End of dashboard-content -->
 
   <!-- Delete Confirmation Modal -->
-  <div
-    class="modal fade"
-    id="deleteEventModal"
-    tabindex="-1"
-    aria-labelledby="deleteEventModalLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header bg-danger text-white">
           <h5 class="modal-title" id="deleteEventModalLabel">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>Confirm Delete
           </h5>
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <p class="mb-0">Are you sure you want to delete this event?</p>
@@ -433,12 +378,7 @@
       <div class="toast-header bg-success text-white">
         <i class="bi bi-check-circle-fill me-2"></i>
         <strong class="me-auto">Success</strong>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="toast"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
       <div class="toast-body">
         {{ successMessage }}
@@ -452,12 +392,7 @@
       <div class="toast-header bg-danger text-white">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
         <strong class="me-auto">Error</strong>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="toast"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
       <div class="toast-body">
         {{ errorMessage }}
@@ -466,18 +401,12 @@
   </div>
 
   <!-- Event Modal -->
-  <EventModal
-    :show="showEventModal"
-    :event="eventToEdit"
-    :artistId="artistData.uid"
-    :artistName="artistData.artistName"
-    @close="closeEventModal"
-    @event-saved="onEventSaved"
-  />
+  <EventModal :show="showEventModal" :event="eventToEdit" :artistId="artistData.uid" :artistName="artistData.artistName"
+    @close="closeEventModal" @event-saved="onEventSaved" />
 </template>
 
 <script>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { doc, getDoc, collection, query, where, getDocs, deleteDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -522,6 +451,8 @@ export default {
 
     // Following artists state
     const followingArtists = ref([])
+    const currentArtistPage = ref(0)
+    const artistsPerPage = ref(6) // Default for large screens
 
     // Initialize artistData with uid field
     const artistData = reactive({
@@ -563,6 +494,24 @@ export default {
         return artistEvents.value
       }
       return artistEvents.value.slice(0, 6)
+    })
+
+    // Computed property for paginated following artists
+    const paginatedFollowingArtists = computed(() => {
+      const pages = []
+      let startIndex = 0
+
+      while (startIndex < followingArtists.value.length) {
+        const endIndex = Math.min(startIndex + artistsPerPage.value, followingArtists.value.length)
+        pages.push(followingArtists.value.slice(startIndex, endIndex))
+        startIndex = endIndex
+      }
+      return pages
+    })
+
+    // Computed property for total artist pages
+    const totalArtistPages = computed(() => {
+      return paginatedFollowingArtists.value.length
     })
 
     const loadArtistEvents = async (artistId) => {
@@ -846,6 +795,32 @@ export default {
       }
     }
 
+    // Pagination methods for following artists carousel
+    const nextArtistPage = () => {
+      if (currentArtistPage.value < totalArtistPages.value - 1) {
+        currentArtistPage.value++
+      }
+    }
+
+    const previousArtistPage = () => {
+      if (currentArtistPage.value > 0) {
+        currentArtistPage.value--
+      }
+    }
+
+    // Update artists per page based on window width (Bootstrap breakpoints)
+    const updateArtistsPerPage = () => {
+      const width = window.innerWidth
+      if (width >= 992) {
+        artistsPerPage.value = 6 // lg: 6 artists (col-lg-2 = 16.66% width)
+      } else if (width >= 768) {
+        artistsPerPage.value = 4 // md: 4 artists (col-md-3 = 25% width)
+      } else {
+        artistsPerPage.value = 2 // sm/xs: 2 artists (col-6 = 50% width)
+      }
+      currentArtistPage.value = 0
+    }
+
     // Handle music updates from MusicManager component
     const onMusicUpdated = async () => {
       console.log('Music updated - refreshing artist data')
@@ -911,6 +886,9 @@ export default {
 
     // Initialize component
     onMounted(async () => {
+      updateArtistsPerPage()
+      window.addEventListener('resize', updateArtistsPerPage)
+
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
           currentUser.value = user
@@ -921,7 +899,14 @@ export default {
         }
       })
 
-      return () => unsubscribe()
+      return () => {
+        unsubscribe()
+        window.removeEventListener('resize', updateArtistsPerPage)
+      }
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', updateArtistsPerPage)
     })
 
     return {
@@ -960,6 +945,13 @@ export default {
       getYouTubeEmbedUrl,
       onMusicUpdated,
       followingArtists,
+      currentArtistPage,
+      artistsPerPage,
+      paginatedFollowingArtists,
+      totalArtistPages,
+      nextArtistPage,
+      previousArtistPage,
+      updateArtistsPerPage,
     }
   },
 }
@@ -1146,14 +1138,12 @@ export default {
 }
 
 .social-icon.instagram {
-  background: linear-gradient(
-    45deg,
-    #f09433 0%,
-    #e6683c 25%,
-    #dc2743 50%,
-    #cc2366 75%,
-    #bc1888 100%
-  );
+  background: linear-gradient(45deg,
+      #f09433 0%,
+      #e6683c 25%,
+      #dc2743 50%,
+      #cc2366 75%,
+      #bc1888 100%);
 }
 
 .social-icon:hover {
@@ -1356,11 +1346,6 @@ export default {
   border-radius: 8px;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-}
 
 .stat-box {
   display: flex;
@@ -1573,12 +1558,6 @@ export default {
   transform: translateY(-2px);
 }
 
-/* Events Grid */
-.events-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
 
 .event-item-card {
   background: rgba(35, 35, 38, 0.8);
@@ -1965,140 +1944,57 @@ small {
   transform: translateY(-2px);
 }
 
-/* ⭐ MOBILE RESPONSIVE */
-@media (max-width: 768px) {
-  .events-grid {
-    grid-template-columns: 1fr;
-  }
 
-  .events-library-title {
-    font-size: 1.5rem;
-  }
-
-  .dashboard-content {
-    padding-top: 80px;
-  }
-
-  .artist-hero-section {
-    min-height: 300px;
-  }
-
-  .hero-content {
-    min-height: 300px;
-    padding-top: 80px;
-  }
-
-  .artist-avatar {
-    width: 120px;
-    height: 120px;
-  }
-
-  .artist-name {
-    font-size: 2rem;
-  }
-
-  .artist-bio {
-    font-size: 1rem;
-  }
-
-  .display-4 {
-    font-size: 2rem;
-  }
-
-  .btn-group {
-    flex-direction: column;
-  }
-
-  .btn-group .btn {
-    border-radius: 0.375rem !important;
-    margin-bottom: 0.5rem;
-  }
-
-  .nav-tabs .nav-link,
-  .tab-btn {
-    padding: 12px 0 10px 0;
-    font-size: 0.85rem;
-  }
-
-  .spotify-iframe {
-    height: 152px;
-  }
-
-  .embed-container {
-    padding: 15px;
-  }
-
-  .events-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .dashboard-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btn-dashboard-action {
-    width: 100%;
-  }
-}
-
-/* Tablet responsive - 2 columns for medium screens */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .events-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Followers Section - Matching UserProfile.vue */
-.genre-picks-section {
+/* Following Section - Matching UserProfile.vue */
+.discover-artists-section {
   margin-top: 40px;
   margin-bottom: 30px;
 }
 
-.genre-heading {
-  font-size: 2rem;
-  font-weight: bold;
-  color: white;
-  margin-bottom: 10px;
+.section-header h2,
+.section-header h4 {
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
   letter-spacing: 1px;
+  font-size: 1.5rem;
 }
 
-.header-subtitle {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 2rem;
+.section-header p {
+  color: #b0b1ba;
+  font-size: 0.9rem;
+  text-transform: none;
+  letter-spacing: normal;
 }
 
-/* Horizontal Scroll for Following Artists */
-.horizontal-scroll {
-  overflow-x: auto;
-  overflow-y: visible;
-  padding: 10px 0;
-  min-height: 350px;
+.highlight-number {
+  color: #bb1814;
+  font-weight: 700;
 }
 
-.horizontal-scroll::-webkit-scrollbar {
-  height: 8px;
+.text-muted {
+  color: #b0b1ba !important;
 }
 
-.horizontal-scroll::-webkit-scrollbar-thumb {
-  background-color: #b51414;
-  border-radius: 4px;
+/* Carousel Container */
+.carousel-container {
+  position: relative;
+  padding: 0;
 }
 
-.horizontal-scroll::-webkit-scrollbar-track {
-  background: #2a2a2a;
+.artists-carousel {
+  overflow: hidden;
+  width: 100%;
 }
 
-/* Artist Card Container */
-.artist-card-container {
-  min-width: 250px;
-  width: 250px;
-  height: 100%;
+.artists-grid-carousel {
   display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-page.artists-page {
+  min-width: 100%;
+  display: flex;
+  padding: 0;
 }
 </style>
