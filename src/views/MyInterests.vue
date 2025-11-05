@@ -3,48 +3,48 @@
   <div class="my-interests-page">
     <NavigationBar />
 
-    <!-- Dynamic Wave Background -->
-    <div class="wave-svg d-none d-md-block">
+    <!-- Wave Background -->
+    <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path id="wave1" fill="none" stroke="#B51414" stroke-width="2" opacity="0.6">
+        <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
           <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
-                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
-                    M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
+                   M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
         </path>
-        <path id="wave2" fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
+        <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
           <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
-                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
-                    M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
+                   M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
         </path>
-        <path id="wave3" fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
+        <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
           <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
-                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
-                    M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
+                   M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
         </path>
-        <path id="wave4" fill="none" stroke="#B51414" stroke-width="1.5" opacity="0.5">
+        <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
           <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
-                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
-                    M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
+                   M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
         </path>
-        <path id="wave5" fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
+        <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
           <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
-                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
-                    M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
+                   M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
         </path>
-        <path id="wave6" fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
+        <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
           <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
-                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
-                    M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
+                   M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
         </path>
-        <path id="wave7" fill="none" stroke="#B51414" stroke-width="0.8" opacity="0.3">
+        <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
           <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
-                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
-                    M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
+                   M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
         </path>
-        <path id="wave8" fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
+        <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
           <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
-                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
-                    M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
+                   M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
         </path>
       </svg>
     </div>
@@ -81,9 +81,7 @@
 
             <!-- Events Carousel -->
             <div v-else class="carousel-container px-2 px-sm-0">
-              <button
-                v-if="currentEventPage > 0"
-                @click="previousEventPage"
+              <button v-if="currentEventPage > 0" @click="previousEventPage"
                 class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
                 aria-label="Previous events">
                 <i class="bi bi-chevron-left fs-5"></i>
@@ -94,7 +92,7 @@
                   <div v-for="(page, pageIndex) in paginatedInterestedEvents" :key="`event-page-${pageIndex}`"
                     class="carousel-page artists-page">
                     <div class="row g-2 g-sm-3 pt-2 pt-sm-3 pb-2 pb-sm-3">
-                      <div v-for="event in page" :key="event.id" class="col-12 col-sm-6 col-md-4 col-lg-3">
+                      <div v-for="event in page" :key="event.id" class="col-12 col-sm-6 col-lg-4">
                         <EventCard :event="event" />
                       </div>
                     </div>
@@ -102,9 +100,7 @@
                 </div>
               </div>
 
-              <button
-                v-if="currentEventPage < totalEventPages - 1"
-                @click="nextEventPage"
+              <button v-if="currentEventPage < totalEventPages - 1" @click="nextEventPage"
                 class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
                 aria-label="Next events">
                 <i class="bi bi-chevron-right fs-5"></i>
@@ -125,14 +121,8 @@
 
             <!-- Network Graph -->
             <div class="network-graph-section overflow-x-auto mb-3 mb-sm-4 mb-md-5 px-2 px-sm-0">
-              <ArtistNetworkGraph
-                v-if="!loading && allArtists.length > 0"
-                :key="graphKey"
-                :userId="userId"
-                :allArtists="allArtists"
-                :userPreferences="userPreferences"
-                :height="graphHeight"
-              />
+              <ArtistNetworkGraph v-if="!loading && allArtists.length > 0" :key="graphKey" :userId="userId"
+                :allArtists="allArtists" :userPreferences="userPreferences" :height="graphHeight" />
 
               <!-- Loading State -->
               <div v-else-if="loading" class="text-center py-4 py-md-5">
@@ -188,12 +178,10 @@ export default {
       const width = this.windowWidth
       if (width < 576) {
         return 1
-      } else if (width < 768) {
-        return 2
       } else if (width < 992) {
-        return 3
+        return 2
       } else {
-        return 4
+        return 3
       }
     },
     paginatedInterestedEvents() {
@@ -236,6 +224,14 @@ export default {
       }
     },
   },
+  watch: {
+    eventsPerPage(newValue, oldValue) {
+      // Reset to first page when events per page changes
+      if (oldValue !== undefined && newValue !== oldValue) {
+        this.currentEventPage = 0
+      }
+    }
+  },
   async mounted() {
     await this.loadUserInterests()
     await this.loadAllArtists()
@@ -244,9 +240,6 @@ export default {
     if (typeof window !== 'undefined') {
       this._resizeTimeout = null
       this.handleResize = () => {
-        if (this._resizeTimeout) {
-          clearTimeout(this._resizeTimeout)
-        }
         this._resizeTimeout = setTimeout(() => {
           this.windowWidth = window.innerWidth
         }, 150)
@@ -473,17 +466,6 @@ export default {
   letter-spacing: 0.5px;
 }
 
-@media (max-width: 768px) {
-  .welcome-section h1 {
-    font-size: 2rem;
-    padding-top: 1rem; /* ADD this */
-  }
-  
-  .welcome-section p,
-  .header-subtitle {
-    font-size: 0.85rem; /* ADD */
-  }
-}
 
 /* Genre Heading */
 .genre-heading {
@@ -503,94 +485,70 @@ export default {
   letter-spacing: 0.5px;
 }
 
-@media (max-width: 768px) {
-  .welcome-section h1 {
-    font-size: 2rem;
-    padding-top: 1rem;
-  }
+.text-muted {
+  color: #b0b1ba !important;
 }
 
-  .text-muted {
-    color: #b0b1ba !important;
-  }
+.card {
+  border: none;
+  border-radius: 12px;
+  background: #2a2a2a;
+}
 
-  .card {
-    border: none;
-    border-radius: 12px;
-    background: #2a2a2a;
-  }
+.card-body {
+  color: #999;
+}
 
-  .card-body {
-    color: #999;
-  }
+.badge {
+  background-color: #b51414 !important;
+}
 
-  .badge {
-    background-color: #b51414 !important;
-  }
+.btn-primary {
+  background: #bb1814;
+  border: none;
+  border-radius: 25px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transform: none;
+}
 
-  .btn-primary {
-    background: #bb1814;
-    border: none;
-    border-radius: 25px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transform: none;
-  }
+.btn-primary:hover {
+  background: #960f0c;
+}
 
-  .btn-primary:hover {
-    background: #960f0c;
-  }
+.spinner-border {
+  color: #b51414 !important;
+}
 
-  .spinner-border {
-    color: #b51414 !important;
-  }
+/* Carousel Container */
+.carousel-container {
+  position: relative;
+  padding: 0;
+}
 
-  /* Carousel Container */
-  .carousel-container {
-    position: relative;
-    padding: 0;
-  }
+/* Arrows now use Bootstrap utilities; custom arrow CSS removed */
 
-  /* Arrows now use Bootstrap utilities; custom arrow CSS removed */
+.artists-carousel {
+  overflow: hidden;
+  width: 100%;
+}
 
-  .artists-carousel {
-    overflow: hidden;
-    width: 100%;
-  }
+.artists-grid-carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
 
-  .artists-grid-carousel {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-  }
+.carousel-page.artists-page {
+  min-width: 100%;
+  width: 100%;
+  min-height: 320px;
+  flex-shrink: 0;
+}
 
-  .carousel-page.artists-page {
-    min-width: 100%;
-    width: 100%;
-    flex-shrink: 0;
-  }
-
-  /* Network Graph Section */
-  .network-graph-section {
-    width: 100%;
-    min-height: 300px;
-  }
-
-  /* Wave: reduce height and opacity on md and below (hidden < md via class) */
-  @media (max-width: 991.98px) {
-    .wave-svg {
-      height: 220px;
-      opacity: 0.35;
-    }
-  }
-
-  /* Extra small typography adjustments */
-  @media (max-width: 575.98px) {
-    .genre-heading {
-      font-size: 1.5rem;
-      margin-bottom: 6px;
-    }
-  }
-
-  /* Removed responsive arrow CSS in favor of Bootstrap utility classes */
-  </style>
+/* Network Graph Section */
+.network-graph-section {
+  width: 100%;
+  min-height: 300px;
+}
+</style>
