@@ -402,6 +402,7 @@ async function saveArtistToFirestore(spotifyData, artistQuery) {
 
   // Transform tracks into musicLinks format
   const musicLinks = topTracksData.tracks.map((track, index) => ({
+    id: `music_${Date.now()}_${index}_${Math.random().toString(36).substr(2, 9)}`, // ✅ Generate unique ID for interactions
     title: track.name,
     url: track.external_urls.spotify,
     embedUrl: `https://open.spotify.com/embed/track/${track.id}`, // ✅ Add Spotify embed URL
