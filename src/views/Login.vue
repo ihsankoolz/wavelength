@@ -120,16 +120,8 @@
           </router-link>
         </div>
 
-        <div class="form-card glass-card py-4 px-3 px-md-5" style="padding: 2rem 1.5rem">
-          <!-- Mobile Title (< 768px) -->
-          <h2 class="login-title mb-4 text-center d-block d-md-none" style="font-size: 2rem">
-            LOG IN
-          </h2>
-
-          <!-- Desktop Title (≥ 768px) -->
-          <h2 class="login-title mb-4 text-center d-none d-md-block" style="font-size: 3rem">
-            LOG IN
-          </h2>
+        <div class="form-card glass-card" style="padding: 70px">
+          <h2 class="login-title">LOG IN</h2>
 
           <!-- Error with animation -->
           <transition name="error-slide">
@@ -589,6 +581,7 @@ export default {
   min-height: 100vh;
   border-radius: 24px 0 0 24px;
 }
+
 @media (max-width: 991.98px) {
   .auth-right {
     background: transparent;
@@ -652,7 +645,11 @@ export default {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-size: 3rem;  /* Mobile default */
 }
+
+
+
 
 /* Error Alert with Animation */
 .error-alert {
