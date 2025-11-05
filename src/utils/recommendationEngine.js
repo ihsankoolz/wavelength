@@ -395,3 +395,77 @@ export function sortSongs(songs, sortBy, userProfile = null) {
       return sorted
   }
 }
+
+/**
+ * Get recommended artists for a user
+ * @param {Array} allArtists - Array of all artists
+ * @param {Array} userGenres - User's preferred genres
+ * @param {string} currentUserId - Current user's ID (to exclude from recommendations)
+ * @param {Object} options - Recommendation options
+ * @returns {Array} - Array of recommended artists (max 20)
+ */
+export function getRecommendedArtists(
+  allArtists,
+  userGenres = [],
+  currentUserId = null,
+  options = {},
+) {
+  const { limit = 20 } = options
+
+  // Filter out current user if they are an artist
+  let filteredArtists = allArtists
+  if (currentUserId) {
+    filteredArtists = allArtists.filter((artist) => artist.id !== currentUserId)
+  }
+
+  // NEW USER WITH NO PREFERENCES - Show popular artists
+  if (userGenres.length === 0) {
+    console.log('👥 Artist Recommendation: No preferences - showing popular artists')
+    return filteredArtists
+      .sort((a, b) => (b.followerCount || 0) - (a.followerCount || 0))
+      .slice(0, limit)
+  }
+
+  // USER WITH PREFERENCES - Genre-based recommendation
+  console.log('👥 Artist Recommendation: Genre-based scoring for', userGenres.length, 'genres')
+
+  // Score artists by genre match
+  const scoredArtists = filteredArtists.map((artist) => {
+    let score = 0
+
+    if (artist.genres && Array.isArray(artist.genres)) {
+      // Count how many of the artist's genres match user preferences
+      artist.genres.forEach((artistGenre) => {
+        if (userGenres.some((userGenre) => userGenre.toLowerCase() === artistGenre.toLowerCase())) {
+          score += 10 // 10 points per matching genre
+        }
+      })
+    }
+
+    // Add popularity bonus (scaled to max 5 points)
+    const popularityBonus = Math.min(5, (artist.followerCount || 0) / 100)
+    score += popularityBonus
+
+    return { ...artist, _recommendationScore: score }
+  })
+
+  // Sort by score (highest first), then by follower count as tiebreaker
+  const sortedArtists = scoredArtists.sort((a, b) => {
+    if (b._recommendationScore !== a._recommendationScore) {
+      return b._recommendationScore - a._recommendationScore
+    }
+    return (b.followerCount || 0) - (a.followerCount || 0)
+  })
+
+  console.log(
+    '✅ Top 5 recommended artists:',
+    sortedArtists.slice(0, 5).map((a) => ({
+      name: a.artistName,
+      score: a._recommendationScore.toFixed(1),
+      followers: a.followerCount || 0,
+      genres: a.genres?.slice(0, 2),
+    })),
+  )
+
+  return sortedArtists.slice(0, limit)
+}
