@@ -9,7 +9,7 @@
         {{ getMusicSymbol(n) }}
       </div>
     </div>
-
+ 
     <!-- SVG Animated Wave Background -->
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -79,10 +79,12 @@
         </path>
       </svg>
     </div>
-
-    <div class="content-wrapper auth-split">
-      <!-- LEFT: Welcome Branding / Hero -->
-      <div class="auth-left d-flex flex-column justify-content-between align-items-start">
+    <div class="content-wrapper auth-split d-flex flex-column flex-lg-row">
+      <!-- LEFT: Welcome Branding / Hero (Mobile: hidden, Desktop: visible) -->
+      <div
+        class="auth-left d-none d-lg-flex flex-column justify-content-between align-items-start"
+        style="flex: 0 0 50%; min-width: 0"
+      >
         <div>
           <router-link to="/">
             <img src="/assets/logo1.png" alt="Wavelength" class="auth-logo logo-3d" />
@@ -102,9 +104,32 @@
       </div>
 
       <!-- RIGHT: Login Form -->
-      <div class="auth-right d-flex flex-column justify-content-center">
-        <div class="form-card glass-card py-4" :class="{ shake: showError }">
-          <h2 class="login-title mb-4 text-center">LOG IN</h2>
+      <div
+        class="auth-right d-flex flex-column justify-content-center rounded-start-0 rounded-start-lg-5"
+        style="flex: 0 0 50%; min-width: 0"
+      >
+        <!-- Logo for Mobile Only -->
+        <div class="d-flex d-lg-none justify-content-center mb-3 mt-4">
+          <router-link to="/">
+            <img
+              src="/assets/logo1.png"
+              alt="Wavelength"
+              class="auth-logo logo-3d"
+              style="width: 100px"
+            />
+          </router-link>
+        </div>
+
+        <div class="form-card glass-card py-4 px-3 px-md-5" style="padding: 2rem 1.5rem">
+          <!-- Mobile Title (< 768px) -->
+          <h2 class="login-title mb-4 text-center d-block d-md-none" style="font-size: 2rem">
+            LOG IN
+          </h2>
+
+          <!-- Desktop Title (≥ 768px) -->
+          <h2 class="login-title mb-4 text-center d-none d-md-block" style="font-size: 3rem">
+            LOG IN
+          </h2>
 
           <!-- Error with animation -->
           <transition name="error-slide">
@@ -216,8 +241,9 @@
               <span v-else class="btn-content">LOG IN</span>
             </button>
           </form>
-          <div class="text-center mt-3 login-row">
-            DON’T HAVE AN ACCOUNT?
+
+          <div class="text-center mt-3 login-row" style="font-size: 1.07rem">
+            DON'T HAVE AN ACCOUNT?
             <router-link to="/register" class="login-link">SIGN UP</router-link>
           </div>
         </div>
@@ -456,14 +482,13 @@ export default {
   pointer-events: none;
   z-index: 0;
 }
+
 .auth-split {
   min-height: 100vh;
-  display: flex;
-  flex-direction: row;
+  width: 100%;
 }
+
 .auth-left {
-  flex: 1 1 50%;
-  min-width: 330px;
   background: transparent;
   color: #fff;
   padding: 42px 0 42px 68px;
@@ -471,15 +496,12 @@ export default {
   overflow: hidden;
   z-index: 2;
 }
+
 .auth-logo {
   width: 136px;
   margin-top: 18px;
   margin-bottom: 48px;
   transition: transform 0.4s ease;
-}
-
-.logo-3d {
-  transition: transform 0.5s ease;
 }
 
 .logo-3d:hover {
@@ -517,7 +539,6 @@ export default {
   }
 }
 
-/* Mini Stats */
 .stats-mini {
   display: flex;
   gap: 40px;
@@ -559,22 +580,27 @@ export default {
 }
 
 .auth-right {
-  flex: 1 1 50%;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 330px;
+  flex: 0 0 100%;
+  min-width: 0;
+  min-height: 100vh;
   border-radius: 24px 0 0 24px;
 }
-.form-card {
-  background: transparent;
-  width: 100%;
-  margin: 0 auto;
-  color: #191717;
-  border: none;
-  border-radius: 0;
-  padding: 10px 6rem;
+@media (max-width: 991.98px) {
+  .auth-right {
+    background: transparent;
+    border-radius: 0;
+  }
+  
+  .form-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+  }
 }
 
 /* Glassmorphism Form Card */
@@ -617,7 +643,6 @@ export default {
 }
 
 .login-title {
-  font-size: 3rem;
   font-weight: 900;
   letter-spacing: 2px;
   text-align: center;
@@ -904,19 +929,23 @@ export default {
     box-shadow 0.2s,
     border-color 0.2s;
 }
+
 .input-lg.form-control::placeholder {
   color: #aaa;
   font-weight: 500;
   opacity: 1;
 }
+
 .input-lg.form-control:focus {
   background: transparent;
   box-shadow: none;
   border-bottom: 3px solid #b71c1c;
 }
+
 .input-lg.form-control:disabled {
   color: #ccc;
 }
+
 .main-btn {
   background: #b71c1c;
   color: #fff;
@@ -930,17 +959,19 @@ export default {
     background 0.2s,
     color 0.2s;
 }
+
 .main-btn:disabled {
   background: #e7a0a0 !important;
   color: #fff !important;
 }
+
 .login-row {
   color: #191717;
   font-weight: 700;
-  font-size: 1.07rem;
   margin-top: 2rem;
   letter-spacing: 0.1px;
 }
+
 .login-link {
   color: #b71c1c;
   font-weight: bold;
@@ -978,31 +1009,25 @@ export default {
   font-size: 1.1rem;
   margin-bottom: 24px;
 }
-@media (max-width: 991px) {
-  .auth-split {
-    flex-direction: column;
-  }
-  .auth-left,
-  .auth-right {
-    min-width: unset;
-    border-radius: 0 !important;
-  }
-  .auth-right {
-    border-radius: 0;
-  }
-  .form-card {
-    padding: 2rem 3rem;
+
+@media (min-width: 992px) {
+  .rounded-start-lg-5 {
+    border-top-left-radius: 1rem !important;
+    border-bottom-left-radius: 1rem !important;
   }
 }
-@media (max-width: 600px) {
-  .login-title {
-    font-size: 2rem;
+
+@media (max-width: 1200px) {
+  .auth-wrapper {
+    background: #191717;
   }
-  .auth-logo {
-    width: 110px;
+  .auth-wrapper::before {
+    background: none !important;
   }
-  .tagline-split {
-    font-size: 1.1rem;
+  body {
+    background: #191717;
   }
 }
+
+
 </style>

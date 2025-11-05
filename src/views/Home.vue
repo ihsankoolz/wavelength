@@ -168,9 +168,10 @@
               <button
                 v-if="currentSongPage > 0"
                 @click="previousSongPage"
-                class="carousel-arrow left"
+                class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
+                aria-label="Previous songs"
               >
-                <i class="bi bi-chevron-left"></i>
+                <i class="bi bi-chevron-left fs-5"></i>
               </button>
 
               <div class="songs-carousel">
@@ -314,9 +315,10 @@
               <button
                 v-if="currentSongPage < totalSongPages - 1"
                 @click="nextSongPage"
-                class="carousel-arrow right"
+                class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
+                aria-label="Next songs"
               >
-                <i class="bi bi-chevron-right"></i>
+                <i class="bi bi-chevron-right fs-5"></i>
               </button>
             </div>
           </section>
@@ -335,10 +337,10 @@
               <button
                 v-if="currentArtistPage > 0"
                 @click="previousArtistPage"
-                class="carousel-arrow left"
+                class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
                 aria-label="Previous artists"
               >
-                <i class="bi bi-chevron-left"></i>
+                <i class="bi bi-chevron-left fs-5"></i>
               </button>
 
               <div class="artists-carousel">
@@ -363,10 +365,10 @@
               <button
                 v-if="currentArtistPage < totalArtistPages - 1"
                 @click="nextArtistPage"
-                class="carousel-arrow right"
+                class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
                 aria-label="Next artists"
               >
-                <i class="bi bi-chevron-right"></i>
+                <i class="bi bi-chevron-right fs-5"></i>
               </button>
             </div>
           </section>
@@ -396,10 +398,10 @@
               <button
                 v-if="currentEventPage > 0"
                 @click="previousEventPage"
-                class="carousel-arrow left"
+                class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
                 aria-label="Previous events"
               >
-                <i class="bi bi-chevron-left"></i>
+                <i class="bi bi-chevron-left fs-5"></i>
               </button>
 
               <div class="events-carousel">
@@ -433,10 +435,10 @@
               <button
                 v-if="currentEventPage < totalEventPages - 1"
                 @click="nextEventPage"
-                class="carousel-arrow right"
+                class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
                 aria-label="Next events"
               >
-                <i class="bi bi-chevron-right"></i>
+                <i class="bi bi-chevron-right fs-5"></i>
               </button>
             </div>
 
@@ -1360,50 +1362,7 @@ export default {
   padding: 0;
 }
 
-.carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: white;
-  border: none;
-  color: #000;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.carousel-container:hover .carousel-arrow {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.carousel-arrow:hover {
-  background: #bb1814;
-  color: white;
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.carousel-arrow.left {
-  left: -25px;
-}
-
-.carousel-arrow.right {
-  right: -25px;
-}
-
-.carousel-arrow i {
-  font-size: 1.5rem;
-}
+/* Arrows now use Bootstrap utilities; custom arrow CSS removed */
 
 .songs-carousel {
   overflow-x: hidden;
