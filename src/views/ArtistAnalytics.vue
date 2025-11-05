@@ -183,7 +183,7 @@
                   <div v-if="musicLinks.length === 0" class="text-center py-4">
                     <i class="bi bi-music-note fs-1 mb-3"></i>
                     <p>No music uploaded yet. Add your first track!</p>
-                    <router-link to="/artist/my-music" class="btn btn-primary">
+                    <router-link to="/artist/dashboard" class="btn btn-primary">
                       Upload Music
                     </router-link>
                   </div>
