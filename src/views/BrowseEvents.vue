@@ -50,12 +50,12 @@
     </div>
 
     <!-- Main Content -->
-    <div class="content-wrapper">
-      <div class="container py-4">
+    <div class="content-wrapper mt-5 mt-md-4">
+      <div class="container py-3 py-md-5">
         <!-- Header -->
-        <div class="welcome-section mb-5">
+        <div class="welcome-section mb-4 mb-md-5 pt-3 pt-md-4 pt-lg-5">
           <h1 class="display-5 fw-bold mb-2">UPCOMING EVENTS</h1>
-          <p class="text-muted">Discover live music performances happening in Singapore</p>
+          <p class="text-muted fs-6 fs-md-5">Discover live music performances happening in Singapore</p>
         </div>
 
         <!-- Filter Section -->
@@ -64,7 +64,7 @@
             <h5 class="card-title mb-3">FILTER EVENTS</h5>
             <div class="row g-3">
               <!-- Date Range Filter -->
-              <div class="col-md-3">
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                 <label class="form-label">Time Period:</label>
                 <select class="form-select" v-model="filters.dateRange">
                   <option value="all">All Upcoming</option>
@@ -76,13 +76,13 @@
               </div>
 
               <!-- Custom Date (shows only if custom selected) -->
-              <div class="col-md-3" v-if="filters.dateRange === 'custom'">
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3" v-if="filters.dateRange === 'custom'">
                 <label class="form-label">Custom Date:</label>
                 <input type="date" class="form-control custom-date-input" v-model="filters.customDate" />
               </div>
 
               <!-- Genre Filter -->
-              <div class="col-md-3">
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                 <label class="form-label">Genre:</label>
                 <select class="form-select" v-model="filters.genre">
                   <option value="">All Genres</option>
@@ -93,13 +93,13 @@
               </div>
 
               <!-- Location Filter -->
-              <div class="col-md-3">
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                 <label class="form-label">Location:</label>
                 <input type="text" class="form-control" v-model="filters.location" placeholder="Search by Venue" />
               </div>
 
               <!-- Sort By -->
-              <div class="col-md-3">
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                 <label class="form-label">Sort By:</label>
                 <select class="form-select" v-model="filters.sortBy">
                   <option value="date">Date (Earliest First)</option>
@@ -110,7 +110,7 @@
               </div>
             </div>
 
-            <div class="mt-3 d-flex gap-3 justify-content-center">
+            <div class="mt-3 d-flex flex-column flex-sm-row gap-2 gap-sm-3 justify-content-center">
               <button class="btn btn-primary" @click="applyFilters">APPLY FILTERS</button>
               <button class="btn btn-secondary" @click="clearFilters">CLEAR</button>
             </div>
@@ -155,8 +155,8 @@
             <p class="text-muted">No events found matching your criteria.</p>
           </div>
           <!-- Events Grid -->
-          <div v-else class="row g-4">
-            <div v-for="event in displayedEvents" :key="event.id" class="col-12 col-md-6 col-lg-4">
+          <div v-else class="row g-3 g-md-4">
+            <div v-for="event in displayedEvents" :key="event.id" class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
               <EventCard :event="event" @interest-changed="handleInterestChange" />
             </div>
           </div>
@@ -488,26 +488,9 @@ export default {
 .content-wrapper {
   position: relative;
   z-index: 1;
-  margin-top: 65px;
   padding-bottom: 40px;
 }
 
-.welcome-section h1 {
-  color: #fff;
-  font-weight: 700;
-  font-size: 2.3rem;
-  margin-bottom: 0.5rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding-top: 2rem;
-}
-
-.welcome-section p {
-  color: #d4d5db;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
 
 
 .card {
@@ -599,20 +582,6 @@ input::placeholder {
   opacity: 1;
 }
 
-@media (max-width: 768px) {
-  .content-wrapper {
-    margin-top: 80px;
-  }
-
-  .welcome-section h1 {
-    font-size: 2rem;
-    padding-top: 1rem;
-  }
-
-  .welcome-section p {
-    font-size: 0.85rem;
-  }
-}
 
 ::-webkit-scrollbar {
   width: 8px;

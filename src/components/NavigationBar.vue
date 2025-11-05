@@ -1,12 +1,12 @@
 <template>
   <nav class="navbar-custom navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
+    <div class="container-fluid px-2 px-md-3 px-lg-4">
       <!-- Logo and Search Bar -->
-      <div class="d-flex align-items-center logo-search-container">
+      <div class="d-flex align-items-center logo-search-container flex-wrap flex-lg-nowrap gap-2 gap-md-3 gap-lg-4">
         <router-link to="/home" class="logo-container">
           <img src="/assets/logo1.png" alt="Wavelength" class="navbar-logo" />
         </router-link>
-        <div class="search-bar d-none d-lg-flex position-relative">
+        <div class="search-bar d-none d-lg-flex position-relative w-100 w-lg-auto">
           <i class="bi bi-search search-icon"></i>
           <input
             ref="searchInput"
@@ -100,9 +100,9 @@
         </div>
       </div>
 
-      <!-- Navigation Links and Icons -->
-      <div class="d-flex align-items-center">
-        <ul class="nav-links d-none d-lg-flex">
+        <!-- Navigation Links and Icons -->
+      <div class="d-flex align-items-center gap-2 gap-md-3 gap-lg-4">
+        <ul class="nav-links d-none d-lg-flex mb-0 gap-2 gap-lg-4">
           <li>
             <router-link
               to="/home"
@@ -151,7 +151,7 @@
           </li>
         </ul>
 
-        <div class="nav-icons d-none d-lg-flex">
+        <div class="nav-icons d-none d-lg-flex ms-2 ms-md-3 ms-lg-4 gap-2 gap-md-3 gap-lg-4">
           <!-- Notification Bell -->
           <NotificationBell />
 
@@ -202,20 +202,22 @@
         </div>
       </div>
 
-      <!-- Mobile Toggle Button -->
+      <!-- Hamburger Toggle Button (shown below lg breakpoint) -->
       <button
         class="navbar-toggler d-lg-none ms-2"
         type="button"
         @click="mobileMenuOpen = !mobileMenuOpen"
         aria-label="Toggle navigation"
+        aria-controls="mobileNavbar"
+        :aria-expanded="mobileMenuOpen"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Mobile Menu -->
-      <div class="collapse navbar-collapse d-lg-none" :class="{ show: mobileMenuOpen }">
-        <div class="mobile-search-bar mb-3">
-          <div class="search-bar position-relative">
+      <!-- Mobile Menu (shown below lg breakpoint when hamburger is clicked) -->
+      <div class="collapse navbar-collapse d-lg-none" :class="{ show: mobileMenuOpen }" id="mobileNavbar">
+        <div class="mobile-search-bar mb-3 px-2 px-md-3">
+          <div class="search-bar position-relative w-100">
             <i class="bi bi-search search-icon"></i>
             <input
               ref="searchInputMobile"
@@ -307,7 +309,7 @@
             </div>
           </div>
         </div>
-        <ul class="navbar-nav">
+        <ul class="navbar-nav px-2 px-md-3">
           <li class="nav-item">
             <router-link
               to="/home"
@@ -359,7 +361,7 @@
             </router-link>
           </li>
         </ul>
-        <div class="mobile-nav-icons d-flex align-items-center justify-content-between mt-3">
+        <div class="mobile-nav-icons d-flex align-items-center justify-content-between mt-3 px-2 px-md-3 gap-3">
           <NotificationBell />
           <div class="dropdown">
             <button
@@ -457,6 +459,8 @@ export default {
   },
   async mounted() {
     await this.loadUserData()
+    // Close mobile menu when window is resized to large screens
+    window.addEventListener('resize', this.handleResize)
   },
   methods: {
     async loadUserData() {
@@ -730,6 +734,13 @@ export default {
         year: 'numeric',
       })
     },
+    
+    handleResize() {
+      // Close mobile menu when window is resized to large screens (>= 992px)
+      if (window.innerWidth >= 992 && this.mobileMenuOpen) {
+        this.mobileMenuOpen = false
+      }
+    },
   },
   beforeUnmount() {
     // Clean up timeouts when component is destroyed
@@ -739,6 +750,8 @@ export default {
     if (this.blurTimeout) {
       clearTimeout(this.blurTimeout)
     }
+    // Remove resize listener
+    window.removeEventListener('resize', this.handleResize)
   },
   watch: {
     // Close mobile menu when route changes
@@ -783,7 +796,6 @@ export default {
   background-color: rgba(26, 26, 26, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  padding: 1rem 2rem;
   border-bottom: 1px solid rgba(51, 51, 51, 0.5);
   z-index: 1000;
   transition: all 0.3s ease;
@@ -804,9 +816,6 @@ export default {
   width: 100%;
 }
 
-.logo-search-container {
-  gap: 2rem;
-}
 
 .logo-container {
   display: flex;
@@ -824,7 +833,8 @@ export default {
 
 /* Search Bar */
 .search-bar {
-  width: 350px;
+  width: 100%;
+  max-width: 350px;
   display: flex;
   align-items: center;
   flex-shrink: 0;
@@ -875,7 +885,6 @@ export default {
 /* Navigation Links */
 .nav-links {
   display: flex;
-  gap: 2rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -907,9 +916,7 @@ export default {
 /* Nav Icons */
 .nav-icons {
   display: flex;
-  gap: 1.5rem;
   align-items: center;
-  margin-left: 1.5rem;
 }
 
 .nav-icons i {
@@ -1179,6 +1186,17 @@ export default {
   transition: all 0.3s ease-in-out;
 }
 
+/* Ensure mobile menu is hidden on large screens */
+@media (min-width: 992px) {
+  .navbar-collapse.d-lg-none {
+    display: none !important;
+  }
+  
+  .navbar-collapse.d-lg-none.show {
+    display: none !important;
+  }
+}
+
 .navbar-nav .nav-link {
   color: #ffffff;
   text-transform: uppercase;
@@ -1193,7 +1211,7 @@ export default {
 }
 
 .mobile-search-bar {
-  padding: 0 1rem;
+  width: 100%;
 }
 
 .mobile-search-bar .search-bar {
@@ -1202,8 +1220,7 @@ export default {
 }
 
 .mobile-nav-icons {
-  padding: 0 1rem;
-  gap: 1.5rem;
+  width: 100%;
 }
 
 .nav-icon-mobile {
@@ -1232,74 +1249,4 @@ export default {
   color: inherit;
 }
 
-/* Responsive Styles */
-@media (max-width: 991.98px) {
-  .navbar-custom {
-    padding: 1rem;
-  }
-
-  .nav-links {
-    gap: 1rem;
-    font-size: 12px;
-  }
-
-  .search-bar {
-    width: 100%;
-  }
-
-  .logo-search-container {
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar-custom {
-    flex-wrap: wrap;
-  }
-
-  .search-bar {
-    order: 3;
-    width: 100%;
-    margin-top: 1rem;
-  }
-
-  .nav-links {
-    order: 2;
-  }
-
-  .search-results-dropdown {
-    position: fixed !important;
-    left: 1rem;
-    right: 1rem;
-    top: auto !important;
-    width: auto !important;
-    max-height: 60vh;
-    margin-top: 0.5rem;
-    transform: none !important;
-  }
-
-  .dropdown-menu {
-    position: static !important;
-    transform: none !important;
-    width: 100%;
-    margin-top: 0.5rem !important;
-    border: 2px solid rgba(187, 24, 20, 0.3);
-    background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
-  }
-
-  .dropdown-item {
-    color: #fff;
-  }
-
-  .dropdown-item:hover {
-    background-color: #bb1814;
-    color: #fff;
-  }
-}
-
-@media (min-width: 992px) {
-  .navbar-collapse.d-lg-none {
-    display: none !important;
-  }
-}
 </style>
