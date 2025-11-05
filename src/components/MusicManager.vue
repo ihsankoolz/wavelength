@@ -1070,6 +1070,7 @@ export default {
   width: 90%;
   max-height: 90vh;
   margin: 1.75rem auto;
+  margin-top: 140px;
 }
 
 .modal-content {
