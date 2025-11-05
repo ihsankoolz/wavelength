@@ -165,16 +165,7 @@
             </div>
           </div>
 
-          <!-- api data  -->
-          <div v-if="songstatsLoading">Loading Songstats batch...</div>
-            <ul v-else>
-              <li v-for="item in songstatsResults" :key="item.name">
-                {{ item.name }} | {{ item.songstats_artist_id }} | 
-                <img v-if="item.avatar" :src="item.avatar" width="48" />
-              </li>
-            </ul>
-
-
+      
           <!-- Tab Content -->
           <div class="row">
             <div class="col-12">
