@@ -8,44 +8,84 @@
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
-          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+          <animate
+            attributeName="d"
+            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
-                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
+            dur="3s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+          <animate
+            attributeName="d"
+            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
-                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
+            dur="4s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
-          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+          <animate
+            attributeName="d"
+            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
-                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
+            dur="5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+          <animate
+            attributeName="d"
+            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
-                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
+            dur="2.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
-          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+          <animate
+            attributeName="d"
+            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
-                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
+            dur="3.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
-          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+          <animate
+            attributeName="d"
+            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
-                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
+            dur="4.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
-          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+          <animate
+            attributeName="d"
+            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
-                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
+            dur="6s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
-          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+          <animate
+            attributeName="d"
+            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
-                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
+            dur="2s"
+            repeatCount="indefinite"
+          />
         </path>
       </svg>
     </div>
@@ -72,7 +112,9 @@
           <!-- Recommended Songs Section -->
           <section class="recommended-songs-section mb-5">
             <!-- Filter and Sort Controls -->
-            <div class="controls-bar mb-4 d-flex flex-wrap gap-3 align-items-center justify-content-between">
+            <div
+              class="controls-bar mb-4 d-flex flex-wrap gap-3 align-items-center justify-content-between"
+            >
               <!-- Filter Header Text -->
               <div class="filter-header">
                 <h2 class="h3 mb-1">FILTER SONGS</h2>
@@ -84,8 +126,11 @@
                 <!-- Genre Filter -->
                 <div class="filter-group">
                   <label class="small text-muted me-2">Filter by Genre:</label>
-                  <select v-model="selectedGenreFilter" class="form-select form-select-sm"
-                    style="width: auto; display: inline-block">
+                  <select
+                    v-model="selectedGenreFilter"
+                    class="form-select form-select-sm"
+                    style="width: auto; display: inline-block"
+                  >
                     <option value="">All Genres</option>
                     <option v-for="genre in allGenres" :key="genre" :value="genre">
                       {{ genre }}
@@ -96,8 +141,11 @@
                 <!-- Sort Options -->
                 <div class="sort-group">
                   <label class="small text-muted me-2">Sort by:</label>
-                  <select v-model="selectedSort" class="form-select form-select-sm"
-                    style="width: auto; display: inline-block">
+                  <select
+                    v-model="selectedSort"
+                    class="form-select form-select-sm"
+                    style="width: auto; display: inline-block"
+                  >
                     <option value="recommended">Recommended</option>
                     <option value="popular">Most Popular</option>
                     <option value="recent">Recently Added</option>
@@ -117,42 +165,81 @@
             <!-- Song Cards Carousel -->
             <div v-else class="carousel-container">
               <!-- Navigation Arrows -->
-              <button v-if="currentSongPage > 0" @click="previousSongPage" class="carousel-arrow left"
-                aria-label="Previous songs">
+              <button
+                v-if="currentSongPage > 0"
+                @click="previousSongPage"
+                class="carousel-arrow left"
+                aria-label="Previous songs"
+              >
                 <i class="bi bi-chevron-left"></i>
               </button>
 
               <div class="songs-carousel">
-                <div class="songs-grid-carousel" :key="songCarouselKey"
-                  :style="{ transform: `translateX(-${currentSongPage * 100}%)` }">
-                  <div v-for="(page, pageIndex) in paginatedSongs" :key="`page-${pageIndex}-${songCarouselKey}`"
-                    class="carousel-page">
-                    <div v-for="song in page" :key="`${song.artistId}_${song.id}`" class="song-card"
-                      @click="openSongDetail(song)">
+                <div
+                  class="songs-grid-carousel"
+                  :key="songCarouselKey"
+                  :style="{ transform: `translateX(-${currentSongPage * 100}%)` }"
+                >
+                  <div
+                    v-for="(page, pageIndex) in paginatedSongs"
+                    :key="`page-${pageIndex}-${songCarouselKey}`"
+                    class="carousel-page"
+                  >
+                    <div
+                      v-for="song in page"
+                      :key="`${song.artistId}_${song.id}`"
+                      class="song-card"
+                      @click="openSongDetail(song)"
+                    >
                       <!-- Embedded Player at Top -->
                       <div class="player-container" @click.stop="handlePlayerClick(song)">
                         <!-- Spotify Embed -->
-                        <iframe v-if="song.platform === 'spotify'"
+                        <iframe
+                          v-if="song.platform === 'spotify'"
                           :src="`https://open.spotify.com/embed/track/${song.spotifyId}?utm_source=generator`"
-                          width="100%" height="232" frameborder="0" allowtransparency="true" allow="encrypted-media"
-                          loading="lazy" style="min-height: 232px"></iframe>
+                          width="100%"
+                          height="232"
+                          frameborder="0"
+                          allowtransparency="true"
+                          allow="encrypted-media"
+                          loading="lazy"
+                          style="min-height: 232px"
+                        ></iframe>
 
                         <!-- SoundCloud Embed -->
-                        <iframe v-else-if="song.platform === 'soundcloud'" width="100%" height="232" scrolling="no"
-                          frameborder="no" allow="autoplay"
+                        <iframe
+                          v-else-if="song.platform === 'soundcloud'"
+                          width="100%"
+                          height="232"
+                          scrolling="no"
+                          frameborder="no"
+                          allow="autoplay"
                           :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
                             song.url,
                           )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
-                          loading="lazy"></iframe>
+                          loading="lazy"
+                        ></iframe>
 
                         <!-- YouTube Embed -->
-                        <iframe v-else-if="song.platform === 'youtube'" width="100%" height="232"
-                          :src="`https://www.youtube.com/embed/${song.youtubeId}`" frameborder="0"
+                        <iframe
+                          v-else-if="song.platform === 'youtube'"
+                          width="100%"
+                          height="232"
+                          :src="`https://www.youtube.com/embed/${song.youtubeId}`"
+                          frameborder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowfullscreen loading="lazy"></iframe>
+                          allowfullscreen
+                          loading="lazy"
+                        ></iframe>
 
                         <!-- Fallback Link -->
-                        <a v-else :href="song.url" target="_blank" rel="noopener noreferrer" class="song-link">
+                        <a
+                          v-else
+                          :href="song.url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="song-link"
+                        >
                           🎵 Open {{ song.platform }} →
                         </a>
                       </div>
@@ -162,12 +249,19 @@
                         <!-- Left Side: Artist Info & Genre Tags -->
                         <div class="song-footer-left">
                           <div class="song-artist-info" @click.stop>
-                            <img :src="song.artistPhoto || '/default-avatar.png'" :alt="song.artistName"
-                              class="artist-photo-bottom" @click="navigateToArtist(song.artistId)"
-                              style="cursor: pointer" />
+                            <img
+                              :src="song.artistPhoto || '/default-avatar.png'"
+                              :alt="song.artistName"
+                              class="artist-photo-bottom"
+                              @click="navigateToArtist(song.artistId)"
+                              style="cursor: pointer"
+                            />
                             <div class="song-details">
                               <div class="song-title-bottom">{{ song.title }}</div>
-                              <router-link :to="`/artist/${song.artistId}`" class="artist-name-bottom">
+                              <router-link
+                                :to="`/artist/${song.artistId}`"
+                                class="artist-name-bottom"
+                              >
                                 {{ song.artistName }}
                               </router-link>
                             </div>
@@ -175,7 +269,11 @@
 
                           <!-- Genre Tags Below Artist Info -->
                           <div class="genre-tags" v-if="song.genres && song.genres.length > 0">
-                            <span v-for="genre in song.genres.slice(0, 3)" :key="genre" class="genre-tag">
+                            <span
+                              v-for="genre in song.genres.slice(0, 3)"
+                              :key="genre"
+                              class="genre-tag"
+                            >
                               {{ genre }}
                             </span>
                           </div>
@@ -183,17 +281,26 @@
 
                         <!-- Right Side: Stats & Actions -->
                         <div class="song-stats">
-                          <button @click.stop="toggleLike(song)" class="stat-button"
+                          <button
+                            @click.stop="toggleLike(song)"
+                            class="stat-button"
                             :class="{ liked: isSongLiked(song) }"
-                            :disabled="likingInProgress[`${song.artistId}_${song.id}`]" :title="isSongLiked(song)
-                              ? 'Unlike and remove from saved songs'
-                              : 'Like this song and save it to My Music'
-                              ">
+                            :disabled="likingInProgress[`${song.artistId}_${song.id}`]"
+                            :title="
+                              isSongLiked(song)
+                                ? 'Unlike and remove from saved songs'
+                                : 'Like this song and save it to My Music'
+                            "
+                          >
                             <span class="icon">❤️</span>
                             <span class="count">{{ song.likes || 0 }}</span>
                           </button>
 
-                          <button @click.stop="openSongDetail(song)" class="stat-button" title="View and post comments">
+                          <button
+                            @click.stop="openSongDetail(song)"
+                            class="stat-button"
+                            title="View and post comments"
+                          >
                             <span class="icon">💬</span>
                             <span class="count">{{ song.comments?.length || 0 }}</span>
                           </button>
@@ -204,8 +311,12 @@
                 </div>
               </div>
 
-              <button v-if="currentSongPage < totalSongPages - 1" @click="nextSongPage" class="carousel-arrow right"
-                aria-label="Next songs">
+              <button
+                v-if="currentSongPage < totalSongPages - 1"
+                @click="nextSongPage"
+                class="carousel-arrow right"
+                aria-label="Next songs"
+              >
                 <i class="bi bi-chevron-right"></i>
               </button>
             </div>
@@ -222,15 +333,25 @@
 
             <!-- Artist Cards Carousel -->
             <div class="carousel-container">
-              <button v-if="currentArtistPage > 0" @click="previousArtistPage" class="carousel-arrow left"
-                aria-label="Previous artists">
+              <button
+                v-if="currentArtistPage > 0"
+                @click="previousArtistPage"
+                class="carousel-arrow left"
+                aria-label="Previous artists"
+              >
                 <i class="bi bi-chevron-left"></i>
               </button>
 
               <div class="artists-carousel">
-                <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentArtistPage * 100}%)` }">
-                  <div v-for="(page, pageIndex) in paginatedArtists" :key="`artist-page-${pageIndex}`"
-                    class="carousel-page artists-page">
+                <div
+                  class="artists-grid-carousel"
+                  :style="{ transform: `translateX(-${currentArtistPage * 100}%)` }"
+                >
+                  <div
+                    v-for="(page, pageIndex) in paginatedArtists"
+                    :key="`artist-page-${pageIndex}`"
+                    class="carousel-page artists-page"
+                  >
                     <div v-for="artist in page" :key="artist.id">
                       <ArtistCard :artist="artist" />
                     </div>
@@ -238,8 +359,12 @@
                 </div>
               </div>
 
-              <button v-if="currentArtistPage < totalArtistPages - 1" @click="nextArtistPage"
-                class="carousel-arrow right" aria-label="Next artists">
+              <button
+                v-if="currentArtistPage < totalArtistPages - 1"
+                @click="nextArtistPage"
+                class="carousel-arrow right"
+                aria-label="Next artists"
+              >
                 <i class="bi bi-chevron-right"></i>
               </button>
             </div>
@@ -267,15 +392,25 @@
             <!-- Events Carousel -->
             <div v-else-if="upcomingEvents.length > 0" class="carousel-container">
               <!-- Navigation Arrows -->
-              <button v-if="currentEventPage > 0" @click="previousEventPage" class="carousel-arrow left"
-                aria-label="Previous events">
+              <button
+                v-if="currentEventPage > 0"
+                @click="previousEventPage"
+                class="carousel-arrow left"
+                aria-label="Previous events"
+              >
                 <i class="bi bi-chevron-left"></i>
               </button>
 
               <div class="events-carousel">
-                <div class="events-grid-carousel" :style="{ transform: `translateX(-${currentEventPage * 100}%)` }">
-                  <div v-for="(page, pageIndex) in paginatedEvents" :key="`event-page-${pageIndex}`"
-                    class="carousel-page events-page">
+                <div
+                  class="events-grid-carousel"
+                  :style="{ transform: `translateX(-${currentEventPage * 100}%)` }"
+                >
+                  <div
+                    v-for="(page, pageIndex) in paginatedEvents"
+                    :key="`event-page-${pageIndex}`"
+                    class="carousel-page events-page"
+                  >
                     <div v-for="event in page" :key="event.id">
                       <EventCard :event="event" @interest-changed="handleEventInterestChange" />
                     </div>
@@ -283,8 +418,12 @@
                 </div>
               </div>
 
-              <button v-if="currentEventPage < totalEventPages - 1" @click="nextEventPage" class="carousel-arrow right"
-                aria-label="Next events">
+              <button
+                v-if="currentEventPage < totalEventPages - 1"
+                @click="nextEventPage"
+                class="carousel-arrow right"
+                aria-label="Next events"
+              >
                 <i class="bi bi-chevron-right"></i>
               </button>
             </div>
@@ -300,8 +439,12 @@
     </div>
 
     <!-- Song Detail Modal (combines embed + comments) -->
-    <SongDetailModal :show="showSongDetailModal" :song="selectedSongForDetail" @close="closeSongDetailModal"
-      @comment-posted="handleDetailCommentPosted" />
+    <SongDetailModal
+      :show="showSongDetailModal"
+      :song="selectedSongForDetail"
+      @close="closeSongDetailModal"
+      @comment-posted="handleDetailCommentPosted"
+    />
   </div>
 </template>
 
@@ -318,6 +461,7 @@ import {
   filterSongsByGenre,
   sortSongs,
   getUserProfile,
+  getRecommendedArtists,
 } from '@/utils/recommendationEngine'
 import { toggleSongLike, getUserLikedSongs } from '@/utils/musicInteractions'
 import { toggleFollowArtist, getUserFollowedArtists } from '@/utils/artistInteractions'
@@ -489,12 +633,8 @@ export default {
         const endIndex = Math.min(startIndex + this.artistsPerPage, this.recommendedArtists.length)
         pages.push(this.recommendedArtists.slice(startIndex, endIndex))
 
-        // For the next page, start from the overlap point (keep last 1 artist)
-        if (endIndex < this.recommendedArtists.length) {
-          startIndex = endIndex - 1 // Overlap of 1 artist
-        } else {
-          break
-        }
+        // Move to next completely new set (no overlap)
+        startIndex = endIndex
       }
       return pages
     },
@@ -631,45 +771,18 @@ export default {
           ...doc.data(),
         }))
 
-        // Filter out current user if they are an artist
-        this.allArtists = this.allArtists.filter((artist) => artist.id !== this.userId)
+        // Get recommended artists using the recommendation engine
+        this.recommendedArtists = getRecommendedArtists(
+          this.allArtists,
+          this.userGenres,
+          this.userId,
+          { limit: 20 },
+        )
 
-        // Get top 6 artists for discovery section
-        this.recommendedArtists = this.getRecommendedArtists()
+        console.log('👥 Loaded', this.recommendedArtists.length, 'recommended artists')
       } catch (error) {
         console.error('Error loading artists:', error)
       }
-    },
-
-    getRecommendedArtists() {
-      if (this.userGenres.length === 0) {
-        // No preferences - show popular artists
-        return this.allArtists
-          .sort((a, b) => (b.followerCount || 0) - (a.followerCount || 0))
-          .slice(0, 6)
-      }
-
-      // Score artists by genre match
-      const scoredArtists = this.allArtists.map((artist) => {
-        let score = 0
-        if (artist.genres && Array.isArray(artist.genres)) {
-          artist.genres.forEach((artistGenre) => {
-            if (this.userGenres.includes(artistGenre)) {
-              score += 1
-            }
-          })
-        }
-        return { ...artist, score }
-      })
-
-      return scoredArtists
-        .sort((a, b) => {
-          if (b.score !== a.score) {
-            return b.score - a.score
-          }
-          return (b.followerCount || 0) - (a.followerCount || 0)
-        })
-        .slice(0, 6)
     },
 
     updateArtistsPerPage() {
@@ -1044,7 +1157,6 @@ export default {
   padding-bottom: 40px;
 }
 
-
 /* Dynamic Wave Background */
 .wave-svg {
   position: fixed;
@@ -1324,7 +1436,7 @@ export default {
   padding: 0;
 }
 
-.carousel-page.artists-page>div {
+.carousel-page.artists-page > div {
   width: 100%;
   max-width: 100%;
 }
