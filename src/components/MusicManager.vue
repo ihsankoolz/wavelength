@@ -2,36 +2,36 @@
   <div class="music-manager">
     <div class="music-library-section">
       <!-- Music Grid Header -->
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="music-library-title">MUSIC LIBRARY</h2>
-        <button class="btn-add-music" @click="openAddModal">+ ADD MUSIC</button>
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3 gap-md-0">
+        <h2 class="music-library-title fs-1 fs-md-2">MUSIC LIBRARY</h2>
+        <button class="btn-add-music px-2 px-md-3 py-2 fs-6 fs-md-5" @click="openAddModal">+ ADD MUSIC</button>
       </div>
 
       <!-- Filter Tabs -->
-      <div v-if="musicLinks.length > 0" class="filter-tabs mb-4">
+      <div v-if="musicLinks.length > 0" class="filter-tabs d-flex flex-wrap overflow-x-auto overflow-md-visible mb-4 gap-2 gap-md-3">
         <button
-          class="filter-tab"
+          class="filter-tab text-nowrap px-2 px-md-3 py-2 fs-6 fs-md-5"
           :class="{ active: filterType === 'all' }"
           @click="filterType = 'all'"
         >
           ALL ({{ musicLinks.length }})
         </button>
         <button
-          class="filter-tab"
+          class="filter-tab text-nowrap px-2 px-md-3 py-2 fs-6 fs-md-5"
           :class="{ active: filterType === 'single' }"
           @click="filterType = 'single'"
         >
           SINGLES ({{ getSongsByType('single').length }})
         </button>
         <button
-          class="filter-tab"
+          class="filter-tab text-nowrap px-2 px-md-3 py-2 fs-6 fs-md-5"
           :class="{ active: filterType === 'album' }"
           @click="filterType = 'album'"
         >
           ALBUMS ({{ getSongsByType('album').length }})
         </button>
         <button
-          class="filter-tab"
+          class="filter-tab text-nowrap px-2 px-md-3 py-2 fs-6 fs-md-5"
           :class="{ active: filterType === 'video' }"
           @click="filterType = 'video'"
         >
@@ -41,16 +41,17 @@
     </div>
 
     <!-- Music Grid -->
-    <div v-if="filteredMusicLinks.length > 0" class="song-carousel">
-      <div v-for="music in displayedMusicLinks" :key="music.id" class="song-card">
+    <div v-if="filteredMusicLinks.length > 0" class="row g-3 g-md-4">
+      <div v-for="music in displayedMusicLinks" :key="music.id" class="col-12 col-sm-6 col-md-6 col-lg-4">
+        <div class="song-card p-3 p-md-4">
         <!-- Song Header - Just Title and Platform/Type Badges -->
-        <div class="song-header">
+        <div class="song-header d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
           <div class="song-info">
             <h6 class="song-title">{{ music.title }}</h6>
           </div>
 
           <!-- Platform and Type Badges -->
-          <div class="badges-container">
+          <div class="badges-container d-flex align-items-center gap-2">
             <!-- Music Type Badge -->
             <span v-if="music.type" class="type-badge" :class="getTypeBadgeClass(music.type)">
               {{ music.type }}
@@ -130,16 +131,16 @@
         </div>
 
         <!-- Bottom Row: Genre Tags Left, Action Buttons Right -->
-        <div class="song-bottom">
+        <div class="song-bottom d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
           <!-- Genre Tags -->
-          <div v-if="music.genres && music.genres.length > 0" class="genres-container">
+          <div v-if="music.genres && music.genres.length > 0" class="genres-container d-flex flex-wrap gap-2">
             <span v-for="genre in music.genres.slice(0, 2)" :key="genre" class="genre-tag">
               {{ genre }}
             </span>
           </div>
 
           <!-- Action Buttons -->
-          <div class="song-actions">
+          <div class="song-actions d-flex gap-2">
             <button class="btn-action-edit" @click="editMusic(music)" title="Edit">
               <i class="bi bi-pencil"></i> Edit
             </button>
@@ -147,6 +148,7 @@
               <i class="bi bi-trash"></i> Delete
             </button>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -701,7 +703,6 @@ export default {
 }
 
 .music-library-title {
-  font-size: 2rem;
   font-weight: bold;
   color: white;
   margin-bottom: 0;
@@ -714,8 +715,6 @@ export default {
   color: white;
   border: none;
   border-radius: 22px;
-  padding: 10px 24px;
-  font-size: 0.95rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -728,25 +727,19 @@ export default {
   transform: translateY(-2px);
 }
 
-/* Filter Tabs */
-.filter-tabs {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
+/* Filter Tabs - Bootstrap utility classes handle flex, gap, and wrap */
 
 .filter-tab {
   background: transparent;
   border: 2px solid rgba(255, 255, 255, 0.3);
   color: white;
-  padding: 8px 20px;
   border-radius: 20px;
   font-weight: 600;
-  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
 }
+
 
 .filter-tab:hover {
   border-color: #bb1814;
@@ -759,19 +752,11 @@ export default {
   color: white;
 }
 
-/* Song Carousel */
-.song-carousel {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  overflow-y: visible;
-}
 
 /* Song Card Styles */
 .song-card {
   background: rgba(35, 35, 38, 0.95);
   border-radius: 16px;
-  padding: 1.5rem;
   transition: all 0.3s ease;
   border: 2px solid rgba(255, 255, 255, 0.1);
   position: relative;
@@ -786,9 +771,6 @@ export default {
 
 /* Song Header */
 .song-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-bottom: 0.75rem;
 }
 
@@ -807,12 +789,7 @@ export default {
   white-space: nowrap;
 }
 
-/* Badges Container */
-.badges-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+/* Badges Container - Bootstrap utility classes handle flex, alignment, and gap */
 
 /* Type Badge */
 .type-badge {
@@ -869,20 +846,12 @@ export default {
 
 /* Bottom Row Layout */
 .song-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-top: 1rem;
   padding-top: 0.75rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Genres Container */
-.genres-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
+/* Genres Container - Bootstrap utility classes handle flex, wrap, and gap */
 
 .genre-tag {
   background: linear-gradient(135deg, #bb1814, #d32f2f);
@@ -895,12 +864,7 @@ export default {
   letter-spacing: 0.5px;
 }
 
-/* Song Actions */
-.song-actions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
+/* Song Actions - Bootstrap utility classes handle flex, gap, and alignment */
 
 .music-item-genres {
   display: flex;
@@ -1405,31 +1369,5 @@ export default {
   transform: translateY(-2px);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .song-carousel {
-    grid-template-columns: 1fr;
-  }
-
-  .filter-tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-
-  .filter-tab {
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .music-library-title {
-    font-size: 1.5rem;
-  }
-}
-
-/* Tablet responsive - 2 columns for medium screens */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .song-carousel {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+/* Responsive styles are handled by Bootstrap utility classes in the template */
 </style>

@@ -4,84 +4,44 @@
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
-          <animate
-            attributeName="d"
-            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
-                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
-            dur="3s"
-            repeatCount="indefinite"
-          />
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
-          <animate
-            attributeName="d"
-            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
-                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
-            dur="4s"
-            repeatCount="indefinite"
-          />
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
-          <animate
-            attributeName="d"
-            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
-                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
-            dur="5s"
-            repeatCount="indefinite"
-          />
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
-          <animate
-            attributeName="d"
-            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
-                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
-            dur="2.5s"
-            repeatCount="indefinite"
-          />
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
-          <animate
-            attributeName="d"
-            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
-                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
-            dur="3.5s"
-            repeatCount="indefinite"
-          />
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
-          <animate
-            attributeName="d"
-            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
-                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
-            dur="4.5s"
-            repeatCount="indefinite"
-          />
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
-          <animate
-            attributeName="d"
-            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
-                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
-            dur="6s"
-            repeatCount="indefinite"
-          />
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
-          <animate
-            attributeName="d"
-            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
-                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
-            dur="2s"
-            repeatCount="indefinite"
-          />
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
         </path>
       </svg>
     </div>
@@ -94,18 +54,16 @@
       <div class="container py-5">
         <!-- EDIT PROFILE Section -->
         <div class="edit-profile-section">
-          <h1 class="section-heading">EDIT PROFILE</h1>
+          <h1 class="section-heading display-4">EDIT PROFILE</h1>
 
           <form @submit.prevent="updateProfile">
-            <div class="profile-info-section">
+            <div
+              class="profile-info-section d-flex flex-column flex-lg-row align-items-center align-items-lg-start gap-4 gap-lg-5 mb-5">
               <!-- Profile Picture (Left) -->
               <div class="profile-image-container">
                 <div class="profile-img-wrapper" @click="selectImage">
-                  <img
-                    :src="previewImage || form.profileImage || defaultPfp"
-                    alt="Profile Picture"
-                    class="profile-img"
-                  />
+                  <img :src="previewImage || form.profileImage || defaultPfp" alt="Profile Picture"
+                    class="profile-img" />
                   <div class="profile-overlay">
                     <span class="overlay-text">Choose Photo</span>
                   </div>
@@ -113,23 +71,17 @@
                     <i class="bi bi-camera"></i>
                   </button>
                 </div>
-                <input
-                  type="file"
-                  ref="fileInput"
-                  accept="image/*"
-                  @change="onFileSelected"
-                  style="display: none"
-                />
+                <input type="file" ref="fileInput" accept="image/*" @change="onFileSelected" style="display: none" />
               </div>
 
               <!-- Display Name & Email (Right) -->
-              <div class="profile-fields">
-                <div class="field-group">
+              <div class="profile-fields flex-grow-1 w-100">
+                <div class="field-group mb-4">
                   <label class="field-label">DISPLAY NAME</label>
                   <input v-model="form.displayName" type="text" class="profile-input" required />
                 </div>
 
-                <div class="field-group">
+                <div class="field-group mb-4">
                   <label class="field-label">EMAIL</label>
                   <input v-model="form.email" type="email" class="profile-input" disabled />
                 </div>
@@ -137,16 +89,11 @@
             </div>
 
             <!-- YOUR GENRE PICKS Section -->
-            <div class="genre-picks-section">
-              <h2 class="genre-heading">YOUR GENRE PICKS</h2>
-              <div class="genres-grid">
-                <div
-                  v-for="genre in availableGenres"
-                  :key="genre"
-                  class="genre-item"
-                  :class="{ selected: form.genres.includes(genre) }"
-                  @click="toggleGenre(genre)"
-                >
+            <div class="genre-picks-section mb-5">
+              <h2 class="genre-heading display-5 mb-4">YOUR GENRE PICKS</h2>
+              <div class="genres-grid row g-3 g-md-4 g-lg-5">
+                <div v-for="genre in availableGenres" :key="genre" class="genre-item col-4 col-sm-3 col-md-2 col-lg-2"
+                  :class="{ selected: form.genres.includes(genre) }" @click="toggleGenre(genre)">
                   <div class="genre-image-wrapper">
                     <img :src="getGenreImage(genre)" :alt="genre" class="genre-image" />
                     <div v-if="form.genres.includes(genre)" class="genre-overlay"></div>
@@ -157,11 +104,12 @@
                   <p class="genre-name">{{ genre.toUpperCase() }}</p>
                 </div>
               </div>
-              <p class="genre-count">{{ form.genres.length }} GENRES SELECTED</p>
+              <p class="genre-count text-center mt-4">{{ form.genres.length }} GENRES SELECTED</p>
             </div>
 
             <!-- Action Buttons -->
-            <div class="action-buttons">
+            <div
+              class="action-buttons d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3 gap-sm-4 mt-5">
               <button type="submit" class="btn-save" :disabled="uploading">
                 <span v-if="uploading" class="spinner-border spinner-border-sm me-2"></span>
                 {{ uploading ? 'Uploading...' : 'SAVE CHANGES' }}
@@ -332,6 +280,12 @@ export default {
   position: relative;
 }
 
+@media (max-width: 991.98px) {
+  .edit-profile-wrapper {
+    padding-top: 80px;
+  }
+}
+
 /* Dynamic Wave Background */
 .wave-svg {
   position: fixed;
@@ -374,13 +328,18 @@ export default {
   padding-bottom: 60px;
 }
 
+@media (max-width: 991.98px) {
+  .content-wrapper {
+    padding-top: 20px;
+  }
+}
+
 .edit-profile-section {
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .section-heading {
-  font-size: 2.5rem;
   font-weight: bold;
   color: white;
   margin-bottom: 40px;
@@ -388,14 +347,20 @@ export default {
   letter-spacing: 2px;
 }
 
-/* Profile Info Section */
-.profile-info-section {
-  display: flex;
-  align-items: flex-start;
-  gap: 40px;
-  margin-bottom: 60px;
-  flex-wrap: wrap;
+/* Use Bootstrap breakpoints for responsive font sizing */
+@media (max-width: 991.98px) {
+  .section-heading {
+    font-size: 2rem;
+  }
 }
+
+@media (max-width: 575.98px) {
+  .section-heading {
+    font-size: 1.5rem;
+  }
+}
+
+/* Profile Info Section - Using Bootstrap utilities now */
 
 .profile-image-container {
   cursor: pointer;
@@ -413,6 +378,13 @@ export default {
   object-fit: cover;
   transition: all 0.3s ease;
   cursor: pointer;
+}
+
+@media (max-width: 991.98px) {
+  .profile-img {
+    width: 180px;
+    height: 180px;
+  }
 }
 
 .profile-img:hover {
@@ -476,14 +448,7 @@ export default {
   transform: scale(1.1);
 }
 
-.profile-fields {
-  flex: 1;
-  min-width: 300px;
-}
-
-.field-group {
-  margin-bottom: 30px;
-}
+/* Profile fields - Using Bootstrap utilities now */
 
 .field-label {
   display: block;
@@ -527,7 +492,6 @@ export default {
 }
 
 .genre-heading {
-  font-size: 2rem;
   font-weight: bold;
   color: white;
   margin-bottom: 30px;
@@ -535,12 +499,14 @@ export default {
   letter-spacing: 1px;
 }
 
-.genres-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 30px;
-  margin-bottom: 30px;
+/* Use Bootstrap breakpoints for responsive font sizing */
+@media (max-width: 991.98px) {
+  .genre-heading {
+    font-size: 1.5rem;
+  }
 }
+
+/* Genres grid - Using Bootstrap row/col system now */
 
 .genre-item {
   text-align: center;
@@ -651,14 +617,7 @@ export default {
   letter-spacing: 1px;
 }
 
-/* Action Buttons */
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 60px;
-  flex-wrap: wrap;
-}
+/* Action Buttons - Using Bootstrap utilities now */
 
 .btn-save,
 .btn-cancel {
@@ -675,6 +634,15 @@ export default {
   transition: all 0.3s ease;
   width: 200px;
   min-width: 200px;
+}
+
+@media (max-width: 575.98px) {
+
+  .btn-save,
+  .btn-cancel {
+    width: 100%;
+    max-width: 300px;
+  }
 }
 
 .btn-save:hover:not(:disabled) {
@@ -696,62 +664,5 @@ export default {
 .btn-cancel:hover {
   background-color: #bb1814;
   color: white;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .edit-profile-wrapper {
-    padding-top: 80px;
-  }
-
-  .section-heading {
-    font-size: 2rem;
-  }
-
-  .profile-info-section {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .profile-img {
-    width: 180px;
-    height: 180px;
-  }
-
-  .profile-fields {
-    width: 100%;
-  }
-
-  .genres-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  .genre-heading {
-    font-size: 1.5rem;
-  }
-
-  .action-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .btn-save,
-  .btn-cancel {
-    width: 100%;
-    max-width: 300px;
-  }
-}
-
-@media (max-width: 576px) {
-  .genres-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-
-  .section-heading {
-    font-size: 1.5rem;
-  }
 }
 </style>

@@ -94,7 +94,7 @@
       <div class="container py-5">
         <!-- EDIT PROFILE Section -->
         <div class="edit-profile-section">
-          <h1 class="section-heading">EDIT PROFILE</h1>
+          <h1 class="section-heading display-4">EDIT PROFILE</h1>
 
           <!-- Success/Error Alerts -->
           <div v-if="successMessage" class="alert-success">
@@ -110,7 +110,7 @@
           </div>
 
           <form @submit.prevent="saveProfile">
-            <div class="profile-info-section">
+            <div class="profile-info-section d-flex flex-column flex-lg-row align-items-center align-items-lg-start gap-4 gap-lg-5 mb-5">
               <!-- Profile Picture (Left) -->
               <div class="profile-image-container">
                 <div class="profile-img-wrapper" @click="selectImage">
@@ -136,8 +136,8 @@
               </div>
 
               <!-- Display Name & Email (Right) -->
-              <div class="profile-fields">
-                <div class="field-group">
+              <div class="profile-fields flex-grow-1 w-100">
+                <div class="field-group mb-4">
                   <label class="field-label">DISPLAY NAME</label>
                   <input
                     v-model="form.artistName"
@@ -148,7 +148,7 @@
                   />
                 </div>
 
-                <div class="field-group">
+                <div class="field-group mb-4">
                   <label class="field-label">EMAIL</label>
                   <input v-model="form.email" type="email" class="profile-input" disabled />
                 </div>
@@ -156,7 +156,7 @@
             </div>
 
             <!-- Artist Bio Section -->
-            <div class="field-group">
+            <div class="field-group mb-4">
               <label class="field-label">ARTIST BIO</label>
               <textarea
                 v-model="form.bio"
@@ -169,7 +169,7 @@
             </div>
 
             <!-- About You Section -->
-            <div class="field-group">
+            <div class="field-group mb-5">
               <label class="field-label">ABOUT YOU</label>
               <textarea
                 v-model="form.aboutSection"
@@ -182,13 +182,13 @@
             </div>
 
             <!-- Music Genre Selection Section -->
-            <div class="genre-picks-section">
-              <h2 class="genre-heading">MUSIC GENRE (SELECT UP TO 5)</h2>
-              <div class="genres-grid">
+            <div class="genre-picks-section mb-5">
+              <h2 class="genre-heading display-5 mb-4">MUSIC GENRE (SELECT UP TO 5)</h2>
+              <div class="genres-grid row g-3 g-md-4 g-lg-5">
                 <div
                   v-for="genre in availableGenres"
                   :key="genre"
-                  class="genre-item"
+                  class="genre-item col-4 col-sm-3 col-md-2 col-lg-2"
                   :class="{ selected: form.genres.includes(genre) }"
                   @click="toggleGenre(genre)"
                 >
@@ -202,14 +202,14 @@
                   <p class="genre-name">{{ genre.toUpperCase() }}</p>
                 </div>
               </div>
-              <p class="genre-count">{{ form.genres.length }} GENRES SELECTED</p>
+              <p class="genre-count text-center mt-4">{{ form.genres.length }} GENRES SELECTED</p>
             </div>
 
             <!-- Social Links Section -->
-            <div class="social-links-section">
-              <h3 class="section-subheading">SOCIAL MEDIA LINKS</h3>
-              <div class="social-fields">
-                <div class="field-group">
+            <div class="social-links-section mb-5 p-3 p-md-4 p-lg-5">
+              <h3 class="section-subheading display-6 mb-4">SOCIAL MEDIA LINKS</h3>
+              <div class="social-fields d-flex flex-column gap-3">
+                <div class="field-group mb-0">
                   <label class="field-label">SPOTIFY</label>
                   <input
                     type="url"
@@ -218,7 +218,7 @@
                     placeholder="https://open.spotify.com/artist/..."
                   />
                 </div>
-                <div class="field-group">
+                <div class="field-group mb-0">
                   <label class="field-label">YOUTUBE</label>
                   <input
                     type="url"
@@ -227,7 +227,7 @@
                     placeholder="https://youtube.com/@yourchannel"
                   />
                 </div>
-                <div class="field-group">
+                <div class="field-group mb-0">
                   <label class="field-label">INSTAGRAM</label>
                   <input
                     type="url"
@@ -240,7 +240,7 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="action-buttons">
+            <div class="action-buttons d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3 gap-sm-4 mt-5">
               <button type="submit" class="btn-save" :disabled="loading">
                 <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
                 {{ loading ? 'Saving...' : 'SAVE CHANGES' }}
@@ -499,7 +499,6 @@ export default {
 }
 
 .section-heading {
-  font-size: 2.5rem;
   font-weight: bold;
   color: white;
   margin-bottom: 40px;
@@ -508,7 +507,6 @@ export default {
 }
 
 .section-subheading {
-  font-size: 1.5rem;
   font-weight: bold;
   color: white;
   margin-bottom: 20px;
@@ -554,14 +552,7 @@ export default {
   opacity: 0.7;
 }
 
-/* Profile Info Section */
-.profile-info-section {
-  display: flex;
-  align-items: flex-start;
-  gap: 40px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
-}
+/* Profile Info Section - Bootstrap classes handle layout */
 
 .profile-image-container {
   cursor: pointer;
@@ -642,14 +633,7 @@ export default {
   transform: scale(1.1);
 }
 
-.profile-fields {
-  flex: 1;
-  min-width: 300px;
-}
-
-.field-group {
-  margin-bottom: 30px;
-}
+/* Profile fields and field groups - Bootstrap classes handle layout */
 
 .field-label {
   display: block;
@@ -699,25 +683,13 @@ export default {
   margin-top: 5px;
 }
 
-/* Genre Picks Section */
-.genre-picks-section {
-  margin-bottom: 60px;
-}
+/* Genre Picks Section - Bootstrap classes handle spacing and grid */
 
 .genre-heading {
-  font-size: 1.5rem;
   font-weight: bold;
   color: white;
-  margin-bottom: 30px;
   text-transform: uppercase;
   letter-spacing: 1px;
-}
-
-.genres-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 30px;
-  margin-bottom: 30px;
 }
 
 .genre-item {
@@ -820,38 +792,23 @@ export default {
 }
 
 .genre-count {
-  text-align: center;
   font-size: 1rem;
   font-weight: 600;
   color: white;
-  margin-top: 20px;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 /* Social Links Section */
 .social-links-section {
-  margin-bottom: 60px;
-  padding: 30px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.social-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+/* Social fields - Bootstrap classes handle layout */
 
-/* Action Buttons */
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 60px;
-  flex-wrap: wrap;
-}
+/* Action Buttons - Bootstrap classes handle layout */
 
 .btn-save,
 .btn-cancel {
@@ -863,7 +820,6 @@ export default {
   border: none;
   padding: 8px 0;
   letter-spacing: 0.4px;
-  margin-bottom: 0.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
   width: 200px;
@@ -891,64 +847,6 @@ export default {
   color: white;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .edit-artist-profile-wrapper {
-    padding-top: 80px;
-  }
-
-  .section-heading {
-    font-size: 2rem;
-  }
-
-  .profile-info-section {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .profile-img {
-    width: 180px;
-    height: 180px;
-  }
-
-  .profile-fields {
-    width: 100%;
-  }
-
-  .genres-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  .genre-heading {
-    font-size: 1.25rem;
-  }
-
-  .action-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .btn-save,
-  .btn-cancel {
-    width: 100%;
-    max-width: 300px;
-  }
-
-  .social-links-section {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 576px) {
-  .genres-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-
-  .section-heading {
-    font-size: 1.5rem;
-  }
-}
+/* Responsive Design - Handled by Bootstrap breakpoints */
+/* All responsive layout is now handled by Bootstrap utility classes */
 </style>

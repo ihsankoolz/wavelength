@@ -63,22 +63,22 @@
       <div v-else-if="userData" class="container py-5">
         <!-- Profile Section -->
         <div class="profile-section">
-          <div class="row align-items-center">
+          <div class="row align-items-center flex-column flex-lg-row text-center text-lg-start">
             <!-- Profile Picture -->
-            <div class="col-auto">
+            <div class="col-auto mb-3 mb-lg-0">
               <img :src="userData.profileImage || defaultPfp" alt="Profile Picture" class="profile-picture" />
             </div>
 
             <!-- User Information -->
             <div class="col">
-              <h1 class="user-name">{{ userData.displayName || 'User' }}</h1>
+              <h1 class="user-name display-4">{{ userData.displayName || 'User' }}</h1>
               <p class="user-email">{{ userData.email || '' }}</p>
               <p class="user-last-active"><b>
                   Last active: {{ formatLastActive(userData.lastActive) }}
                 </b></p>
 
               <!-- Genre Tags -->
-              <div class="genre-tags">
+              <div class="genre-tags d-flex justify-content-center justify-content-lg-start flex-wrap">
                 <span v-for="genre in (userData.preferredGenres || userData.preferences?.genres || [])" :key="genre"
                   class="genre-tag">
                   {{ genre.toUpperCase() }}
@@ -86,7 +86,7 @@
               </div>
 
               <!-- Action Buttons -->
-              <div class="action-buttons mt-3">
+              <div class="action-buttons mt-3 d-flex justify-content-center justify-content-lg-start flex-wrap">
                 <button @click="goToEditProfile" class="btn-edit">EDIT PROFILE</button>
                 <button @click="confirmDelete" class="btn-delete">DELETE PROFILE</button>
               </div>
@@ -95,11 +95,13 @@
         </div>
 
         <!-- Following Artists Section -->
-        <section class="genre-picks-section">
-          <h2 class="genre-heading">FOLLOWING</h2>
-          <div class="header-subtitle text-muted mb-4">
-            You are following <span class="highlight-number">{{ followingArtists.length }}</span> artist{{
-              followingArtists.length !== 1 ? 's' : '' }}
+        <section class="discover-artists-section mb-5">
+          <div class="section-header d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h2 class="h4 mb-1">FOLLOWING</h2>
+              <p class="text-muted mb-0 small">You are following <span class="highlight-number">{{
+                  followingArtists.length }}</span> artist{{ followingArtists.length !== 1 ? 's' : '' }}</p>
+            </div>
           </div>
 
           <!-- No Following Artists -->
@@ -114,25 +116,29 @@
 
           <!-- Artists Carousel -->
           <div v-else class="carousel-container">
-            <button v-if="currentArtistPage > 0" @click="previousArtistPage" class="carousel-arrow left"
+            <button v-if="currentArtistPage > 0" @click="previousArtistPage"
+              class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
               aria-label="Previous artists">
-              <i class="bi bi-chevron-left"></i>
+              <i class="bi bi-chevron-left fs-5"></i>
             </button>
 
             <div class="artists-carousel">
               <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentArtistPage * 100}%)` }">
                 <div v-for="(page, pageIndex) in paginatedFollowingArtists" :key="`artist-page-${pageIndex}`"
-                  class="carousel-page artists-page row g-3">
-                  <div v-for="artist in page" :key="artist.id" class="col-lg-3 col-md-4 col-sm-6">
-                    <ArtistCard :artist="artist" />
+                  class="carousel-page artists-page">
+                  <div class="row g-3 w-100">
+                    <div v-for="artist in page" :key="artist.id" class="col-6 col-md-3 col-lg-2">
+                      <ArtistCard :artist="artist" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <button v-if="currentArtistPage < totalArtistPages - 1" @click="nextArtistPage" class="carousel-arrow right"
+            <button v-if="currentArtistPage < totalArtistPages - 1" @click="nextArtistPage"
+              class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
               aria-label="Next artists">
-              <i class="bi bi-chevron-right"></i>
+              <i class="bi bi-chevron-right fs-5"></i>
             </button>
           </div>
         </section>
@@ -166,7 +172,7 @@ export default {
       defaultPfp: defaultPfp,
       followingArtists: [],
       currentArtistPage: 0,
-      artistsPerPage: 4,
+      artistsPerPage: 6, // Default for large screens
     }
   },
   computed: {
@@ -190,6 +196,11 @@ export default {
   },
   async mounted() {
     await this.loadUserProfile()
+    this.updateArtistsPerPage()
+    window.addEventListener('resize', this.updateArtistsPerPage)
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateArtistsPerPage)
   },
   methods: {
     async loadUserProfile() {
@@ -352,6 +363,18 @@ export default {
       }
     },
 
+    updateArtistsPerPage() {
+      const width = window.innerWidth
+      if (width >= 992) {
+        this.artistsPerPage = 6 // lg: 6 artists (col-lg-2 = 16.66% width)
+      } else if (width >= 768) {
+        this.artistsPerPage = 4 // md: 4 artists (col-md-3 = 25% width)
+      } else {
+        this.artistsPerPage = 2 // sm/xs: 2 artists (col-6 = 50% width)
+      }
+      this.currentArtistPage = 0
+    },
+
     confirmDelete() {
       if (
         confirm(
@@ -493,11 +516,23 @@ export default {
   position: relative;
 }
 
+@media (max-width: 991.98px) {
+  .user-profile-page {
+    padding-top: 80px;
+  }
+}
+
 .content-wrapper {
   position: relative;
   z-index: 1;
   padding-top: 40px;
   padding-bottom: 30px;
+}
+
+@media (max-width: 991.98px) {
+  .content-wrapper {
+    padding-top: 20px;
+  }
 }
 
 /* Dynamic Wave Background */
@@ -548,10 +583,22 @@ export default {
 }
 
 .user-name {
-  font-size: 2.5rem;
   font-weight: bold;
   color: white;
   margin-bottom: 0.5rem;
+}
+
+/* Use Bootstrap breakpoints for responsive font sizing */
+@media (max-width: 991.98px) {
+  .user-name {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .user-name {
+    font-size: 1.5rem;
+  }
 }
 
 .user-email {
@@ -651,24 +698,20 @@ export default {
   text-transform: uppercase;
 }
 
-/* Genre Heading (matching EditProfile) */
-.genre-heading {
-  font-size: 2rem;
-  font-weight: bold;
-  color: white;
-  margin-bottom: 10px;
+.section-header h2,
+.section-header h4 {
+  color: #fff;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-size: 1.5rem;
 }
 
-.genre-picks-section {
-  margin-bottom: 30px;
-}
-
-.section-subtitle {
-  font-size: 1rem;
-  color: #ccc;
-  margin-bottom: 2rem;
+.section-header p {
+  color: #b0b1ba;
+  font-size: 0.9rem;
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 .text-muted {
@@ -709,51 +752,6 @@ export default {
   padding: 0;
 }
 
-.carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: white;
-  border: none;
-  color: #000;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.carousel-container:hover .carousel-arrow {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.carousel-arrow:hover {
-  background: #bb1814;
-  color: white;
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.carousel-arrow.left {
-  left: -25px;
-}
-
-.carousel-arrow.right {
-  right: -25px;
-}
-
-.carousel-arrow i {
-  font-size: 1.5rem;
-}
-
 .artists-carousel {
   overflow: hidden;
   width: 100%;
@@ -766,52 +764,7 @@ export default {
 
 .carousel-page.artists-page {
   min-width: 100%;
-}
-
-/* Responsive Design - Bootstrap breakpoints */
-@media (max-width: 991.98px) {
-  .user-profile-page {
-    padding-top: 80px;
-  }
-
-  .content-wrapper {
-    padding-top: 20px;
-  }
-
-  .profile-section .row {
-    flex-direction: column;
-    align-items: center !important;
-    text-align: center;
-  }
-
-  .profile-picture {
-    margin-bottom: 20px;
-  }
-
-  .user-name {
-    font-size: 2rem;
-  }
-
-  .action-buttons {
-    justify-content: center;
-  }
-
-  .section-title {
-    font-size: 1.8rem;
-  }
-
-  .genre-tags {
-    justify-content: center;
-  }
-}
-
-@media (max-width: 575.98px) {
-  .user-name {
-    font-size: 1.5rem;
-  }
-
-  .section-title {
-    font-size: 1.5rem;
-  }
+  display: flex;
+  padding: 0;
 }
 </style>

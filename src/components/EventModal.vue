@@ -498,23 +498,42 @@ export default {
 .modal-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: white;
-  border: none;
-  border-radius: 8px;
-  color: #333;
+  background: rgba(35, 35, 38, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
   font-size: 1rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
   box-sizing: border-box;
+}
+
+.modal-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .modal-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(187, 24, 20, 0.3);
+  border-color: #bb1814;
+  box-shadow: 0 0 0 3px rgba(187, 24, 20, 0.2);
+  background: rgba(35, 35, 38, 0.9);
 }
 
 .modal-input textarea {
   resize: vertical;
   font-family: inherit;
+}
+
+/* Date Input Calendar Button - Red */
+input[type="date"].modal-input::-webkit-calendar-picker-indicator {
+  filter: invert(27%) sepia(95%) saturate(2878%) hue-rotate(346deg) brightness(90%) contrast(97%);
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+input[type="date"].modal-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 0.8;
 }
 
 /* Genres Grid */
