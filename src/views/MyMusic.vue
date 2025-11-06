@@ -99,7 +99,7 @@
 
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-5">
-          <div class="spinner-border text-primary" role="status">
+          <div class="spinner-border text-red" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
           <p class="mt-3 text-muted">Loading your music...</p>
@@ -922,5 +922,10 @@ export default {
   .welcome-section p {
     font-size: 0.85rem;
   }
+}
+
+/* Custom red loading spinner */
+.spinner-border.text-red {
+  color: #bb1814 !important;
 }
 </style>

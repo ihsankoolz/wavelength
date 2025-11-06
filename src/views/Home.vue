@@ -101,7 +101,7 @@
 
         <!-- Loading State -->
         <div v-if="isLoading" class="text-center py-5">
-          <div class="spinner-border text-primary" role="status">
+          <div class="spinner-border text-red" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
           <p class="mt-3 text-muted">Loading recommendations...</p>
@@ -387,7 +387,7 @@
 
             <!-- Events Loading -->
             <div v-if="loadingEvents" class="text-center py-4">
-              <div class="spinner-border spinner-border-sm text-primary" role="status">
+              <div class="spinner-border spinner-border-sm text-red" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
@@ -1786,5 +1786,10 @@ export default {
 :deep(.song-detail-modal .genre-tags .genre-tag) {
   display: inline-flex !important;
   /* Force display all tags in modal */
+}
+
+/* Custom red loading spinner */
+.spinner-border.text-red {
+  color: #bb1814 !important;
 }
 </style>

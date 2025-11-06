@@ -119,7 +119,7 @@
 
         <!-- Loading State -->
         <div v-if="isLoading" class="text-center py-5">
-          <div class="spinner-border text-primary" role="status">
+          <div class="spinner-border text-red" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
           <p class="mt-3 text-muted">Loading events...</p>
@@ -777,5 +777,10 @@ input::placeholder {
     radial-gradient(ellipse at 70% 50%, rgba(187, 24, 20, 0.08) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
+}
+
+/* Custom red loading spinner */
+.spinner-border.text-red {
+  color: #bb1814 !important;
 }
 </style>
