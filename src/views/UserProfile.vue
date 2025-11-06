@@ -4,44 +4,84 @@
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
-          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+          <animate
+            attributeName="d"
+            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
-                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
+            dur="3s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+          <animate
+            attributeName="d"
+            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
-                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
+            dur="4s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
-          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+          <animate
+            attributeName="d"
+            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
-                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
+            dur="5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+          <animate
+            attributeName="d"
+            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
-                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
+            dur="2.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
-          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+          <animate
+            attributeName="d"
+            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
-                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
+            dur="3.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
-          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+          <animate
+            attributeName="d"
+            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
-                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
+            dur="4.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
-          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+          <animate
+            attributeName="d"
+            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
-                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
+            dur="6s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
-          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+          <animate
+            attributeName="d"
+            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
-                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
+            dur="2s"
+            repeatCount="indefinite"
+          />
         </path>
       </svg>
     </div>
@@ -66,27 +106,38 @@
           <div class="row align-items-center flex-column flex-lg-row text-center text-lg-start">
             <!-- Profile Picture -->
             <div class="col-auto mb-3 mb-lg-0">
-              <img :src="userData.profileImage || defaultPfp" alt="Profile Picture" class="profile-picture" />
+              <img
+                :src="userData.profileImage || defaultPfp"
+                alt="Profile Picture"
+                class="profile-picture"
+              />
             </div>
 
             <!-- User Information -->
             <div class="col">
               <h1 class="user-name display-4">{{ userData.displayName || 'User' }}</h1>
               <p class="user-email">{{ userData.email || '' }}</p>
-              <p class="user-last-active"><b>
-                  Last active: {{ formatLastActive(userData.lastActive) }}
-                </b></p>
+              <p class="user-last-active">
+                <b> Last active: {{ formatLastActive(userData.lastActive) }} </b>
+              </p>
 
               <!-- Genre Tags -->
-              <div class="genre-tags d-flex justify-content-center justify-content-lg-start flex-wrap">
-                <span v-for="genre in (userData.preferredGenres || userData.preferences?.genres || [])" :key="genre"
-                  class="genre-tag">
+              <div
+                class="genre-tags d-flex justify-content-center justify-content-lg-start flex-wrap"
+              >
+                <span
+                  v-for="genre in userData.preferredGenres || userData.preferences?.genres || []"
+                  :key="genre"
+                  class="genre-tag"
+                >
                   {{ genre.toUpperCase() }}
                 </span>
               </div>
 
               <!-- Action Buttons -->
-              <div class="action-buttons mt-3 d-flex justify-content-center justify-content-lg-start flex-wrap">
+              <div
+                class="action-buttons mt-3 d-flex justify-content-center justify-content-lg-start flex-wrap"
+              >
                 <button @click="goToEditProfile" class="btn-edit">EDIT PROFILE</button>
                 <button @click="confirmDelete" class="btn-delete">DELETE PROFILE</button>
               </div>
@@ -99,8 +150,12 @@
           <div class="section-header d-flex justify-content-between align-items-center mb-3">
             <div>
               <h2 class="h4 mb-1">FOLLOWING</h2>
-              <p class="text-muted mb-0 small">You are following <span class="highlight-number">{{
-                  followingArtists.length }}</span> artist{{ followingArtists.length !== 1 ? 's' : '' }}</p>
+              <p class="text-muted mb-0 small">
+                You are following
+                <span class="highlight-number">{{ followingArtists.length }}</span> artist{{
+                  followingArtists.length !== 1 ? 's' : ''
+                }}
+              </p>
             </div>
           </div>
 
@@ -116,16 +171,25 @@
 
           <!-- Artists Carousel -->
           <div v-else class="carousel-container">
-            <button v-if="currentArtistPage > 0" @click="previousArtistPage"
+            <button
+              v-if="currentArtistPage > 0"
+              @click="previousArtistPage"
               class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
-              aria-label="Previous artists">
+              aria-label="Previous artists"
+            >
               <i class="bi bi-chevron-left fs-5"></i>
             </button>
 
             <div class="artists-carousel">
-              <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentArtistPage * 100}%)` }">
-                <div v-for="(page, pageIndex) in paginatedFollowingArtists" :key="`artist-page-${pageIndex}`"
-                  class="carousel-page artists-page">
+              <div
+                class="artists-grid-carousel"
+                :style="{ transform: `translateX(-${currentArtistPage * 100}%)` }"
+              >
+                <div
+                  v-for="(page, pageIndex) in paginatedFollowingArtists"
+                  :key="`artist-page-${pageIndex}`"
+                  class="carousel-page artists-page"
+                >
                   <div class="row g-3 w-100">
                     <div v-for="artist in page" :key="artist.id" class="col-6 col-md-3 col-lg-2">
                       <ArtistCard :artist="artist" />
@@ -135,14 +199,16 @@
               </div>
             </div>
 
-            <button v-if="currentArtistPage < totalArtistPages - 1" @click="nextArtistPage"
+            <button
+              v-if="currentArtistPage < totalArtistPages - 1"
+              @click="nextArtistPage"
               class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
-              aria-label="Next artists">
+              aria-label="Next artists"
+            >
               <i class="bi bi-chevron-right fs-5"></i>
             </button>
           </div>
         </section>
-
       </div>
     </div>
   </div>
@@ -150,7 +216,18 @@
 
 <script>
 import { getAuth, deleteUser, signOut } from 'firebase/auth'
-import { doc, getDoc, deleteDoc, collection, getDocs, query, where, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
+import {
+  doc,
+  getDoc,
+  deleteDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from 'firebase/firestore'
 import { auth, db } from '@/services/firebase'
 import NavigationBar from '@/components/NavigationBar.vue'
 import defaultPfp from '@/assets/defaultPfp.jpg'
@@ -275,18 +352,20 @@ export default {
         if (isFollowing) {
           // Unfollow
           await updateDoc(userDocRef, {
-            followingArtists: arrayRemove(artistId)
+            followingArtists: arrayRemove(artistId),
           })
           // Update local state
-          this.userData.followingArtists = this.userData.followingArtists.filter(id => id !== artistId)
+          this.userData.followingArtists = this.userData.followingArtists.filter(
+            (id) => id !== artistId,
+          )
           this.followingCount = this.followingCount - 1
 
           // Remove from displayed list
-          this.followingArtists = this.followingArtists.filter(artist => artist.id !== artistId)
+          this.followingArtists = this.followingArtists.filter((artist) => artist.id !== artistId)
         } else {
           // Follow
           await updateDoc(userDocRef, {
-            followingArtists: arrayUnion(artistId)
+            followingArtists: arrayUnion(artistId),
           })
           // Update local state
           if (!this.userData.followingArtists) {
@@ -312,22 +391,18 @@ export default {
         }
 
         for (const batch of batches) {
-          const artistsQuery = query(
-            collection(db, 'artists'),
-            where('__name__', 'in', batch)
-          )
+          const artistsQuery = query(collection(db, 'artists'), where('__name__', 'in', batch))
 
           const artistsSnapshot = await getDocs(artistsQuery)
-          artistsSnapshot.docs.forEach(doc => {
+          artistsSnapshot.docs.forEach((doc) => {
             artists.push({
               id: doc.id,
-              ...doc.data()
+              ...doc.data(),
             })
           })
         }
 
         this.followingArtists = artists
-
       } catch (error) {
         console.error('Error loading following artists:', error)
       }
@@ -340,7 +415,7 @@ export default {
 
       const containerWidth = container.offsetWidth
       const gap = 32 // 2rem
-      const cardWidth = (containerWidth - (gap * 4)) / 5 + gap // 5 cards visible
+      const cardWidth = (containerWidth - gap * 4) / 5 + gap // 5 cards visible
 
       const maxOffset = Math.max(0, (this.followingArtists.length - 5) * cardWidth)
 
@@ -450,9 +525,9 @@ export default {
             // Firestore data is already deleted, but Auth needs re-authentication
             alert(
               '⚠️ Your account data has been deleted from our database.\n\n' +
-              'However, for security reasons, you need to log out and log back in, ' +
-              'then delete your account again to fully remove it from the authentication system.\n\n' +
-              'This will allow you to reuse your email address.',
+                'However, for security reasons, you need to log out and log back in, ' +
+                'then delete your account again to fully remove it from the authentication system.\n\n' +
+                'This will allow you to reuse your email address.',
             )
             await signOut(auth)
             this.$router.push('/login')
@@ -460,9 +535,9 @@ export default {
             // Unexpected error - alert user
             alert(
               '⚠️ Partial deletion occurred.\n\n' +
-              'Your data was removed from our database, but there was an issue with the authentication system.\n\n' +
-              'Please contact support with this error code: ' +
-              authError.code,
+                'Your data was removed from our database, but there was an issue with the authentication system.\n\n' +
+                'Please contact support with this error code: ' +
+                authError.code,
             )
             await signOut(auth)
             this.$router.push('/')
@@ -474,9 +549,9 @@ export default {
         // If Firestore deletion failed, show error
         alert(
           '❌ Failed to delete account.\n\n' +
-          'Please try again or contact support if the issue persists.\n\n' +
-          'Error: ' +
-          (error.message || 'Unknown error'),
+            'Please try again or contact support if the issue persists.\n\n' +
+            'Error: ' +
+            (error.message || 'Unknown error'),
         )
       }
     },
@@ -656,7 +731,7 @@ export default {
 
 .btn-edit:hover,
 .btn-delete:hover {
-  background: #6E0B0B;
+  background: #6e0b0b;
   color: white;
 }
 
@@ -731,7 +806,7 @@ export default {
 }
 
 .horizontal-scroll::-webkit-scrollbar-thumb {
-  background-color: #B51414;
+  background-color: #b51414;
   border-radius: 4px;
 }
 
