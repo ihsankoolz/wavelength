@@ -96,7 +96,7 @@
                 :key="index"
                 class="letter"
                 :style="{ animationDelay: `${index * 0.05}s` }"
-                >{{ letter }}</span
+                >{{ letter === ' ' ? '\u00A0' : letter }}</span
               >
             </span>
           </div>
