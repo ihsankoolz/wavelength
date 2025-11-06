@@ -3,10 +3,10 @@
     <NavigationBar />
 
     <!-- Loading State -->
-    <div v-if="loading" class="container-fluid bg-light p-4">
+    <div v-if="loading" class="container-fluid bg-light p-4 loading-container">
       <div class="row justify-content-center">
         <div class="col-md-6 text-center">
-          <div class="spinner-border text-primary" role="status">
+          <div class="spinner-border text-red" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
           <p class="mt-3">Loading artist profile...</p>
@@ -15,7 +15,7 @@
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="container-fluid bg-danger text-white p-4">
+    <div v-else-if="error" class="container-fluid bg-danger text-white p-4 loading-container">
       <div class="row justify-content-center">
         <div class="col-md-8 text-center">
           <h3>Profile Setup Required</h3>
@@ -2079,5 +2079,20 @@ small {
 .modal-body .text-muted {
   color: #b0b1ba !important;
   font-size: 0.9rem;
+}
+
+/* Loading Container - Push below navbar */
+.loading-container {
+  margin-top: 100px;
+  background: #191717 !important;
+}
+
+.loading-container p {
+  color: #b0b1ba;
+}
+
+/* Custom red loading spinner */
+.spinner-border.text-red {
+  color: #bb1814 !important;
 }
 </style>

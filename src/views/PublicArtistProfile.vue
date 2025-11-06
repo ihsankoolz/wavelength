@@ -1194,7 +1194,7 @@ export default {
   position: relative;
   z-index: 1;
   padding-bottom: 40px;
-  margin-top: 0;
+  margin-top: 100px;
   padding-top: 0;
 }
 
