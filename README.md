@@ -1,10 +1,10 @@
-# 🎵 Wavelength - Music Discovery & Events Platform
+# Wavelength - Music Discovery & Events Platform
 
 **Connecting Singapore's Music Community**
 
 ---
 
-## 🌐 Live Application
+## Live Application
 
 **Hosted URL:** [https://wavelength-adde0.web.app](https://wavelength-adde0.web.app)
 
@@ -12,7 +12,7 @@
 
 ---
 
-## 📋 Problem Statement
+## Problem Statement
 
 ### The Challenge
 
@@ -30,25 +30,25 @@ In Singapore's vibrant music scene, emerging local artists struggle to gain visi
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### For Music Fans
 
-- 🎵 **Personalized Song Recommendations** - Smart algorithm considering genre preferences, listening history, and trending tracks
-- 🎪 **Event Discovery** - Browse upcoming live music events with interactive Google Maps integration
-- 🔔 **Real-time Notifications** - Get notified when artists you follow upload new music or create events
-- ❤️ **Social Interactions** - Like, comment, and save favorite songs
-- 👤 **Profile Customization** - Set music preferences and manage your interests
-- 📍 **Location-Based Discovery** - Find events near you with map visualization
+- **Personalized Song Recommendations** - Smart algorithm considering genre preferences, listening history, and trending tracks
+- **Event Discovery** - Browse upcoming live music events with interactive Google Maps integration
+- **Real-time Notifications** - Get notified when artists you follow upload new music or create events
+- **Social Interactions** - Like, comment, and save favorite songs
+- **Profile Customization** - Set music preferences and manage your interests
+- **Location-Based Discovery** - Find events near you with map visualization
 
 ### For Artists
 
-- 🎼 **Music Upload & Management** - Support for Spotify, and Youtube integration
-- 🎤 **Event Creation** - Create and manage live events with location, tickets, and details
-- 📊 **Analytics Dashboard** - Track song performance, follower growth, and engagement metrics
-- 🔗 **Social Media Integration** - Connect Instagram, Facebook, and other platforms
-- 💬 **Fan Engagement** - Interact with fans through comments and notifications
-- 📈 **Performance Insights** - Understand which songs resonate with your audience
+- **Music Upload & Management** - Support for Spotify, and Youtube integration
+- **Event Creation** - Create and manage live events with location, tickets, and details
+- **Analytics Dashboard** - Track song performance, follower growth, and engagement metrics
+- **Social Media Integration** - Connect Instagram, Facebook, and other platforms
+- **Fan Engagement** - Interact with fans through comments and notifications
+- **Performance Insights** - Understand which songs resonate with your audience
 
 ### Recommendation Algorithm
 
@@ -60,7 +60,7 @@ Our adaptive recommendation system uses three user profiles:
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Frontend Framework:** Vue 3 (Options API)
 - **Routing:** Vue Router
@@ -77,7 +77,7 @@ Our adaptive recommendation system uses three user profiles:
 
 ---
 
-## 📦 Setup Instructions
+## Setup Instructions
 
 Follow these step-by-step instructions to set up and run Wavelength on your local machine.
 
@@ -180,7 +180,7 @@ firebase deploy --only storage
 
 ---
 
-## 🚀 How to Run the Application
+## How to Run the Application
 
 ### Development Mode (Local)
 
@@ -234,7 +234,7 @@ Your application will be live at: `https://your-project-id.web.app`
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 wavelength/
@@ -296,7 +296,7 @@ wavelength/
 
 ---
 
-## 🔒 Security
+## Security
 
 - Firebase Authentication for secure user management
 - Firestore security rules to protect user data
@@ -305,7 +305,7 @@ wavelength/
 
 ---
 
-## 🧪 Testing
+## Testing
 
 Run tests (if configured):
 
@@ -315,7 +315,7 @@ npm run test
 
 ---
 
-## 📱 Browser Compatibility
+## Browser Compatibility
 
 - Chrome (recommended)
 - Firefox
@@ -329,7 +329,7 @@ npm run test
 
 ---
 
-## 📞 Support & Contact
+## Support & Contact
 
 For issues, questions, or contributions:
 
@@ -338,13 +338,13 @@ For issues, questions, or contributions:
 
 ---
 
-## 📄 License
+## License
 
 Private - Wavelength Development Team
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Singapore's local music community
 - Firebase platform
@@ -356,4 +356,3 @@ Private - Wavelength Development Team
 
 **Last Updated:** November 6, 2025  
 **Version:** 2.0  
-**Current Branch:** FurtherCleanUp

@@ -3,10 +3,10 @@
     <NavigationBar />
 
     <!-- Loading State -->
-    <div v-if="loading" class="container-fluid bg-light p-4">
+    <div v-if="loading" class="container-fluid bg-light p-4 loading-container">
       <div class="row justify-content-center">
         <div class="col-md-6 text-center">
-          <div class="spinner-border text-primary" role="status">
+          <div class="spinner-border text-red" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
           <p class="mt-3">Loading artist profile...</p>
@@ -15,7 +15,7 @@
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="container-fluid bg-danger text-white p-4">
+    <div v-else-if="error" class="container-fluid bg-danger text-white p-4 loading-container">
       <div class="row justify-content-center">
         <div class="col-md-8 text-center">
           <h3>Profile Setup Required</h3>
@@ -1996,5 +1996,103 @@ small {
   min-width: 100%;
   display: flex;
   padding: 0;
+}
+
+/* Delete Modal Specific Styles */
+.modal-footer {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(25, 23, 23, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0 0 16px 16px;
+}
+
+.modal-footer .btn {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border-radius: 22px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.modal-footer .btn-secondary {
+  background: rgba(35, 35, 38, 0.8);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.modal-footer .btn-secondary:hover {
+  background: rgba(55, 55, 58, 0.9);
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-2px);
+}
+
+.modal-footer .btn-danger {
+  background: linear-gradient(135deg, #bb1814, #9d1310);
+  color: white;
+  box-shadow: 0 4px 15px rgba(187, 24, 20, 0.3);
+}
+
+.modal-footer .btn-danger:hover:not(:disabled) {
+  background: linear-gradient(135deg, #9d1310, #7a0f0d);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(187, 24, 20, 0.4);
+}
+
+.modal-footer .btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Modal Content Styling */
+.modal-content {
+  background: #1a1a1a;
+  border: 1px solid rgba(187, 24, 20, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  color: #d4d5db;
+}
+
+.modal-body p {
+  margin-bottom: 0.5rem;
+}
+
+.modal-body .text-muted {
+  color: #b0b1ba !important;
+  font-size: 0.9rem;
+}
+
+/* Loading Container - Push below navbar */
+.loading-container {
+  margin-top: 100px;
+  background: #191717 !important;
+}
+
+.loading-container p {
+  color: #b0b1ba;
+}
+
+/* Custom red loading spinner */
+.spinner-border.text-red {
+  color: #bb1814 !important;
 }
 </style>

@@ -74,27 +74,27 @@ export function buildArtistNetwork(currentUserId, allArtists, userPreferences, o
   const followingArtistIds = userPreferences.followingArtists || []
   const userFollowedArtists = allArtists.filter((a) => followingArtistIds.includes(a.id))
 
-  // If user has no followed artists, use preferred genres
+  // Store for later: whether user actually follows any artists
+  const hasFollowedArtists = userFollowedArtists.length > 0
+
+  // If user has no followed artists, use preferred genres for recommendations
+  let seedArtists = []
   if (userFollowedArtists.length === 0 && userPreferences.preferredGenres) {
     // Show top artists from user's preferred genres
-    const topGenreArtists = allArtists
+    seedArtists = allArtists
       .filter((artist) => {
         if (!artist.genres) return false
         return artist.genres.some((g) => userPreferences.preferredGenres.includes(g))
       })
       .sort((a, b) => (b.followerCount || 0) - (a.followerCount || 0))
       .slice(0, 5)
-
-    userFollowedArtists.push(...topGenreArtists)
   }
 
   // If still no artists, show top overall artists
-  if (userFollowedArtists.length === 0) {
-    const topArtists = allArtists
+  if (userFollowedArtists.length === 0 && seedArtists.length === 0) {
+    seedArtists = allArtists
       .sort((a, b) => (b.followerCount || 0) - (a.followerCount || 0))
       .slice(0, 5)
-
-    userFollowedArtists.push(...topArtists)
   }
 
   // Add center node (user's interests)
@@ -110,45 +110,81 @@ export function buildArtistNetwork(currentUserId, allArtists, userPreferences, o
     nodeIds.add('user-center')
   }
 
-  // Add followed artists as primary nodes
-  userFollowedArtists.forEach((artist) => {
-    if (!nodeIds.has(artist.id)) {
-      nodes.push({
-        id: artist.id,
-        label: artist.artistName,
-        type: 'followed',
-        size: 18,
-        color: '#667eea',
-        data: artist,
-        genres: artist.genres || [],
-        followerCount: artist.followerCount || 0,
-      })
-      nodeIds.add(artist.id)
-
-      // Connect to user center
-      if (includeUserCenter) {
-        links.push({
-          source: 'user-center',
-          target: artist.id,
-          strength: 1,
-          type: 'primary',
+  // Add followed artists as BLUE nodes (only if user actually follows them)
+  if (hasFollowedArtists) {
+    userFollowedArtists.forEach((artist) => {
+      if (!nodeIds.has(artist.id)) {
+        nodes.push({
+          id: artist.id,
+          label: artist.artistName,
+          type: 'followed',
+          size: 18,
+          color: '#667eea', // Blue - artists user actually follows
+          data: artist,
+          genres: artist.genres || [],
+          followerCount: artist.followerCount || 0,
         })
-      }
-    }
-  })
+        nodeIds.add(artist.id)
 
-  // Find similar artists for each followed artist
+        // Connect to user center
+        if (includeUserCenter) {
+          links.push({
+            source: 'user-center',
+            target: artist.id,
+            strength: 1,
+            type: 'primary',
+          })
+        }
+      }
+    })
+  }
+
+  // Add seed artists as GREEN nodes (recommendations, not followed)
+  if (!hasFollowedArtists && seedArtists.length > 0) {
+    seedArtists.forEach((artist) => {
+      if (!nodeIds.has(artist.id)) {
+        nodes.push({
+          id: artist.id,
+          label: artist.artistName,
+          type: 'similar', // Green - recommended, not followed
+          size: 18,
+          color: '#4CAF50', // Green - recommendations based on genres/popularity
+          data: artist,
+          genres: artist.genres || [],
+          followerCount: artist.followerCount || 0,
+        })
+        nodeIds.add(artist.id)
+
+        // Connect to user center
+        if (includeUserCenter) {
+          links.push({
+            source: 'user-center',
+            target: artist.id,
+            strength: 0.8,
+            type: 'similar',
+          })
+        }
+      }
+    })
+  }
+
+  // Determine which artists to use for finding similar artists
+  const baseArtists = hasFollowedArtists ? userFollowedArtists : seedArtists
+
+  // Find similar artists for each base artist
   const similarArtistScores = new Map()
 
-  userFollowedArtists.forEach((followedArtist) => {
+  baseArtists.forEach((baseArtist) => {
     allArtists.forEach((otherArtist) => {
-      // Skip if same artist or already following
-      if (otherArtist.id === followedArtist.id) return
-      if (followingArtistIds.includes(otherArtist.id)) return
-      if (otherArtist.id === currentUserId) return // Don't show user's own artist profile
+      // Skip if same artist
+      if (otherArtist.id === baseArtist.id) return
+      // Skip if already in our node list (either followed or seed)
+      if (nodeIds.has(otherArtist.id)) return
+      // Don't show user's own artist profile
+      if (otherArtist.id === currentUserId) return
 
       // Calculate similarity
-      const similarity = calculateArtistSimilarity(followedArtist, otherArtist)
+      const similarity = calculateArtistSimilarity(baseArtist, otherArtist)
 
       if (similarity >= similarityThreshold) {
         // Track highest similarity score for each artist
@@ -156,12 +192,12 @@ export function buildArtistNetwork(currentUserId, allArtists, userPreferences, o
           similarArtistScores.set(otherArtist.id, {
             artist: otherArtist,
             maxSimilarity: similarity,
-            connections: [{ source: followedArtist.id, similarity }],
+            connections: [{ source: baseArtist.id, similarity }],
           })
         } else {
           const existing = similarArtistScores.get(otherArtist.id)
           existing.maxSimilarity = Math.max(existing.maxSimilarity, similarity)
-          existing.connections.push({ source: followedArtist.id, similarity })
+          existing.connections.push({ source: baseArtist.id, similarity })
         }
       }
     })
