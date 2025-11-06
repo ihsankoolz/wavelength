@@ -13,84 +13,44 @@
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
-          <animate
-            attributeName="d"
-            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
-                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
-            dur="3s"
-            repeatCount="indefinite"
-          />
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
-          <animate
-            attributeName="d"
-            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
-                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
-            dur="4s"
-            repeatCount="indefinite"
-          />
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
-          <animate
-            attributeName="d"
-            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
-                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
-            dur="5s"
-            repeatCount="indefinite"
-          />
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
-          <animate
-            attributeName="d"
-            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
-                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
-            dur="2.5s"
-            repeatCount="indefinite"
-          />
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
-          <animate
-            attributeName="d"
-            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
-                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
-            dur="3.5s"
-            repeatCount="indefinite"
-          />
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
-          <animate
-            attributeName="d"
-            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
-                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
-            dur="4.5s"
-            repeatCount="indefinite"
-          />
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
-          <animate
-            attributeName="d"
-            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
-                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
-            dur="6s"
-            repeatCount="indefinite"
-          />
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
-          <animate
-            attributeName="d"
-            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
-                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
-            dur="2s"
-            repeatCount="indefinite"
-          />
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
         </path>
       </svg>
     </div>
@@ -104,22 +64,15 @@
           </router-link>
           <div class="tagline-split mt-5">
             <span class="animated-text">
-              <span
-                v-for="(letter, index) in welcomeText"
-                :key="index"
-                class="letter"
-                :style="{ animationDelay: `${index * 0.05}s` }"
-                >{{ letter === ' ' ? '\u00A0' : letter }}</span
-              >
+              <span v-for="(letter, index) in welcomeText" :key="index" class="letter"
+                :style="{ animationDelay: `${index * 0.05}s` }">{{ letter === ' ' ? '\u00A0' : letter }}</span>
             </span>
           </div>
         </div>
       </div>
 
       <!-- RIGHT / Form Section -->
-      <div
-        class="auth-right d-flex flex-column justify-content-center rounded-start-0 rounded-start-lg-5"
-      >
+      <div class="auth-right d-flex flex-column justify-content-center rounded-start-0 rounded-start-lg-5">
         <!-- Logo for Mobile Only -->
         <div class="d-flex d-lg-none justify-content-center mb-3 mt-4">
           <router-link to="/">
@@ -128,27 +81,17 @@
         </div>
 
         <div class="form-card glass-card py-4 px-3 px-md-5">
-          <h2 class="text-white font-weight-bold mb-4 text-center signup-title">SIGN UP</h2>
+          <h2 class="signup-title">SIGN UP</h2>
 
           <!-- Type toggle -->
           <div class="toggle-row mb-5 d-flex justify-content-center" style="gap: 16px">
-            <button
-              class="toggle-btn toggle-enhanced"
-              :class="userType === 'fan' ? 'selected' : 'outline'"
-              type="button"
-              @click="userType = 'fan'"
-              style="min-width: 100px; font-size: 1rem; margin-right: 0.6rem"
-            >
+            <button class="toggle-btn toggle-enhanced" :class="userType === 'fan' ? 'selected' : 'outline'"
+              type="button" @click="userType = 'fan'" style="min-width: 100px; font-size: 1rem; margin-right: 0.6rem">
               <span class="toggle-icon">🎵</span>
               MUSIC FAN
             </button>
-            <button
-              class="toggle-btn toggle-enhanced"
-              :class="userType === 'artist' ? 'selected' : 'outline'"
-              type="button"
-              @click="userType = 'artist'"
-              style="min-width: 100px; font-size: 1rem"
-            >
+            <button class="toggle-btn toggle-enhanced" :class="userType === 'artist' ? 'selected' : 'outline'"
+              type="button" @click="userType = 'artist'" style="min-width: 100px; font-size: 1rem">
               <span class="toggle-icon">🎤</span>
               ARTIST
             </button>
@@ -166,120 +109,52 @@
             <!-- Display Name Input with Floating Label -->
             <div class="mb-4 input-group-enhanced">
               <div class="input-icon">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  class="icon-pulse"
-                >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="icon-pulse">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
               </div>
-              <input
-                type="text"
-                v-model="displayName"
-                class="form-control input-enhanced"
-                required
-                autocomplete="name"
-                name="name"
-                @focus="nameFocused = true"
-                @blur="nameFocused = false"
-              />
-              <label class="floating-label" :class="{ active: displayName || nameFocused }"
-                >Display Name</label
-              >
+              <input type="text" v-model="displayName" class="form-control input-enhanced" required autocomplete="off"
+                @focus="nameFocused = true" @blur="nameFocused = false" />
+              <label class="floating-label" :class="{ active: displayName || nameFocused }">Display Name</label>
               <div class="input-underline"></div>
             </div>
 
             <!-- Email Input with Floating Label -->
             <div class="mb-4 input-group-enhanced">
               <div class="input-icon">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  class="icon-pulse"
-                >
-                  <path
-                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                  />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="icon-pulse">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                   <polyline points="22,6 12,13 2,6" />
                 </svg>
               </div>
-              <input
-                type="email"
-                v-model="email"
-                class="form-control input-enhanced"
-                required
-                autocomplete="username email"
-                name="email"
-                @focus="emailFocused = true"
-                @blur="emailFocused = false"
-              />
-              <label class="floating-label" :class="{ active: email || emailFocused }"
-                >Email Address</label
-              >
+              <input type="email" v-model="email" class="form-control input-enhanced" required autocomplete="off"
+                @focus="emailFocused = true" @blur="emailFocused = false" />
+              <label class="floating-label" :class="{ active: email || emailFocused }">Email Address</label>
               <div class="input-underline"></div>
             </div>
 
             <!-- Password Input with Floating Label -->
             <div class="mb-4 input-group-enhanced">
               <div class="input-icon">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  :class="{ 'icon-shake': passwordFocused }"
-                >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  :class="{ 'icon-shake': passwordFocused }">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
               </div>
-              <input
-                :type="showPassword ? 'text' : 'password'"
-                v-model="password"
-                class="form-control input-enhanced"
-                required
-                minlength="8"
-                autocomplete="new-password"
-                name="password"
-                @focus="passwordFocused = true"
-                @blur="passwordFocused = false"
-                @input="validatePasswordStrength"
-              />
-              <label class="floating-label" :class="{ active: password || passwordFocused }"
-                >Password</label
-              >
+              <input :type="showPassword ? 'text' : 'password'" v-model="password" class="form-control input-enhanced"
+                required minlength="8" autocomplete="new-password" name="password" @focus="passwordFocused = true"
+                @blur="passwordFocused = false" @input="validatePasswordStrength" />
+              <label class="floating-label" :class="{ active: password || passwordFocused }">Password</label>
               <div class="password-toggle" @click="showPassword = !showPassword">
-                <svg
-                  v-if="!showPassword"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                >
+                <svg v-if="!showPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                   <circle cx="12" cy="12" r="3" />
                 </svg>
-                <svg
-                  v-else
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                >
+                <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path
-                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
-                  />
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
                   <line x1="1" y1="1" x2="23" y2="23" />
                 </svg>
               </div>
@@ -289,11 +164,8 @@
             <!-- Password Strength Indicator -->
             <div v-if="password" class="mb-4 password-strength">
               <div class="strength-bar">
-                <div
-                  class="strength-fill"
-                  :class="passwordStrength.class"
-                  :style="{ width: passwordStrength.percentage + '%' }"
-                ></div>
+                <div class="strength-fill" :class="passwordStrength.class"
+                  :style="{ width: passwordStrength.percentage + '%' }"></div>
               </div>
               <div class="strength-text" :class="passwordStrength.class">
                 {{ passwordStrength.text }}
@@ -325,81 +197,42 @@
             <!-- Confirm Password Input with Floating Label -->
             <div class="mb-5 input-group-enhanced">
               <div class="input-icon">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  :class="{ 'icon-shake': confirmPasswordFocused }"
-                >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  :class="{ 'icon-shake': confirmPasswordFocused }">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
               </div>
-              <input
-                :type="showConfirmPassword ? 'text' : 'password'"
-                v-model="confirmPassword"
+              <input :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPassword"
                 class="form-control input-enhanced"
-                :class="{ 'is-invalid': confirmPassword && password !== confirmPassword }"
-                required
-                autocomplete="new-password"
-                name="confirm-password"
-                @focus="confirmPasswordFocused = true"
-                @blur="confirmPasswordFocused = false"
-              />
-              <label
-                class="floating-label"
-                :class="{ active: confirmPassword || confirmPasswordFocused }"
-                >Confirm Password</label
-              >
+                :class="{ 'is-invalid': confirmPassword && password !== confirmPassword }" required
+                autocomplete="new-password" name="confirm-password" @focus="confirmPasswordFocused = true"
+                @blur="confirmPasswordFocused = false" />
+              <label class="floating-label" :class="{ active: confirmPassword || confirmPasswordFocused }">Confirm
+                Password</label>
               <div class="password-toggle" @click="showConfirmPassword = !showConfirmPassword">
-                <svg
-                  v-if="!showConfirmPassword"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                >
+                <svg v-if="!showConfirmPassword" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                   <circle cx="12" cy="12" r="3" />
                 </svg>
-                <svg
-                  v-else
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                >
+                <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path
-                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
-                  />
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
                   <line x1="1" y1="1" x2="23" y2="23" />
                 </svg>
               </div>
               <div class="input-underline"></div>
-              <small
-                v-if="confirmPassword && password !== confirmPassword"
-                class="text-danger mt-1 d-block"
-              >
+              <small v-if="confirmPassword && password !== confirmPassword" class="text-white mt-1 d-block">
                 Passwords do not match
               </small>
-              <small
-                v-else-if="confirmPassword && password === confirmPassword"
-                class="text-success mt-1 d-block"
-              >
+              <small v-else-if="confirmPassword && password === confirmPassword" class="text-success mt-1 d-block">
                 <i class="bi bi-check-circle-fill"></i> Passwords match
               </small>
             </div>
 
-            <button
-              type="submit"
-              class="main-btn btn-block mb-3 btn-enhanced"
-              :disabled="isLoading"
-              @click="createRipple"
-            >
+            <button type="submit" class="main-btn btn-block mb-3 btn-enhanced" :disabled="isLoading"
+              @click="createRipple">
               <span class="btn-shine"></span>
               <span v-if="isLoading" class="btn-content">
                 <span class="spinner"></span>
@@ -723,12 +556,15 @@ export default {
     transform: translateY(0) rotate(0deg);
     opacity: 0;
   }
+
   10% {
     opacity: 1;
   }
+
   90% {
     opacity: 1;
   }
+
   100% {
     transform: translateY(-100vh) rotate(360deg);
     opacity: 0;
@@ -739,6 +575,7 @@ export default {
   position: relative;
   z-index: 1;
 }
+
 .auth-wrapper {
   min-height: 100vh;
 
@@ -835,6 +672,7 @@ export default {
     opacity: 0;
     transform: translateY(30px) rotateX(-90deg);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) rotateX(0);
@@ -875,6 +713,7 @@ export default {
     opacity: 0;
     transform: translateY(20px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -884,18 +723,19 @@ export default {
 .auth-right {
   flex: 0 0 50%;
   padding: 0;
-  background: #b71c1c;
+  background: radial-gradient(ellipse at center, #b71c1c 0%, #5a0d0d 100%);
   min-width: 330px;
   border-radius: 24px 0 0 24px;
+
 }
 
 .form-card {
   background: transparent;
-  width: 100%;
+  width: 75%;
   margin: 0 auto;
   color: #fff;
   border: none;
-  border-radius: 0;
+  border-radius: 24px;
 }
 
 /* Glassmorphism Card */
@@ -905,6 +745,7 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   transition: all 0.4s ease;
+
 }
 
 .glass-card:hover {
@@ -918,19 +759,23 @@ export default {
 }
 
 @keyframes shake {
+
   10%,
   90% {
     transform: translateX(-2px);
   }
+
   20%,
   80% {
     transform: translateX(4px);
   }
+
   30%,
   50%,
   70% {
     transform: translateX(-8px);
   }
+
   40%,
   60% {
     transform: translateX(8px);
@@ -941,13 +786,17 @@ export default {
   font-weight: 900;
   letter-spacing: 2px;
   text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
 }
 
 .toggle-row {
   justify-content: center !important;
+  display: flex;
 }
 
 .toggle-btn {
+  flex: 1;
   font-weight: bold;
   border-radius: 2rem;
   padding: 0.8rem 2rem;
@@ -986,6 +835,34 @@ export default {
   color: #b71c1c;
   border: 3px solid #fff;
   transform: scale(1.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.toggle-btn.selected::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(213, 34, 34, 0.2), transparent);
+  transform: rotate(45deg);
+  animation: shine 3s linear infinite;
+  pointer-events: none;
+}
+
+.toggle-btn.selected::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(213, 34, 34, 0.2), transparent);
+  transform: rotate(45deg);
+  animation: shine 3s linear infinite;
+  pointer-events: none;
 }
 
 .toggle-btn.selected .toggle-icon {
@@ -993,10 +870,12 @@ export default {
 }
 
 @keyframes bounce-icon {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -1033,6 +912,7 @@ export default {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -1044,6 +924,7 @@ export default {
     opacity: 1;
     transform: translateY(0);
   }
+
   100% {
     opacity: 0;
     transform: translateY(-10px);
@@ -1061,7 +942,7 @@ export default {
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgb(255, 255, 255);
   transition: all 0.3s ease;
   z-index: 2;
 }
@@ -1075,10 +956,12 @@ export default {
 }
 
 @keyframes icon-pulse {
+
   0%,
   100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.1);
   }
@@ -1089,13 +972,16 @@ export default {
 }
 
 @keyframes icon-shake {
+
   0%,
   100% {
     transform: rotate(0deg);
   }
+
   25% {
     transform: rotate(-10deg);
   }
+
   75% {
     transform: rotate(10deg);
   }
@@ -1109,6 +995,7 @@ export default {
   font-size: 1rem;
   padding: 12px 0 12px 35px;
   width: 100%;
+  box-sizing: border-box;
   outline: none;
   transition: all 0.3s ease;
 }
@@ -1120,7 +1007,7 @@ export default {
 }
 
 .input-enhanced::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgb(255, 255, 255);
 }
 
 .floating-label {
@@ -1228,6 +1115,7 @@ export default {
   0% {
     transform: translateX(-100%) rotate(45deg);
   }
+
   100% {
     transform: translateX(100%) rotate(45deg);
   }
@@ -1255,6 +1143,7 @@ export default {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -1363,6 +1252,7 @@ export default {
     opacity: 0;
     transform: translateY(-5px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1429,7 +1319,7 @@ export default {
 
 .login-row {
   color: #fff;
-  font-weight: normal;
+  font-weight: 700;
   margin-top: 2rem;
   letter-spacing: 0.1px;
 }
@@ -1461,6 +1351,7 @@ export default {
 
 .login-link:hover::after {
   width: 100%;
+  opacity: 1;
 }
 
 .alert-danger {
@@ -1472,11 +1363,20 @@ export default {
   font-size: 1.1rem;
   margin-bottom: 24px;
 }
+
+@media (min-width: 992px) {
+  .rounded-start-lg-5 {
+    border-top-left-radius: 1rem !important;
+    border-bottom-left-radius: 1rem !important;
+  }
+}
+
 @media (max-width: 991.98px) {
   .auth-right {
     background: transparent;
     border-radius: 0;
-    padding: 0; /* Remove padding */
+    padding: 0;
+    /* Remove padding */
   }
 
   .form-card {
@@ -1484,9 +1384,12 @@ export default {
     backdrop-filter: blur(10px);
     border-radius: 16px;
     padding: 2rem 1.5rem !important;
-    margin: auto !important; /* Force no margin */
-    width: 60% !important; /* Full width */
-    max-width: none !important; /* Remove max-width constraint */
+    margin: auto !important;
+    /* Force no margin */
+    width: 60% !important;
+    /* Full width */
+    max-width: none !important;
+    /* Remove max-width constraint */
     margin-top: 40px !important;
     justify-content: center;
     min-width: 250px !important;
