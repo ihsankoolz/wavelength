@@ -74,7 +74,7 @@ export async function getUserProfile(userId) {
   const likedSongs = userData.likedSongs || []
   const followedArtists = userData.followedArtists || []
   const interestedEvents = userData.interestedEvents || []
-  const preferredGenres = userData.preferredGenres || []
+  const preferredGenres = userData.preferences?.genres || userData.preferredGenres || []
   const listenHistory = userData.listenHistory || []
   const artistClicks = userData.artistClicks || {}
 
@@ -159,7 +159,7 @@ function extractPlatformData(song) {
  * Get all songs from all artists
  * @returns {Promise<Array>} - Array of song objects with artist info
  */
-async function getAllSongs() {
+export async function getAllSongs() {
   const artistsSnapshot = await getDocs(collection(db, 'artists'))
   const songs = []
 
@@ -227,7 +227,7 @@ function calculateTrendingScore(song) {
   const addedAt = song.addedAt?.toMillis() || Date.now()
 
   // Popularity score (0-60)
-  const popularity = likes + comments * 2 // Comments worth 2x likes
+  const popularity = likes * 2 + comments // Likes worth 2x comments
   const popularityScore = Math.min(60, (popularity / 100) * 60)
 
   // Recency score (0-40) - songs from last 30 days get full points
@@ -239,7 +239,7 @@ function calculateTrendingScore(song) {
 
 /**
  * New user score (has genre preferences but no engagement)
- * Score = Genre Match (50%) + Popularity (30%) + Recency (20%)
+ * Score = Genre Match (70%) + Popularity (20%) + Recency (10%)
  */
 function calculateNewUserScore(song, preferredGenres) {
   const songGenres = song.genres || song.artistGenres || []
@@ -247,19 +247,19 @@ function calculateNewUserScore(song, preferredGenres) {
   const comments = (song.comments || []).length
   const addedAt = song.addedAt?.toMillis() || Date.now()
 
-  // Genre match score (0-50)
+  // Genre match score (0-70)
   const genreMatches = songGenres.filter((g) =>
     preferredGenres.some((pg) => pg.toLowerCase() === g.toLowerCase()),
   ).length
-  const genreScore = genreMatches > 0 ? 50 : 0
+  const genreScore = genreMatches > 0 ? 70 : 0
 
-  // Popularity score (0-30)
-  const popularity = likes + comments * 2
-  const popularityScore = Math.min(30, (popularity / 100) * 30)
+  // Popularity score (0-20)
+  const popularity = likes * 2 + comments // Likes worth 2x comments
+  const popularityScore = Math.min(20, (popularity / 100) * 20)
 
-  // Recency score (0-20)
+  // Recency score (0-10)
   const daysSinceAdded = (Date.now() - addedAt) / (1000 * 60 * 60 * 24)
-  const recencyScore = Math.max(0, 20 - (daysSinceAdded / 30) * 20)
+  const recencyScore = Math.max(0, 10 - (daysSinceAdded / 30) * 10)
 
   return genreScore + popularityScore + recencyScore
 }
@@ -307,7 +307,7 @@ function calculateActiveUserScore(song, userProfile) {
   const clickScore = Math.min(10, clickCount * 2) // 2 points per click, max 10
 
   // Popularity score (0-10)
-  const popularity = likes + comments * 2
+  const popularity = likes * 2 + comments // Likes worth 2x comments
   const popularityScore = Math.min(10, (popularity / 100) * 10)
 
   // Recency score (0-5)
@@ -346,10 +346,10 @@ export function sortSongs(songs, sortBy, userProfile = null) {
 
   switch (sortBy) {
     case 'popular':
-      console.log('Sorting by POPULAR (Likes + Comments × 2)')
+      console.log('Sorting by POPULAR (Likes × 2 + Comments)')
       return sorted.sort((a, b) => {
-        const aPopularity = (a.likes || 0) + (a.comments || []).length * 2
-        const bPopularity = (b.likes || 0) + (b.comments || []).length * 2
+        const aPopularity = (a.likes || 0) * 2 + (a.comments || []).length
+        const bPopularity = (b.likes || 0) * 2 + (b.comments || []).length
         return bPopularity - aPopularity
       })
 

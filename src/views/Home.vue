@@ -189,7 +189,7 @@
                       <div
                         v-for="song in page"
                         :key="`${song.artistId}_${song.id}`"
-                        class=" col-12 col-md-6 col-xl-4"
+                        class="col-12 col-md-6 col-xl-4"
                       >
                         <div class="song-card" @click="openSongDetail(song)">
                           <!-- Player Container - Fixed height -->
@@ -472,6 +472,7 @@ import EventMap from '@/components/EventMap.vue'
 import SongDetailModal from '@/components/SongDetailModal.vue'
 import {
   getRecommendedSongs,
+  getAllSongs,
   filterSongsByGenre,
   sortSongs,
   getUserProfile,
@@ -584,10 +585,20 @@ export default {
 
     // Computed property for filtered and sorted songs
     displayedSongs() {
+      // Determine which song list to use based on sort option
+      let sourceSongs
+      if (this.selectedSort === 'recommended') {
+        // Use personalized recommendations
+        sourceSongs = [...this.recommendedSongs]
+      } else {
+        // Use all songs for other sort options (popular, recent, trending)
+        sourceSongs = [...this.allSongs]
+      }
+
       // Apply genre filter first
       let filtered = this.selectedGenreFilter
-        ? filterSongsByGenre(this.recommendedSongs, this.selectedGenreFilter)
-        : [...this.recommendedSongs]
+        ? filterSongsByGenre(sourceSongs, this.selectedGenreFilter)
+        : sourceSongs
 
       // Apply sort - pass userProfile for recommendation scoring
       const sorted = sortSongs(filtered, this.selectedSort, this.userProfile)
@@ -596,6 +607,7 @@ export default {
       console.log('Filters applied:', {
         genre: this.selectedGenreFilter || 'All',
         sort: this.selectedSort,
+        sourceCount: sourceSongs.length,
         resultCount: sorted.length,
         first3Songs: sorted.slice(0, 3).map((s) => ({
           title: s.title,
@@ -779,7 +791,11 @@ export default {
           limit: 50,
         })
 
+        // Also load ALL songs for non-recommended sorting
+        this.allSongs = await getAllSongs()
+
         console.log('Loaded', this.recommendedSongs.length, 'recommended songs')
+        console.log('Loaded', this.allSongs.length, 'total songs')
       } catch (error) {
         console.error('Error loading recommendations:', error)
       }

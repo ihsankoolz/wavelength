@@ -10,7 +10,7 @@
                     M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
                     M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
             dur="3s"
-            repeatCount="indefinite" 
+            repeatCount="indefinite"
           />
         </path>
         <path id="wave2" fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
@@ -115,33 +115,33 @@
           <div class="subtitle mb-5">CHOOSE SOME OF YOUR FAVOURITE GENRES</div>
 
           <!-- Single Responsive Grid -->
-<div class="genres-grid">
-  <div
-    v-for="genre in genres"
-    :key="genre.name"
-    class="genre-avatar"
-    :class="{ selected: selectedGenres.includes(genre.name) }"
-    @click="toggleGenre(genre.name)"
-  >
-    <div class="genre-img-wrap">
-      <img :src="genre.img" :alt="genre.name" class="genre-img" />
-      <span v-if="selectedGenres.includes(genre.name)" class="genre-check">
-        <svg width="100%" height="100%" viewBox="0 0 55 55">
-          <circle cx="27.5" cy="27.5" r="27.5" fill="black" fill-opacity="0.55" />
-          <polyline
-            points="16,30 25,39 40,21"
-            fill="none"
-            stroke="#fff"
-            stroke-width="2"
-            stroke-linecap="square"
-            stroke-linejoin="square"
-          />
-        </svg>
-      </span>
-    </div>
-    <div class="genre-label">{{ genre.name.toUpperCase() }}</div>
-  </div>
-</div>
+          <div class="genres-grid">
+            <div
+              v-for="genre in genres"
+              :key="genre.name"
+              class="genre-avatar"
+              :class="{ selected: selectedGenres.includes(genre.name) }"
+              @click="toggleGenre(genre.name)"
+            >
+              <div class="genre-img-wrap">
+                <img :src="genre.img" :alt="genre.name" class="genre-img" />
+                <span v-if="selectedGenres.includes(genre.name)" class="genre-check">
+                  <svg width="100%" height="100%" viewBox="0 0 55 55">
+                    <circle cx="27.5" cy="27.5" r="27.5" fill="black" fill-opacity="0.55" />
+                    <polyline
+                      points="16,30 25,39 40,21"
+                      fill="none"
+                      stroke="#fff"
+                      stroke-width="2"
+                      stroke-linecap="square"
+                      stroke-linejoin="square"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div class="genre-label">{{ genre.name.toUpperCase() }}</div>
+            </div>
+          </div>
 
           <div class="genre-count text-center mt-4">
             <span
@@ -255,6 +255,7 @@ export default {
   background: #191717;
   position: relative;
   font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
 }
 
 .meta-action-bar {
@@ -265,7 +266,7 @@ export default {
   position: fixed;
   top: 50%;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 300px;
   transform: translateY(-50%);
   pointer-events: none;
@@ -285,7 +286,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background:
     radial-gradient(ellipse at center, rgba(187, 24, 20, 0.08) 0%, transparent 70%),
@@ -297,7 +298,7 @@ export default {
 
 .onboarding-bg {
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   background: transparent;
   display: flex;
   flex-direction: column;
@@ -396,7 +397,6 @@ export default {
   font-size: 1rem;
 }
 
-
 /* Base: Mobile (< 576px) - 3 columns */
 .genres-grid {
   display: grid;
@@ -415,7 +415,9 @@ export default {
   border-radius: 50%;
   overflow: hidden;
   background: #191919;
-  transition: border 0.2s, box-shadow 0.2s;
+  transition:
+    border 0.2s,
+    box-shadow 0.2s;
   margin-bottom: 6px;
 }
 
@@ -436,14 +438,14 @@ export default {
   .genres-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px 12px;
-     justify-content: center;
+    justify-content: center;
   }
-  
+
   .genre-img-wrap {
     width: 86px;
     height: 86px;
   }
-  
+
   .genre-label {
     font-size: 0.9rem;
     margin-top: 7px;
@@ -455,14 +457,14 @@ export default {
   .genres-grid {
     grid-template-columns: repeat(5, 1fr);
     gap: 24px 16px;
-     justify-content: center;
+    justify-content: center;
   }
-  
+
   .genre-img-wrap {
     width: 95px;
     height: 95px;
   }
-  
+
   .genre-label {
     font-size: 0.95rem;
     margin-top: 8px;
@@ -474,14 +476,14 @@ export default {
   .genres-grid {
     grid-template-columns: repeat(6, 1fr);
     gap: 28px 20px;
-     justify-content: center;
+    justify-content: center;
   }
-  
+
   .genre-img-wrap {
     width: 105px;
     height: 105px;
   }
-  
+
   .genre-label {
     font-size: 1rem;
   }
@@ -494,13 +496,13 @@ export default {
     gap: 34px 24px;
     justify-content: center;
   }
-  
+
   .genre-img-wrap {
     width: 110px;
     height: 110px;
     margin-bottom: 8px;
   }
-  
+
   .genre-label {
     font-size: 1.05rem;
     letter-spacing: 0.03rem;
@@ -513,7 +515,9 @@ export default {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   position: relative;
   background: none;
 }
@@ -541,5 +545,4 @@ export default {
   justify-content: center;
   pointer-events: none;
 }
-
 </style>
