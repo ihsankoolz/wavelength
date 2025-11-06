@@ -465,9 +465,17 @@
                     </div>
                     <div class="stat-box">
                       <i class="bi bi-music-note-list fs-4"></i>
-                      <div>
+                      <div class="w-100">
                         <div class="fw-bold">Genres</div>
                         <div class="text-white-soft">{{ artist.genres?.length || 0 }} genres</div>
+                        <div
+                          v-if="artist.genres && artist.genres.length > 0"
+                          class="genre-tags mt-2"
+                        >
+                          <span v-for="genre in artist.genres" :key="genre" class="genre-tag">
+                            {{ genre }}
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <div class="stat-box">
@@ -2126,11 +2134,29 @@ export default {
 .stat-box i {
   color: #bb1814;
   font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
 .stat-box .fw-bold {
   color: white;
   font-size: 1rem;
+}
+
+.genre-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.genre-tag {
+  display: inline-block;
+  background: rgba(187, 24, 20, 0.2);
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(187, 24, 20, 0.4);
+  font-weight: 500;
 }
 
 .btn-back-home {
