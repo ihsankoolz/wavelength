@@ -316,18 +316,26 @@ export default {
         this.submitting = false
       }
     },
-    async deleteComment(comment) {
-      if (!confirm('Are you sure you want to delete this comment?')) return
+    async deleteReply(comment, reply) {
+      if (!confirm('Are you sure you want to delete this reply?')) return
 
       try {
-        const result = await deleteSongComment(this.song.artistId, this.song.id, comment.id)
+        const { deleteCommentReply } = await import('@/utils/musicInteractions')
+        const result = await deleteCommentReply(
+          this.song.artistId,
+          this.song.id,
+          comment.id,
+          reply.id,
+        )
 
         if (!result.success) {
-          alert('Failed to delete comment. Please try again.')
+          alert('Failed to delete reply. Please try again.')
+          return
         }
+        this.$emit('comment-posted')
       } catch (error) {
-        console.error('Error deleting comment:', error)
-        alert('An error occurred while deleting the comment.')
+        console.error('Error deleting reply:', error)
+        alert('An error occurred while deleting the reply.')
       }
     },
     async toggleCommentLike(comment) {
@@ -419,6 +427,9 @@ export default {
         if (result.success) {
           this.replyText = ''
           this.replyingTo = null
+
+          this.$emit('comment-posted')
+
         } else {
           alert('Failed to post reply. Please try again.')
         }
