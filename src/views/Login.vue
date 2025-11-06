@@ -265,7 +265,7 @@ export default {
       cursorX: 0,
       cursorY: 0,
       animatedStats: { artists: 0, fans: 0 },
-      welcomeText: 'WELCOME BACK!',
+      welcomeText: 'WELCOME  BACK!',
     }
   },
   computed: {

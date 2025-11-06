@@ -96,11 +96,16 @@
           <div class="row align-items-start align-items-md-center mb-3 g-3">
             <div class="col-12 col-md-8 col-lg-9">
               <h1 class="display-5 fw-bold mb-2">MY ANALYTICS</h1>
-              <p class="header-subtitle d-none d-sm-block">TRACK YOUR PERFORMANCE AND AUDIENCE ENGAGEMENT</p>
+              <p class="header-subtitle d-none d-sm-block">
+                TRACK YOUR PERFORMANCE AND AUDIENCE ENGAGEMENT
+              </p>
               <p class="header-subtitle d-block d-sm-none">TRACK YOUR PERFORMANCE</p>
             </div>
             <div class="col-12 col-md-4 col-lg-3">
-              <router-link to="/artist/dashboard" class="btn btn-primary btn-sm w-100 w-md-auto d-flex align-items-center justify-content-center position-relative">
+              <router-link
+                to="/artist/dashboard"
+                class="btn btn-primary btn-sm w-100 w-md-auto d-flex align-items-center justify-content-center position-relative"
+              >
                 <i class="bi bi-arrow-left position-absolute start-0 ms-3"></i>
                 <span>Back to Dashboard</span>
               </router-link>
@@ -200,9 +205,15 @@
                           <th class="d-table-cell d-md-none">Song Details</th>
                           <th class="d-none d-lg-table-cell">Type</th>
                           <th class="d-none d-md-table-cell">Platform</th>
-                          <th class="text-center d-none d-sm-table-cell"><i class="bi bi-play-circle"></i> Plays</th>
-                          <th class="text-center d-none d-sm-table-cell"><i class="bi bi-heart"></i> Likes</th>
-                          <th class="text-center d-none d-sm-table-cell"><i class="bi bi-chat"></i> Comments</th>
+                          <th class="text-center d-none d-sm-table-cell">
+                            <i class="bi bi-play-circle"></i> Plays
+                          </th>
+                          <th class="text-center d-none d-sm-table-cell">
+                            <i class="bi bi-heart"></i> Likes
+                          </th>
+                          <th class="text-center d-none d-sm-table-cell">
+                            <i class="bi bi-chat"></i> Comments
+                          </th>
                           <th class="text-center d-table-cell d-sm-none">Stats</th>
                         </tr>
                       </thead>
@@ -257,7 +268,9 @@
                           </td>
                           <td class="text-center d-table-cell d-sm-none">
                             <div class="d-flex flex-column gap-1">
-                              <small><i class="bi bi-play-circle"></i> {{ song.playCount || 0 }}</small>
+                              <small
+                                ><i class="bi bi-play-circle"></i> {{ song.playCount || 0 }}</small
+                              >
                               <small><i class="bi bi-heart"></i> {{ song.likes || 0 }}</small>
                               <small><i class="bi bi-chat"></i> {{ song.commentCount || 0 }}</small>
                             </div>
@@ -349,7 +362,9 @@
                         <tr v-for="event in upcomingEvents" :key="event.id">
                           <td>
                             <strong class="d-block">{{ event.title }}</strong>
-                            <small class="d-block d-md-none text-muted">{{ formatDate(event.date) }}</small>
+                            <small class="d-block d-md-none text-muted">{{
+                              formatDate(event.date)
+                            }}</small>
                             <small class="d-block d-lg-none text-muted">{{ event.venue }}</small>
                           </td>
                           <td class="d-none d-md-table-cell">{{ formatDate(event.date) }}</td>
@@ -361,12 +376,16 @@
                             </span>
                           </td>
                           <td class="text-center">
-                            <div class="d-flex flex-column flex-sm-row gap-1 justify-content-center align-items-center">
+                            <div
+                              class="d-flex flex-column flex-sm-row gap-1 justify-content-center align-items-center"
+                            >
                               <span class="badge bg-warning d-sm-none">
                                 <i class="bi bi-star-fill"></i>
                                 {{ event.interestedCount || 0 }}
                               </span>
-                              <span class="badge bg-success">Upcoming</span>
+                              <span class="badge" :class="getEventStatus(event).class">
+                                {{ getEventStatus(event).label }}
+                              </span>
                             </div>
                           </td>
                         </tr>
@@ -446,10 +465,14 @@
                             </div>
                             <div class="col">
                               <h6 class="mb-1 fw-bold text-truncate">{{ event.title }}</h6>
-                              <small class="text-muted d-block mb-2 text-truncate">{{ event.venue }}</small>
+                              <small class="text-muted d-block mb-2 text-truncate">{{
+                                event.venue
+                              }}</small>
                               <div class="d-flex align-items-center gap-2">
                                 <i class="bi bi-star-fill text-warning"></i>
-                                <span class="fw-bold small">{{ event.interestedCount || 0 }} interested</span>
+                                <span class="fw-bold small"
+                                  >{{ event.interestedCount || 0 }} interested</span
+                                >
                               </div>
                             </div>
                           </div>
@@ -674,6 +697,25 @@ export default {
       showEventModal.value = false
     }
 
+    const getEventStatus = (event) => {
+      if (!event.date) return { label: 'TBA', class: 'bg-secondary' }
+
+      const eventDate = event.date?.toDate ? event.date.toDate() : new Date(event.date)
+      const now = new Date()
+
+      // Set to start of day for comparison
+      const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate())
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+      if (eventDay < today) {
+        return { label: 'Past', class: 'bg-secondary' }
+      } else if (eventDay.getTime() === today.getTime()) {
+        return { label: 'Today', class: 'bg-danger' }
+      } else {
+        return { label: 'Upcoming', class: 'bg-success' }
+      }
+    }
+
     const onEventSaved = () => {
       closeEventModal()
       loadAnalytics() // Refresh the analytics data including events
@@ -711,6 +753,7 @@ export default {
       getGenrePercentage,
       getProgressBarClass,
       getRankClass,
+      getEventStatus,
       // Event modal
       showEventModal,
       openEventModal,
@@ -1219,7 +1262,7 @@ small {
 }
 
 .btn-primary:hover {
-  background: #6E0B0B;
+  background: #6e0b0b;
   transform: none;
 }
 
