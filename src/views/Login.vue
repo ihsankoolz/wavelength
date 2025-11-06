@@ -9,7 +9,7 @@
         {{ getMusicSymbol(n) }}
       </div>
     </div>
- 
+
     <!-- SVG Animated Wave Background -->
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -130,7 +130,7 @@
             </div>
           </transition>
 
-          <form @submit.prevent="login" autocomplete="off">
+          <form @submit.prevent="login" autocomplete="on">
             <!-- Email Input with Floating Label -->
             <div class="mb-4 input-group-enhanced">
               <div class="input-icon">
@@ -153,7 +153,8 @@
                 v-model="email"
                 class="form-control input-enhanced"
                 required
-                autocomplete="off"
+                autocomplete="username email"
+                name="email"
                 @focus="emailFocused = true"
                 @blur="emailFocused = false"
               />
@@ -183,7 +184,8 @@
                 v-model="password"
                 class="form-control input-enhanced"
                 required
-                autocomplete="off"
+                autocomplete="current-password"
+                name="password"
                 @focus="passwordFocused = true"
                 @blur="passwordFocused = false"
               />
@@ -265,7 +267,7 @@ export default {
       cursorX: 0,
       cursorY: 0,
       animatedStats: { artists: 0, fans: 0 },
-      welcomeText: 'WELCOME BACK!',
+      welcomeText: 'WELCOME  BACK!',
     }
   },
   computed: {
@@ -587,7 +589,7 @@ export default {
     background: transparent;
     border-radius: 0;
   }
-  
+
   .form-card {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -645,11 +647,8 @@ export default {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-size: 3rem;  /* Mobile default */
+  font-size: 3rem; /* Mobile default */
 }
-
-
-
 
 /* Error Alert with Animation */
 .error-alert {
@@ -1025,6 +1024,4 @@ export default {
     background: #191717;
   }
 }
-
-
 </style>

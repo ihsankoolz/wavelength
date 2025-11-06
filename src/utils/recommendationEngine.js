@@ -1,4 +1,4 @@
-// recommendationEngine.js - Smart song recommendation algorithm
+﻿// recommendationEngine.js - Smart song recommendation algorithm
 import { db } from '@/services/firebase'
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore'
 
@@ -15,15 +15,15 @@ export async function getRecommendedSongs(userId, options = {}) {
   } = options
 
   try {
-    console.log('🎵 Getting recommendations for user:', userId)
+    console.log('Getting recommendations for user:', userId)
 
     // 1. Get user profile
     const userProfile = await getUserProfile(userId)
-    console.log('👤 User profile:', userProfile)
+    console.log('User profile:', userProfile)
 
     // 2. Get all songs from all artists
     const allSongs = await getAllSongs()
-    console.log('📀 Total songs available:', allSongs.length)
+    console.log('Total songs available:', allSongs.length)
 
     // 3. Determine user type and score songs accordingly
     const scoredSongs = allSongs.map((song) => ({
@@ -35,7 +35,7 @@ export async function getRecommendedSongs(userId, options = {}) {
     scoredSongs.sort((a, b) => b.score - a.score)
 
     console.log(
-      '✅ Top 5 recommended songs:',
+      'Top 5 recommended songs:',
       scoredSongs.slice(0, 5).map((s) => ({
         title: s.title,
         artist: s.artistName,
@@ -45,7 +45,7 @@ export async function getRecommendedSongs(userId, options = {}) {
 
     return scoredSongs.slice(0, limit)
   } catch (error) {
-    console.error('❌ Error getting recommendations:', error)
+    console.error('Error getting recommendations:', error)
     return []
   }
 }
@@ -346,7 +346,7 @@ export function sortSongs(songs, sortBy, userProfile = null) {
 
   switch (sortBy) {
     case 'popular':
-      console.log('📊 Sorting by POPULAR (Likes + Comments × 2)')
+      console.log('Sorting by POPULAR (Likes + Comments × 2)')
       return sorted.sort((a, b) => {
         const aPopularity = (a.likes || 0) + (a.comments || []).length * 2
         const bPopularity = (b.likes || 0) + (b.comments || []).length * 2
@@ -354,7 +354,7 @@ export function sortSongs(songs, sortBy, userProfile = null) {
       })
 
     case 'recent':
-      console.log('🆕 Sorting by RECENT (Newest first)')
+      console.log('Sorting by RECENT (Newest first)')
       return sorted.sort((a, b) => {
         const aTime = a.addedAt?.toMillis() || 0
         const bTime = b.addedAt?.toMillis() || 0
@@ -362,7 +362,7 @@ export function sortSongs(songs, sortBy, userProfile = null) {
       })
 
     case 'trending':
-      console.log('🔥 Sorting by TRENDING (60% Popularity + 40% Recency)')
+      console.log('Sorting by TRENDING (60% Popularity + 40% Recency)')
       return sorted.sort((a, b) => {
         const aScore = calculateTrendingScore(a)
         const bScore = calculateTrendingScore(b)
@@ -379,7 +379,7 @@ export function sortSongs(songs, sortBy, userProfile = null) {
         } else if (isNewUser && hasPreferences) {
           algorithm = 'New User - With Preferences (Genre Match)'
         }
-        console.log(`⭐ Sorting by RECOMMENDED - Algorithm: ${algorithm}`)
+        console.log(`Sorting by RECOMMENDED - Algorithm: ${algorithm}`)
 
         const scoredSongs = sorted.map((song) => ({
           ...song,
@@ -388,7 +388,7 @@ export function sortSongs(songs, sortBy, userProfile = null) {
         return scoredSongs.sort((a, b) => b._tempScore - a._tempScore)
       }
       // Fallback to existing order if no user profile
-      console.log('⭐ Sorting by RECOMMENDED (using existing order - no user profile)')
+      console.log('Sorting by RECOMMENDED (using existing order - no user profile)')
       return sorted
 
     default:
@@ -458,7 +458,7 @@ export function getRecommendedArtists(
   })
 
   console.log(
-    '✅ Top 5 recommended artists:',
+    'Top 5 recommended artists:',
     sortedArtists.slice(0, 5).map((a) => ({
       name: a.artistName,
       score: a._recommendationScore.toFixed(1),

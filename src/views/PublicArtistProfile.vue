@@ -1,4 +1,4 @@
-<!-- public artist profile.vue -->
+﻿<!-- public artist profile.vue -->
 <template>
   <div class="public-artist-profile">
     <!-- Navigation Bar -->
@@ -465,9 +465,17 @@
                     </div>
                     <div class="stat-box">
                       <i class="bi bi-music-note-list fs-4"></i>
-                      <div>
+                      <div class="w-100">
                         <div class="fw-bold">Genres</div>
                         <div class="text-white-soft">{{ artist.genres?.length || 0 }} genres</div>
+                        <div
+                          v-if="artist.genres && artist.genres.length > 0"
+                          class="genre-tags mt-2"
+                        >
+                          <span v-for="genre in artist.genres" :key="genre" class="genre-tag">
+                            {{ genre }}
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <div class="stat-box">
@@ -643,7 +651,7 @@ export default {
       try {
         this.loadingEvents = true
 
-        // ⭐ FIXED: Removed orderBy to avoid index requirement
+        //  FIXED: Removed orderBy to avoid index requirement
         const eventsQuery = query(collection(db, 'events'), where('artistId', '==', this.artist.id))
 
         const eventsSnapshot = await getDocs(eventsQuery)
@@ -663,13 +671,13 @@ export default {
             return eventDate >= now
           })
           .sort((a, b) => {
-            // ⭐ Client-side sorting
+            //  Client-side sorting
             const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date)
             const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date)
             return dateA - dateB
           })
 
-        console.log(`✅ ${this.artistEvents.length} upcoming events for ${this.artist.artistName}`)
+        console.log(`${this.artistEvents.length} upcoming events for ${this.artist.artistName}`)
       } catch (error) {
         console.error('Error loading artist events:', error)
       } finally {
@@ -1099,7 +1107,7 @@ export default {
     },
 
     openSongDetail(song) {
-      console.log('🎵 Opening song detail modal for:', song.title)
+      console.log('Opening song detail modal for:', song.title)
       this.selectedSong = {
         ...song,
         artistId: this.artist.id,
@@ -1107,7 +1115,7 @@ export default {
         artistPhoto: this.artist.profileImage,
       }
       this.showSongModal = true
-      console.log('🎵 Modal state:', this.showSongModal, 'Selected song:', this.selectedSong?.title)
+      console.log('Modal state:', this.showSongModal, 'Selected song:', this.selectedSong?.title)
     },
 
     closeSongModal() {
@@ -2126,11 +2134,29 @@ export default {
 .stat-box i {
   color: #bb1814;
   font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
 .stat-box .fw-bold {
   color: white;
   font-size: 1rem;
+}
+
+.genre-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.genre-tag {
+  display: inline-block;
+  background: rgba(187, 24, 20, 0.2);
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(187, 24, 20, 0.4);
+  font-weight: 500;
 }
 
 .btn-back-home {

@@ -1,4 +1,4 @@
-<!-- Home.vue -->
+﻿<!-- Home.vue -->
 <template>
   <div class="fan-homepage">
     <!-- Navigation Bar -->
@@ -593,7 +593,7 @@ export default {
       const sorted = sortSongs(filtered, this.selectedSort, this.userProfile)
 
       // Log for debugging with first 3 songs
-      console.log('🔍 Filters applied:', {
+      console.log('Filters applied:', {
         genre: this.selectedGenreFilter || 'All',
         sort: this.selectedSort,
         resultCount: sorted.length,
@@ -624,7 +624,7 @@ export default {
         }
       }
 
-      console.log('📄 Paginated into', pages.length, 'pages')
+      console.log('Paginated into', pages.length, 'pages')
 
       return pages
     },
@@ -688,12 +688,12 @@ export default {
     // Watch for filter/sort changes to reset pagination
     selectedGenreFilter() {
       this.currentSongPage = 0
-      console.log('🎯 Genre filter changed to:', this.selectedGenreFilter || 'All')
+      console.log('Genre filter changed to:', this.selectedGenreFilter || 'All')
     },
 
     selectedSort(newSort) {
       this.currentSongPage = 0
-      console.log('🔄 Sort changed to:', newSort)
+      console.log('Sort changed to:', newSort)
     },
   },
 
@@ -755,17 +755,17 @@ export default {
 
           // Load user profile for recommendation scoring
           this.userProfile = await getUserProfile(user.uid)
-          console.log('🎯 User profile loaded for recommendations:', {
+          console.log('User profile loaded for recommendations:', {
             isNewUser: this.userProfile.isNewUser,
             hasPreferences: this.userProfile.hasPreferences,
             genres: this.userProfile.preferredGenres.length,
             followedArtists: this.userProfile.followedArtists.length,
           })
 
-          console.log('👤 User genres:', this.userGenres)
-          console.log('❤️ Liked songs:', this.likedSongsSet.size)
-          console.log('👥 Following:', this.followedArtistsSet.size)
-          console.log('📅 Interested in:', this.interestedEventsSet.size, 'events')
+          console.log('User genres:', this.userGenres)
+          console.log('Liked songs:', this.likedSongsSet.size)
+          console.log('Following:', this.followedArtistsSet.size)
+          console.log('Interested in:', this.interestedEventsSet.size, 'events')
         }
       } catch (error) {
         console.error('Error loading user data:', error)
@@ -779,7 +779,7 @@ export default {
           limit: 50,
         })
 
-        console.log('🎵 Loaded', this.recommendedSongs.length, 'recommended songs')
+        console.log('Loaded', this.recommendedSongs.length, 'recommended songs')
       } catch (error) {
         console.error('Error loading recommendations:', error)
       }
@@ -801,7 +801,7 @@ export default {
           { limit: 20 },
         )
 
-        console.log('👥 Loaded', this.recommendedArtists.length, 'recommended artists')
+        console.log('Loaded', this.recommendedArtists.length, 'recommended artists')
       } catch (error) {
         console.error('Error loading artists:', error)
       }
@@ -881,7 +881,7 @@ export default {
         }
 
         this.upcomingEvents = upcomingEvents
-        console.log('📅 Loaded', this.upcomingEvents.length, 'upcoming events')
+        console.log('Loaded', this.upcomingEvents.length, 'upcoming events')
       } catch (error) {
         console.error('Error loading events:', error)
       } finally {
@@ -989,30 +989,30 @@ export default {
     },
 
     async toggleLike(song) {
-      console.log('🔥 toggleLike called!', song.title)
+      console.log('toggleLike called!', song.title)
       const songKey = `${song.artistId}_${song.id}`
       if (this.likingInProgress[songKey]) {
-        console.log('⚠️ Already in progress, skipping')
+        console.log('Already in progress, skipping')
         return
       }
 
       try {
         this.likingInProgress[songKey] = true
         const isLiked = this.isSongLiked(song)
-        console.log('❤️ Current like status:', isLiked)
+        console.log('Current like status:', isLiked)
 
         const result = await toggleSongLike(song.artistId, song.id, isLiked)
-        console.log('✅ Toggle result:', result)
+        console.log('Toggle result:', result)
 
         if (result.success) {
           // Update local state - Create new Set to trigger reactivity
           const newSet = new Set(this.likedSongsSet)
           if (isLiked) {
             newSet.delete(songKey)
-            console.log('💔 Unliked song')
+            console.log('Unliked song')
           } else {
             newSet.add(songKey)
-            console.log('❤️ Liked song')
+            console.log('Liked song')
           }
           this.likedSongsSet = newSet
 
@@ -1023,7 +1023,7 @@ export default {
           if (songIndex !== -1) {
             this.recommendedSongs[songIndex].likes = result.newLikeCount
           }
-          console.log('📊 New like count:', result.newLikeCount)
+          console.log('New like count:', result.newLikeCount)
         } else {
           console.error('❌ Toggle failed:', result.error)
         }
@@ -1071,7 +1071,7 @@ export default {
 
     // Song Detail Modal (combines embed + comments)
     openSongDetail(song) {
-      console.log('🎵 Opening song detail for:', song.title, {
+      console.log('Opening song detail for:', song.title, {
         artistId: song.artistId,
         songId: song.id,
         platform: song.platform,
@@ -1145,7 +1145,7 @@ export default {
     handlePlayerClick(song) {
       const songKey = `${song.artistId}_${song.id}`
 
-      console.log('🎧 Player clicked:', song.title, 'by', song.artistName)
+      console.log('Player clicked:', song.title, 'by', song.artistName)
 
       // Only track once per song per session (to avoid duplicate tracking on every click)
       if (!this.playedSongsSet.has(songKey)) {
