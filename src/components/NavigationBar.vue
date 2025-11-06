@@ -414,7 +414,7 @@
           </li>
         </ul>
         <div
-          class="mobile-nav-icons d-flex align-items-center justify-content-between mt-3 px-2 px-md-3 gap-3"
+          class="mobile-nav-icons d-flex align-items-center justify-content-end mt-3 px-2 px-md-3 gap-3"
         >
           <NotificationBell />
           <div class="dropdown">
