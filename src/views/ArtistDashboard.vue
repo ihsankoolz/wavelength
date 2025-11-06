@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-content">
+  g<div class="dashboard-content">
     <NavigationBar />
 
     <!-- Loading State -->
@@ -289,8 +289,8 @@
                       <div class="section-header d-flex justify-content-between align-items-center mb-3">
                         <div>
                           <h2 class="h4 mb-1">FOLLOWING</h2>
-                          <p class="text-muted mb-0 small">You are following <span class="highlight-number">{{
-                            followingArtists.length }}</span> artist{{ followingArtists.length !== 1 ? 's' : '' }}</p>
+                          <p class="text-muted mb-0 small">YOU ARE FOLLOWING <span>{{
+                            followingArtists.length }}</span> ARTIST{{ followingArtists.length !== 1 ? 'S' : '' }}</p>
                         </div>
                       </div>
 
