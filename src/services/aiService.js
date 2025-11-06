@@ -1,4 +1,4 @@
-// aiService.js - Gemini AI Integration for Wavelength Music Discovery
+﻿// aiService.js - Gemini AI Integration for Wavelength Music Discovery
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { db } from './firebase'
 import { collection, getDocs, query, where, limit } from 'firebase/firestore'
@@ -24,7 +24,7 @@ export async function getCompactContext(userId) {
   try {
     const context = {
       artists: [],
-      songs: [], // ✨ NEW: Add songs
+      songs: [], //  NEW: Add songs
       events: [],
       userFollowing: [],
       userGenres: [],
@@ -33,14 +33,14 @@ export async function getCompactContext(userId) {
     // Fetch top 50 artists (names + primary genre only for token efficiency)
     const artistsSnapshot = await getDocs(query(collection(db, 'artists'), limit(50)))
 
-    // ✨ NEW: Collect songs while fetching artists
+    //  NEW: Collect songs while fetching artists
     const allSongs = []
 
     context.artists = artistsSnapshot.docs.map((doc) => {
       const data = doc.data()
       const artistId = doc.id
 
-      // ✨ NEW: Extract songs from each artist
+      //  NEW: Extract songs from each artist
       const musicLinks = data.musicLinks || []
       musicLinks.forEach((song) => {
         allSongs.push({
@@ -59,7 +59,7 @@ export async function getCompactContext(userId) {
       }
     })
 
-    // ✨ NEW: Limit to top 30 songs (sorted by likes or plays)
+    //  NEW: Limit to top 30 songs (sorted by likes or plays)
     context.songs = allSongs.sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 30)
 
     // Fetch upcoming events (limited to 15)
@@ -109,7 +109,7 @@ function buildSystemPrompt(context) {
     .join(', ')
     .substring(0, 500) // Limit to 500 chars max
 
-  // ✨ NEW: Create song list (title - artist)
+  //  NEW: Create song list (title - artist)
   const songList = context.songs
     .map((s) => `${s.title} by ${s.artistName}`)
     .join(', ')
@@ -251,7 +251,7 @@ function parseActions(text, context) {
         })
       }
     } else if (type === 'song') {
-      // ✨ NEW: Handle song recommendations
+      //  NEW: Handle song recommendations
       // Format: artistId_songId
       const song = context.songs.find((s) => {
         const songKey = `${s.artistId}_${s.id}`

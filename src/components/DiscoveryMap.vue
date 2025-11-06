@@ -1,4 +1,4 @@
-<!-- discoverymap.vue -->
+﻿<!-- discoverymap.vue -->
 <template>
   <div>
     <div id="discoveryMap" class="discovery-map"></div>
@@ -44,7 +44,7 @@ export default {
       this.$router.push(`/events/${eventId}`)
     }
 
-    await this.initMap() // ⭐ ADD async/await HERE
+    await this.initMap() //  ADD async/await HERE
   },
   beforeUnmount() {
     // Clean up global function
@@ -52,9 +52,9 @@ export default {
   },
   methods: {
     async initMap() {
-      // ⭐ MAKE THIS async
+      //  MAKE THIS async
       try {
-        // ⭐ Load Google Maps dynamically (SECURE WAY)
+        //  Load Google Maps dynamically (SECURE WAY)
         await loadGoogleMaps()
 
         const singaporeBounds = {

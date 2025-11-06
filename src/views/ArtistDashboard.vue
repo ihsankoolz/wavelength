@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   g<div class="dashboard-content">
     <NavigationBar />
 

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="user-profile-page">
     <!-- Dynamic Wave Background -->
     <div class="wave-svg">
@@ -398,24 +398,24 @@ export default {
         const userId = user.uid
 
         // Step 1: Delete all related data from Firestore first
-        console.log('🗑️ Deleting user data from Firestore...')
+        console.log('Deleting user data from Firestore...')
 
         // Delete user document
         await deleteDoc(doc(db, 'users', userId))
-        console.log('✅ User document deleted')
+        console.log('User document deleted')
 
         // If artist, delete artist profile and related data
         try {
           const artistDoc = await getDoc(doc(db, 'artists', userId))
           if (artistDoc.exists()) {
             await deleteDoc(doc(db, 'artists', userId))
-            console.log('✅ Artist profile deleted')
+            console.log('Artist profile deleted')
 
             // TODO: Delete artist's events (if needed)
             // TODO: Delete artist's music comments (if needed)
           }
         } catch (e) {
-          console.log('ℹ️ No artist profile found')
+          console.log('No artist profile found')
         }
 
         // Delete user's notifications
@@ -428,16 +428,16 @@ export default {
           const notificationsSnapshot = await getDocs(notificationsQuery)
           const deletePromises = notificationsSnapshot.docs.map((doc) => deleteDoc(doc.ref))
           await Promise.all(deletePromises)
-          console.log(`✅ Deleted ${notificationsSnapshot.size} notifications`)
+          console.log(`Deleted ${notificationsSnapshot.size} notifications`)
         } catch (e) {
-          console.log('ℹ️ No notifications to delete')
+          console.log('No notifications to delete')
         }
 
         // Step 2: Delete Firebase Auth account
-        console.log('🗑️ Deleting Firebase Auth account...')
+        console.log('Deleting Firebase Auth account...')
         try {
           await deleteUser(user)
-          console.log('✅ Firebase Auth account deleted')
+          console.log('Firebase Auth account deleted')
 
           alert(
             '✅ Account deleted successfully. You can now register with this email again if you wish.',

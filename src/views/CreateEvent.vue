@@ -1,4 +1,4 @@
-<!-- createEvent.vue -->
+﻿<!-- createEvent.vue -->
 <template>
   <div class="create-event-page">
     <!-- Navigation Bar -->

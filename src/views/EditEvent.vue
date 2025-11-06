@@ -1,4 +1,4 @@
-<!-- EditEvent.vue -->
+﻿<!-- EditEvent.vue -->
 <template>
   <div class="edit-event-page">
     <!-- Navigation Bar -->
