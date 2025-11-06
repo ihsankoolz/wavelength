@@ -12,11 +12,7 @@
           <div class="song-details-section">
             <!-- Artist Header -->
             <div class="artist-header">
-              <img
-                :src="song?.artistPhoto || '/default-avatar.png'"
-                :alt="song?.artistName"
-                class="artist-photo"
-              />
+              <img :src="song?.artistPhoto || '/default-avatar.png'" :alt="song?.artistName" class="artist-photo" />
               <div class="artist-info">
                 <h2 class="song-title">{{ song?.title || 'Song Title' }}</h2>
                 <p class="artist-name">{{ song?.artistName || 'Artist Name' }}</p>
@@ -32,52 +28,26 @@
             <!-- Spotify Embed -->
             <div class="embed-container">
               <!-- Spotify Embed -->
-              <iframe
-                v-if="song?.platform === 'spotify' && song?.embedUrl"
-                :src="song.embedUrl"
-                width="100%"
-                height="232"
-                frameborder="0"
-                allowtransparency="true"
-                allow="encrypted-media"
-                loading="lazy"
-                style="min-height: 232px"
-              ></iframe>
+              <iframe v-if="song?.platform === 'spotify' && song?.embedUrl" :src="song.embedUrl" width="100%"
+                height="232" frameborder="0" allowtransparency="true" allow="encrypted-media" loading="lazy"
+                style="min-height: 232px"></iframe>
 
               <!-- YouTube Embed -->
-              <iframe
-                v-else-if="song?.platform === 'youtube' && song?.embedUrl"
-                width="100%"
-                height="232"
-                :src="song.embedUrl"
-                frameborder="0"
+              <iframe v-else-if="song?.platform === 'youtube' && song?.embedUrl" width="100%" height="232"
+                :src="song.embedUrl" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
+                allowfullscreen loading="lazy"></iframe>
 
               <!-- SoundCloud Embed (legacy support) -->
-              <iframe
-                v-else-if="song?.platform === 'soundcloud' && song?.url"
-                width="100%"
-                height="232"
-                scrolling="no"
-                frameborder="no"
-                allow="autoplay"
+              <iframe v-else-if="song?.platform === 'soundcloud' && song?.url" width="100%" height="232" scrolling="no"
+                frameborder="no" allow="autoplay"
                 :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
                   song.url,
                 )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`"
-                loading="lazy"
-              ></iframe>
+                loading="lazy"></iframe>
 
               <!-- Fallback Link -->
-              <a
-                v-else-if="song?.url"
-                :href="song.url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="song-link"
-              >
+              <a v-else-if="song?.url" :href="song.url" target="_blank" rel="noopener noreferrer" class="song-link">
                 🎵 Open on {{ song.platform }} →
               </a>
             </div>
@@ -92,18 +62,9 @@
 
             <!-- Add Comment -->
             <div class="add-comment-section">
-              <textarea
-                v-model="newComment"
-                placeholder="Add a comment..."
-                class="comment-input"
-                rows="3"
-                @keydown.enter.ctrl="submitComment"
-              ></textarea>
-              <button
-                @click="submitComment"
-                :disabled="!newComment.trim() || submitting"
-                class="comment-button"
-              >
+              <textarea v-model="newComment" placeholder="Add a comment..." class="comment-input" rows="3"
+                @keydown.enter.ctrl="submitComment"></textarea>
+              <button @click="submitComment" :disabled="!newComment.trim() || submitting" class="comment-button">
                 {{ submitting ? 'Posting...' : 'COMMENT' }}
               </button>
             </div>
@@ -135,11 +96,8 @@
 
                       <!-- Comment Actions -->
                       <div class="comment-actions">
-                        <button
-                          @click="toggleCommentLike(comment)"
-                          class="action-btn"
-                          :class="{ liked: isCommentLiked(comment) }"
-                        >
+                        <button @click="toggleCommentLike(comment)" class="action-btn"
+                          :class="{ liked: isCommentLiked(comment) }">
                           <i class="bi bi-heart-fill" v-if="isCommentLiked(comment)"></i>
                           <i class="bi bi-heart" v-else></i>
                           <span>{{ comment.likes || 0 }}</span>
@@ -150,21 +108,15 @@
                           <span>Reply</span>
                         </button>
 
-                        <button
-                          v-if="canDeleteComment(comment)"
-                          @click="deleteComment(comment)"
-                          class="action-btn delete"
-                        >
+                        <button v-if="canDeleteComment(comment)" @click="deleteComment(comment)"
+                          class="action-btn delete">
                           <i class="bi bi-trash-fill"></i>
                           <span>Delete</span>
                         </button>
                       </div>
 
                       <!-- Replies -->
-                      <div
-                        v-if="comment.replies && comment.replies.length > 0"
-                        class="replies-list"
-                      >
+                      <div v-if="comment.replies && comment.replies.length > 0" class="replies-list">
                         <div v-for="reply in comment.replies" :key="reply.id" class="reply-item">
                           <div class="comment-avatar small">
                             <i class="bi bi-person-circle"></i>
@@ -175,26 +127,27 @@
                               <span class="comment-time">{{ formatTime(reply.createdAt) }}</span>
                             </div>
                             <p class="comment-text">{{ reply.text }}</p>
+
+                            <!-- Add Reply Actions -->
+                            <div class="comment-actions">
+                              <button v-if="canDeleteReply(reply)" @click="deleteReply(comment, reply)"
+                                class="action-btn delete">
+                                <i class="bi bi-trash-fill"></i>
+                                <span>Delete</span>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
 
                       <!-- Reply Input -->
                       <div v-if="replyingTo === comment.id" class="reply-input-section">
-                        <textarea
-                          v-model="replyText"
-                          :placeholder="`Reply to ${comment.userName}...`"
-                          class="reply-input"
-                          rows="2"
-                          @keydown.esc="cancelReply"
-                        ></textarea>
+                        <textarea v-model="replyText" :placeholder="`Reply to ${comment.userName}...`"
+                          class="reply-input" rows="2" @keydown.esc="cancelReply"></textarea>
                         <div class="reply-buttons">
                           <button @click="cancelReply" class="btn-cancel">Cancel</button>
-                          <button
-                            @click="submitReply(comment)"
-                            :disabled="!replyText.trim() || submittingReply"
-                            class="btn-submit"
-                          >
+                          <button @click="submitReply(comment)" :disabled="!replyText.trim() || submittingReply"
+                            class="btn-submit">
                             {{ submittingReply ? 'Posting...' : 'Reply' }}
                           </button>
                         </div>
@@ -218,6 +171,7 @@ import {
   deleteSongComment,
   toggleCommentLike as toggleCommentLikeAPI,
   postCommentReply,
+  deleteCommentReply,
 } from '@/utils/musicInteractions'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { db } from '@/services/firebase'
@@ -377,8 +331,25 @@ export default {
       }
     },
     async toggleCommentLike(comment) {
+      const user = auth.currentUser
+      if (!user) {
+        alert('Please log in to like comments')
+        return
+      }
+
+      const isLiked = this.isCommentLiked(comment)
+
       try {
-        await toggleCommentLikeAPI(this.song.artistId, this.song.id, comment.id)
+        const result = await toggleCommentLikeAPI(
+          this.song.artistId,
+          this.song.id,
+          comment.id,
+          isLiked
+        )
+
+        if (!result.success) {
+          alert('Failed to toggle like. Please try again.')
+        }
       } catch (error) {
         console.error('Error toggling comment like:', error)
       }
@@ -393,6 +364,32 @@ export default {
       if (!user) return false
       return comment.userId === user.uid
     },
+    canDeleteReply(reply) {
+      const user = auth.currentUser
+      if (!user) return false
+      return reply.userId === user.uid
+    },
+    async deleteReply(comment, reply) {
+      if (!confirm('Are you sure you want to delete this reply?')) return
+
+      try {
+        const { deleteCommentReply } = await import('@/utils/musicInteractions')
+        const result = await deleteCommentReply(
+          this.song.artistId,
+          this.song.id,
+          comment.id,
+          reply.id,
+        )
+
+        if (!result.success) {
+          alert('Failed to delete reply. Please try again.')
+        }
+      } catch (error) {
+        console.error('Error deleting reply:', error)
+        alert('An error occurred while deleting the reply.')
+      }
+    },
+
     startReply(comment) {
       this.replyingTo = comment.id
       this.replyText = ''
