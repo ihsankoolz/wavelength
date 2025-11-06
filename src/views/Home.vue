@@ -189,7 +189,7 @@
                       <div
                         v-for="song in page"
                         :key="`${song.artistId}_${song.id}`"
-                        class="col-sm-6 col-md-6 col-lg-4 px-3"
+                        class=" col-12 col-md-6 col-xl-4"
                       >
                         <div class="song-card" @click="openSongDetail(song)">
                           <!-- Player Container - Fixed height -->
@@ -831,12 +831,14 @@ export default {
     },
     updateSongsPerPage() {
       const width = window.innerWidth
-      if (width >= 992) {
+      if (width >= 1200) {
         this.songsPerPage = 6 // lg: 2 rows × 3 cols
-      } else if (width >= 768) {
+      } else if (width >= 992) {
         this.songsPerPage = 4 // md: 2 rows × 2 cols
-      } else {
+      } else if (width >= 768) {
         this.songsPerPage = 2 // sm: 2 rows × 1 col
+      } else {
+        this.songsPerPage = 2
       }
       this.currentSongPage = 0 // Reset to first page when layout changes
     },
