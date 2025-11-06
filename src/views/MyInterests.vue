@@ -80,20 +80,22 @@
             </div>
 
             <!-- Events Carousel -->
-            <div v-else class="carousel-container px-2 px-sm-0">
+            <div v-else class="carousel-container">
               <button v-if="currentEventPage > 0" @click="previousEventPage"
                 class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
                 aria-label="Previous events">
                 <i class="bi bi-chevron-left fs-5"></i>
               </button>
 
-              <div class="artists-carousel">
-                <div class="artists-grid-carousel" :style="{ transform: `translateX(-${currentEventPage * 100}%)` }">
+              <div class="events-carousel">
+                <div class="events-grid-carousel" :style="{ transform: `translateX(-${currentEventPage * 100}%)` }">
                   <div v-for="(page, pageIndex) in paginatedInterestedEvents" :key="`event-page-${pageIndex}`"
-                    class="carousel-page artists-page">
-                    <div class="row g-2 g-sm-3 pt-2 pt-sm-3 pb-2 pb-sm-3">
-                      <div v-for="event in page" :key="event.id" class="col-12 col-sm-6 col-lg-4">
-                        <EventCard :event="event" />
+                    class="carousel-page events-page">
+                    <div class="row w-100">
+                      <div v-for="event in page" :key="event.id" class="col-sm-6 col-md-6 col-lg-4 px-3">
+                        <div class="h-100">
+                          <EventCard :event="event" @interest-changed="handleEventInterestChange" />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -165,7 +167,7 @@ export default {
         preferredGenres: [],
         likedSongs: [],
       },
-      windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1200,
+      windowWidth: window.innerWidth,
       currentEventPage: 0,
     }
   },
@@ -176,12 +178,12 @@ export default {
     },
     eventsPerPage() {
       const width = this.windowWidth
-      if (width < 576) {
-        return 1
-      } else if (width < 992) {
-        return 2
+      if (width >= 992) {
+        return 3 // lg: 3 events (col-lg-4)
+      } else if (width >= 576) {
+        return 2 // md: 2 events (col-md-6)
       } else {
-        return 3
+        return 1 // sm/xs: 1 event (col-12)
       }
     },
     paginatedInterestedEvents() {
@@ -224,39 +226,19 @@ export default {
       }
     },
   },
-  watch: {
-    eventsPerPage(newValue, oldValue) {
-      // Reset to first page when events per page changes
-      if (oldValue !== undefined && newValue !== oldValue) {
-        this.currentEventPage = 0
-      }
-    }
-  },
   async mounted() {
+    window.addEventListener('resize', this.updateWindowWidth)
+    this.windowWidth = window.innerWidth
     await this.loadUserInterests()
     await this.loadAllArtists()
-
-    // Add window resize listener for responsive height
-    if (typeof window !== 'undefined') {
-      this._resizeTimeout = null
-      this.handleResize = () => {
-        this._resizeTimeout = setTimeout(() => {
-          this.windowWidth = window.innerWidth
-        }, 150)
-      }
-      window.addEventListener('resize', this.handleResize)
-    }
   },
   beforeUnmount() {
-    // Remove resize listener
-    if (typeof window !== 'undefined' && this.handleResize) {
-      window.removeEventListener('resize', this.handleResize)
-    }
-    if (this._resizeTimeout) {
-      clearTimeout(this._resizeTimeout)
-    }
+    window.removeEventListener('resize', this.updateWindowWidth)
   },
   methods: {
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth
+    },
     async loadUserInterests() {
       try {
         const user = auth.currentUser
@@ -393,6 +375,10 @@ export default {
         this.currentEventPage--
       }
     },
+    handleEventInterestChange() {
+      // Reload interested events when interest changes
+      this.loadUserInterests()
+    }
   },
 }
 </script>
@@ -529,21 +515,20 @@ export default {
 
 /* Arrows now use Bootstrap utilities; custom arrow CSS removed */
 
-.artists-carousel {
+.events-carousel {
   overflow: hidden;
   width: 100%;
 }
 
-.artists-grid-carousel {
+.events-grid-carousel {
   display: flex;
   transition: transform 0.5s ease-in-out;
 }
 
-.carousel-page.artists-page {
+.carousel-page.events-page {
   min-width: 100%;
-  width: 100%;
-  min-height: 320px;
-  flex-shrink: 0;
+  display: flex;
+  gap: 1.5rem;
 }
 
 /* Network Graph Section */
