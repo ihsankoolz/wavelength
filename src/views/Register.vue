@@ -72,7 +72,9 @@
       </div>
 
       <!-- RIGHT / Form Section -->
-      <div class="auth-right d-flex flex-column justify-content-center rounded-start-0 rounded-start-lg-5">
+      <div
+        class="auth-right d-flex flex-column justify-content-center rounded-start-0 rounded-start-lg-5"
+      >
         <!-- Logo for Mobile Only -->
         <div class="d-flex d-lg-none justify-content-center mb-3 mt-4">
           <router-link to="/">
@@ -105,7 +107,7 @@
           </transition>
 
           <!-- Registration Form -->
-          <form @submit.prevent="register" autocomplete="off">
+          <form @submit.prevent="register" autocomplete="on">
             <!-- Display Name Input with Floating Label -->
             <div class="mb-4 input-group-enhanced">
               <div class="input-icon">
@@ -114,9 +116,19 @@
                   <circle cx="12" cy="7" r="4" />
                 </svg>
               </div>
-              <input type="text" v-model="displayName" class="form-control input-enhanced" required autocomplete="off"
-                @focus="nameFocused = true" @blur="nameFocused = false" />
-              <label class="floating-label" :class="{ active: displayName || nameFocused }">Display Name</label>
+              <input
+                type="text"
+                v-model="displayName"
+                class="form-control input-enhanced"
+                required
+                autocomplete="name"
+                name="name"
+                @focus="nameFocused = true"
+                @blur="nameFocused = false"
+              />
+              <label class="floating-label" :class="{ active: displayName || nameFocused }"
+                >Display Name</label
+              >
               <div class="input-underline"></div>
             </div>
 
@@ -128,14 +140,24 @@
                   <polyline points="22,6 12,13 2,6" />
                 </svg>
               </div>
-              <input type="email" v-model="email" class="form-control input-enhanced" required autocomplete="off"
-                @focus="emailFocused = true" @blur="emailFocused = false" />
-              <label class="floating-label" :class="{ active: email || emailFocused }">Email Address</label>
+              <input
+                type="email"
+                v-model="email"
+                class="form-control input-enhanced"
+                required
+                autocomplete="username email"
+                name="email"
+                @focus="emailFocused = true"
+                @blur="emailFocused = false"
+              />
+              <label class="floating-label" :class="{ active: email || emailFocused }"
+                >Email Address</label
+              >
               <div class="input-underline"></div>
             </div>
 
             <!-- Password Input with Floating Label -->
-            <div class="mb-5 input-group-enhanced">
+            <div class="mb-4 input-group-enhanced">
               <div class="input-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   :class="{ 'icon-shake': passwordFocused }">
@@ -143,6 +165,21 @@
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
               </div>
+              <input
+                :type="showPassword ? 'text' : 'password'"
+                v-model="password"
+                class="form-control input-enhanced"
+                required
+                minlength="8"
+                autocomplete="new-password"
+                name="password"
+                @focus="passwordFocused = true"
+                @blur="passwordFocused = false"
+                @input="validatePasswordStrength"
+              />
+              <label class="floating-label" :class="{ active: password || passwordFocused }"
+                >Password</label
+              >
               <input :type="showPassword ? 'text' : 'password'" v-model="password" class="form-control input-enhanced"
                 required minlength="6" autocomplete="off" @focus="passwordFocused = true"
                 @blur="passwordFocused = false" />
@@ -160,6 +197,222 @@
                 </svg>
               </div>
               <div class="input-underline"></div>
+            </div>
+
+            <!-- Password Strength Indicator -->
+            <div v-if="password" class="mb-4 password-strength">
+              <div class="strength-bar">
+                <div
+                  class="strength-fill"
+                  :class="passwordStrength.class"
+                  :style="{ width: passwordStrength.percentage + '%' }"
+                ></div>
+              </div>
+              <div class="strength-text" :class="passwordStrength.class">
+                {{ passwordStrength.text }}
+              </div>
+              <ul class="password-requirements mt-2">
+                <li :class="{ valid: hasMinLength }">
+                  <i class="bi" :class="hasMinLength ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+                  At least 8 characters
+                </li>
+                <li :class="{ valid: hasUpperCase }">
+                  <i class="bi" :class="hasUpperCase ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+                  One uppercase letter
+                </li>
+                <li :class="{ valid: hasLowerCase }">
+                  <i class="bi" :class="hasLowerCase ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+                  One lowercase letter
+                </li>
+                <li :class="{ valid: hasNumber }">
+                  <i class="bi" :class="hasNumber ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+                  One number
+                </li>
+                <li :class="{ valid: hasSpecialChar }">
+                  <i class="bi" :class="hasSpecialChar ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+                  One special character (!@#$%^&*)
+                </li>
+              </ul>
+            </div>
+
+            <!-- Confirm Password Input with Floating Label -->
+            <div class="mb-5 input-group-enhanced">
+              <div class="input-icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  :class="{ 'icon-shake': confirmPasswordFocused }"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </div>
+              <input
+                :type="showConfirmPassword ? 'text' : 'password'"
+                v-model="confirmPassword"
+                class="form-control input-enhanced"
+                :class="{ 'is-invalid': confirmPassword && password !== confirmPassword }"
+                required
+                autocomplete="new-password"
+                name="confirm-password"
+                @focus="confirmPasswordFocused = true"
+                @blur="confirmPasswordFocused = false"
+              />
+              <label
+                class="floating-label"
+                :class="{ active: confirmPassword || confirmPasswordFocused }"
+                >Confirm Password</label
+              >
+              <div class="password-toggle" @click="showConfirmPassword = !showConfirmPassword">
+                <svg
+                  v-if="!showConfirmPassword"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg
+                  v-else
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                  />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+              </div>
+              <div class="input-underline"></div>
+              <small
+                v-if="confirmPassword && password !== confirmPassword"
+                class="text-danger mt-1 d-block"
+              >
+                Passwords do not match
+              </small>
+              <small
+                v-else-if="confirmPassword && password === confirmPassword"
+                class="text-success mt-1 d-block"
+              >
+                <i class="bi bi-check-circle-fill"></i> Passwords match
+              </small>
+            </div>
+
+            <!-- Password Strength Indicator -->
+            <div v-if="password" class="mb-4 password-strength">
+              <div class="strength-bar">
+                <div
+                  class="strength-fill"
+                  :class="passwordStrength.class"
+                  :style="{ width: passwordStrength.percentage + '%' }"
+                ></div>
+              </div>
+              <div class="strength-text" :class="passwordStrength.class">
+                {{ passwordStrength.text }}
+              </div>
+              <ul class="password-requirements mt-2">
+                <li :class="{ valid: hasMinLength }">
+                  <i class="bi" :class="hasMinLength ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+                  At least 8 characters
+                </li>
+                <li :class="{ valid: hasUpperCase }">
+                  <i class="bi" :class="hasUpperCase ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+                  One uppercase letter
+                </li>
+                <li :class="{ valid: hasLowerCase }">
+                  <i class="bi" :class="hasLowerCase ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+                  One lowercase letter
+                </li>
+                <li :class="{ valid: hasNumber }">
+                  <i class="bi" :class="hasNumber ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+                  One number
+                </li>
+                <li :class="{ valid: hasSpecialChar }">
+                  <i class="bi" :class="hasSpecialChar ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+                  One special character (!@#$%^&*)
+                </li>
+              </ul>
+            </div>
+
+            <!-- Confirm Password Input with Floating Label -->
+            <div class="mb-5 input-group-enhanced">
+              <div class="input-icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  :class="{ 'icon-shake': confirmPasswordFocused }"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </div>
+              <input
+                :type="showConfirmPassword ? 'text' : 'password'"
+                v-model="confirmPassword"
+                class="form-control input-enhanced"
+                :class="{ 'is-invalid': confirmPassword && password !== confirmPassword }"
+                required
+                autocomplete="new-password"
+                name="confirm-password"
+                @focus="confirmPasswordFocused = true"
+                @blur="confirmPasswordFocused = false"
+              />
+              <label
+                class="floating-label"
+                :class="{ active: confirmPassword || confirmPasswordFocused }"
+                >Confirm Password</label
+              >
+              <div class="password-toggle" @click="showConfirmPassword = !showConfirmPassword">
+                <svg
+                  v-if="!showConfirmPassword"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg
+                  v-else
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                  />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+              </div>
+              <div class="input-underline"></div>
+              <small
+                v-if="confirmPassword && password !== confirmPassword"
+                class="text-danger mt-1 d-block"
+              >
+                Passwords do not match
+              </small>
+              <small
+                v-else-if="confirmPassword && password === confirmPassword"
+                class="text-success mt-1 d-block"
+              >
+                <i class="bi bi-check-circle-fill"></i> Passwords match
+              </small>
             </div>
 
             <button type="submit" class="main-btn btn-block mb-3 btn-enhanced" :disabled="isLoading"
@@ -195,18 +448,26 @@ export default {
       displayName: '',
       email: '',
       password: '',
+      confirmPassword: '',
       userType: 'fan',
       errorMessage: '',
       isLoading: false,
       showPassword: false,
+      showConfirmPassword: false,
       nameFocused: false,
       emailFocused: false,
       passwordFocused: false,
+      confirmPasswordFocused: false,
       showError: false,
       cursorX: 0,
       cursorY: 0,
       animatedStats: { artists: 0, fans: 0 },
       welcomeText: "DISCOVER SINGAPORE'S LOCAL MUSIC",
+      passwordStrength: {
+        percentage: 0,
+        text: '',
+        class: '',
+      },
     }
   },
   computed: {
@@ -214,6 +475,21 @@ export default {
       return {
         background: `radial-gradient(circle at ${this.cursorX}px ${this.cursorY}px, rgba(213, 34, 34, 0.15) 0%, transparent 50%)`,
       }
+    },
+    hasMinLength() {
+      return this.password.length >= 8
+    },
+    hasUpperCase() {
+      return /[A-Z]/.test(this.password)
+    },
+    hasLowerCase() {
+      return /[a-z]/.test(this.password)
+    },
+    hasNumber() {
+      return /[0-9]/.test(this.password)
+    },
+    hasSpecialChar() {
+      return /[!@#$%^&*(),.?":{}|<>]/.test(this.password)
     },
   },
   mounted() {
@@ -275,12 +551,80 @@ export default {
       button.appendChild(ripple)
       setTimeout(() => ripple.remove(), 600)
     },
+    validatePasswordStrength() {
+      const password = this.password
+      let strength = 0
+
+      // Check length
+      if (password.length >= 8) strength += 20
+      if (password.length >= 12) strength += 10
+
+      // Check for uppercase
+      if (/[A-Z]/.test(password)) strength += 20
+
+      // Check for lowercase
+      if (/[a-z]/.test(password)) strength += 20
+
+      // Check for numbers
+      if (/[0-9]/.test(password)) strength += 15
+
+      // Check for special characters
+      if (/[!@#$%^&*(),.?\":{}|<>]/.test(password)) strength += 15
+
+      // Update strength indicator
+      if (strength < 40) {
+        this.passwordStrength = {
+          percentage: strength,
+          text: 'Weak',
+          class: 'weak',
+        }
+      } else if (strength < 70) {
+        this.passwordStrength = {
+          percentage: strength,
+          text: 'Medium',
+          class: 'medium',
+        }
+      } else {
+        this.passwordStrength = {
+          percentage: strength,
+          text: 'Strong',
+          class: 'strong',
+        }
+      }
+    },
     async register() {
       this.errorMessage = ''
       this.showError = false
 
-      if (this.password.length < 6) {
-        this.errorMessage = 'Password must be at least 6 characters'
+      // Validate password length
+      if (this.password.length < 8) {
+        this.errorMessage = 'Password must be at least 8 characters'
+        this.showError = true
+        setTimeout(() => {
+          this.showError = false
+        }, 500)
+        return
+      }
+
+      // Validate password strength requirements
+      const hasUpperCase = /[A-Z]/.test(this.password)
+      const hasLowerCase = /[a-z]/.test(this.password)
+      const hasNumber = /[0-9]/.test(this.password)
+      const hasSpecialChar = /[!@#$%^&*(),.?\":{}|<>]/.test(this.password)
+
+      if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+        this.errorMessage =
+          'Password must contain uppercase, lowercase, number, and special character'
+        this.showError = true
+        setTimeout(() => {
+          this.showError = false
+        }, 500)
+        return
+      }
+
+      // Validate passwords match
+      if (this.password !== this.confirmPassword) {
+        this.errorMessage = 'Passwords do not match'
         this.showError = true
         setTimeout(() => {
           this.showError = false
@@ -1004,6 +1348,107 @@ export default {
     transform: scale(2);
     opacity: 0;
   }
+}
+
+/* Password Strength Indicator */
+.password-strength {
+  animation: fadeIn 0.3s ease;
+}
+
+.strength-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.strength-fill {
+  height: 100%;
+  transition:
+    width 0.3s ease,
+    background-color 0.3s ease;
+  border-radius: 10px;
+}
+
+.strength-fill.weak {
+  background: linear-gradient(90deg, #ff4444, #cc0000);
+}
+
+.strength-fill.medium {
+  background: linear-gradient(90deg, #ffa500, #ff8c00);
+}
+
+.strength-fill.strong {
+  background: linear-gradient(90deg, #00c851, #007e33);
+}
+
+.strength-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.strength-text.weak {
+  color: #ff4444;
+}
+
+.strength-text.medium {
+  color: #ffa500;
+}
+
+.strength-text.strong {
+  color: #00c851;
+}
+
+.password-requirements {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.password-requirements li {
+  padding: 0.25rem 0;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.password-requirements li.valid {
+  color: #00c851;
+}
+
+.password-requirements li i {
+  font-size: 0.9rem;
+}
+
+.password-requirements li.valid i {
+  color: #00c851;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Invalid input styling */
+.input-enhanced.is-invalid {
+  border-bottom-color: #ff4444 !important;
+}
+
+.text-success {
+  color: #00c851 !important;
 }
 
 .input-lg.form-control {
