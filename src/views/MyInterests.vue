@@ -7,44 +7,84 @@
     <div class="wave-svg">
       <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#bb1814" stroke-width="2" opacity="0.6">
-          <animate attributeName="d" values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
+          <animate
+            attributeName="d"
+            values="M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150;
                    M0,150 Q150,250 300,150 T600,150 T900,150 T1200,150;
-                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150" dur="3s" repeatCount="indefinite" />
+                   M0,150 Q150,50 300,150 T600,150 T900,150 T1200,150"
+            dur="3s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
+          <animate
+            attributeName="d"
+            values="M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180;
                    M0,180 Q150,280 300,180 T600,180 T900,180 T1200,180;
-                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180" dur="4s" repeatCount="indefinite" />
+                   M0,180 Q150,80 300,180 T600,180 T900,180 T1200,180"
+            dur="4s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1" opacity="0.4">
-          <animate attributeName="d" values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
+          <animate
+            attributeName="d"
+            values="M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120;
                    M0,120 Q150,220 300,120 T600,120 T900,120 T1200,120;
-                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120" dur="5s" repeatCount="indefinite" />
+                   M0,120 Q150,20 300,120 T600,120 T900,120 T1200,120"
+            dur="5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="1.5" opacity="0.5">
-          <animate attributeName="d" values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
+          <animate
+            attributeName="d"
+            values="M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90;
                    M0,90 Q150,210 300,90 T600,90 T900,90 T1200,90;
-                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90" dur="2.5s" repeatCount="indefinite" />
+                   M0,90 Q150,30 300,90 T600,90 T900,90 T1200,90"
+            dur="2.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1" opacity="0.45">
-          <animate attributeName="d" values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
+          <animate
+            attributeName="d"
+            values="M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210;
                    M0,210 Q150,270 300,210 T600,210 T900,210 T1200,210;
-                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210" dur="3.5s" repeatCount="indefinite" />
+                   M0,210 Q150,120 300,210 T600,210 T900,210 T1200,210"
+            dur="3.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#D95656" stroke-width="1.2" opacity="0.35">
-          <animate attributeName="d" values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
+          <animate
+            attributeName="d"
+            values="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60;
                    M0,60 Q150,240 300,60 T600,60 T900,60 T1200,60;
-                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60" dur="4.5s" repeatCount="indefinite" />
+                   M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60"
+            dur="4.5s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#bb1814" stroke-width="0.8" opacity="0.3">
-          <animate attributeName="d" values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
+          <animate
+            attributeName="d"
+            values="M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240;
                    M0,240 Q150,290 300,240 T600,240 T900,240 T1200,240;
-                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240" dur="6s" repeatCount="indefinite" />
+                   M0,240 Q150,160 300,240 T600,240 T900,240 T1200,240"
+            dur="6s"
+            repeatCount="indefinite"
+          />
         </path>
         <path fill="none" stroke="#C73535" stroke-width="1.3" opacity="0.4">
-          <animate attributeName="d" values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
+          <animate
+            attributeName="d"
+            values="M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100;
                    M0,100 Q150,230 300,100 T600,100 T900,100 T1200,100;
-                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100" dur="2s" repeatCount="indefinite" />
+                   M0,100 Q150,40 300,100 T600,100 T900,100 T1200,100"
+            dur="2s"
+            repeatCount="indefinite"
+          />
         </path>
       </svg>
     </div>
@@ -64,8 +104,10 @@
           <section class="mb-4 mb-md-5">
             <div class="welcome-section mb-3 mb-md-4">
               <h1 class="display-5 fw-bold mb-2">INTERESTED EVENTS</h1>
-              <p class="text-muted">You are interested in
-                <span>{{ interestedEvents.length }}</span> event{{ interestedEvents.length !== 1 ? 's' : '' }}
+              <p class="text-muted">
+                You are interested in <span>{{ interestedEvents.length }}</span> event{{
+                  interestedEvents.length !== 1 ? 's' : ''
+                }}
               </p>
             </div>
 
@@ -73,26 +115,39 @@
             <div v-if="interestedEvents.length === 0" class="text-center py-4 py-md-5">
               <i class="bi bi-calendar-x fs-1 text-muted mb-3"></i>
               <h2 class="h4 mb-2 mb-md-3 text-white">No interested events yet</h2>
-              <p class="text-muted mb-3 mb-md-4">Start exploring and mark events you're interested in!</p>
-              <router-link to="/events" class="btn btn-primary">
-                Browse Events
-              </router-link>
+              <p class="text-muted mb-3 mb-md-4">
+                Start exploring and mark events you're interested in!
+              </p>
+              <router-link to="/events" class="btn btn-primary"> Browse Events </router-link>
             </div>
 
             <!-- Events Carousel -->
             <div v-else class="carousel-container">
-              <button v-if="currentEventPage > 0" @click="previousEventPage"
+              <button
+                v-if="currentEventPage > 0"
+                @click="previousEventPage"
                 class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y shadow z-3 ms-2 ms-md-0"
-                aria-label="Previous events">
+                aria-label="Previous events"
+              >
                 <i class="bi bi-chevron-left fs-5"></i>
               </button>
 
               <div class="events-carousel">
-                <div class="events-grid-carousel" :style="{ transform: `translateX(-${currentEventPage * 100}%)` }">
-                  <div v-for="(page, pageIndex) in paginatedInterestedEvents" :key="`event-page-${pageIndex}`"
-                    class="carousel-page events-page">
+                <div
+                  class="events-grid-carousel"
+                  :style="{ transform: `translateX(-${currentEventPage * 100}%)` }"
+                >
+                  <div
+                    v-for="(page, pageIndex) in paginatedInterestedEvents"
+                    :key="`event-page-${pageIndex}`"
+                    class="carousel-page events-page"
+                  >
                     <div class="row w-100">
-                      <div v-for="event in page" :key="event.id" class="col-sm-6 col-md-6 col-lg-4 px-3">
+                      <div
+                        v-for="event in page"
+                        :key="event.id"
+                        class="col-sm-6 col-md-6 col-lg-4 px-3"
+                      >
                         <div class="h-100">
                           <EventCard :event="event" @interest-changed="handleEventInterestChange" />
                         </div>
@@ -102,9 +157,12 @@
                 </div>
               </div>
 
-              <button v-if="currentEventPage < totalEventPages - 1" @click="nextEventPage"
+              <button
+                v-if="currentEventPage < totalEventPages - 1"
+                @click="nextEventPage"
                 class="btn btn-light rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y shadow z-3 me-2 me-md-0"
-                aria-label="Next events">
+                aria-label="Next events"
+              >
                 <i class="bi bi-chevron-right fs-5"></i>
               </button>
             </div>
@@ -123,8 +181,14 @@
 
             <!-- Network Graph -->
             <div class="network-graph-section overflow-x-auto mb-3 mb-sm-4 mb-md-5 px-2 px-sm-0">
-              <ArtistNetworkGraph v-if="!loading && allArtists.length > 0" :key="graphKey" :userId="userId"
-                :allArtists="allArtists" :userPreferences="userPreferences" :height="graphHeight" />
+              <ArtistNetworkGraph
+                v-if="!loading && allArtists.length > 0"
+                :key="graphKey"
+                :userId="userId"
+                :allArtists="allArtists"
+                :userPreferences="userPreferences"
+                :height="graphHeight"
+              />
 
               <!-- Loading State -->
               <div v-else-if="loading" class="text-center py-4 py-md-5">
@@ -285,10 +349,14 @@ export default {
     async loadAllArtists() {
       try {
         const artistsSnapshot = await getDocs(collection(db, 'artists'))
-        this.allArtists = artistsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
+        // Only include documents from the 'artists' collection
+        // Filter out any that might not have artistName (ensures they are real artist profiles)
+        this.allArtists = artistsSnapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .filter((artist) => artist.artistName) // Only include if they have an artistName
       } catch (error) {
         console.error('Error loading all artists:', error)
       }
@@ -378,7 +446,7 @@ export default {
     handleEventInterestChange() {
       // Reload interested events when interest changes
       this.loadUserInterests()
-    }
+    },
   },
 }
 </script>
@@ -451,7 +519,6 @@ export default {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-
 
 /* Genre Heading */
 .genre-heading {
