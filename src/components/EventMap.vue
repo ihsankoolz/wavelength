@@ -137,13 +137,44 @@ export default {
       if (this.size !== 'small') {
         const infoWindow = new google.maps.InfoWindow({
           content: `
-            <div style="padding: 8px;">
-              <strong>${this.title || 'Event Location'}</strong><br>
-              <small>${this.location}</small><br>
+            <div style="
+              padding: 16px 18px;
+              min-width: 220px;
+              font-family: 'Poppins', sans-serif;
+              background: #fff;
+              border-radius: 12px;
+            ">
+              <div style="
+                font-size: 15px;
+                font-weight: 700;
+                color: #191717;
+                margin-bottom: 8px;
+                letter-spacing: 0.3px;
+                line-height: 1.4;
+              ">${this.title || 'Event Location'}</div>
+              <div style="
+                font-size: 13px;
+                color: #666;
+                margin-bottom: 14px;
+                line-height: 1.4;
+              ">${this.location}</div>
               <a href="https://www.google.com/maps/dir/?api=1&destination=${location.lat()},${location.lng()}" 
                  target="_blank" 
-                 style="color: #667eea; text-decoration: none;">
-                Get Directions →
+                 style="
+                   display: inline-block;
+                   background: #bb1814;
+                   color: #fff;
+                   text-decoration: none;
+                   padding: 8px 18px;
+                   border-radius: 20px;
+                   font-size: 13px;
+                   font-weight: 600;
+                   letter-spacing: 0.3px;
+                   transition: all 0.3s ease;
+                 "
+                 onmouseover="this.style.background='#6E0B0B'"
+                 onmouseout="this.style.background='#bb1814'">
+                GET DIRECTIONS →
               </a>
             </div>
           `,
