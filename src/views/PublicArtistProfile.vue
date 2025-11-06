@@ -89,7 +89,7 @@
               <div class="col">
                 <h1 class="artist-name">{{ artist.artistName }}</h1>
                 <p class="artist-bio">{{ artist.bio || 'Whatever bio they have.' }}</p>
-                <div class="follower-count">{{ artist.followerCount || 500 }} Followers</div>
+                <div class="follower-count">{{ artist.followerCount || 0 }} Followers</div>
                 <button
                   v-if="!isOwnProfile"
                   class="btn-follow"
