@@ -1,4 +1,4 @@
-<!-- public artist profile.vue -->
+﻿<!-- public artist profile.vue -->
 <template>
   <div class="public-artist-profile">
     <!-- Navigation Bar -->
@@ -651,7 +651,7 @@ export default {
       try {
         this.loadingEvents = true
 
-        // ⭐ FIXED: Removed orderBy to avoid index requirement
+        //  FIXED: Removed orderBy to avoid index requirement
         const eventsQuery = query(collection(db, 'events'), where('artistId', '==', this.artist.id))
 
         const eventsSnapshot = await getDocs(eventsQuery)
@@ -671,13 +671,13 @@ export default {
             return eventDate >= now
           })
           .sort((a, b) => {
-            // ⭐ Client-side sorting
+            //  Client-side sorting
             const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date)
             const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date)
             return dateA - dateB
           })
 
-        console.log(`✅ ${this.artistEvents.length} upcoming events for ${this.artist.artistName}`)
+        console.log(`${this.artistEvents.length} upcoming events for ${this.artist.artistName}`)
       } catch (error) {
         console.error('Error loading artist events:', error)
       } finally {
@@ -1107,7 +1107,7 @@ export default {
     },
 
     openSongDetail(song) {
-      console.log('🎵 Opening song detail modal for:', song.title)
+      console.log('Opening song detail modal for:', song.title)
       this.selectedSong = {
         ...song,
         artistId: this.artist.id,
@@ -1115,7 +1115,7 @@ export default {
         artistPhoto: this.artist.profileImage,
       }
       this.showSongModal = true
-      console.log('🎵 Modal state:', this.showSongModal, 'Selected song:', this.selectedSong?.title)
+      console.log('Modal state:', this.showSongModal, 'Selected song:', this.selectedSong?.title)
     },
 
     closeSongModal() {

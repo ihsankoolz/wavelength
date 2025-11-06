@@ -1,4 +1,4 @@
-// migrateArtistMusic.js - Script to migrate existing artist music data to new schema
+﻿// migrateArtistMusic.js - Script to migrate existing artist music data to new schema
 
 import { db } from '@/services/firebase'
 import { collection, getDocs, updateDoc, doc } from 'firebase/firestore'

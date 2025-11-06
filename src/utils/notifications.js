@@ -1,4 +1,4 @@
-import { auth, db } from '../services/firebase'
+﻿import { auth, db } from '../services/firebase'
 import {
   doc,
   collection,
@@ -55,10 +55,10 @@ export async function createNotification({
       createdAt: Timestamp.now(),
     })
 
-    console.log('✅ Notification created:', notificationRef.id)
+    console.log('Notification created:', notificationRef.id)
     return notificationRef.id
   } catch (error) {
-    console.error('❌ Error creating notification:', error)
+    console.error('Error creating notification:', error)
     return null
   }
 }
@@ -101,9 +101,9 @@ export async function notifyFollowersNewMusic(artistId, artistName, song) {
     })
 
     await Promise.all(promises)
-    console.log(`✅ Notified ${usersSnapshot.size} followers about new music`)
+    console.log(`Notified ${usersSnapshot.size} followers about new music`)
   } catch (error) {
-    console.error('❌ Error notifying followers:', error)
+    console.error('Error notifying followers:', error)
   }
 }
 
@@ -140,9 +140,9 @@ export async function notifyOnComment(artistId, songId, songTitle, commenterId, 
       },
     })
 
-    console.log('✅ Notified artist about comment')
+    console.log('Notified artist about comment')
   } catch (error) {
-    console.error('❌ Error notifying about comment:', error)
+    console.error('Error notifying about comment:', error)
   }
 }
 
@@ -180,9 +180,9 @@ export async function notifyOnReply(
       },
     })
 
-    console.log('✅ Notified user about reply')
+    console.log('Notified user about reply')
   } catch (error) {
-    console.error('❌ Error notifying about reply:', error)
+    console.error('Error notifying about reply:', error)
   }
 }
 
@@ -220,9 +220,9 @@ export async function notifyFollowersNewEvent(artistId, artistName, event) {
     })
 
     await Promise.all(promises)
-    console.log(`✅ Notified ${usersSnapshot.size} followers about new event`)
+    console.log(`Notified ${usersSnapshot.size} followers about new event`)
   } catch (error) {
-    console.error('❌ Error notifying about event:', error)
+    console.error('Error notifying about event:', error)
   }
 }
 
@@ -250,7 +250,7 @@ export async function getUserNotifications(userId, limitCount = 20) {
 
     return notifications
   } catch (error) {
-    console.error('❌ Error getting notifications:', error)
+    console.error('Error getting notifications:', error)
     return []
   }
 }
@@ -285,9 +285,9 @@ export async function markAsRead(notificationId) {
     await updateDoc(doc(db, 'notifications', notificationId), {
       read: true,
     })
-    console.log('✅ Notification marked as read')
+    console.log('Notification marked as read')
   } catch (error) {
-    console.error('❌ Error marking notification as read:', error)
+    console.error('Error marking notification as read:', error)
   }
 }
 
@@ -311,9 +311,9 @@ export async function markAllAsRead(userId) {
     )
 
     await Promise.all(promises)
-    console.log(`✅ Marked ${snapshot.size} notifications as read`)
+    console.log(`Marked ${snapshot.size} notifications as read`)
   } catch (error) {
-    console.error('❌ Error marking all as read:', error)
+    console.error('Error marking all as read:', error)
   }
 }
 
@@ -326,9 +326,9 @@ export async function deleteNotification(notificationId) {
     await updateDoc(doc(db, 'notifications', notificationId), {
       deleted: true,
     })
-    console.log('✅ Notification deleted')
+    console.log('Notification deleted')
   } catch (error) {
-    console.error('❌ Error deleting notification:', error)
+    console.error('Error deleting notification:', error)
   }
 }
 

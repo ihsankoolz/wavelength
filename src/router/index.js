@@ -1,4 +1,4 @@
-// index.js
+﻿// index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import { auth } from '@/services/firebase'
 import { onAuthStateChanged } from 'firebase/auth'

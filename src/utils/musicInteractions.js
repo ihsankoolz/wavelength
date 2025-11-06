@@ -1,4 +1,4 @@
-// musicInteractions.js - Handle like/save/playlist functions
+﻿// musicInteractions.js - Handle like/save/playlist functions
 import { auth, db } from '@/services/firebase'
 import {
   doc,

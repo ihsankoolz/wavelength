@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="edit-profile-wrapper">
     <!-- Dynamic Wave Background -->
     <div class="wave-svg">

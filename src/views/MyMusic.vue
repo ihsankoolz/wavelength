@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="my-music-page">
     <NavigationBar />
 
@@ -348,25 +348,25 @@ export default {
           return
         }
 
-        console.log('🎵 Loading saved songs for user:', user.uid)
+        console.log('Loading saved songs for user:', user.uid)
 
         // Get user's saved songs
         const userDoc = await getDoc(doc(db, 'users', user.uid))
         if (!userDoc.exists()) {
-          console.log('❌ User document does not exist')
+          console.log('User document does not exist')
           this.savedSongs = []
           this.loading = false
           return
         }
 
         const userData = userDoc.data()
-        console.log('📄 User data:', userData)
+        console.log('User data:', userData)
 
         const savedSongKeys = userData.savedSongs || []
-        console.log('💾 Saved song keys:', savedSongKeys)
+        console.log('Saved song keys:', savedSongKeys)
 
         if (savedSongKeys.length === 0) {
-          console.log('⚠️ No saved songs found in user document')
+          console.log('No saved songs found in user document')
           this.savedSongs = []
           this.loading = false
           return
@@ -376,7 +376,7 @@ export default {
         const songsData = []
 
         for (const songKey of savedSongKeys) {
-          console.log('🔍 Processing song key:', songKey)
+          console.log('Processing song key:', songKey)
 
           // Split only on the FIRST underscore (artistId_music_timestamp_random)
           const firstUnderscoreIndex = songKey.indexOf('_')
@@ -391,14 +391,14 @@ export default {
             savedTimestamp = parseInt(songIdParts[1])
           }
 
-          console.log('  📌 Artist ID:', artistId)
-          console.log('  🎵 Song ID:', songId)
-          console.log('  ⏰ Saved timestamp:', savedTimestamp, new Date(savedTimestamp))
+          console.log('  Artist ID:', artistId)
+          console.log('  Song ID:', songId)
+          console.log('  Saved timestamp:', savedTimestamp, new Date(savedTimestamp))
 
           // Get artist document
           const artistDoc = await getDoc(doc(db, 'artists', artistId))
           if (!artistDoc.exists()) {
-            console.log('❌ Artist not found:', artistId)
+            console.log('Artist not found:', artistId)
             continue
           }
 
@@ -408,11 +408,11 @@ export default {
           // Find the specific song
           const song = musicLinks.find((s) => s.id === songId)
           if (!song) {
-            console.log('❌ Song not found:', songId, 'in', musicLinks.length, 'songs')
+            console.log('Song not found:', songId, 'in', musicLinks.length, 'songs')
             continue
           }
 
-          console.log('✅ Found song:', song.title)
+          console.log('Found song:', song.title)
 
           // Extract platform-specific IDs
           let platform = 'unknown'
@@ -453,10 +453,10 @@ export default {
         }
 
         this.savedSongs = songsData
-        console.log('✅ Total saved songs loaded:', songsData.length)
+        console.log('Total saved songs loaded:', songsData.length)
         this.loading = false
       } catch (error) {
-        console.error('❌ Error loading saved songs:', error)
+        console.error('Error loading saved songs:', error)
         this.loading = false
       }
     },
@@ -518,7 +518,7 @@ export default {
 
     // Song Detail Modal (combines embed + comments)
     openSongDetail(song) {
-      console.log('🎵 Opening song detail for:', song.title, {
+      console.log('Opening song detail for:', song.title, {
         artistId: song.artistId,
         songId: song.songId,
         platform: song.platform,

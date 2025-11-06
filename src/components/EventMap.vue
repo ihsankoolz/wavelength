@@ -1,4 +1,4 @@
-<!-- EVENTMAP.VUE -->
+﻿<!-- EVENTMAP.VUE -->
 <template>
   <div>
     <div :id="mapId" class="event-map"></div>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { loadGoogleMaps } from '@/utils/googleMapsLoader' // ⭐ ADD THIS
+import { loadGoogleMaps } from '@/utils/googleMapsLoader' //  ADD THIS
 
 export default {
   name: 'EventMap',
@@ -49,7 +49,7 @@ export default {
   methods: {
     async initMap() {
       try {
-        // ⭐ Load Google Maps dynamically
+        //  Load Google Maps dynamically
         await loadGoogleMaps()
 
         // Now proceed with geocoding
