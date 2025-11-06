@@ -40,6 +40,8 @@ In Singapore's vibrant music scene, emerging local artists struggle to gain visi
 - **Social Interactions** - Like, comment, and save favorite songs
 - **Profile Customization** - Set music preferences and manage your interests
 - **Location-Based Discovery** - Find events near you with map visualization
+- **AI Music Assistant (Pulse)** - Chat with an AI assistant powered by Gemini for song recommendations, event discovery, and platform guidance
+- **Artist Network Visualization** - Interactive D3.js network graph showing artist relationships and recommendations based on your music taste
 
 ### For Artists
 
@@ -54,7 +56,7 @@ In Singapore's vibrant music scene, emerging local artists struggle to gain visi
 
 Our adaptive recommendation system uses three user profiles:
 
-- **New Users (No Preferences):** Trending songs based on popularity and recency
+- **New Users (No Preferences):** Trending songs based on popularity (60%) and recency (40%)
 - **New Users (With Preferences):** 70% genre matching + 20% popularity + 10% recency
 - **Active Users:** Personalized mix considering followed artists (30%), genre preferences (25%), listening history (20%), interactions (10%), popularity (10%), and recency (5%)
 
@@ -72,6 +74,8 @@ Our adaptive recommendation system uses three user profiles:
   - Firebase Storage
   - Firebase Cloud Functions
 - **Maps Integration:** Google Maps API
+- **Data Visualization:** D3.js (for artist network graph)
+- **AI Integration:** Google Gemini AI (for Pulse chatbot)
 - **Deployment:** Firebase Hosting
 - **Version Control:** Git & GitHub
 
@@ -85,7 +89,7 @@ Follow these step-by-step instructions to set up and run Wavelength on your loca
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js** (v16 or higher) - [Download here](https://nodejs.org/)
+- **Node.js** (v20.19.0 or higher, or v22.12.0+) - [Download here](https://nodejs.org/)
 - **npm** (comes with Node.js)
 - **Git** - [Download here](https://git-scm.com/)
 - **Firebase CLI** - Install globally with: `npm install -g firebase-tools`
@@ -135,6 +139,7 @@ VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+VITE_GEMINI_API_KEY=your_gemini_api_key
 ```
 
 #### 3.4 Google Maps API Key
@@ -143,6 +148,13 @@ VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 2. Create a new project or select existing
 3. Enable **Maps JavaScript API** and **Geocoding API**
 4. Create API key and add it to `.env` file
+
+#### 3.5 Gemini AI API Key (for Pulse Chatbot)
+
+1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey) or [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new API key for **Gemini API**
+3. Enable the **Generative AI API** in your Google Cloud project
+4. Add the API key to your `.env` file as `VITE_GEMINI_API_KEY`
 
 ### Step 4: Initialize Firebase
 
@@ -243,13 +255,17 @@ wavelength/
 ├── src/
 │   ├── assets/             # CSS and image assets
 │   ├── components/         # Reusable Vue components
+│   │   ├── AIChatbot.vue   # Pulse AI Music Assistant
+│   │   ├── ArtistNetworkGraph.vue  # D3.js network visualization
 │   │   ├── NavigationBar.vue
 │   │   ├── EventMap.vue
 │   │   ├── SongDetailModal.vue
 │   │   └── ...
+│   ├── constants/          # Application constants
+│   │   └── genres.js       # Genre definitions
+│   ├── data/               # Data scripts and JSON files
 │   ├── router/             # Vue Router configuration
 │   ├── services/           # Firebase and auth services
-│   ├── stores/             # State management
 │   ├── utils/              # Helper functions
 │   │   ├── recommendationEngine.js
 │   │   ├── interactionTracking.js
@@ -262,7 +278,6 @@ wavelength/
 │   ├── App.vue             # Root component
 │   └── main.js             # Application entry point
 ├── functions/              # Firebase Cloud Functions
-├── docs/                   # Documentation
 ├── firebase.json           # Firebase configuration
 ├── firestore.rules         # Firestore security rules
 ├── firestore.indexes.json  # Firestore indexes
@@ -284,6 +299,7 @@ wavelength/
 5. **Follow Artists:** Stay updated with your favorite artists
 6. **Find Events:** Browse live events on the Events page
 7. **Get Notifications:** Receive updates on new music and events
+8. **Chat with Pulse:** Use the AI assistant (Pulse) for personalized music recommendations, event suggestions, and platform help
 
 ### For Artists
 
@@ -354,5 +370,5 @@ Private - Wavelength Development Team
 
 ---
 
-**Last Updated:** November 6, 2025  
+**Last Updated:** November 7, 2025  
 **Version:** 2.0  
